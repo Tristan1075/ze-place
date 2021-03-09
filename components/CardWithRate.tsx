@@ -16,7 +16,7 @@ const CardWithRate = (props: Props) => {
       <View style={styles.shadow}>
         <Image source={{uri: item.images[0]}} style={styles.image} />
         <View style={styles.rate}>
-          <Ionicons size={14} name='star' color={Colors.white} />
+          <Ionicons size={14} name='star' color={Colors.yellow} />
           <Text style={styles.rateValue}>  {item.rate}</Text>
         </View>
       </View>

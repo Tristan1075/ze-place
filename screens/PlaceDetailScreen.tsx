@@ -41,16 +41,25 @@ const PlaceDetailScreen = (props: Props) => {
               imageSize={20} 
               tintColor={Colors.background} 
             />
+            <View style={styles.row}>
+              {item.reviewers.map((reviewer) => 
+                  <Image source={{uri: reviewer }} style={styles.reviewers} />
+              )}
+              <View style={styles.reviewersNumber}>
+                <Text style={styles.subtitle}>5+</Text>
+              </View>
+              <Text style={styles.reviewersText}>People reviewed this</Text>
+            </View>
             <Text style={styles.description}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse eget tellus vel nisl ultricies vestibulum sit amet vel ipsum. Praesent consectetur pulvinar dignissim. Etiam a nisi scelerisque, pellentesque nunc id, vulputate lorem. Interdum et malesuada fames ac ante ipsum primis in faucibus. Integer accumsan lorem id massa aliquam faucibus. Donec posuere vulputate justo eget commodo. Integer bibendum elit pharetra eros luctus, et cursus nibh pharetra. In fermentum nisl metus, vel vehicula purus suscipit et. Mauris nisl ante, accumsan id porttitor quis, porta convallis sem. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. In vitae ipsum dignissim, molestie turpis ac, ultricies risus. Phasellus bibendum bibendum mollis. Nam ut efficitur diam. Curabitur ex sapien, dictum a dui nec, interdum viverra urna. Maecenas euismod semper eros, in laoreet neque elementum non.</Text>
           </View>
         </View>
-        <View style={styles.imagePicker}>
+        <ScrollView style={styles.imagePicker} contentContainerStyle={styles.center} showsVerticalScrollIndicator={false}>
           {item.images.map((image, index) => 
             <TouchableWithoutFeedback onPress={() => setActiveImage(index)}>
               <Image source={{uri: image }} style={[styles.imagePreview, activeImage === index && styles.activeImage]} />
             </TouchableWithoutFeedback>
           )}
-        </View>
+        </ScrollView>
       </View>
     </ScrollView>
   );
@@ -66,7 +75,10 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   row: {
+    marginTop: 10,
     flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   cover: {
     position: 'absolute',
@@ -90,7 +102,6 @@ const styles = StyleSheet.create({
   subtitle: {
     fontFamily: 'poppins',
     fontSize: 16,
-    width: 250,
     color: Colors.white,
   },
   descriptionBloc: {
@@ -112,10 +123,14 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 20,
     top: 260,
-    alignItems: 'center',
     backgroundColor: 'rgba(220, 220, 220, 0.6)',
     borderRadius: 10,
     padding: 6,
+    height: 250,
+  },
+  center: {
+    alignItems: 'center',
+    paddingBottom: 10,
   },
   imagePreview: {
     margin: 3,
@@ -126,6 +141,32 @@ const styles = StyleSheet.create({
   activeImage: {
     width: 55,
     height: 55,
+  },
+  padding: {
+    paddingBottom: 10,
+  },
+  reviewers: {
+    width: 30,
+    height: 30,
+    borderRadius: 5,
+    marginRight: 5,
+  },
+  reviewersNumber: {
+    fontFamily: 'poppins',
+    fontSize: 16,
+    backgroundColor: Colors.primary, 
+    color: Colors.white,
+    height: 30,
+    width: 30,
+    borderRadius: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 10,
+  },
+  reviewersText: {
+    fontFamily: 'poppins',
+    fontSize: 16,
+    color: Colors.primary,  
   }
 });
 
