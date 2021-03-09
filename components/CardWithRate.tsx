@@ -13,7 +13,7 @@ const CardWithRate = (props: Props) => {
   const {onPress, item} =  props;
   return (
     <TouchableWithoutFeedback style={styles.carouselItem} onPress={onPress}>
-      <View>
+      <View style={styles.shadow}>
         <Image source={{uri: item.image}} style={styles.image} />
         <View style={styles.rate}>
           <Ionicons size={14} name='star' color={Colors.white} />
@@ -28,6 +28,16 @@ const CardWithRate = (props: Props) => {
 const styles = StyleSheet.create({
   carouselItem: {
     position: 'relative',
+  },
+  shadow: {
+    shadowColor: "#2d2d2d",
+    shadowOffset: {
+      width: 6,
+      height: 0,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 1.84,
+    elevation: 5,
   },
   rate: {
     borderTopRightRadius: 10,
@@ -46,6 +56,7 @@ const styles = StyleSheet.create({
     fontFamily: 'poppins-bold',
   },
   image: {
+    backgroundColor: 'red',
     width: 220,
     height: 300,
     borderRadius: 15,

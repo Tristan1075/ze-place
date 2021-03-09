@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, TouchableOpacity, ViewStyle} from 'react-native';
+import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 
@@ -14,9 +14,11 @@ type Props = {
 const SquaredButton = (props: Props) => {
   const {onPress, icon, isActive} =  props;
   return(
-    <TouchableOpacity style={[styles.categoryButton, isActive && styles.categoryButtonActive]} onPress={onPress}>
-      <Ionicons size={24} name={icon} color={isActive ? Colors.white : Colors.primary} style={styles.icon} />
-    </TouchableOpacity>     
+    <View style={styles.shadow}>
+      <TouchableOpacity style={[styles.categoryButton, isActive && styles.categoryButtonActive]} onPress={onPress}>
+          <Ionicons size={24} name={icon} color={isActive ? Colors.white : Colors.primary} style={styles.icon} />
+      </TouchableOpacity>    
+    </View> 
   );
 };
 
@@ -39,10 +41,20 @@ const styles = StyleSheet.create({
       width: 0,
       height: 0,
     },
-    shadowOpacity: 0.2,
-    shadowRadius: 5.0,
+    shadowOpacity: 0.5,
+    shadowRadius: 2,
     elevation: 5,
-  }
+  },
+  shadow: {
+    shadowColor: "#2d2d2d",
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.4,
+    shadowRadius: 1.84,
+    elevation: 5,
+  },
 });
 
 export default SquaredButton;

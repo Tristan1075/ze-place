@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 10,
   },
   color: {
-    backgroundColor: 'rgba(200, 200, 200, 0.6)',
+    backgroundColor: 'rgba(220, 220, 220, 0.4)',
   }
 });
 

@@ -11,6 +11,7 @@ export type BottomTabParamList = {
 
 export type HomeParamList = {
   Home: undefined;
+  PlaceDetail: { item: any};
 };
 
 export type TabTwoParamList = {

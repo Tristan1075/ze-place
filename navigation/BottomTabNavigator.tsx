@@ -3,11 +3,14 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import * as React from 'react';
 
+import { BottomTabParamList, HomeParamList, TabTwoParamList } from '../types';
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
+
 import HomeScreen from '../screens/HomeScreen';
+import PlaceDetailScreen from '../screens/PlaceDetailScreen';
+
 import TabTwoScreen from '../screens/TabTwoScreen';
-import { BottomTabParamList, HomeParamList, TabTwoParamList } from '../types';
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
@@ -55,6 +58,11 @@ const HomeNavigator = () => {
       <HomeStack.Screen
         name="Home"
         component={HomeScreen}
+        options={{}}
+      />
+      <HomeStack.Screen
+        name="PlaceDetail"
+        component={PlaceDetailScreen}
         options={{}}
       />
     </HomeStack.Navigator>
