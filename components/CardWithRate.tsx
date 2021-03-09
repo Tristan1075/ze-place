@@ -14,7 +14,7 @@ const CardWithRate = (props: Props) => {
   return (
     <TouchableWithoutFeedback style={styles.carouselItem} onPress={onPress}>
       <View style={styles.shadow}>
-        <Image source={{uri: item.image}} style={styles.image} />
+        <Image source={{uri: item.images[0]}} style={styles.image} />
         <View style={styles.rate}>
           <Ionicons size={14} name='star' color={Colors.white} />
           <Text style={styles.rateValue}>  {item.rate}</Text>
@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
     fontFamily: 'poppins-bold',
   },
   image: {
-    backgroundColor: 'red',
+    backgroundColor: Colors.white,
     width: 220,
     height: 300,
     borderRadius: 15,

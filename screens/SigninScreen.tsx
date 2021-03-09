@@ -34,11 +34,11 @@ const SigninScreen = (props: Props) => {
       <Header type='back' />
       <View style={styles.container}>
         <Text style={styles.title}>Hello ! Signin to get started !</Text>
-        <TextInput style={styles.input} placeholder='Email' />
-        <TextInput style={styles.input} placeholder='Password' />
+        <TextInput style={styles.input} placeholder='Email' placeholderTextColor={Colors.secondary} />
+        <TextInput style={styles.input} placeholder='Password' placeholderTextColor={Colors.secondary} />
         <Button onPress={handleSigninPress} backgroundColor={Colors.primary} textColor={Colors.white} style={styles.button} />
         <View style={styles.row}>
-          <Text style={styles.text}>Don't have an account ? </Text>
+          <Text style={styles.text}>Forgot your password ?</Text>
           <Text style={[styles.text, styles.underline]}>Sign up</Text>
         </View>
       </View>
@@ -71,6 +71,7 @@ const styles = StyleSheet.create({
   },
   row: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   text: {
     fontFamily: 'poppins',
