@@ -1,17 +1,18 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
   FlatList,
   View,
   TextInput,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import {RouteProp, useRoute} from '@react-navigation/native';
 // @ts-ignore
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import {Ionicons} from '@expo/vector-icons';
 
-import {MessagesParamList} from '../types';
+import {Message, MessagesParamList} from '../types';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
 import {getConversationById} from '../api/conversations';
@@ -31,8 +32,9 @@ const ConversationScreen = (props: Props) => {
   const {navigation} = props;
   const route = useRoute<ConversationScreenNavigationProp>();
   const sender = route.params.sender;
-  const [messages, setMessages] = useState([]);
-  const [input, setInput] = useState('');
+  const [messages, setMessages] = useState<Array<Message>>([]);
+  const [input, setInput] = useState<string>('');
+  const _flatList = useRef<FlatList>(null);
 
   useEffect(() => {
     getConversationById(sender.conversationId)
@@ -46,7 +48,9 @@ const ConversationScreen = (props: Props) => {
       });
   }, [sender.conversationId]);
 
-  const renderItem = ({item, index}) => <ConversationItem message={item} />;
+  const renderItem = ({item}: {item: Message}) => (
+    <ConversationItem message={item} />
+  );
 
   const sendMessage = () => {
     const newMessage = {
@@ -55,13 +59,26 @@ const ConversationScreen = (props: Props) => {
     };
     setMessages((prev) => [...prev, newMessage]);
     setInput('');
+    scrollToBottom();
+  };
+
+  const scrollToBottom = () => {
+    if (_flatList.current) {
+      _flatList.current.scrollToEnd();
+    }
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header type="back" showProfil={true} />
+      <Header
+        type="back"
+        showProfil={true}
+        title={sender.from}
+        profilPicture={sender.picture}
+      />
       <View style={styles.content}>
         <FlatList
+          ref={_flatList}
           showsVerticalScrollIndicator={false}
           data={messages}
           renderItem={renderItem}
@@ -74,6 +91,7 @@ const ConversationScreen = (props: Props) => {
             style={styles.input}
             blurOnSubmit={false}
             value={input}
+            onTouchStart={scrollToBottom}
             returnKeyType="send"
             onSubmitEditing={sendMessage}
             onChangeText={(text) => setInput(text)}
