@@ -1,5 +1,11 @@
 import React from 'react';
-import {Text, StyleSheet, TouchableOpacity, ViewStyle, View} from 'react-native';
+import {
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ViewStyle,
+  View,
+} from 'react-native';
 import Colors from '../constants/Colors';
 
 type Props = {
@@ -7,23 +13,24 @@ type Props = {
   backgroundColor: string;
   textColor: string;
   style?: ViewStyle;
-}
+};
 
 const Button = (props: Props) => {
-  const {onPress, backgroundColor, textColor, style} =  props;
-  return(
+  const {onPress, backgroundColor, textColor, style} = props;
+  return (
     <View style={styles.shadow}>
-      <TouchableOpacity style={[styles.container, {backgroundColor}, style]} onPress={onPress}>
-          <Text style={[styles.text, {color: textColor}]}>Sign in</Text>
+      <TouchableOpacity
+        style={[styles.container, {backgroundColor}, style]}
+        onPress={onPress}>
+        <Text style={[styles.text, {color: textColor}]}>Sign in</Text>
       </TouchableOpacity>
     </View>
   );
 };
 
-
 const styles = StyleSheet.create({
   shadow: {
-    shadowColor: "#2d2d2d",
+    shadowColor: '#2d2d2d',
     shadowOffset: {
       width: 0,
       height: 2,
@@ -37,7 +44,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 15,
     paddingVertical: 20,
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 2,
@@ -48,8 +55,8 @@ const styles = StyleSheet.create({
   },
   text: {
     fontFamily: 'poppins-bold',
-    color: Colors.primary
-  }
+    color: Colors.primary,
+  },
 });
 
 export default Button;

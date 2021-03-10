@@ -1,36 +1,42 @@
 import React from 'react';
-import {Text, StyleSheet, View, Image, TouchableWithoutFeedback} from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import {
+  Text,
+  StyleSheet,
+  View,
+  Image,
+  TouchableWithoutFeedback,
+} from 'react-native';
+import {Ionicons} from '@expo/vector-icons';
 
 import Colors from '../constants/Colors';
+import {PlaceType} from '../types';
 
 type Props = {
   onPress: () => void;
-  item: any;
-}
+  place: PlaceType;
+};
 
 const CardWithRate = (props: Props) => {
-  const {onPress, item} =  props;
+  const {onPress, place} = props;
   return (
     <TouchableWithoutFeedback style={styles.carouselItem} onPress={onPress}>
       <View style={styles.shadow}>
-        <Image source={{uri: item.images[0]}} style={styles.image} />
+        <Image source={{uri: place.images[0]}} style={styles.image} />
         <View style={styles.rate}>
-          <Ionicons size={14} name='star' color={Colors.yellow} />
-          <Text style={styles.rateValue}>  {item.rate}</Text>
+          <Ionicons size={14} name="star" color={Colors.yellow} />
+          <Text style={styles.rateValue}> {place.rate}</Text>
         </View>
       </View>
     </TouchableWithoutFeedback>
   );
 };
 
-
 const styles = StyleSheet.create({
   carouselItem: {
     position: 'relative',
   },
   shadow: {
-    shadowColor: "#2d2d2d",
+    shadowColor: '#2d2d2d',
     shadowOffset: {
       width: 6,
       height: 0,
@@ -60,15 +66,6 @@ const styles = StyleSheet.create({
     width: 220,
     height: 300,
     borderRadius: 15,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    fontFamily: 'poppins',
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
   },
 });
 

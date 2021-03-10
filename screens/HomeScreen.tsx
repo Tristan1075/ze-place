@@ -1,92 +1,25 @@
 import React, {useState} from 'react';
-import { SafeAreaView, StyleSheet, Text, View, TextInput, TouchableOpacity, Image, Dimensions, ScrollView } from 'react-native';
+import {
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  Image,
+  ScrollView,
+} from 'react-native';
 import Carousel from 'react-native-snap-carousel';
-import { StackNavigationProp } from '@react-navigation/stack';
+import {StackNavigationProp} from '@react-navigation/stack';
 
 import Header from '../components/Header';
 import SquaredButton from '../components/SquaredButton';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
 import CardWithRate from '../components/CardWithRate';
-import { HomeParamList } from '../types';
+import {HomeParamList, PlaceType} from '../types';
+import {places, categories} from '../mocks';
 
-const categories = [
-  {
-    icon: 'home'
-  },
-  {
-    icon: 'parking'
-  },
-  {
-    icon: 'garden'
-  },
-  {
-    icon: 'home'
-  }
-];
-
-const items = [
-  {
-    images: [
-      'https://images.pexels.com/photos/1315919/pexels-photo-1315919.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500',
-      'https://images.pexels.com/photos/210617/pexels-photo-210617.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500',
-      'https://images.pexels.com/photos/4480505/pexels-photo-4480505.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500',
-      'https://images.pexels.com/photos/2381872/pexels-photo-2381872.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500',
-      'https://images.pexels.com/photos/2381872/pexels-photo-2381872.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500',
-    ],
-    reviewers: [
-      'https://images.pexels.com/photos/1704488/pexels-photo-1704488.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-      'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500',
-      'https://images.pexels.com/photos/1043471/pexels-photo-1043471.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500',
-    ],
-    rate: 3.5,
-  },
-  {
-    images: [
-      'https://images.pexels.com/photos/210617/pexels-photo-210617.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500',
-      'https://images.pexels.com/photos/1315919/pexels-photo-1315919.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500',
-      'https://images.pexels.com/photos/2381872/pexels-photo-2381872.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500',
-    ],
-    reviewers: [
-      'https://images.pexels.com/photos/1704488/pexels-photo-1704488.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-      'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500',
-      'https://images.pexels.com/photos/1043471/pexels-photo-1043471.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500',
-    ],
-    rate: 4.8,
-
-  },
-  {
-    images: [
-      'https://images.pexels.com/photos/4480505/pexels-photo-4480505.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500',
-      'https://images.pexels.com/photos/2381872/pexels-photo-2381872.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500',
-    ],
-    reviewers: [
-      'https://images.pexels.com/photos/1704488/pexels-photo-1704488.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-      'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500',
-      'https://images.pexels.com/photos/1043471/pexels-photo-1043471.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500',
-    ],
-    rate: 4.5,
-  },
-  {
-    images: [
-      'https://images.pexels.com/photos/1315919/pexels-photo-1315919.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500',
-      'https://images.pexels.com/photos/210617/pexels-photo-210617.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500',
-      'https://images.pexels.com/photos/4480505/pexels-photo-4480505.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500',
-      'https://images.pexels.com/photos/2381872/pexels-photo-2381872.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500',
-    ],
-    reviewers: [
-      'https://images.pexels.com/photos/1704488/pexels-photo-1704488.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-      'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500',
-      'https://images.pexels.com/photos/1043471/pexels-photo-1043471.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500',
-    ],
-    rate: 2.5,
-  }
-];
-
-type RootScreenNavigationProp = StackNavigationProp<
-  HomeParamList,
-  'Home'
->;
+type RootScreenNavigationProp = StackNavigationProp<HomeParamList, 'Home'>;
 
 type Props = {
   navigation: RootScreenNavigationProp;
@@ -96,53 +29,55 @@ const HomeScreen = (props: Props) => {
   const {navigation} = props;
   const [activeCategory, setActiveCategory] = useState<number>(0);
 
-  const handlePlacePress = (item: any) => {
-    navigation.navigate('PlaceDetail', item);
-  }
+  const handlePlacePress = (place: PlaceType) => {
+    navigation.navigate('PlaceDetail', {place: place});
+  };
 
-
-  const renderItem = ({item, index}) => <CardWithRate item={item} onPress={() => handlePlacePress(item)} />
+  const renderItem = ({item}: {item: PlaceType}) => {
+    return <CardWithRate place={item} onPress={() => handlePlacePress(item)} />;
+  };
 
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <Header type='menu' />
+        <Header type="menu" showProfil={true} />
         <View style={styles.container}>
           <Text style={styles.title}>Discover world with us !</Text>
-          <TextInput style={styles.input} placeholder='Search' />
+          <TextInput style={styles.input} placeholder="Search" />
           <View style={styles.iconsRow}>
-            {categories.map((category, index) => 
-              <SquaredButton 
-                onPress={() => setActiveCategory(index)} 
-                isActive={activeCategory === index} 
+            {categories.map((category, index) => (
+              <SquaredButton
+                key={index}
+                onPress={() => setActiveCategory(index)}
+                isActive={activeCategory === index}
                 icon={category.icon}
-              />       
-            )}
+              />
+            ))}
           </View>
         </View>
         <Carousel
           contentContainerCustomStyle={{paddingLeft: Layout.padding}}
           useScrollView={true}
-          data={items}
+          data={places}
           renderItem={renderItem}
           sliderWidth={Layout.window.width}
-          activeSlideAlignment='start'
+          activeSlideAlignment="start"
           itemWidth={220}
         />
         <Text style={styles.subtitle}>Popular Place</Text>
-        <ScrollView horizontal={true}showsHorizontalScrollIndicator={false}>
+        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
           <View style={styles.horizontalList}>
-            {items.map((item, index) => 
-              <View style={styles.shadow}>
-                <Image source={{uri: item.images[0]}} style={styles.image} />   
-              </View>  
-            )}
+            {places.map((place: PlaceType, index: number) => (
+              <View style={styles.shadow} key={index}>
+                <Image source={{uri: place.images[0]}} style={styles.image} />
+              </View>
+            ))}
           </View>
         </ScrollView>
       </ScrollView>
     </SafeAreaView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -167,7 +102,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     padding: 20,
     borderRadius: 15,
-    shadowColor: "#2d2d2d",
+    shadowColor: '#2d2d2d',
     shadowOffset: {
       width: 0,
       height: 2,
@@ -194,7 +129,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   shadow: {
-    shadowColor: "#2d2d2d",
+    shadowColor: '#2d2d2d',
     shadowOffset: {
       width: 6,
       height: 0,
@@ -202,8 +137,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 1.84,
     elevation: 5,
-  }
+  },
 });
-
 
 export default HomeScreen;

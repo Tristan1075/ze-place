@@ -1,22 +1,22 @@
 import React, {useState} from 'react';
-import { SafeAreaView, StyleSheet, Text, View, TextInput, ImageBackground, Image, Dimensions, ScrollView } from 'react-native';
-import { RouteProp, useRoute } from '@react-navigation/native';
-import { Rating, AirbnbRating } from 'react-native-ratings';
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableWithoutFeedback,
+  Image,
+  ScrollView,
+} from 'react-native';
+import {RouteProp, useRoute} from '@react-navigation/native';
+import {Rating} from 'react-native-ratings';
 
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
-import { HomeParamList } from '../types';
+import {HomeParamList, PlaceType} from '../types';
 
-import CardWithRate from '../components/CardWithRate';
 import Header from '../components/Header';
-import RatingStars from '../components/RatingStars';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
-
-type PlaceScreenNavigationProp = RouteProp<
-  HomeParamList,
-  'PlaceDetail'
->
+type PlaceScreenNavigationProp = RouteProp<HomeParamList, 'PlaceDetail'>;
 
 type Props = {
   navigation: PlaceScreenNavigationProp;
@@ -25,45 +25,70 @@ type Props = {
 const PlaceDetailScreen = (props: Props) => {
   const [activeImage, setActiveImage] = useState<number>(0);
   const route = useRoute<PlaceScreenNavigationProp>();
-  const item = route.params;
+  const item: PlaceType = route.params.place;
   return (
     <ScrollView showsVerticalScrollIndicator={false} style={styles.screen}>
-      <Image source={{uri: item.images[activeImage] }} style={styles.cover} />
+      <Image source={{uri: item.images[activeImage]}} style={styles.cover} />
       <View style={styles.container}>
-        <Header type='back' />
+        <Header type="back" />
         <View style={styles.content}>
           <Text style={styles.title}>A River runs</Text>
           <Text style={styles.subtitle}>Island in the Aegean Sea</Text>
           <View style={styles.descriptionBloc}>
             <Text style={styles.about}>About Rivers runs</Text>
-            <Rating 
-              startingValue={item.rate} 
-              imageSize={20} 
-              tintColor={Colors.background} 
+            <Rating
+              startingValue={item.rate}
+              imageSize={20}
+              tintColor={Colors.background}
             />
             <View style={styles.row}>
-              {item.reviewers.map((reviewer) => 
-                  <Image source={{uri: reviewer }} style={styles.reviewers} />
-              )}
+              {item.reviewers.map((reviewer) => (
+                <Image source={{uri: reviewer}} style={styles.reviewers} />
+              ))}
               <View style={styles.reviewersNumber}>
                 <Text style={styles.subtitle}>5+</Text>
               </View>
               <Text style={styles.reviewersText}>People reviewed this</Text>
             </View>
-            <Text style={styles.description}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse eget tellus vel nisl ultricies vestibulum sit amet vel ipsum. Praesent consectetur pulvinar dignissim. Etiam a nisi scelerisque, pellentesque nunc id, vulputate lorem. Interdum et malesuada fames ac ante ipsum primis in faucibus. Integer accumsan lorem id massa aliquam faucibus. Donec posuere vulputate justo eget commodo. Integer bibendum elit pharetra eros luctus, et cursus nibh pharetra. In fermentum nisl metus, vel vehicula purus suscipit et. Mauris nisl ante, accumsan id porttitor quis, porta convallis sem. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. In vitae ipsum dignissim, molestie turpis ac, ultricies risus. Phasellus bibendum bibendum mollis. Nam ut efficitur diam. Curabitur ex sapien, dictum a dui nec, interdum viverra urna. Maecenas euismod semper eros, in laoreet neque elementum non.</Text>
+            <Text style={styles.description}>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+              Suspendisse eget tellus vel nisl ultricies vestibulum sit amet vel
+              ipsum. Praesent consectetur pulvinar dignissim. Etiam a nisi
+              scelerisque, pellentesque nunc id, vulputate lorem. Interdum et
+              malesuada fames ac ante ipsum primis in faucibus. Integer accumsan
+              lorem id massa aliquam faucibus. Donec posuere vulputate justo
+              eget commodo. Integer bibendum elit pharetra eros luctus, et
+              cursus nibh pharetra. In fermentum nisl metus, vel vehicula purus
+              suscipit et. Mauris nisl ante, accumsan id porttitor quis, porta
+              convallis sem. Orci varius natoque penatibus et magnis dis
+              parturient montes, nascetur ridiculus mus. In vitae ipsum
+              dignissim, molestie turpis ac, ultricies risus. Phasellus bibendum
+              bibendum mollis. Nam ut efficitur diam. Curabitur ex sapien,
+              dictum a dui nec, interdum viverra urna. Maecenas euismod semper
+              eros, in laoreet neque elementum non.
+            </Text>
           </View>
         </View>
-        <ScrollView style={styles.imagePicker} contentContainerStyle={styles.center} showsVerticalScrollIndicator={false}>
-          {item.images.map((image, index) => 
+        <ScrollView
+          style={styles.imagePicker}
+          contentContainerStyle={styles.center}
+          showsVerticalScrollIndicator={false}>
+          {item.images.map((image, index) => (
             <TouchableWithoutFeedback onPress={() => setActiveImage(index)}>
-              <Image source={{uri: image }} style={[styles.imagePreview, activeImage === index && styles.activeImage]} />
+              <Image
+                source={{uri: image}}
+                style={[
+                  styles.imagePreview,
+                  activeImage === index && styles.activeImage,
+                ]}
+              />
             </TouchableWithoutFeedback>
-          )}
+          ))}
         </ScrollView>
       </View>
     </ScrollView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   screen: {
@@ -84,8 +109,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: Layout.window.width,
     height: 480,
-    resizeMode: "cover",
-    justifyContent: "flex-end",
+    resizeMode: 'cover',
+    justifyContent: 'flex-end',
     borderBottomLeftRadius: 60,
     borderBottomRightRadius: 60,
   },
@@ -154,7 +179,7 @@ const styles = StyleSheet.create({
   reviewersNumber: {
     fontFamily: 'poppins',
     fontSize: 16,
-    backgroundColor: Colors.primary, 
+    backgroundColor: Colors.primary,
     color: Colors.white,
     height: 30,
     width: 30,
@@ -166,9 +191,8 @@ const styles = StyleSheet.create({
   reviewersText: {
     fontFamily: 'poppins',
     fontSize: 16,
-    color: Colors.primary,  
-  }
+    color: Colors.primary,
+  },
 });
-
 
 export default PlaceDetailScreen;

@@ -6,14 +6,38 @@ export type RootStackParamList = {
 
 export type BottomTabParamList = {
   Home: undefined;
-  TabTwo: undefined;
+  Messages: undefined;
 };
 
 export type HomeParamList = {
   Home: undefined;
-  PlaceDetail: { item: any};
+  PlaceDetail: {place: PlaceType};
 };
 
-export type TabTwoParamList = {
-  TabTwoScreen: undefined;
+export type MessagesParamList = {
+  Messages: undefined;
+  Conversation: {sender: Sender};
+};
+
+export type PlaceType = {
+  images: Array<string>;
+  reviewers: Array<string>;
+  rate: number;
+};
+
+export type Sender = {
+  id: string;
+  from: string;
+  picture: string;
+  conversationId: string;
+};
+
+export type Conversation = {
+  id: string;
+  messages: Array<Message>;
+};
+
+export type Message = {
+  value: string;
+  from: string;
 };
