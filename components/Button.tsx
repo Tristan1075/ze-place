@@ -13,16 +13,17 @@ type Props = {
   backgroundColor: string;
   textColor: string;
   style?: ViewStyle;
+  value: string;
 };
 
 const Button = (props: Props) => {
-  const {onPress, backgroundColor, textColor, style} = props;
+  const {onPress, backgroundColor, textColor, style, value} = props;
   return (
     <View style={styles.shadow}>
       <TouchableOpacity
         style={[styles.container, {backgroundColor}, style]}
         onPress={onPress}>
-        <Text style={[styles.text, {color: textColor}]}>Sign in</Text>
+        <Text style={[styles.text, {color: textColor}]}>{value}</Text>
       </TouchableOpacity>
     </View>
   );
@@ -43,7 +44,8 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     alignItems: 'center',
     borderRadius: 15,
-    paddingVertical: 20,
+    paddingVertical: 15,
+    paddingHorizontal: 20,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,

@@ -19,10 +19,39 @@ export type MessagesParamList = {
   Conversation: {sender: Sender};
 };
 
+export type User = {
+  avatar: String;
+  first_name: String;
+  last_name: String;
+  email: String;
+  password: String;
+  phone: String;
+  address: String;
+  description: String;
+  created_at: {type: Date; default: Date};
+};
+
 export type PlaceType = {
-  images: Array<string>;
-  reviewers: Array<string>;
+  title: String;
+  location: String;
+  description: String;
+  images: Array<Image>;
   rate: number;
+  price: number;
+  reviews: Array<Review>;
+  created_at: {type: Date; default: Date};
+};
+
+export type Review = {
+  from: User;
+  text: String;
+  rate: Number;
+  created_at: {type: Date; default: Date};
+};
+
+export type Image = {
+  name: string;
+  url: string;
 };
 
 export type Sender = {
@@ -40,4 +69,9 @@ export type Conversation = {
 export type Message = {
   value: string;
   from: string;
+};
+
+export type Credentials = {
+  email: string;
+  password: string;
 };

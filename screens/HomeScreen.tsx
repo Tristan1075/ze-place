@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 import {StackNavigationProp} from '@react-navigation/stack';
+import * as SecureStore from 'expo-secure-store';
 
 import Header from '../components/Header';
 import SquaredButton from '../components/SquaredButton';
@@ -17,7 +18,8 @@ import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
 import CardWithRate from '../components/CardWithRate';
 import {HomeParamList, PlaceType} from '../types';
-import {places, categories} from '../mocks';
+import {categories} from '../mocks';
+import {getAllPlaces} from '../api/places';
 
 type RootScreenNavigationProp = StackNavigationProp<HomeParamList, 'Home'>;
 
@@ -28,6 +30,12 @@ type Props = {
 const HomeScreen = (props: Props) => {
   const {navigation} = props;
   const [activeCategory, setActiveCategory] = useState<number>(0);
+  const [places, setPlaces] = useState<Array<PlaceType>>([]);
+
+  useEffect(() => {
+    const init = async () => setPlaces(await getAllPlaces());
+    init();
+  }, []);
 
   const handlePlacePress = (place: PlaceType) => {
     navigation.navigate('PlaceDetail', {place: place});
@@ -55,6 +63,7 @@ const HomeScreen = (props: Props) => {
             ))}
           </View>
         </View>
+        <Text style={styles.subtitle}>Near you</Text>
         <Carousel
           contentContainerCustomStyle={{paddingLeft: Layout.padding}}
           useScrollView={true}
@@ -67,14 +76,25 @@ const HomeScreen = (props: Props) => {
         <Text style={styles.subtitle}>Popular Place</Text>
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
           <View style={styles.horizontalList}>
-            {places.map((place: PlaceType, index: number) => (
-              <View style={styles.shadow} key={index}>
-                <Image source={{uri: place.images[0]}} style={styles.image} />
-              </View>
-            ))}
+            {places.map((place: PlaceType, index: number) => {
+              console.log(place.images[0].url);
+              return (
+                <View style={styles.shadow} key={index}>
+                  <Image
+                    source={{uri: place.images[0].url}}
+                    style={styles.image}
+                  />
+                </View>
+              );
+            })}
           </View>
         </ScrollView>
       </ScrollView>
+      <Text
+        style={styles.subtitle}
+        onPress={async () => await SecureStore.deleteItemAsync('access-token')}>
+        Déconnexion
+      </Text>
     </SafeAreaView>
   );
 };
@@ -95,7 +115,7 @@ const styles = StyleSheet.create({
     fontFamily: 'playfair-bold',
     fontSize: 26,
     color: Colors.primary,
-    paddingTop: 20,
+    paddingVertical: 20,
     paddingLeft: Layout.padding,
   },
   input: {
@@ -119,7 +139,6 @@ const styles = StyleSheet.create({
   },
   horizontalList: {
     flexDirection: 'row',
-    paddingVertical: 20,
     paddingHorizontal: Layout.padding,
   },
   image: {

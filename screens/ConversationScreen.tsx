@@ -5,7 +5,6 @@ import {
   FlatList,
   View,
   TextInput,
-  TouchableWithoutFeedback,
 } from 'react-native';
 import {RouteProp, useRoute} from '@react-navigation/native';
 // @ts-ignore
@@ -28,6 +27,7 @@ type ConversationScreenNavigationProp = RouteProp<
 type Props = {
   navigation: ConversationScreenNavigationProp;
 };
+
 const ConversationScreen = (props: Props) => {
   const {navigation} = props;
   const route = useRoute<ConversationScreenNavigationProp>();

@@ -10,7 +10,7 @@ type Props = {
   type: 'back' | 'menu';
   showProfil?: boolean;
   title?: string;
-  profilPicture: string;
+  profilPicture?: string;
 };
 
 const Header = (props: Props) => {

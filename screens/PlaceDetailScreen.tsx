@@ -6,15 +6,20 @@ import {
   TouchableWithoutFeedback,
   Image,
   ScrollView,
+  ImageBackground,
 } from 'react-native';
 import {RouteProp, useRoute} from '@react-navigation/native';
 import {Rating} from 'react-native-ratings';
+import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
+import {Ionicons} from '@expo/vector-icons';
 
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
 import {HomeParamList, PlaceType} from '../types';
-
 import Header from '../components/Header';
+import {facilities} from '../mocks';
+import Button from '../components/Button';
+import {mapStyle} from '../utils/mapStyle';
 
 type PlaceScreenNavigationProp = RouteProp<HomeParamList, 'PlaceDetail'>;
 
@@ -22,71 +27,115 @@ type Props = {
   navigation: PlaceScreenNavigationProp;
 };
 
-const PlaceDetailScreen = (props: Props) => {
+const PlaceDetailScreen = () => {
   const [activeImage, setActiveImage] = useState<number>(0);
+  const [seeMore, setSeeMore] = useState<boolean>(false);
   const route = useRoute<PlaceScreenNavigationProp>();
   const item: PlaceType = route.params.place;
   return (
-    <ScrollView showsVerticalScrollIndicator={false} style={styles.screen}>
-      <Image source={{uri: item.images[activeImage]}} style={styles.cover} />
-      <View style={styles.container}>
-        <Header type="back" />
-        <View style={styles.content}>
-          <Text style={styles.title}>A River runs</Text>
-          <Text style={styles.subtitle}>Island in the Aegean Sea</Text>
-          <View style={styles.descriptionBloc}>
-            <Text style={styles.about}>About Rivers runs</Text>
-            <Rating
-              startingValue={item.rate}
-              imageSize={20}
-              tintColor={Colors.background}
-            />
-            <View style={styles.row}>
-              {item.reviewers.map((reviewer) => (
-                <Image source={{uri: reviewer}} style={styles.reviewers} />
-              ))}
-              <View style={styles.reviewersNumber}>
-                <Text style={styles.subtitle}>5+</Text>
-              </View>
-              <Text style={styles.reviewersText}>People reviewed this</Text>
-            </View>
-            <Text style={styles.description}>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-              Suspendisse eget tellus vel nisl ultricies vestibulum sit amet vel
-              ipsum. Praesent consectetur pulvinar dignissim. Etiam a nisi
-              scelerisque, pellentesque nunc id, vulputate lorem. Interdum et
-              malesuada fames ac ante ipsum primis in faucibus. Integer accumsan
-              lorem id massa aliquam faucibus. Donec posuere vulputate justo
-              eget commodo. Integer bibendum elit pharetra eros luctus, et
-              cursus nibh pharetra. In fermentum nisl metus, vel vehicula purus
-              suscipit et. Mauris nisl ante, accumsan id porttitor quis, porta
-              convallis sem. Orci varius natoque penatibus et magnis dis
-              parturient montes, nascetur ridiculus mus. In vitae ipsum
-              dignissim, molestie turpis ac, ultricies risus. Phasellus bibendum
-              bibendum mollis. Nam ut efficitur diam. Curabitur ex sapien,
-              dictum a dui nec, interdum viverra urna. Maecenas euismod semper
-              eros, in laoreet neque elementum non.
-            </Text>
+    <View>
+      <ScrollView showsVerticalScrollIndicator={false} style={styles.screen}>
+        <ImageBackground
+          source={{uri: item.images[activeImage].url}}
+          style={styles.cover}>
+          <View style={styles.favorite}>
+            <Ionicons size={20} name="star" color={Colors.primary} />
           </View>
+        </ImageBackground>
+        <View style={styles.container}>
+          <Header type="back" />
+          <View style={[styles.content, styles.paddingTop]}>
+            <Text style={styles.title}>{item.title}</Text>
+            <Text style={styles.subtitle}>Island in the Aegean Sea</Text>
+            <View style={styles.descriptionBloc}>
+              <Text style={styles.contentTitle}>About {item.title}</Text>
+              <View style={styles.padding}>
+                <Rating
+                  startingValue={item.rate}
+                  imageSize={20}
+                  tintColor={Colors.background}
+                />
+              </View>
+              <View style={styles.row}>
+                {item.reviews.map((review, index) => (
+                  <Image
+                    key={index}
+                    source={{uri: item.images[0].url}}
+                    style={styles.reviewers}
+                  />
+                ))}
+                <View style={styles.reviewersNumber}>
+                  <Text style={styles.subtitle}>{item.reviews.length}+</Text>
+                </View>
+                <Text style={styles.reviewersText}>People reviewed this</Text>
+              </View>
+              <Text
+                style={styles.description}
+                numberOfLines={seeMore ? 999 : 5}>
+                {item.description}
+              </Text>
+              <Text style={styles.seeMore} onPress={() => setSeeMore(!seeMore)}>
+                See more
+              </Text>
+            </View>
+            <Text style={styles.contentTitle}>Features</Text>
+          </View>
+          <ScrollView
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.facilitiesContainer}>
+            {facilities.map((facility, index) => (
+              <View style={styles.facilities} key={index}>
+                <Image source={facility.url} style={styles.facilityIcon} />
+                <Text style={styles.facilityTitle}>Stockage</Text>
+              </View>
+            ))}
+          </ScrollView>
+          <View style={styles.content}>
+            <MapView
+              provider={PROVIDER_GOOGLE}
+              customMapStyle={mapStyle}
+              scrollEnabled={false}
+              style={styles.map}
+              initialRegion={{
+                latitude: 37.78825,
+                longitude: -122.4324,
+                latitudeDelta: 0.0922,
+                longitudeDelta: 0.0421,
+              }}
+            />
+            <Text style={styles.contentTitle}>About Rivers runs</Text>
+          </View>
+          <ScrollView
+            style={styles.imagePicker}
+            contentContainerStyle={styles.center}
+            showsVerticalScrollIndicator={false}>
+            {item.images.map((image, index) => (
+              <TouchableWithoutFeedback
+                onPress={() => setActiveImage(index)}
+                key={index}>
+                <Image
+                  source={{uri: image.url}}
+                  style={[
+                    styles.imagePreview,
+                    activeImage === index && styles.activeImage,
+                  ]}
+                />
+              </TouchableWithoutFeedback>
+            ))}
+          </ScrollView>
         </View>
-        <ScrollView
-          style={styles.imagePicker}
-          contentContainerStyle={styles.center}
-          showsVerticalScrollIndicator={false}>
-          {item.images.map((image, index) => (
-            <TouchableWithoutFeedback onPress={() => setActiveImage(index)}>
-              <Image
-                source={{uri: image}}
-                style={[
-                  styles.imagePreview,
-                  activeImage === index && styles.activeImage,
-                ]}
-              />
-            </TouchableWithoutFeedback>
-          ))}
-        </ScrollView>
+      </ScrollView>
+      <View style={styles.chooseBanner}>
+        <Text style={styles.chooseBannerText}>Per day</Text>
+        <Text style={styles.chooseBannerPrice}>100€</Text>
+        <Button
+          backgroundColor={Colors.white}
+          textColor={Colors.primary}
+          value={'Select place'}
+        />
       </View>
-    </ScrollView>
+    </View>
   );
 };
 
@@ -94,16 +143,17 @@ const styles = StyleSheet.create({
   screen: {
     backgroundColor: Colors.background,
   },
+  paddingTop: {
+    paddingTop: 250,
+  },
   container: {
     flex: 1,
     paddingTop: 50,
     position: 'relative',
+    paddingBottom: 100,
   },
   row: {
-    marginTop: 10,
     flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   cover: {
     position: 'absolute',
@@ -116,7 +166,6 @@ const styles = StyleSheet.create({
   },
   content: {
     paddingHorizontal: Layout.padding,
-    paddingTop: 250,
   },
   title: {
     fontFamily: 'playfair-bold',
@@ -130,14 +179,14 @@ const styles = StyleSheet.create({
     color: Colors.white,
   },
   descriptionBloc: {
-    paddingTop: 80,
+    paddingTop: 40,
     alignItems: 'flex-start',
   },
-  about: {
+  contentTitle: {
     fontFamily: 'playfair-bold',
     fontSize: 24,
     color: Colors.secondary,
-    paddingBottom: 10,
+    paddingVertical: 10,
   },
   description: {
     paddingTop: 10,
@@ -192,6 +241,71 @@ const styles = StyleSheet.create({
     fontFamily: 'poppins',
     fontSize: 16,
     color: Colors.primary,
+  },
+  facilities: {
+    backgroundColor: 'rgb(228, 236, 249)',
+    marginRight: 20,
+    width: 100,
+    height: 100,
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  facilityIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: 10,
+    marginBottom: 10,
+  },
+  facilityTitle: {
+    fontFamily: 'poppins-light',
+    fontSize: 12,
+    color: Colors.secondary,
+  },
+  map: {
+    height: 120,
+    borderRadius: 20,
+    marginTop: 20,
+  },
+  seeMore: {
+    paddingTop: 5,
+    fontFamily: 'poppins',
+    fontSize: 12,
+    color: Colors.secondary,
+  },
+  chooseBanner: {
+    flexDirection: 'row',
+    padding: 10,
+    paddingLeft: Layout.padding,
+    position: 'absolute',
+    left: Layout.padding,
+    right: Layout.padding,
+    bottom: 20,
+    backgroundColor: Colors.primary,
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  chooseBannerText: {
+    fontFamily: 'poppins',
+    color: Colors.white,
+    marginRight: 5,
+  },
+  chooseBannerPrice: {
+    fontFamily: 'poppins-bold',
+    color: Colors.white,
+    flex: 1,
+  },
+  facilitiesContainer: {
+    paddingLeft: Layout.padding,
+    paddingRight: 5,
+  },
+  favorite: {
+    position: 'absolute',
+    right: 20,
+    top: 60,
+    backgroundColor: 'rgba(220, 220, 220, 0.4)',
+    padding: 5,
+    borderRadius: 20,
   },
 });
 

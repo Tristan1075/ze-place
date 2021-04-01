@@ -2,6 +2,8 @@ import {Message, PlaceType} from '../types';
 
 export const places: Array<PlaceType> = [
   {
+    title: 'A Big House',
+    subtitle: 'The way you like...',
     images: [
       'https://images.pexels.com/photos/1315919/pexels-photo-1315919.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500',
       'https://images.pexels.com/photos/210617/pexels-photo-210617.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500',
@@ -17,6 +19,8 @@ export const places: Array<PlaceType> = [
     rate: 3.5,
   },
   {
+    title: 'A Big House',
+    subtitle: 'The way you like...',
     images: [
       'https://images.pexels.com/photos/210617/pexels-photo-210617.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500',
       'https://images.pexels.com/photos/1315919/pexels-photo-1315919.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500',
@@ -30,6 +34,8 @@ export const places: Array<PlaceType> = [
     rate: 4.8,
   },
   {
+    title: 'A Big House',
+    subtitle: 'The way you like...',
     images: [
       'https://images.pexels.com/photos/4480505/pexels-photo-4480505.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500',
       'https://images.pexels.com/photos/2381872/pexels-photo-2381872.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500',
@@ -42,6 +48,8 @@ export const places: Array<PlaceType> = [
     rate: 4.5,
   },
   {
+    title: 'A Big House',
+    subtitle: 'The way you like...',
     images: [
       'https://images.pexels.com/photos/1315919/pexels-photo-1315919.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500',
       'https://images.pexels.com/photos/210617/pexels-photo-210617.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500',
@@ -62,10 +70,10 @@ export const categories = [
     icon: 'home',
   },
   {
-    icon: 'parking',
+    icon: 'heart',
   },
   {
-    icon: 'garden',
+    icon: 'home',
   },
   {
     icon: 'home',
@@ -120,3 +128,21 @@ export const conversation = {
     },
   ],
 };
+
+export const facilities = [
+  {
+    url: require('../assets/images/packages.png'),
+  },
+  {
+    url: require('../assets/images/park.png'),
+  },
+  {
+    url: require('../assets/images/party.png'),
+  },
+  {
+    url: require('../assets/images/barbecue.png'),
+  },
+  {
+    url: require('../assets/images/packages.png'),
+  },
+];

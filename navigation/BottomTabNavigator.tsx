@@ -5,7 +5,6 @@ import * as React from 'react';
 
 import {BottomTabParamList, HomeParamList, MessagesParamList} from '../types';
 import Colors from '../constants/Colors';
-import useColorScheme from '../hooks/useColorScheme';
 
 import HomeScreen from '../screens/HomeScreen';
 import PlaceDetailScreen from '../screens/PlaceDetailScreen';
@@ -16,12 +15,10 @@ import ConversationScreen from '../screens/ConversationScreen';
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
 export default function BottomTabNavigator() {
-  const colorScheme = useColorScheme();
-
   return (
     <BottomTab.Navigator
       initialRouteName="Home"
-      tabBarOptions={{activeTintColor: Colors[colorScheme].tint}}>
+      tabBarOptions={{activeTintColor: Colors.primary}}>
       <BottomTab.Screen
         name="Home"
         component={HomeNavigator}

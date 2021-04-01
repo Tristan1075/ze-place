@@ -1,12 +1,14 @@
-import * as React from 'react';
+import React, {useState} from 'react';
 import {StyleSheet, Text, View, SafeAreaView, TextInput} from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {CommonActions} from '@react-navigation/native';
+import {CommonActions} from '@react-navigation/routers';
+import * as SecureStore from 'expo-secure-store';
 
+import {Credentials, RootStackParamList} from '../types';
 import Button from '../components/Button';
 import Colors from '../constants/Colors';
-import {RootStackParamList} from '../types';
 import Header from '../components/Header';
+import {login} from '../api/auth';
 
 type RootScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -19,14 +21,26 @@ type Props = {
 
 const SigninScreen = (props: Props) => {
   const {navigation} = props;
+  const [error, setError] = useState<boolean>(false);
+  const [credentials, setCredentials] = useState<Credentials>({
+    email: '',
+    password: '',
+  });
 
-  const handleSigninPress = () => {
-    navigation.dispatch(
-      CommonActions.reset({
-        index: 0,
-        routes: [{name: 'Tab'}],
-      }),
-    );
+  const handleSigninPress = async () => {
+    try {
+      const token = await login(credentials);
+      await SecureStore.setItemAsync('access-token', token.access_token);
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{name: 'Tab'}],
+        }),
+      );
+    } catch (e) {
+      setError(true);
+      console.log(e);
+    }
   };
 
   return (
@@ -35,16 +49,30 @@ const SigninScreen = (props: Props) => {
       <View style={styles.container}>
         <Text style={styles.title}>Hello ! Signin to get started !</Text>
         <TextInput
+          onChange={() => setError(false)}
+          onChangeText={(v) =>
+            setCredentials({...credentials, email: v.toLowerCase()})
+          }
           style={styles.input}
           placeholder="Email"
+          autoCapitalize="none"
           placeholderTextColor={Colors.gray}
         />
         <TextInput
+          onChange={() => setError(false)}
+          onChangeText={(v) => setCredentials({...credentials, password: v})}
           style={styles.input}
           placeholder="Password"
+          autoCapitalize="none"
           placeholderTextColor={Colors.gray}
         />
+        {error && (
+          <Text style={styles.error}>
+            Your email and/or password do not match !
+          </Text>
+        )}
         <Button
+          value="Sign in"
           onPress={handleSigninPress}
           backgroundColor={Colors.primary}
           textColor={Colors.white}
@@ -111,6 +139,11 @@ const styles = StyleSheet.create({
   },
   button: {
     marginVertical: 20,
+  },
+  error: {
+    paddingTop: 10,
+    color: Colors.error,
+    fontFamily: 'poppins',
   },
   circle: {
     position: 'absolute',
