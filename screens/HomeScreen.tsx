@@ -11,6 +11,7 @@ import {
 import Carousel from 'react-native-snap-carousel';
 import {StackNavigationProp} from '@react-navigation/stack';
 import * as SecureStore from 'expo-secure-store';
+import i18n from 'i18n-js';
 
 import Header from '../components/Header';
 import SquaredButton from '../components/SquaredButton';
@@ -50,7 +51,7 @@ const HomeScreen = (props: Props) => {
       <ScrollView showsVerticalScrollIndicator={false}>
         <Header type="menu" showProfil={true} />
         <View style={styles.container}>
-          <Text style={styles.title}>Discover world with us !</Text>
+          <Text style={styles.title}>{i18n.t('discover')}</Text>
           <TextInput style={styles.input} placeholder="Search" />
           <View style={styles.iconsRow}>
             {categories.map((category, index) => (
@@ -77,7 +78,6 @@ const HomeScreen = (props: Props) => {
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
           <View style={styles.horizontalList}>
             {places.map((place: PlaceType, index: number) => {
-              console.log(place.images[0].url);
               return (
                 <View style={styles.shadow} key={index}>
                   <Image

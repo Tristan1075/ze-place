@@ -6,12 +6,13 @@ import {
   TouchableWithoutFeedback,
   Image,
   ScrollView,
-  ImageBackground,
+  Modal,
 } from 'react-native';
 import {RouteProp, useRoute} from '@react-navigation/native';
 import {Rating} from 'react-native-ratings';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import {Ionicons} from '@expo/vector-icons';
+import ImageViewer from 'react-native-image-zoom-viewer';
 
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
@@ -30,18 +31,19 @@ type Props = {
 const PlaceDetailScreen = () => {
   const [activeImage, setActiveImage] = useState<number>(0);
   const [seeMore, setSeeMore] = useState<boolean>(false);
+  const [imagePreview, setImagePreview] = useState<boolean>(false);
   const route = useRoute<PlaceScreenNavigationProp>();
   const item: PlaceType = route.params.place;
   return (
     <View>
       <ScrollView showsVerticalScrollIndicator={false} style={styles.screen}>
-        <ImageBackground
+        <Image
           source={{uri: item.images[activeImage].url}}
-          style={styles.cover}>
-          <View style={styles.favorite}>
-            <Ionicons size={20} name="star" color={Colors.primary} />
-          </View>
-        </ImageBackground>
+          style={styles.cover}
+        />
+        <View style={styles.favorite}>
+          <Ionicons size={20} name="star" color={Colors.primary} />
+        </View>
         <View style={styles.container}>
           <Header type="back" />
           <View style={[styles.content, styles.paddingTop]}>
@@ -113,6 +115,7 @@ const PlaceDetailScreen = () => {
             {item.images.map((image, index) => (
               <TouchableWithoutFeedback
                 onPress={() => setActiveImage(index)}
+                onLongPress={() => setImagePreview(true)}
                 key={index}>
                 <Image
                   source={{uri: image.url}}
@@ -128,13 +131,24 @@ const PlaceDetailScreen = () => {
       </ScrollView>
       <View style={styles.chooseBanner}>
         <Text style={styles.chooseBannerText}>Per day</Text>
-        <Text style={styles.chooseBannerPrice}>100€</Text>
+        <Text style={styles.chooseBannerPrice}>{item.price}€</Text>
         <Button
           backgroundColor={Colors.white}
           textColor={Colors.primary}
           value={'Select place'}
         />
       </View>
+      <Modal visible={imagePreview} transparent={true}>
+        <TouchableWithoutFeedback onPress={() => setImagePreview(false)}>
+          <ImageViewer
+            imageUrls={item.images}
+            index={activeImage}
+            enablePreload={true}
+            backgroundColor={'rgba(0,0,0, 0.8)'}
+            onClick={() => setImagePreview(false)}
+          />
+        </TouchableWithoutFeedback>
+      </Modal>
     </View>
   );
 };

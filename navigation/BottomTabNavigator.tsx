@@ -11,6 +11,7 @@ import PlaceDetailScreen from '../screens/PlaceDetailScreen';
 
 import MessagesScreen from '../screens/MessagesScreen';
 import ConversationScreen from '../screens/ConversationScreen';
+import FavoritesScreen from '../screens/FavoritesScreen';
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
@@ -33,6 +34,13 @@ export default function BottomTabNavigator() {
           tabBarIcon: ({color}) => (
             <TabBarIcon name="chatbubbles-outline" color={color} />
           ),
+        }}
+      />
+      <BottomTab.Screen
+        name="Favorites"
+        component={FavoritesNavigator}
+        options={{
+          tabBarIcon: ({color}) => <TabBarIcon name="heart" color={color} />,
         }}
       />
     </BottomTab.Navigator>
@@ -67,5 +75,15 @@ const MessagesNavigator = () => {
         component={ConversationScreen}
       />
     </MessagesStack.Navigator>
+  );
+};
+
+const FavoritesStack = createStackNavigator<MessagesParamList>();
+
+const FavoritesNavigator = () => {
+  return (
+    <FavoritesStack.Navigator screenOptions={{headerShown: false}}>
+      <FavoritesStack.Screen name="Messages" component={FavoritesScreen} />
+    </FavoritesStack.Navigator>
   );
 };

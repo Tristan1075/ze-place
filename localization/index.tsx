@@ -1,24 +1,13 @@
-import { Platform, NativeModules } from 'react-native'
-import type {LocalizationType} from './type';
+import * as Localization from 'expo-localization';
+import i18n from 'i18n-js';
 
-import fr from './fr-FR';
-import en from './en-US';
+import frFR from './fr-FR';
+import enUS from './en-US';
 
-const deviceLanguage =
-      Platform.OS === 'ios'
-        ? NativeModules.SettingsManager.settings.AppleLocale ||
-          NativeModules.SettingsManager.settings.AppleLanguages[0] //iOS 13
-        : NativeModules.I18nManager.localeIdentifier;
-
-
-export const translate = (index: string) => {
-  const langFR: LocalizationType = fr;
-  switch(deviceLanguage){
-    case 'fr':
-      return langFR[index];
-
-
-    case: 'en':
-      return en[index]; 
-  };
+i18n.translations = {
+  en: enUS,
+  fr: frFR,
 };
+
+i18n.locale = Localization.locale;
+i18n.fallbacks = true;
