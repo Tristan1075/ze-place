@@ -37,6 +37,10 @@ const RootScreen = (props: Props) => {
     navigation.navigate('Signin');
   };
 
+  const handleSignupPress = () => {
+    navigation.navigate('Signup');
+  };
+
   return (
     <ImageBackground
       source={{
@@ -51,7 +55,9 @@ const RootScreen = (props: Props) => {
         backgroundColor={Colors.white}
         textColor={Colors.primary}
       />
-      <Text style={styles.text}>Create an account</Text>
+      <Text style={styles.text} onPress={handleSignupPress}>
+        Create an account
+      </Text>
     </ImageBackground>
   );
 };

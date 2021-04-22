@@ -1,6 +1,7 @@
 export type RootStackParamList = {
   Root: undefined;
   Signin: undefined;
+  Signup: undefined;
   Tab: undefined;
 };
 
@@ -72,7 +73,19 @@ export type Message = {
   from: string;
 };
 
-export type Credentials = {
+export type SigninForm = {
   email: string;
   password: string;
+};
+
+export type SignupForm = {
+  avatar: string;
+  firstname: string;
+  lastname: string;
+  birthdate?: Date;
+  phoneNumber: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+  description: string;
 };

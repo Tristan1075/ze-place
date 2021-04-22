@@ -65,15 +65,17 @@ const HomeScreen = (props: Props) => {
           </View>
         </View>
         <Text style={styles.subtitle}>Near you</Text>
-        <Carousel
-          contentContainerCustomStyle={{paddingLeft: Layout.padding}}
-          useScrollView={true}
-          data={places}
-          renderItem={renderItem}
-          sliderWidth={Layout.window.width}
-          activeSlideAlignment="start"
-          itemWidth={220}
-        />
+        <View style={styles.row}>
+          <Carousel
+            contentContainerCustomStyle={{paddingLeft: Layout.padding}}
+            useScrollView={true}
+            data={places}
+            renderItem={renderItem}
+            sliderWidth={Layout.window.width}
+            activeSlideAlignment="start"
+            itemWidth={220}
+          />
+        </View>
         <Text style={styles.subtitle}>Popular Place</Text>
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
           <View style={styles.horizontalList}>
@@ -104,6 +106,9 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: Layout.padding,
     backgroundColor: Colors.background,
+  },
+  row: {
+    flex: 1,
   },
   title: {
     fontFamily: 'playfair-bold',
@@ -156,6 +161,26 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 1.84,
     elevation: 5,
+  },
+  filterText: {
+    fontSize: 16,
+    color: Colors.secondary,
+    marginRight: 20,
+  },
+  tabContainer: {},
+  tabbar: {
+    backgroundColor: 'transparent',
+  },
+  tab: {
+    height: 90,
+    backgroundColor: 'transparent',
+  },
+  label: {
+    textAlign: 'center',
+    fontSize: 12,
+    fontFamily: 'Source Sans Pro',
+    color: Colors.primary,
+    transform: [{rotate: '-90deg'}],
   },
 });
 

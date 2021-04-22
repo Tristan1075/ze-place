@@ -1,6 +1,7 @@
 import {StatusBar} from 'expo-status-bar';
 import React from 'react';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
+import {ModalPortal} from 'react-native-modals';
 import * as Localization from 'expo-localization';
 import i18n from 'i18n-js';
 
@@ -25,6 +26,7 @@ const App = () => {
       <SafeAreaProvider>
         <Navigation />
         <StatusBar />
+        <ModalPortal />
       </SafeAreaProvider>
     );
   }

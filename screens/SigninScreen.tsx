@@ -4,7 +4,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {CommonActions} from '@react-navigation/routers';
 import * as SecureStore from 'expo-secure-store';
 
-import {Credentials, RootStackParamList} from '../types';
+import {RootStackParamList, SigninForm} from '../types';
 import Button from '../components/Button';
 import Colors from '../constants/Colors';
 import Header from '../components/Header';
@@ -22,7 +22,7 @@ type Props = {
 const SigninScreen = (props: Props) => {
   const {navigation} = props;
   const [error, setError] = useState<boolean>(false);
-  const [credentials, setCredentials] = useState<Credentials>({
+  const [credentials, setCredentials] = useState<SigninForm>({
     email: '',
     password: '',
   });
