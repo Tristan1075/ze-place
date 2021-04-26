@@ -1,4 +1,5 @@
 export default {
+  dark: '#191919',
   white: '#fff',
   whiteOpacity: 'rgba(200, 200, 200, 0.6)',
   background: '#F5F7F8',

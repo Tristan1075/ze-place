@@ -7,6 +7,7 @@ export type RootStackParamList = {
 
 export type BottomTabParamList = {
   Home: undefined;
+  Create: undefined;
   Messages: undefined;
   Favorites: undefined;
 };
@@ -14,6 +15,12 @@ export type BottomTabParamList = {
 export type HomeParamList = {
   Home: undefined;
   PlaceDetail: {place: PlaceType};
+  CreatePlace: undefined;
+  MapModal: undefined;
+};
+
+export type CreatePlaceParamList = {
+  CreatePlace: undefined;
 };
 
 export type MessagesParamList = {

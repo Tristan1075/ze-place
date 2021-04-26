@@ -4,24 +4,25 @@ import {
   StyleSheet,
   Text,
   View,
-  TextInput,
-  Image,
   ScrollView,
+  FlatList,
 } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 import {StackNavigationProp} from '@react-navigation/stack';
-import * as SecureStore from 'expo-secure-store';
 import i18n from 'i18n-js';
 
 import Header from '../components/Header';
-import SquaredButton from '../components/SquaredButton';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
 import CardWithRate from '../components/CardWithRate';
 import {HomeParamList, PlaceType} from '../types';
-import {categories} from '../mocks';
 import {getAllPlaces} from '../api/places';
+import DescriptionBloc from '../components/DescriptionBloc';
+import SimpleInput from '../components/SimpleInput';
+import TitleWithDescription from '../components/TitleWithDescription';
+import PlaceCard from '../components/PlaceCard';
 
+import {placesMock} from '../mocks';
 type RootScreenNavigationProp = StackNavigationProp<HomeParamList, 'Home'>;
 
 type Props = {
@@ -30,7 +31,6 @@ type Props = {
 
 const HomeScreen = (props: Props) => {
   const {navigation} = props;
-  const [activeCategory, setActiveCategory] = useState<number>(0);
   const [places, setPlaces] = useState<Array<PlaceType>>([]);
 
   useEffect(() => {
@@ -42,9 +42,23 @@ const HomeScreen = (props: Props) => {
     navigation.navigate('PlaceDetail', {place: place});
   };
 
-  const renderItem = ({item}: {item: PlaceType}) => {
+  const handleCreatePlacePress = () => {
+    navigation.navigate('CreatePlace');
+  };
+
+  const renderCarouselItem = ({item}: {item: PlaceType}) => {
     return <CardWithRate place={item} onPress={() => handlePlacePress(item)} />;
   };
+
+  const renderListItem = ({item, index}: {item: PlaceType; index: number}) => (
+    <View style={styles.paddingHorizontal}>
+      <PlaceCard
+        key={index}
+        place={item}
+        onPress={() => handleItemPress(item)}
+      />
+    </View>
+  );
 
   return (
     <SafeAreaView style={styles.container}>
@@ -52,51 +66,35 @@ const HomeScreen = (props: Props) => {
         <Header type="menu" showProfil={true} />
         <View style={styles.container}>
           <Text style={styles.title}>{i18n.t('discover')}</Text>
-          <TextInput style={styles.input} placeholder="Search" />
-          <View style={styles.iconsRow}>
-            {categories.map((category, index) => (
-              <SquaredButton
-                key={index}
-                onPress={() => setActiveCategory(index)}
-                isActive={activeCategory === index}
-                icon={category.icon}
-              />
-            ))}
-          </View>
+          <SimpleInput style={styles.input} placeholder="Search" />
         </View>
-        <Text style={styles.subtitle}>Near you</Text>
-        <View style={styles.row}>
-          <Carousel
-            contentContainerCustomStyle={{paddingLeft: Layout.padding}}
-            useScrollView={true}
-            data={places}
-            renderItem={renderItem}
-            sliderWidth={Layout.window.width}
-            activeSlideAlignment="start"
-            itemWidth={220}
-          />
-        </View>
-        <Text style={styles.subtitle}>Popular Place</Text>
-        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-          <View style={styles.horizontalList}>
-            {places.map((place: PlaceType, index: number) => {
-              return (
-                <View style={styles.shadow} key={index}>
-                  <Image
-                    source={{uri: place.images[0].url}}
-                    style={styles.image}
-                  />
-                </View>
-              );
-            })}
-          </View>
-        </ScrollView>
+        <TitleWithDescription
+          title="Near you"
+          description="Find nearby you the available places to rent"
+          style={styles.padding}
+        />
+        <Carousel
+          contentContainerCustomStyle={{paddingLeft: Layout.padding}}
+          useScrollView={true}
+          data={places}
+          renderItem={renderCarouselItem}
+          sliderWidth={Layout.window.width}
+          activeSlideAlignment="start"
+          itemWidth={220}
+        />
+        <DescriptionBloc onPress={handleCreatePlacePress} />
+        <TitleWithDescription
+          title="Announces"
+          description="Find nearby you the available places to rent"
+          style={styles.padding}
+        />
+        <FlatList
+          data={placesMock}
+          renderItem={renderListItem}
+          keyExtractor={(item) => item.id}
+          showsVerticalScrollIndicator={false}
+        />
       </ScrollView>
-      <Text
-        style={styles.subtitle}
-        onPress={async () => await SecureStore.deleteItemAsync('access-token')}>
-        Déconnexion
-      </Text>
     </SafeAreaView>
   );
 };
@@ -107,80 +105,25 @@ const styles = StyleSheet.create({
     paddingHorizontal: Layout.padding,
     backgroundColor: Colors.background,
   },
-  row: {
-    flex: 1,
-  },
   title: {
-    fontFamily: 'playfair-bold',
+    fontFamily: 'oswald-light',
     fontSize: 32,
-    color: Colors.primary,
+    color: Colors.dark,
     paddingBottom: 20,
+    width: 200,
   },
   subtitle: {
-    fontFamily: 'playfair-bold',
+    fontFamily: 'oswald-light',
     fontSize: 26,
-    color: Colors.primary,
+    color: Colors.dark,
     paddingVertical: 20,
     paddingLeft: Layout.padding,
   },
-  input: {
-    backgroundColor: Colors.white,
-    padding: 20,
-    borderRadius: 15,
-    shadowColor: '#2d2d2d',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-    fontFamily: 'poppins',
-  },
-  iconsRow: {
-    paddingVertical: 30,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  horizontalList: {
-    flexDirection: 'row',
+  paddingHorizontal: {
     paddingHorizontal: Layout.padding,
   },
-  image: {
-    width: 130,
-    height: 130,
-    marginRight: 10,
-    borderRadius: 10,
-  },
-  shadow: {
-    shadowColor: '#2d2d2d',
-    shadowOffset: {
-      width: 6,
-      height: 0,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 1.84,
-    elevation: 5,
-  },
-  filterText: {
-    fontSize: 16,
-    color: Colors.secondary,
-    marginRight: 20,
-  },
-  tabContainer: {},
-  tabbar: {
-    backgroundColor: 'transparent',
-  },
-  tab: {
-    height: 90,
-    backgroundColor: 'transparent',
-  },
-  label: {
-    textAlign: 'center',
-    fontSize: 12,
-    fontFamily: 'Source Sans Pro',
-    color: Colors.primary,
-    transform: [{rotate: '-90deg'}],
+  padding: {
+    padding: Layout.padding,
   },
 });
 

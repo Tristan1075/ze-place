@@ -12,7 +12,7 @@ import i18n from 'i18n-js';
 
 import Header from '../components/Header';
 import {MessagesParamList, PlaceType} from '../types';
-import {places} from '../mocks';
+import {placesMock} from '../mocks';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
 import PlaceCard from '../components/PlaceCard';
@@ -48,7 +48,7 @@ const FavoritesScreen = (props: Props) => {
           placeholderTextColor={Colors.gray}
         />
         <FlatList
-          data={places}
+          data={placesMock}
           renderItem={renderItem}
           keyExtractor={(item) => item.id}
           showsVerticalScrollIndicator={false}

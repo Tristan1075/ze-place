@@ -3,7 +3,12 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createStackNavigator} from '@react-navigation/stack';
 import * as React from 'react';
 
-import {BottomTabParamList, HomeParamList, MessagesParamList} from '../types';
+import {
+  BottomTabParamList,
+  CreatePlaceParamList,
+  HomeParamList,
+  MessagesParamList,
+} from '../types';
 import Colors from '../constants/Colors';
 
 import HomeScreen from '../screens/HomeScreen';
@@ -12,6 +17,8 @@ import PlaceDetailScreen from '../screens/PlaceDetailScreen';
 import MessagesScreen from '../screens/MessagesScreen';
 import ConversationScreen from '../screens/ConversationScreen';
 import FavoritesScreen from '../screens/FavoritesScreen';
+import CreatePlaceModal from '../screens/CreatePlaceModal';
+import MapModal from '../screens/MapModal';
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
@@ -25,6 +32,15 @@ export default function BottomTabNavigator() {
         component={HomeNavigator}
         options={{
           tabBarIcon: ({color}) => <TabBarIcon name="home" color={color} />,
+        }}
+      />
+      <BottomTab.Screen
+        name="Create"
+        component={CreatePlaceNavigator}
+        options={{
+          tabBarIcon: ({color}) => (
+            <TabBarIcon name="add-circle" color={color} />
+          ),
         }}
       />
       <BottomTab.Screen
@@ -60,7 +76,24 @@ const HomeNavigator = () => {
     <HomeStack.Navigator screenOptions={{headerShown: false}}>
       <HomeStack.Screen name="Home" component={HomeScreen} />
       <HomeStack.Screen name="PlaceDetail" component={PlaceDetailScreen} />
+      <HomeStack.Screen name="CreatePlace" component={CreatePlaceModal} />
+      <HomeStack.Screen name="MapModal" component={MapModal} />
     </HomeStack.Navigator>
+  );
+};
+
+const CreatePlaceStack = createStackNavigator<CreatePlaceParamList>();
+
+const CreatePlaceNavigator = () => {
+  return (
+    <CreatePlaceStack.Navigator
+      screenOptions={{headerShown: false}}
+      mode="modal">
+      <CreatePlaceStack.Screen
+        name="CreatePlace"
+        component={CreatePlaceModal}
+      />
+    </CreatePlaceStack.Navigator>
   );
 };
 

@@ -70,9 +70,9 @@ const styles = StyleSheet.create({
     marginRight: 5,
   },
   image: {
-    width: 130,
+    width: 120,
     borderRadius: 10,
-    height: 100,
+    height: 120,
     marginRight: 10,
   },
   informations: {
@@ -80,14 +80,14 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
   },
   title: {
-    fontFamily: 'poppins',
-    color: Colors.secondary,
+    fontFamily: 'oswald-bold',
+    color: Colors.primary,
     fontSize: 16,
     flex: 1,
   },
   location: {
     fontFamily: 'poppins',
-    color: Colors.secondary,
+    color: Colors.dark,
     fontSize: 12,
   },
   footer: {

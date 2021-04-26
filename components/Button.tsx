@@ -39,6 +39,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 1.84,
     elevation: 5,
+    flex: 1,
   },
   container: {
     backgroundColor: Colors.white,

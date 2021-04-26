@@ -1,6 +1,6 @@
 import {Message, PlaceType} from '../types';
 
-export const places: Array<PlaceType> = [
+export const placesMock: Array<PlaceType> = [
   {
     title: 'A Big House',
     subtitle: 'The way you like...',

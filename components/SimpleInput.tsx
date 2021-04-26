@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 
 import Colors from '../constants/Colors';
+import Layout from '../constants/Layout';
 
 type Props = {
   onPress?: () => void;
@@ -37,7 +38,7 @@ const SimpleInput = (props: Props) => {
   } = props;
 
   return (
-    <View>
+    <View style={styles.flex}>
       <TextInput
         onTouchStart={onPress}
         editable={isEditable}
@@ -58,20 +59,16 @@ const SimpleInput = (props: Props) => {
 };
 
 const styles = StyleSheet.create({
+  flex: {
+    flex: 1,
+  },
   input: {
     backgroundColor: Colors.white,
     padding: 20,
     borderRadius: 10,
-    shadowColor: '#2d2d2d',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
     fontFamily: 'poppins',
-    shadowOpacity: 0.15,
-    shadowRadius: 3.84,
-    elevation: 5,
     marginVertical: 10,
+    ...Layout.shadow,
   },
   textArea: {
     height: 100,

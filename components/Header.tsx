@@ -11,10 +11,11 @@ type Props = {
   showProfil?: boolean;
   title?: string;
   profilPicture?: string;
+  onBackPress?: Function;
 };
 
 const Header = (props: Props) => {
-  const {type, showProfil, title, profilPicture} = props;
+  const {type, showProfil, title, profilPicture, onBackPress} = props;
   const navigation = useNavigation();
 
   const handleBackPress = () => {
@@ -26,7 +27,7 @@ const Header = (props: Props) => {
       {type === 'back' ? (
         <TouchableOpacity
           style={[styles.headerContainer, styles.color]}
-          onPress={handleBackPress}>
+          onPress={onBackPress ? onBackPress() : handleBackPress}>
           <Ionicons size={30} name="arrow-back" color={Colors.primary} />
         </TouchableOpacity>
       ) : (
