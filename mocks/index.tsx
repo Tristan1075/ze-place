@@ -1,4 +1,4 @@
-import {Message, PlaceType} from '../types';
+import {FeatureType, Message, PlaceType} from '../types';
 
 export const placesMock: Array<PlaceType> = [
   {
@@ -119,7 +119,8 @@ export const conversation = {
       from: '2',
     },
     {
-      value: "J'espère que tu vas bien, tu cherches une place de parking sur Paris ?",
+      value:
+        "J'espère que tu vas bien, tu cherches une place de parking sur Paris ?",
       from: '2',
     },
     {
@@ -129,20 +130,61 @@ export const conversation = {
   ],
 };
 
-export const facilities = [
+export const features = [
   {
-    url: require('../assets/images/packages.png'),
+    name: 'Lunch',
+    icon: {
+      name: 'active',
+      url: require('../assets/icons/lunch.png'),
+    },
   },
   {
-    url: require('../assets/images/park.png'),
+    name: 'Storage',
+    icon: {
+      name: 'active',
+      url: require('../assets/icons/storage.png'),
+    },
   },
   {
-    url: require('../assets/images/party.png'),
+    name: 'Gardening',
+    icon: {
+      name: 'active',
+      url: require('../assets/icons/garden.png'),
+    },
   },
   {
-    url: require('../assets/images/barbecue.png'),
+    name: 'Party',
+    icon: {
+      name: 'active',
+      url: require('../assets/icons/party.png'),
+    },
   },
   {
-    url: require('../assets/images/packages.png'),
+    name: 'Parking',
+    icon: {
+      name: 'active',
+      url: require('../assets/icons/parking.png'),
+    },
+  },
+  {
+    name: 'Work place',
+    icon: {
+      name: 'active',
+      url: require('../assets/icons/workplace.png'),
+    },
+  },
+  {
+    name: 'Camping',
+    icon: {
+      name: 'active',
+      url: require('../assets/icons/camping.png'),
+    },
+  },
+  {
+    name: 'Spectacle',
+    icon: {
+      name: 'active',
+      url: require('../assets/icons/spectacle.png'),
+    },
   },
 ];

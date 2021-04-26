@@ -7859,6 +7859,13 @@ react-native-snap-carousel@^3.9.1:
     prop-types "^15.6.1"
     react-addons-shallow-compare "15.6.2"
 
+react-native-super-grid@^4.1.1:
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/react-native-super-grid/-/react-native-super-grid-4.1.1.tgz#54da8fe6d716edf1c87d158c5cc61cd449c20ab7"
+  integrity sha512-rJQI2zfnqZ409V7i/2MpdQjtfs52lfZ9lILFbIojYI428sP4XRgoqUcKjjL9sRr2w/X7eK4EjJ/RnCw/shVxxQ==
+  dependencies:
+    prop-types "^15.6.0"
+
 react-native-swipe-gestures@^1.0.5:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/react-native-swipe-gestures/-/react-native-swipe-gestures-1.0.5.tgz#a172cb0f3e7478ccd681fd36b8bfbcdd098bde7c"

@@ -18,9 +18,10 @@ import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
 import {HomeParamList, PlaceType} from '../types';
 import Header from '../components/Header';
-import {facilities} from '../mocks';
+import {facilities, features} from '../mocks';
 import Button from '../components/Button';
 import {mapStyle} from '../utils/mapStyle';
+import Feature from '../components/Feature';
 
 type PlaceScreenNavigationProp = RouteProp<HomeParamList, 'PlaceDetail'>;
 
@@ -86,11 +87,8 @@ const PlaceDetailScreen = () => {
             horizontal={true}
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={styles.facilitiesContainer}>
-            {facilities.map((facility, index) => (
-              <View style={styles.facilities} key={index}>
-                <Image source={facility.url} style={styles.facilityIcon} />
-                <Text style={styles.facilityTitle}>Stockage</Text>
-              </View>
+            {features.map((feature, index) => (
+              <Feature feature={feature} key={index} />
             ))}
           </ScrollView>
           <View style={styles.content}>

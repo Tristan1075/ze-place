@@ -1,5 +1,5 @@
-import React from 'react';
-import {StyleSheet, Text, View, ScrollView, Image} from 'react-native';
+import React, {useContext} from 'react';
+import {StyleSheet, Text, View, ScrollView} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
 import TitleWithDescription from '../../components/TitleWithDescription';
@@ -7,9 +7,12 @@ import SimpleInput from '../../components/SimpleInput';
 import Button from '../../components/Button';
 import Colors from '../../constants/Colors';
 import Layout from '../../constants/Layout';
-import { Ionicons } from '@expo/vector-icons';
+import {Ionicons} from '@expo/vector-icons';
 import CalendarPicker from '../../components/CalendarPicker';
-import {facilities} from '../../mocks';
+import {features} from '../../mocks';
+import Feature from '../../components/Feature';
+import {ModalContext} from '../../providers/modalContext';
+import SelectPlaceTypeScreen from '../SelectPlaceTypeScreen';
 
 type Props = {
   prevStep: () => void;
@@ -18,26 +21,36 @@ type Props = {
 
 const PlaceInformations = (props: Props) => {
   const navigation = useNavigation();
+  const {handleModal} = useContext(ModalContext);
+
+  const handleSelectPlaceType = () => {
+    handleModal({child: <SelectPlaceTypeScreen />});
+  };
 
   return (
     <View style={styles.container}>
       <TitleWithDescription
         title="Place type"
-        description="Select  the type that fit your place !"
+        description="What is the type of the ?"
         subtitle={true}
         style={styles.paddingVertical}
       />
-      <SimpleInput placeholder="Choose" />
+      <SimpleInput
+        placeholder="Choose"
+        isEditable={false}
+        onPress={handleSelectPlaceType}
+        suffix={<Ionicons name="chevron-down" size={20} color={Colors.dark} />}
+      />
       <TitleWithDescription
-        title="Size"
-        description="Select  the type that fit your place !"
+        title="Surface"
+        description="How many square meters is your place ?"
         subtitle={true}
         style={styles.paddingVertical}
       />
-      <SimpleInput placeholder="Type your size in m2" />
+      <SimpleInput placeholder="Enter the size in m2" />
       <TitleWithDescription
         title="Price"
-        description="Select  the type that fit your place !"
+        description="How much do you want to rent your place ?"
         subtitle={true}
         style={styles.paddingVertical}
       />
@@ -65,11 +78,8 @@ const PlaceInformations = (props: Props) => {
         horizontal={true}
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.facilitiesContainer}>
-        {facilities.map((facility, index) => (
-          <View style={styles.facilities} key={index}>
-            <Image source={facility.url} style={styles.facilityIcon} />
-            <Text style={styles.facilityTitle}>Stockage</Text>
-          </View>
+        {features.map((feature, index) => (
+          <Feature feature={feature} key={index} />
         ))}
       </ScrollView>
       <TitleWithDescription
@@ -114,11 +124,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   durationBloc: {
-    marginLeft: 20,
+    marginLeft: 10,
     backgroundColor: Colors.white,
     borderRadius: 10,
     width: 100,
-    marginVertical: 10,
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
@@ -126,27 +135,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontFamily: 'poppins',
-    marginRight: 5,
-  },
-  facilities: {
-    backgroundColor: 'rgb(228, 236, 249)',
-    marginRight: 20,
-    width: 100,
-    height: 100,
-    borderRadius: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  facilityIcon: {
-    width: 40,
-    height: 40,
-    borderRadius: 10,
-    marginBottom: 10,
-  },
-  facilityTitle: {
-    fontFamily: 'poppins-light',
-    fontSize: 12,
-    color: Colors.secondary,
+    marginRight: 10,
   },
   facilitiesContainer: {
     marginVertical: 20,

@@ -6,17 +6,18 @@ import Button from './Button';
 
 type Props = {
   title: string;
-  description: string;
+  description?: string;
   style?: ViewStyle;
   subtitle?: boolean;
+  color?: string;
 };
 
 const TitleWithDescription = (props: Props) => {
-  const {title, description, style, subtitle} = props;
+  const {title, description, style, subtitle, color} = props;
   return (
     <View style={style}>
-      <Text style={subtitle ? styles.subtitle : styles.title}>{title}</Text>
-      <Text style={styles.description}>{description}</Text>
+      <Text style={[subtitle ? styles.subtitle : styles.title, {color: color}]}>{title}</Text>
+      {description && <Text style={styles.description}>{description}</Text>}
     </View>
   );
 };

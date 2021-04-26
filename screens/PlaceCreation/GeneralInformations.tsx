@@ -1,8 +1,7 @@
-import React from 'react';
+import React, {Dispatch, SetStateAction, useContext} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
-import {PlaceType} from '../types';
 import TitleWithDescription from '../../components/TitleWithDescription';
 import SimpleInput from '../../components/SimpleInput';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
@@ -10,13 +9,24 @@ import {mapStyle} from '../../utils/mapStyle';
 import Button from '../../components/Button';
 import Colors from '../../constants/Colors';
 import Layout from '../../constants/Layout';
+import {CreatePlaceForm} from '../../types';
+import {ModalContext} from '../../providers/modalContext';
+import MapModal from '../MapModal';
 
 type Props = {
   nextStep: () => void;
+  createPlaceForm: CreatePlaceForm;
+  setCreatePlaceForm: Dispatch<SetStateAction<{}>>;
 };
 
 const GeneralInformations = (props: Props) => {
+  const {nextStep, createPlaceForm, setCreatePlaceForm} = props;
   const navigation = useNavigation();
+  const {handleModal} = useContext(ModalContext);
+
+  const handleMapPress = () => {
+    handleModal({child: <MapModal />});
+  };
 
   return (
     <View style={styles.container}>
@@ -26,14 +36,26 @@ const GeneralInformations = (props: Props) => {
         subtitle={true}
         style={styles.paddingVertical}
       />
-      <SimpleInput placeholder="Place's title" />
+      <SimpleInput
+        placeholder="Place's title"
+        onChangeText={(value) => {
+          setCreatePlaceForm({...createPlaceForm, title: value});
+        }}
+      />
       <TitleWithDescription
         title="Description"
         description="Description of your !"
         subtitle={true}
         style={styles.paddingVertical}
       />
-      <SimpleInput placeholder="Choose" multiline={true} numberOfLines={1} />
+      <SimpleInput
+        placeholder="Choose"
+        multiline={true}
+        numberOfLines={1}
+        onChangeText={(value) => {
+          setCreatePlaceForm({...createPlaceForm, description: value});
+        }}
+      />
       <TitleWithDescription
         title="Location"
         description="Where is located your place ?"
@@ -41,7 +63,7 @@ const GeneralInformations = (props: Props) => {
         style={styles.paddingVertical}
       />
       <MapView
-        onPress={() => navigation.navigate('MapModal')}
+        onPress={handleMapPress}
         provider={PROVIDER_GOOGLE}
         customMapStyle={mapStyle}
         scrollEnabled={false}
@@ -57,7 +79,7 @@ const GeneralInformations = (props: Props) => {
         value="Continuer"
         backgroundColor={Colors.dark}
         textColor={Colors.white}
-        onPress={props.nextStep}
+        onPress={nextStep}
       />
     </View>
   );

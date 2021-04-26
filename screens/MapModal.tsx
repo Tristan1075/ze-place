@@ -23,28 +23,23 @@ const MapModal = () => {
   }, [search]);
 
   return (
-    <Modal visible={true} animationType="slide">
-      <View style={styles.container}>
-        <MapView
-          provider={PROVIDER_GOOGLE}
-          customMapStyle={mapStyle}
-          style={styles.map}
-          initialRegion={{
-            latitude: 37.78825,
-            longitude: -122.4324,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
-          }}
-        />
-        <View style={styles.header}>
-          <Header type="back" />
-        </View>
-        <Animated.View style={styles.bottomCard}>
-          <Text style={styles.title}>Place location</Text>
-          <SimpleInput placeholder="Type your address !" />
-        </Animated.View>
-      </View>
-    </Modal>
+    <View style={styles.container}>
+      <MapView
+        provider={PROVIDER_GOOGLE}
+        customMapStyle={mapStyle}
+        style={styles.map}
+        initialRegion={{
+          latitude: 37.78825,
+          longitude: -122.4324,
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421,
+        }}
+      />
+      <Animated.View style={styles.bottomCard}>
+        <Text style={styles.title}>Place location</Text>
+        <SimpleInput placeholder="Type your address !" />
+      </Animated.View>
+    </View>
   );
 };
 

@@ -96,3 +96,14 @@ export type SignupForm = {
   confirmPassword: string;
   description: string;
 };
+
+export type FeatureType = {
+  name: string;
+  activeIcon: Image;
+  inactiveIcon: Image;
+};
+
+export type CreatePlaceForm = {
+  title: string;
+  description: string;
+};

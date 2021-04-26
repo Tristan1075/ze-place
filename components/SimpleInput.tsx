@@ -14,13 +14,14 @@ type Props = {
   onPress?: () => void;
   onChange?: () => void;
   onChangeText: (v: string) => void;
-  error: string;
+  error?: string;
   placeholder: string;
   isEditable?: boolean;
   value?: string;
   secureTextEntry?: boolean;
   numberOfLines?: number;
   multiline?: boolean;
+  suffix?: any;
 };
 
 const SimpleInput = (props: Props) => {
@@ -35,24 +36,28 @@ const SimpleInput = (props: Props) => {
     secureTextEntry = false,
     numberOfLines,
     multiline,
+    suffix,
   } = props;
 
   return (
     <View style={styles.flex}>
-      <TextInput
-        onTouchStart={onPress}
-        editable={isEditable}
-        onChange={onChange}
-        onChangeText={onChangeText}
-        style={multiline ? styles.textArea : styles.input}
-        placeholder={placeholder}
-        autoCapitalize="none"
-        placeholderTextColor={Colors.gray}
-        value={value}
-        secureTextEntry={secureTextEntry}
-        numberOfLines={numberOfLines}
-        multiline={multiline}
-      />
+      <View style={styles.inputContainer}>
+        <TextInput
+          onTouchStart={onPress}
+          editable={isEditable}
+          onChange={onChange}
+          onChangeText={onChangeText}
+          style={multiline ? styles.textArea : styles.input}
+          placeholder={placeholder}
+          autoCapitalize="none"
+          placeholderTextColor={Colors.gray}
+          value={value}
+          secureTextEntry={secureTextEntry}
+          numberOfLines={numberOfLines}
+          multiline={multiline}
+        />
+        {suffix}
+      </View>
       {error ? <Text style={styles.error}>{error}</Text> : null}
     </View>
   );
@@ -62,30 +67,28 @@ const styles = StyleSheet.create({
   flex: {
     flex: 1,
   },
-  input: {
+  inputContainer: {
+    flexDirection: 'row',
     backgroundColor: Colors.white,
+    borderRadius: 10,
+    ...Layout.shadow,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingRight: 20,
+  },
+  input: {
+    flex: 1,
     padding: 20,
     borderRadius: 10,
     fontFamily: 'poppins',
-    marginVertical: 10,
-    ...Layout.shadow,
   },
   textArea: {
+    flex: 1,
     height: 100,
-    backgroundColor: Colors.white,
     padding: 20,
     paddingTop: 20,
     paddingBottom: 20,
-    borderRadius: 10,
-    shadowColor: '#2d2d2d',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
     fontFamily: 'poppins',
-    shadowOpacity: 0.15,
-    shadowRadius: 3.84,
-    elevation: 5,
     marginVertical: 10,
   },
   error: {

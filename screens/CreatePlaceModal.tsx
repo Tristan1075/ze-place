@@ -6,11 +6,14 @@ import {ProgressSteps, ProgressStep} from 'react-native-progress-steps';
 
 import Header from '../components/Header';
 import Colors from '../constants/Colors';
+import {CreatePlaceForm} from '../types';
 import GeneralInformations from './PlaceCreation/GeneralInformations';
 import PlaceInformations from './PlaceCreation/PlaceInformations';
+import RightsAndCustomization from './PlaceCreation/RightsAndCustomization';
 
 const CreatePlaceModal = () => {
   const [activeStep, setActiveStep] = useState<number>(0);
+  const [createPlaceForm, setCreatePlaceForm] = useState<CreatePlaceForm>();
 
   const prevStep = () => setActiveStep((step) => step - 1);
 
@@ -34,7 +37,11 @@ const CreatePlaceModal = () => {
             removeBtnRow={true}
             scrollViewProps={{showsVerticalScrollIndicator: false}}>
             <View>
-              <GeneralInformations nextStep={nextStep} />
+              <GeneralInformations
+                nextStep={nextStep}
+                createPlaceForm={createPlaceForm}
+                setCreatePlaceForm={setCreatePlaceForm}
+              />
             </View>
           </ProgressStep>
           <ProgressStep
@@ -42,15 +49,22 @@ const CreatePlaceModal = () => {
             removeBtnRow={true}
             scrollViewProps={{showsVerticalScrollIndicator: false}}>
             <View>
-              <PlaceInformations prevStep={prevStep} nextStep={nextStep} />
+              <PlaceInformations
+                prevStep={prevStep}
+                nextStep={nextStep}
+                setCreateFormPlace={setCreatePlaceForm}
+              />
             </View>
           </ProgressStep>
           <ProgressStep
-            label="Third Step"
+            label="Rights and customization"
             removeBtnRow={true}
             scrollViewProps={{showsVerticalScrollIndicator: false}}>
-            <View style={styles.center}>
-              <Text>This is the content within step 3!</Text>
+            <View>
+              <RightsAndCustomization
+                prevStep={prevStep}
+                setCreatePlaceForm={setCreatePlaceForm}
+              />
             </View>
           </ProgressStep>
         </ProgressSteps>
