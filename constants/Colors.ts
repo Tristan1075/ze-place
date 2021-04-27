@@ -9,4 +9,5 @@ export default {
   gray: '#8C8C98',
   error: '#f22240',
   inputError: 'rgba(242, 34, 64, 0.2)',
+  success: '#2ded2d',
 };

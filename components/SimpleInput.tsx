@@ -4,7 +4,8 @@ import {
   Text,
   TextInput,
   StyleSheet,
-  TouchableOpacity,
+  ViewStyle,
+  KeyboardType,
 } from 'react-native';
 
 import Colors from '../constants/Colors';
@@ -13,7 +14,7 @@ import Layout from '../constants/Layout';
 type Props = {
   onPress?: () => void;
   onChange?: () => void;
-  onChangeText: (v: string) => void;
+  onChangeText?: (v: string) => void;
   error?: string;
   placeholder: string;
   isEditable?: boolean;
@@ -22,6 +23,8 @@ type Props = {
   numberOfLines?: number;
   multiline?: boolean;
   suffix?: any;
+  style?: ViewStyle;
+  type?: KeyboardType;
 };
 
 const SimpleInput = (props: Props) => {
@@ -37,12 +40,15 @@ const SimpleInput = (props: Props) => {
     numberOfLines,
     multiline,
     suffix,
+    style,
+    type,
   } = props;
 
   return (
-    <View style={styles.flex}>
+    <View style={style}>
       <View style={styles.inputContainer}>
         <TextInput
+          keyboardType={type}
           onTouchStart={onPress}
           editable={isEditable}
           onChange={onChange}

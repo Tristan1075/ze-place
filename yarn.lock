@@ -2193,6 +2193,14 @@
     "@types/react" "*"
     "@types/react-native" "*"
 
+"@types/react-native-modals@^0.19.0":
+  version "0.19.0"
+  resolved "https://registry.yarnpkg.com/@types/react-native-modals/-/react-native-modals-0.19.0.tgz#816833314b708a61f5d43660ff5406e88c5d1d7c"
+  integrity sha512-qhvXjZ1ltrboWrB+nAtRLZoG8opbMVLBxveWLDJ8Y4m0+9cnQyYntX3o0QUQosGyVHfcZQ7MUgQS0KsO1+sHDg==
+  dependencies:
+    "@types/react" "*"
+    "@types/react-native" "*"
+
 "@types/react-native-snap-carousel@^3.8.2":
   version "3.8.2"
   resolved "https://registry.yarnpkg.com/@types/react-native-snap-carousel/-/react-native-snap-carousel-3.8.2.tgz#31fb91530198183c658db0d23935ca79850419f5"

@@ -1,3 +1,5 @@
+import {ImageProps} from 'react-native';
+
 export type RootStackParamList = {
   Root: undefined;
   Signin: undefined;
@@ -40,7 +42,7 @@ export type User = {
   created_at: {type: Date; default: Date};
 };
 
-export type PlaceType = {
+export type Place = {
   title: String;
   location: String;
   description: String;
@@ -59,7 +61,6 @@ export type Review = {
 };
 
 export type Image = {
-  name: string;
   url: string;
 };
 
@@ -99,11 +100,28 @@ export type SignupForm = {
 
 export type FeatureType = {
   name: string;
-  activeIcon: Image;
-  inactiveIcon: Image;
+  icon: {
+    name: string;
+    url: ImageProps;
+  };
+};
+
+export type PlaceType = {
+  id: string;
+  name: string;
 };
 
 export type CreatePlaceForm = {
-  title: string;
-  description: string;
+  title?: string;
+  aboutMe?: string;
+  placeType?: PlaceType;
+  surface?: string;
+  price?: string;
+  locationDuration: {
+    title: string;
+    value: string;
+  };
+  description?: string;
+  images: Array<Image>;
+  features: Array<FeatureType>;
 };

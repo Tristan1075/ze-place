@@ -1,6 +1,14 @@
-import React, {useContext} from 'react';
-import {StyleSheet, Text, View, ScrollView} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import React, {Dispatch, SetStateAction, useContext, useState} from 'react';
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native';
+
+//@ts-ignore
+import {ModalContent, BottomModal} from 'react-native-modals';
 
 import TitleWithDescription from '../../components/TitleWithDescription';
 import SimpleInput from '../../components/SimpleInput';
@@ -13,30 +21,64 @@ import {features} from '../../mocks';
 import Feature from '../../components/Feature';
 import {ModalContext} from '../../providers/modalContext';
 import SelectPlaceTypeScreen from '../SelectPlaceTypeScreen';
+import SelectableItem from '../../components/SelectableItem';
+import {CreatePlaceForm, FeatureType, PlaceType} from '../../types';
+
+const locationDuration = [
+  {title: 'Day', value: 'day'},
+  {title: 'Night', value: 'night'},
+  {title: 'Week', value: 'week'},
+  {title: 'Month', value: 'month'},
+];
 
 type Props = {
   prevStep: () => void;
   nextStep: () => void;
+  createPlaceForm: CreatePlaceForm;
+  setCreatePlaceForm: Dispatch<SetStateAction<CreatePlaceForm>>;
 };
 
 const PlaceInformations = (props: Props) => {
-  const navigation = useNavigation();
+  const {prevStep, nextStep, createPlaceForm, setCreatePlaceForm} = props;
   const {handleModal} = useContext(ModalContext);
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
 
   const handleSelectPlaceType = () => {
-    handleModal({child: <SelectPlaceTypeScreen />});
+    handleModal({
+      child: <SelectPlaceTypeScreen onPlaceTypePress={handlePlaceTypePress} />,
+    });
+  };
+
+  const handlePlaceTypePress = (type: PlaceType) => {
+    setCreatePlaceForm({...createPlaceForm, placeType: type});
+    handleModal();
+  };
+
+  const handleFeaturePress = (feature: FeatureType) => {
+    if (createPlaceForm.features.includes(feature)) {
+      setCreatePlaceForm({
+        ...createPlaceForm,
+        features: createPlaceForm.features.filter((item) => item !== feature),
+      });
+    } else {
+      setCreatePlaceForm({
+        ...createPlaceForm,
+        features: [...createPlaceForm.features, feature],
+      });
+    }
   };
 
   return (
     <View style={styles.container}>
       <TitleWithDescription
         title="Place type"
-        description="What is the type of the ?"
+        description="What is the type of your place?"
         subtitle={true}
         style={styles.paddingVertical}
       />
       <SimpleInput
-        placeholder="Choose"
+        placeholder="Choose a place type"
+        value={createPlaceForm.placeType?.name}
         isEditable={false}
         onPress={handleSelectPlaceType}
         suffix={<Ionicons name="chevron-down" size={20} color={Colors.dark} />}
@@ -47,7 +89,15 @@ const PlaceInformations = (props: Props) => {
         subtitle={true}
         style={styles.paddingVertical}
       />
-      <SimpleInput placeholder="Enter the size in m2" />
+      <SimpleInput
+        value={createPlaceForm.surface}
+        placeholder="Please enter the size"
+        type="number-pad"
+        suffix={<Text style={styles.descriptionText}>m²</Text>}
+        onChangeText={(value) =>
+          setCreatePlaceForm({...createPlaceForm, surface: value})
+        }
+      />
       <TitleWithDescription
         title="Price"
         description="How much do you want to rent your place ?"
@@ -55,11 +105,24 @@ const PlaceInformations = (props: Props) => {
         style={styles.paddingVertical}
       />
       <View style={styles.row}>
-        <SimpleInput placeholder="Type your price" />
-        <View style={styles.durationBloc}>
-          <Text style={styles.text}>Day</Text>
+        <SimpleInput
+          value={createPlaceForm.price}
+          placeholder="Type your price"
+          style={styles.flex}
+          suffix={<Text style={styles.descriptionText}>€</Text>}
+          type="number-pad"
+          onChangeText={(value) =>
+            setCreatePlaceForm({...createPlaceForm, price: value})
+          }
+        />
+        <TouchableOpacity
+          style={styles.durationBloc}
+          onPress={() => setModalVisible(true)}>
+          <Text style={styles.text}>
+            {createPlaceForm.locationDuration.title}
+          </Text>
           <Ionicons name="chevron-down" size={20} color={Colors.dark} />
-        </View>
+        </TouchableOpacity>
       </View>
       <TitleWithDescription
         title="Description"
@@ -67,7 +130,15 @@ const PlaceInformations = (props: Props) => {
         subtitle={true}
         style={styles.paddingVertical}
       />
-      <SimpleInput placeholder="Choose" multiline={true} numberOfLines={1} />
+      <SimpleInput
+        placeholder="Choose"
+        multiline={true}
+        numberOfLines={1}
+        value={createPlaceForm.description}
+        onChangeText={(value) =>
+          setCreatePlaceForm({...createPlaceForm, description: value})
+        }
+      />
       <TitleWithDescription
         title="Features"
         description="Select  the type that fit your place !"
@@ -79,7 +150,12 @@ const PlaceInformations = (props: Props) => {
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.facilitiesContainer}>
         {features.map((feature, index) => (
-          <Feature feature={feature} key={index} />
+          <Feature
+            feature={feature}
+            key={index}
+            isActive={createPlaceForm.features.includes(feature)}
+            onPress={() => handleFeaturePress(feature)}
+          />
         ))}
       </ScrollView>
       <TitleWithDescription
@@ -94,22 +170,48 @@ const PlaceInformations = (props: Props) => {
           value="Back"
           backgroundColor={Colors.primary}
           textColor={Colors.white}
-          onPress={props.prevStep}
-          style={{marginRight: 10}}
+          onPress={prevStep}
+          style={{marginRight: 10, flex: 1}}
         />
         <Button
           value="Continue"
           backgroundColor={Colors.dark}
           textColor={Colors.white}
-          onPress={props.nextStep}
-          style={{marginLeft: 10}}
+          onPress={nextStep}
+          style={{marginLeft: 10, flex: 1}}
         />
       </View>
+      <BottomModal
+        visible={modalVisible}
+        onTouchOutside={() => setModalVisible(false)}
+        width={1}
+        onSwipeOut={() => setModalVisible(false)}>
+        <ModalContent style={styles.bottomModal}>
+          {locationDuration.map((duration) => (
+            <SelectableItem
+              value={duration.title}
+              onPress={() => {
+                setCreatePlaceForm({
+                  ...createPlaceForm,
+                  locationDuration: duration,
+                });
+                setModalVisible(false);
+              }}
+              isActive={
+                createPlaceForm.locationDuration.value === duration.value
+              }
+            />
+          ))}
+        </ModalContent>
+      </BottomModal>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  flex: {
+    flex: 1,
+  },
   container: {
     marginBottom: 20,
   },
@@ -139,6 +241,12 @@ const styles = StyleSheet.create({
   },
   facilitiesContainer: {
     marginVertical: 20,
+  },
+  bottomModal: {
+    paddingBottom: 40,
+  },
+  descriptionText: {
+    color: Colors.gray,
   },
 });
 

@@ -1,8 +1,11 @@
 import React, {useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
+import Modal, {ModalContent} from 'react-native-modals';
+import {useNavigation} from '@react-navigation/native';
 
 // @ts-ignore
 import {ProgressSteps, ProgressStep} from 'react-native-progress-steps';
+import Button from '../components/Button';
 
 import Header from '../components/Header';
 import Colors from '../constants/Colors';
@@ -12,8 +15,28 @@ import PlaceInformations from './PlaceCreation/PlaceInformations';
 import RightsAndCustomization from './PlaceCreation/RightsAndCustomization';
 
 const CreatePlaceModal = () => {
+  const navigation = useNavigation();
   const [activeStep, setActiveStep] = useState<number>(0);
-  const [createPlaceForm, setCreatePlaceForm] = useState<CreatePlaceForm>();
+  const [exitModal, setExitModal] = useState<boolean>(false);
+  const [createPlaceForm, setCreatePlaceForm] = useState<CreatePlaceForm>({
+    title: undefined,
+    aboutMe: undefined,
+    surface: undefined,
+    placeType: undefined,
+    price: undefined,
+    locationDuration: {
+      title: 'Day',
+      value: 'day',
+    },
+    description: undefined,
+    features: [],
+    images: [],
+  });
+
+  const handleBackPress = () => {
+    setExitModal(false);
+    navigation.goBack();
+  };
 
   const prevStep = () => setActiveStep((step) => step - 1);
 
@@ -21,7 +44,7 @@ const CreatePlaceModal = () => {
 
   return (
     <View style={styles.container}>
-      <Header type="back" />
+      <Header type="back" onBackPress={() => setExitModal(true)} />
       <View style={styles.scrollView}>
         <ProgressSteps
           activeStep={activeStep}
@@ -52,7 +75,8 @@ const CreatePlaceModal = () => {
               <PlaceInformations
                 prevStep={prevStep}
                 nextStep={nextStep}
-                setCreateFormPlace={setCreatePlaceForm}
+                createPlaceForm={createPlaceForm}
+                setCreatePlaceForm={setCreatePlaceForm}
               />
             </View>
           </ProgressStep>
@@ -63,12 +87,37 @@ const CreatePlaceModal = () => {
             <View>
               <RightsAndCustomization
                 prevStep={prevStep}
+                createPlaceForm={createPlaceForm}
                 setCreatePlaceForm={setCreatePlaceForm}
               />
             </View>
           </ProgressStep>
         </ProgressSteps>
       </View>
+      <Modal
+        width={0.7}
+        visible={exitModal}
+        rounded
+        style={{zIndex: 1000}}
+        onTouchOutside={() => {
+          setExitModal(false);
+        }}>
+        <ModalContent style={styles.modal}>
+          <Text style={styles.modalTitle}>Are you sure you want to quit ?</Text>
+          <Text style={styles.modalDescription}>
+            You will lose what you've done and you will not be able to continue
+          </Text>
+          <Button
+            backgroundColor={Colors.primary}
+            value="Confirm"
+            textColor={Colors.white}
+            onPress={handleBackPress}
+          />
+          <Text onPress={() => setExitModal(false)} style={styles.cancel}>
+            Cancel
+          </Text>
+        </ModalContent>
+      </Modal>
     </View>
   );
 };
@@ -99,6 +148,30 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     width: 100,
     margin: 0,
+  },
+  modal: {
+    backgroundColor: Colors.white,
+    justifyContent: 'center',
+  },
+  modalTitle: {
+    fontFamily: 'poppins',
+    color: Colors.dark,
+    textAlign: 'center',
+    paddingBottom: 10,
+  },
+  modalDescription: {
+    fontFamily: 'poppins-light',
+    color: Colors.dark,
+    fontSize: 12,
+    textAlign: 'center',
+    paddingBottom: 20,
+  },
+  cancel: {
+    paddingTop: 20,
+    textAlign: 'center',
+    fontFamily: 'poppins',
+    color: Colors.dark,
+    textDecorationLine: 'underline',
   },
 });
 

@@ -1,5 +1,12 @@
 import React, {useState, useEffect} from 'react';
-import {Modal, Animated, StyleSheet, Text, View} from 'react-native';
+import {
+  Modal,
+  Animated,
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+} from 'react-native';
 import {FlatGrid} from 'react-native-super-grid';
 
 import Colors from '../constants/Colors';
@@ -8,18 +15,23 @@ import TitleWithDescription from '../components/TitleWithDescription';
 import Layout from '../constants/Layout';
 import {Ionicons} from '@expo/vector-icons';
 
-const SelectPlaceTypeScreen = () => {
+type Props = {
+  onPlaceTypePress: (type) => void;
+};
+
+const SelectPlaceTypeScreen = (props: Props) => {
+  const {onPlaceTypePress} = props;
   const [items, setItems] = React.useState([
-    {name: 'Garden'},
-    {name: 'Office'},
-    {name: 'Parking'},
-    {name: 'Cave'},
-    {name: 'Warehouse'},
-    {name: 'GREEN SEA'},
-    {name: 'GREEN SEA'},
-    {name: 'GREEN SEA'},
-    {name: 'GREEN SEA'},
-    {name: 'GREEN SEA'},
+    {name: 'Garden', id: 0},
+    {name: 'Office', id: 1},
+    {name: 'Parking', id: 2},
+    {name: 'Cave', id: 3},
+    {name: 'Warehouse', id: 4},
+    {name: 'GREEN SEA', id: 5},
+    {name: 'GREEN SEA', id: 6},
+    {name: 'GREEN SEA', id: 7},
+    {name: 'GREEN SEA', id: 8},
+    {name: 'GREEN SEA', id: 9},
   ]);
 
   return (
@@ -32,6 +44,7 @@ const SelectPlaceTypeScreen = () => {
         <View style={styles.row}>
           <SimpleInput
             placeholder="Search a type"
+            style={styles.flex}
             suffix={<Ionicons name="search" size={20} color={Colors.gray} />}
           />
         </View>
@@ -42,9 +55,11 @@ const SelectPlaceTypeScreen = () => {
         style={styles.gridView}
         spacing={20}
         renderItem={({item}) => (
-          <View style={styles.itemContainer}>
+          <TouchableOpacity
+            style={styles.itemContainer}
+            onPress={() => onPlaceTypePress(item)}>
             <Text style={styles.itemName}>{item.name}</Text>
-          </View>
+          </TouchableOpacity>
         )}
       />
     </View>
@@ -52,6 +67,9 @@ const SelectPlaceTypeScreen = () => {
 };
 
 const styles = StyleSheet.create({
+  flex: {
+    flex: 1,
+  },
   container: {
     flex: 1,
     backgroundColor: Colors.background,

@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {Text, StyleSheet, View, Image, TouchableOpacity} from 'react-native';
+import React from 'react';
+import {Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
 import {FeatureType} from '../types';
@@ -7,15 +7,13 @@ import {FeatureType} from '../types';
 type Props = {
   feature: FeatureType;
   onPress?: () => void;
+  isActive: boolean;
 };
 
 const Feature = (props: Props) => {
-  const [isActive, setIsActive] = useState(false);
-  const {feature, onPress} = props;
+  const {feature, onPress, isActive} = props;
 
   const handleFeaturePress = () => {
-    console.log(feature);
-    setIsActive(!isActive);
     onPress && onPress();
   };
 

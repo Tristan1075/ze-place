@@ -17,7 +17,7 @@ const Modal = (props: Props) => {
       <TouchableOpacity
         style={[styles.headerContainer, styles.color]}
         onPress={handleModal}>
-        <Ionicons size={30} name="arrow-back" color={Colors.primary} />
+        <Ionicons size={30} name="close" color={Colors.white} />
       </TouchableOpacity>
       {child}
     </RNModal>

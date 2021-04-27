@@ -16,7 +16,7 @@ import MapModal from '../MapModal';
 type Props = {
   nextStep: () => void;
   createPlaceForm: CreatePlaceForm;
-  setCreatePlaceForm: Dispatch<SetStateAction<{}>>;
+  setCreatePlaceForm: Dispatch<SetStateAction<CreatePlaceForm>>;
 };
 
 const GeneralInformations = (props: Props) => {
@@ -37,6 +37,7 @@ const GeneralInformations = (props: Props) => {
         style={styles.paddingVertical}
       />
       <SimpleInput
+        value={createPlaceForm.title}
         placeholder="Place's title"
         onChangeText={(value) => {
           setCreatePlaceForm({...createPlaceForm, title: value});
@@ -49,11 +50,12 @@ const GeneralInformations = (props: Props) => {
         style={styles.paddingVertical}
       />
       <SimpleInput
+        value={createPlaceForm.aboutMe}
         placeholder="Choose"
         multiline={true}
         numberOfLines={1}
         onChangeText={(value) => {
-          setCreatePlaceForm({...createPlaceForm, description: value});
+          setCreatePlaceForm({...createPlaceForm, aboutMe: value});
         }}
       />
       <TitleWithDescription

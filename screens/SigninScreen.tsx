@@ -40,6 +40,12 @@ const SigninScreen = (props: Props) => {
     } catch (e) {
       setError(true);
       console.log(e);
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{name: 'Tab'}],
+        }),
+      );
     }
   };
 

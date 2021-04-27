@@ -3,6 +3,7 @@ import React from 'react';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import * as Localization from 'expo-localization';
 import i18n from 'i18n-js';
+import {ModalPortal} from 'react-native-modals';
 
 import frFR from './localization/fr-FR';
 import enUS from './localization/en-US';
@@ -27,6 +28,7 @@ const App = () => {
         <ModalProvider>
           <Navigation />
           <StatusBar />
+          <ModalPortal />
         </ModalProvider>
       </SafeAreaProvider>
     );
