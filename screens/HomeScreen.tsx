@@ -7,6 +7,7 @@ import {
   TextInput,
   Image,
   ScrollView,
+  TouchableOpacity,
 } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 import {StackNavigationProp} from '@react-navigation/stack';
@@ -18,9 +19,13 @@ import SquaredButton from '../components/SquaredButton';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
 import CardWithRate from '../components/CardWithRate';
-import {HomeParamList, PlaceType} from '../types';
+import {HomeParamList, PlaceType,User} from '../types';
 import {categories} from '../mocks';
 import {getAllPlaces} from '../api/places';
+import {getUser} from '../api/customer';
+import Button from '../components/Button';
+import { setupMaster } from 'cluster';
+import { getFocusedRouteNameFromRoute } from '@react-navigation/core';
 
 type RootScreenNavigationProp = StackNavigationProp<HomeParamList, 'Home'>;
 
@@ -32,14 +37,23 @@ const HomeScreen = (props: Props) => {
   const {navigation} = props;
   const [activeCategory, setActiveCategory] = useState<number>(0);
   const [places, setPlaces] = useState<Array<PlaceType>>([]);
+  const [user,setUser] = useState<User>();
 
   useEffect(() => {
     const init = async () => setPlaces(await getAllPlaces());
+    const user = async () => setUser(await getUser());
     init();
+    user();
+    
+    
   }, []);
 
   const handlePlacePress = (place: PlaceType) => {
     navigation.navigate('PlaceDetail', {place: place});
+  };
+  const handleProfilOption = () => {
+    navigation.navigate('Signin');
+    
   };
 
   const renderItem = ({item}: {item: PlaceType}) => {
@@ -48,8 +62,11 @@ const HomeScreen = (props: Props) => {
 
   return (
     <SafeAreaView style={styles.container}>
+
       <ScrollView showsVerticalScrollIndicator={false}>
-        <Header type="menu" showProfil={true} />
+      <View style={styles.container}>
+      <Header type='menu' showProfil={true}  profilPicture={user && user.avatar}></Header>
+        </View>
         <View style={styles.container}>
           <Text style={styles.title}>{i18n.t('discover')}</Text>
           <TextInput style={styles.input} placeholder="Search" />
@@ -76,6 +93,7 @@ const HomeScreen = (props: Props) => {
             itemWidth={220}
           />
         </View>
+        { user && console.log(user.first_name)}
         <Text style={styles.subtitle}>Popular Place</Text>
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
           <View style={styles.horizontalList}>
@@ -181,6 +199,12 @@ const styles = StyleSheet.create({
     fontFamily: 'Source Sans Pro',
     color: Colors.primary,
     transform: [{rotate: '-90deg'}],
+  },
+  profil: {
+    width: 40,
+    height: 40,
+    borderRadius: 10,
+    alignSelf: 'flex-end',
   },
 });
 

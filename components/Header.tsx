@@ -10,15 +10,20 @@ type Props = {
   type: 'back' | 'menu';
   showProfil?: boolean;
   title?: string;
-  profilPicture?: string;
+  profilPicture?: String;
+  button?: string;
 };
 
 const Header = (props: Props) => {
-  const {type, showProfil, title, profilPicture} = props;
+  const {type, showProfil, title, profilPicture,button} = props;
   const navigation = useNavigation();
 
   const handleBackPress = () => {
     navigation.goBack();
+  };
+  const handleProfilOption = () => {
+    navigation.navigate('ProfilList');
+    
   };
 
   return (
@@ -35,9 +40,12 @@ const Header = (props: Props) => {
         </TouchableOpacity>
       )}
       {title && <Text style={styles.title}>{title}</Text>}
+      
       {showProfil && (
-        <TouchableOpacity style={styles.shadow}>
-          <Image
+        <TouchableOpacity 
+        style={styles.shadow}
+        onPress={handleProfilOption}  >
+          <Image 
             source={{
               uri: profilPicture,
             }}
@@ -45,6 +53,9 @@ const Header = (props: Props) => {
           />
         </TouchableOpacity>
       )}
+      {button && <TouchableOpacity style={styles.shadow}
+        onPress={() =>console.log("test")
+        } ><Text style={styles.button}>{button}</Text></TouchableOpacity>}
     </View>
   );
 };
@@ -74,6 +85,14 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 10,
+  },  
+  button: {
+    fontFamily: 'playfair-bold',
+    fontSize: 16,
+    color: Colors.primary,
+    paddingVertical: 20,
+    paddingLeft: Layout.padding,
+    textAlign:"right",
   },
   shadow: {
     shadowColor: '#2d2d2d',

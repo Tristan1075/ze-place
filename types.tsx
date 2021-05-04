@@ -15,6 +15,10 @@ export type HomeParamList = {
   Home: undefined;
   PlaceDetail: {place: PlaceType};
 };
+export type HeaderParamList = {
+  Home: undefined;
+  PlaceDetail: {place: PlaceType};
+};
 
 export type MessagesParamList = {
   Messages: undefined;
@@ -28,6 +32,7 @@ export type User = {
   email: String;
   password: String;
   phone: String;
+  birthdate: String;
   address: String;
   description: String;
   created_at: {type: Date; default: Date};
