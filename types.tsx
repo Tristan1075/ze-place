@@ -26,15 +26,16 @@ export type MessagesParamList = {
 };
 
 export type User = {
-  avatar: String;
-  first_name: String;
-  last_name: String;
-  email: String;
-  password: String;
-  phone: String;
-  birthdate: String;
-  address: String;
-  description: String;
+  _id:string;
+  avatar: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+  password: string;
+  phone: string;
+  birthdate: string;
+  address: string;
+  description: string;
   created_at: {type: Date; default: Date};
 };
 

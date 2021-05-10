@@ -12,10 +12,11 @@ type Props = {
   title?: string;
   profilPicture?: String;
   button?: string;
+  onActionTap?:Function;
 };
 
 const Header = (props: Props) => {
-  const {type, showProfil, title, profilPicture,button} = props;
+  const {type, showProfil, title, profilPicture,button,onActionTap} = props;
   const navigation = useNavigation();
 
   const handleBackPress = () => {
@@ -54,8 +55,7 @@ const Header = (props: Props) => {
         </TouchableOpacity>
       )}
       {button && <TouchableOpacity style={styles.shadow}
-        onPress={() =>console.log("test")
-        } ><Text style={styles.button}>{button}</Text></TouchableOpacity>}
+        onPress={onActionTap} ><Text style={styles.button}>{button}</Text></TouchableOpacity>}
     </View>
   );
 };

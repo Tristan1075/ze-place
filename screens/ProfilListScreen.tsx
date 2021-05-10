@@ -56,7 +56,7 @@ const ProfilListScreen = (props: Props) => {
                     textColor={Colors.primary}></Button>
         </View>
         <View style={styles.container}>
-            <Button value="Moyen de payement"
+            <Button value="Moyen de paiement"
                     onPress={()=> console.log("Pay")}
                     backgroundColor={Colors.white}
                     textColor={Colors.primary}></Button>
