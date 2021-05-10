@@ -4,21 +4,22 @@ import {
   StyleSheet,
   Text,
   View,
-  TextInput,
-  Image,
   ScrollView,
   TouchableOpacity,
+  FlatList,
+  ImageBackground,
+  Image,
+
 } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 import {StackNavigationProp} from '@react-navigation/stack';
-import * as SecureStore from 'expo-secure-store';
 import i18n from 'i18n-js';
 
 import Header from '../components/Header';
-import SquaredButton from '../components/SquaredButton';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
 import CardWithRate from '../components/CardWithRate';
+
 import {HomeParamList, PlaceType,User} from '../types';
 import {categories} from '../mocks';
 import {getAllPlaces} from '../api/places';
@@ -27,6 +28,14 @@ import Button from '../components/Button';
 import { setupMaster } from 'cluster';
 import { getFocusedRouteNameFromRoute } from '@react-navigation/core';
 
+import DescriptionBloc from '../components/DescriptionBloc';
+import SimpleInput from '../components/SimpleInput';
+import TitleWithDescription from '../components/TitleWithDescription';
+import PlaceCard from '../components/PlaceCard';
+
+
+import {placesMock} from '../mocks';
+import { Ionicons } from '@expo/vector-icons';
 type RootScreenNavigationProp = StackNavigationProp<HomeParamList, 'Home'>;
 
 type Props = {
@@ -35,7 +44,6 @@ type Props = {
 
 const HomeScreen = (props: Props) => {
   const {navigation} = props;
-  const [activeCategory, setActiveCategory] = useState<number>(0);
   const [places, setPlaces] = useState<Array<PlaceType>>([]);
   const [user,setUser] = useState<User>();
 
@@ -56,11 +64,26 @@ const HomeScreen = (props: Props) => {
     
   };
 
-  const renderItem = ({item}: {item: PlaceType}) => {
+  const handleCreatePlacePress = () => {
+    navigation.navigate('CreatePlace');
+  };
+
+  const renderCarouselItem = ({item}: {item: PlaceType}) => {
     return <CardWithRate place={item} onPress={() => handlePlacePress(item)} />;
   };
 
+  const renderListItem = ({item, index}: {item: PlaceType; index: number}) => (
+    <View style={styles.paddingHorizontal}>
+      <PlaceCard
+        key={index}
+        place={item}
+        onPress={() => handleItemPress(item)}
+      />
+    </View>
+  );
+
   return (
+
     <SafeAreaView style={styles.container}>
 
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -116,89 +139,88 @@ const HomeScreen = (props: Props) => {
         Déconnexion
       </Text>
     </SafeAreaView>
+    <ScrollView showsVerticalScrollIndicator={false} style={styles.scrollView}>
+      <Image
+        source={require('../assets/images/home_banner.jpg')}
+        style={styles.imageBanner}
+      />
+      <View style={styles.container}>
+        <Header type="menu" showProfil={true} />
+        <Text style={styles.title}>{i18n.t('discover')}</Text>
+        <SimpleInput
+          style={styles.input}
+          placeholder="Search"
+          suffix={<Ionicons name="search" size={20} color={Colors.gray} />}
+        />
+      </View>
+      <TitleWithDescription
+        title="Near you"
+        description="Find nearby you the available places to rent"
+        style={styles.padding}
+      />
+      <Carousel
+        contentContainerCustomStyle={{paddingLeft: Layout.padding}}
+        useScrollView={true}
+        data={places}
+        renderItem={renderCarouselItem}
+        sliderWidth={Layout.window.width}
+        activeSlideAlignment="start"
+        itemWidth={220}
+      />
+      <DescriptionBloc onPress={handleCreatePlacePress} />
+      <TitleWithDescription
+        title="Announces"
+        description="Find nearby you the available places to rent"
+        style={styles.padding}
+      />
+      <FlatList
+        data={placesMock}
+        renderItem={renderListItem}
+        keyExtractor={(item) => item.id}
+        showsVerticalScrollIndicator={false}
+      />
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingHorizontal: Layout.padding,
+  scrollView: {
     backgroundColor: Colors.background,
   },
-  row: {
+  container: {
     flex: 1,
+    marginBottom: 50,
+    marginTop: 50,
+  },
+  imageBanner: {
+    height: 360,
+    position: 'absolute',
+    resizeMode: 'cover',
+    width: Layout.window.width,
   },
   title: {
-    fontFamily: 'playfair-bold',
+    fontFamily: 'oswald-light',
     fontSize: 32,
-    color: Colors.primary,
+    color: Colors.white,
     paddingBottom: 20,
+    width: 200,
+    paddingHorizontal: 20,
   },
   subtitle: {
-    fontFamily: 'playfair-bold',
+    fontFamily: 'oswald-light',
     fontSize: 26,
-    color: Colors.primary,
+    color: Colors.dark,
     paddingVertical: 20,
     paddingLeft: Layout.padding,
   },
-  input: {
-    backgroundColor: Colors.white,
-    padding: 20,
-    borderRadius: 15,
-    shadowColor: '#2d2d2d',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-    fontFamily: 'poppins',
-  },
-  iconsRow: {
-    paddingVertical: 30,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  horizontalList: {
-    flexDirection: 'row',
+  paddingHorizontal: {
     paddingHorizontal: Layout.padding,
   },
-  image: {
-    width: 130,
-    height: 130,
-    marginRight: 10,
-    borderRadius: 10,
+  padding: {
+    padding: Layout.padding,
   },
-  shadow: {
-    shadowColor: '#2d2d2d',
-    shadowOffset: {
-      width: 6,
-      height: 0,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 1.84,
-    elevation: 5,
-  },
-  filterText: {
-    fontSize: 16,
-    color: Colors.secondary,
-    marginRight: 20,
-  },
-  tabContainer: {},
-  tabbar: {
-    backgroundColor: 'transparent',
-  },
-  tab: {
-    height: 90,
-    backgroundColor: 'transparent',
-  },
-  label: {
-    textAlign: 'center',
-    fontSize: 12,
-    fontFamily: 'Source Sans Pro',
-    color: Colors.primary,
-    transform: [{rotate: '-90deg'}],
+  input: {
+    marginHorizontal: 20,
   },
   profil: {
     width: 40,

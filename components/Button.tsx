@@ -19,27 +19,15 @@ type Props = {
 const Button = (props: Props) => {
   const {onPress, backgroundColor, textColor, style, value} = props;
   return (
-    <View style={styles.shadow}>
-      <TouchableOpacity
-        style={[styles.container, {backgroundColor}, style]}
-        onPress={onPress}>
-        <Text style={[styles.text, {color: textColor}]}>{value}</Text>
-      </TouchableOpacity>
-    </View>
+    <TouchableOpacity
+      style={[styles.container, {backgroundColor}, style]}
+      onPress={onPress}>
+      <Text style={[styles.text, {color: textColor}]}>{value}</Text>
+    </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
-  shadow: {
-    shadowColor: '#2d2d2d',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 1.84,
-    elevation: 5,
-  },
   container: {
     backgroundColor: Colors.white,
     alignItems: 'center',
@@ -57,7 +45,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   text: {
-    fontFamily: 'poppins-bold',
+    fontFamily: 'poppins-semiBold',
     color: Colors.primary,
   },
 });

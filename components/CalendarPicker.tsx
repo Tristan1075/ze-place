@@ -1,16 +1,14 @@
 import React from 'react';
-import {View, Text} from 'react-native';
-import {LocaleConfig, CalendarList, Arrow, Calendar} from 'react-native-calendars';
+import {View, StyleSheet} from 'react-native';
+import {Calendar} from 'react-native-calendars';
 import Layout from '../constants/Layout';
-
 
 type Props = {};
 
 const CalendarPicker = (props: Props) => {
   return (
     <Calendar
-      pagingEnabled={true}
-      calendarWidth={Layout.window.width - Layout.padding}
+      style={styles.calendar}
       current={Date()}
       minDate={Date()}
       onDayPress={(day) => {
@@ -23,10 +21,17 @@ const CalendarPicker = (props: Props) => {
       disableMonthChange={false}
       onPressArrowLeft={(subtractMonth) => subtractMonth()}
       onPressArrowRight={(addMonth) => addMonth()}
-      disableAllTouchEventsForDisabledDays={true}
       enableSwipeMonths={true}
     />
   );
 };
+
+const styles = StyleSheet.create({
+  calendar: {
+    borderRadius: 10,
+    marginVertical: 20,
+    ...Layout.shadow,
+  },
+});
 
 export default CalendarPicker;

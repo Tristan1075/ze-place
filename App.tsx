@@ -1,15 +1,16 @@
 import {StatusBar} from 'expo-status-bar';
 import React from 'react';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
-import {ModalPortal} from 'react-native-modals';
 import * as Localization from 'expo-localization';
 import i18n from 'i18n-js';
+import {ModalPortal} from 'react-native-modals';
 
 import frFR from './localization/fr-FR';
 import enUS from './localization/en-US';
 
 import useCachedResources from './hooks/useCachedResources';
 import Navigation from './navigation';
+import {ModalProvider} from './providers/modalContext';
 
 const App = () => {
   i18n.translations = {
@@ -24,9 +25,11 @@ const App = () => {
   } else {
     return (
       <SafeAreaProvider>
-        <Navigation />
-        <StatusBar />
-        <ModalPortal />
+        <ModalProvider>
+          <Navigation />
+          <StatusBar />
+          <ModalPortal />
+        </ModalProvider>
       </SafeAreaProvider>
     );
   }

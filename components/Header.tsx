@@ -17,6 +17,14 @@ type Props = {
 
 const Header = (props: Props) => {
   const {type, showProfil, title, profilPicture,button,onActionTap} = props;
+  profilPicture?: string;
+  onBackPress?: Function;
+  color?: string;
+};
+
+const Header = (props: Props) => {
+  const {type, showProfil, title, profilPicture, onBackPress, color} = props;
+
   const navigation = useNavigation();
 
   const handleBackPress = () => {
@@ -32,12 +40,16 @@ const Header = (props: Props) => {
       {type === 'back' ? (
         <TouchableOpacity
           style={[styles.headerContainer, styles.color]}
-          onPress={handleBackPress}>
-          <Ionicons size={30} name="arrow-back" color={Colors.primary} />
+          onPress={onBackPress ? () => onBackPress() : handleBackPress}>
+          <Ionicons
+            size={30}
+            name="arrow-back"
+            color={color ? color : Colors.primary}
+          />
         </TouchableOpacity>
       ) : (
         <TouchableOpacity style={styles.headerContainer}>
-          <Ionicons size={30} name="menu" color={Colors.primary} />
+          <Ionicons size={30} name="menu" color={Colors.white} />
         </TouchableOpacity>
       )}
       {title && <Text style={styles.title}>{title}</Text>}

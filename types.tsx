@@ -1,3 +1,5 @@
+import {ImageProps} from 'react-native';
+
 export type RootStackParamList = {
   Root: undefined;
   Signin: undefined;
@@ -7,6 +9,7 @@ export type RootStackParamList = {
 
 export type BottomTabParamList = {
   Home: undefined;
+  Create: undefined;
   Messages: undefined;
   Favorites: undefined;
 };
@@ -14,6 +17,12 @@ export type BottomTabParamList = {
 export type HomeParamList = {
   Home: undefined;
   PlaceDetail: {place: PlaceType};
+  CreatePlace: undefined;
+  MapModal: undefined;
+};
+
+export type CreatePlaceParamList = {
+  CreatePlace: undefined;
 };
 export type HeaderParamList = {
   Home: undefined;
@@ -39,7 +48,7 @@ export type User = {
   created_at: {type: Date; default: Date};
 };
 
-export type PlaceType = {
+export type Place = {
   title: String;
   location: String;
   description: String;
@@ -58,7 +67,6 @@ export type Review = {
 };
 
 export type Image = {
-  name: string;
   url: string;
 };
 
@@ -94,4 +102,32 @@ export type SignupForm = {
   password: string;
   confirmPassword: string;
   description: string;
+};
+
+export type FeatureType = {
+  name: string;
+  icon: {
+    name: string;
+    url: ImageProps;
+  };
+};
+
+export type PlaceType = {
+  id: string;
+  name: string;
+};
+
+export type CreatePlaceForm = {
+  title?: string;
+  aboutMe?: string;
+  placeType?: PlaceType;
+  surface?: string;
+  price?: string;
+  locationDuration: {
+    title: string;
+    value: string;
+  };
+  description?: string;
+  images: Array<Image>;
+  features: Array<FeatureType>;
 };

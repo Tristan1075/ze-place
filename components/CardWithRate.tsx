@@ -18,6 +18,7 @@ type Props = {
 
 const CardWithRate = (props: Props) => {
   const {onPress, place} = props;
+  console.log(place);
   return (
     <TouchableWithoutFeedback style={styles.carouselItem} onPress={onPress}>
       <View style={styles.shadow}>
@@ -28,7 +29,7 @@ const CardWithRate = (props: Props) => {
         </View>
         <View style={styles.content}>
           <Text style={styles.title}>{place.title}</Text>
-          {/* <Text style={styles.subtitle}>{place.subtitle}</Text> */}
+          <Text style={styles.subtitle}>{place.city}</Text>
         </View>
       </View>
     </TouchableWithoutFeedback>
@@ -77,14 +78,14 @@ const styles = StyleSheet.create({
     left: 10,
   },
   title: {
-    fontFamily: 'playfair-bold',
+    fontFamily: 'oswald-bold',
     fontSize: 24,
     width: 250,
     color: Colors.white,
   },
   subtitle: {
     fontFamily: 'poppins',
-    fontSize: 12,
+    fontSize: 16,
     color: Colors.white,
   },
 });

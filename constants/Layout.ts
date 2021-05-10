@@ -10,4 +10,14 @@ export default {
   },
   isSmallDevice: width < 375,
   padding: 25,
+  shadow: {
+    shadowColor: '#2d2d2d',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.15,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
 };

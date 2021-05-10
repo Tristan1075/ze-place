@@ -157,12 +157,14 @@ const SignupScreen = (props: Props) => {
             onChangeText={(v) => setForm({...form, firstname: v})}
             placeholder="First name"
             error={errors.firstname}
+            style={styles.input}
           />
           <SimpleInput
             onChange={() => setErrors({...errors, lastname: ''})}
             onChangeText={(v) => setForm({...form, lastname: v})}
             placeholder="Last name"
             error={errors.lastname}
+            style={styles.input}
           />
           <SimpleInput
             onPress={() => setShowDateTimePicker(true)}
@@ -171,19 +173,22 @@ const SignupScreen = (props: Props) => {
             onChangeText={(v) => setForm({...form, lastname: v})}
             placeholder="Birthdate"
             value={form.birthdate ? moment(form.birthdate).format('ll') : ''}
-            error={errors.birthdate ? 'The fiels is required' : ''}
+            error={errors.birthdate ? 'The field is required' : ''}
+            style={styles.input}
           />
           <SimpleInput
             onChange={() => setErrors({...errors, phoneNumber: ''})}
             onChangeText={(v) => setForm({...form, phoneNumber: v})}
             placeholder="Phone number"
             error={errors.phoneNumber}
+            style={styles.input}
           />
           <SimpleInput
             onChange={() => setErrors({...errors, email: ''})}
             onChangeText={(v) => setForm({...form, email: v.toLowerCase()})}
             placeholder="Email"
             error={errors.email}
+            style={styles.input}
           />
           <SimpleInput
             onChange={() => setErrors({...errors, password: ''})}
@@ -191,6 +196,7 @@ const SignupScreen = (props: Props) => {
             placeholder="Password"
             secureTextEntry={true}
             error={errors.password}
+            style={styles.input}
           />
           <SimpleInput
             onChange={() => setErrors({...errors, confirmPassword: ''})}
@@ -198,6 +204,7 @@ const SignupScreen = (props: Props) => {
             placeholder="Confirmation password"
             secureTextEntry={true}
             error={errors.confirmPassword}
+            style={styles.input}
           />
           <SimpleInput
             onChangeText={(v) => setForm({...form, description: v})}
@@ -205,6 +212,7 @@ const SignupScreen = (props: Props) => {
             error={errors.description}
             multiline={true}
             numberOfLines={1}
+            style={styles.input}
           />
           <Button
             value="Sign up"
@@ -330,6 +338,9 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
     color: Colors.error,
     fontFamily: 'poppins',
+  },
+  input: {
+    marginBottom: 10,
   },
 });
 
