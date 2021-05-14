@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -12,6 +12,7 @@ import {
 import Carousel from 'react-native-snap-carousel';
 import {StackNavigationProp} from '@react-navigation/stack';
 import i18n from 'i18n-js';
+import * as SecureStore from 'expo-secure-store';
 
 import Header from '../components/Header';
 import Colors from '../constants/Colors';
@@ -25,7 +26,11 @@ import TitleWithDescription from '../components/TitleWithDescription';
 import PlaceCard from '../components/PlaceCard';
 
 import {placesMock} from '../mocks';
-import { Ionicons } from '@expo/vector-icons';
+import {Ionicons} from '@expo/vector-icons';
+import {ModalContext} from '../providers/modalContext';
+import SearchFilterScreen from './SearchFilterScreen';
+import Button from '../components/Button';
+import { CommonActions } from '@react-navigation/native';
 type RootScreenNavigationProp = StackNavigationProp<HomeParamList, 'Home'>;
 
 type Props = {
@@ -35,11 +40,22 @@ type Props = {
 const HomeScreen = (props: Props) => {
   const {navigation} = props;
   const [places, setPlaces] = useState<Array<PlaceType>>([]);
+  const {handleModal} = useContext(ModalContext);
 
   useEffect(() => {
     const init = async () => setPlaces(await getAllPlaces());
     init();
   }, []);
+
+  const handleDisconnectPress = async () => {
+    await SecureStore.deleteItemAsync('access-token');
+    navigation.dispatch(
+      CommonActions.reset({
+        index: 0,
+        routes: [{name: 'Root'}],
+      }),
+    );
+  };
 
   const handlePlacePress = (place: PlaceType) => {
     navigation.navigate('PlaceDetail', {place: place});
@@ -47,6 +63,12 @@ const HomeScreen = (props: Props) => {
 
   const handleCreatePlacePress = () => {
     navigation.navigate('CreatePlace');
+  };
+
+  const handleSeeAnnouncesPress = () => {
+    handleModal({
+      child: <SearchFilterScreen />,
+    });
   };
 
   const renderCarouselItem = ({item}: {item: PlaceType}) => {
@@ -82,6 +104,8 @@ const HomeScreen = (props: Props) => {
         title="Near you"
         description="Find nearby you the available places to rent"
         style={styles.padding}
+        actionText="See map"
+        actionIcon="map"
       />
       <Carousel
         contentContainerCustomStyle={{paddingLeft: Layout.padding}}
@@ -97,6 +121,9 @@ const HomeScreen = (props: Props) => {
         title="Announces"
         description="Find nearby you the available places to rent"
         style={styles.padding}
+        actionText="See more"
+        actionIcon="list"
+        onActionPress={handleSeeAnnouncesPress}
       />
       <FlatList
         data={placesMock}
@@ -104,6 +131,7 @@ const HomeScreen = (props: Props) => {
         keyExtractor={(item) => item.id}
         showsVerticalScrollIndicator={false}
       />
+      <Button value="Disconnnect" onPress={handleDisconnectPress} />
     </ScrollView>
   );
 };

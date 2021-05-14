@@ -17,8 +17,8 @@ import PlaceDetailScreen from '../screens/PlaceDetailScreen';
 import MessagesScreen from '../screens/MessagesScreen';
 import ConversationScreen from '../screens/ConversationScreen';
 import FavoritesScreen from '../screens/FavoritesScreen';
-import CreatePlaceModal from '../screens/CreatePlaceModal';
-import MapModal from '../screens/MapModal';
+import CreatePlaceScreen from '../screens/PlaceCreation/CreatePlaceScreen';
+import SearchFilterScreen from '../screens/SearchFilterScreen';
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
@@ -76,8 +76,8 @@ const HomeNavigator = () => {
     <HomeStack.Navigator screenOptions={{headerShown: false}}>
       <HomeStack.Screen name="Home" component={HomeScreen} />
       <HomeStack.Screen name="PlaceDetail" component={PlaceDetailScreen} />
-      <HomeStack.Screen name="CreatePlace" component={CreatePlaceModal} />
-      <HomeStack.Screen name="MapModal" component={MapModal} />
+      <HomeStack.Screen name="CreatePlace" component={CreatePlaceScreen} />
+      <HomeStack.Screen name="SearchFilter" component={SearchFilterScreen} />
     </HomeStack.Navigator>
   );
 };
@@ -91,7 +91,7 @@ const CreatePlaceNavigator = () => {
       mode="modal">
       <CreatePlaceStack.Screen
         name="CreatePlace"
-        component={CreatePlaceModal}
+        component={CreatePlaceScreen}
       />
     </CreatePlaceStack.Navigator>
   );

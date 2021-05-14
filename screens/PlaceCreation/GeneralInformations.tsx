@@ -1,17 +1,15 @@
 import React, {Dispatch, SetStateAction, useContext} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, View, TouchableWithoutFeedback, Image} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
 import TitleWithDescription from '../../components/TitleWithDescription';
 import SimpleInput from '../../components/SimpleInput';
-import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
-import {mapStyle} from '../../utils/mapStyle';
 import Button from '../../components/Button';
 import Colors from '../../constants/Colors';
 import Layout from '../../constants/Layout';
 import {CreatePlaceForm} from '../../types';
 import {ModalContext} from '../../providers/modalContext';
-import MapModal from '../MapModal';
+import SearchPlaceScreen from '../SearchPlaceScreen';
 
 type Props = {
   nextStep: () => void;
@@ -21,11 +19,17 @@ type Props = {
 
 const GeneralInformations = (props: Props) => {
   const {nextStep, createPlaceForm, setCreatePlaceForm} = props;
-  const navigation = useNavigation();
   const {handleModal} = useContext(ModalContext);
 
   const handleMapPress = () => {
-    handleModal({child: <MapModal />});
+    handleModal({
+      child: (
+        <SearchPlaceScreen
+          createPlaceForm={createPlaceForm}
+          setCreatePlaceForm={setCreatePlaceForm}
+        />
+      ),
+    });
   };
 
   return (
@@ -64,19 +68,12 @@ const GeneralInformations = (props: Props) => {
         subtitle={true}
         style={styles.paddingVertical}
       />
-      <MapView
-        onPress={handleMapPress}
-        provider={PROVIDER_GOOGLE}
-        customMapStyle={mapStyle}
-        scrollEnabled={false}
-        style={styles.map}
-        initialRegion={{
-          latitude: 37.78825,
-          longitude: -122.4324,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
-        }}
-      />
+      <TouchableWithoutFeedback onPress={handleMapPress}>
+        <Image
+          source={require('../../assets/images/map.png')}
+          style={styles.map}
+        />
+      </TouchableWithoutFeedback>
       <Button
         value="Continuer"
         backgroundColor={Colors.dark}
@@ -96,8 +93,10 @@ const styles = StyleSheet.create({
   },
   map: {
     height: 120,
+    width: Layout.window.width - 40,
     borderRadius: 10,
     marginBottom: Layout.padding,
+    ...Layout.shadow,
   },
 });
 

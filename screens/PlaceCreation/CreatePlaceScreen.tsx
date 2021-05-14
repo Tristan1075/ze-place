@@ -5,22 +5,23 @@ import {useNavigation} from '@react-navigation/native';
 
 // @ts-ignore
 import {ProgressSteps, ProgressStep} from 'react-native-progress-steps';
-import Button from '../components/Button';
+import Button from '../../components/Button';
 
-import Header from '../components/Header';
-import Colors from '../constants/Colors';
-import {CreatePlaceForm} from '../types';
-import GeneralInformations from './PlaceCreation/GeneralInformations';
-import PlaceInformations from './PlaceCreation/PlaceInformations';
-import RightsAndCustomization from './PlaceCreation/RightsAndCustomization';
+import Header from '../../components/Header';
+import Colors from '../../constants/Colors';
+import {CreatePlaceForm} from '../../types';
+import GeneralInformations from './GeneralInformations';
+import PlaceInformations from './PlaceInformations';
+import RightsAndCustomization from './RightsAndCustomization';
 
-const CreatePlaceModal = () => {
+const CreatePlaceScreen = () => {
   const navigation = useNavigation();
   const [activeStep, setActiveStep] = useState<number>(0);
   const [exitModal, setExitModal] = useState<boolean>(false);
   const [createPlaceForm, setCreatePlaceForm] = useState<CreatePlaceForm>({
     title: undefined,
     aboutMe: undefined,
+    location: undefined,
     surface: undefined,
     placeType: undefined,
     price: undefined,
@@ -175,4 +176,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CreatePlaceModal;
+export default CreatePlaceScreen;

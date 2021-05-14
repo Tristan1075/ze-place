@@ -4,7 +4,6 @@ import * as SecureStore from 'expo-secure-store';
 
 export const getAllPlaces = async () => {
   const token = await SecureStore.getItemAsync('access-token');
-  console.log(token);
   return await axios
     .get(`${API_URL}/places`, {
       headers: {

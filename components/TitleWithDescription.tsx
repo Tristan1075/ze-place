@@ -1,8 +1,13 @@
+import {Ionicons} from '@expo/vector-icons';
 import React from 'react';
-import {View, Text, StyleSheet, Image, ViewStyle} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ViewStyle,
+  TouchableOpacity,
+} from 'react-native';
 import Colors from '../constants/Colors';
-import Layout from '../constants/Layout';
-import Button from './Button';
 
 type Props = {
   title: string;
@@ -10,13 +15,34 @@ type Props = {
   style?: ViewStyle;
   subtitle?: boolean;
   color?: string;
+  actionText?: string;
+  actionIcon?: any;
+  onActionPress?: () => void;
 };
 
 const TitleWithDescription = (props: Props) => {
-  const {title, description, style, subtitle, color} = props;
+  const {
+    title,
+    description,
+    style,
+    subtitle,
+    color,
+    actionText,
+    actionIcon,
+    onActionPress,
+  } = props;
   return (
     <View style={style}>
-      <Text style={[subtitle ? styles.subtitle : styles.title, {color: color}]}>{title}</Text>
+      <View style={styles.row}>
+        <Text
+          style={[subtitle ? styles.subtitle : styles.title, {color: color}]}>
+          {title}
+        </Text>
+        <TouchableOpacity onPress={onActionPress} style={styles.row}>
+          <Text style={styles.actionText}>{actionText}</Text>
+          <Ionicons name={actionIcon} size={16} color={Colors.primary} />
+        </TouchableOpacity>
+      </View>
       {description && <Text style={styles.description}>{description}</Text>}
     </View>
   );
@@ -27,6 +53,11 @@ const styles = StyleSheet.create({
     color: Colors.dark,
     fontFamily: 'oswald-bold',
     fontSize: 24,
+    flex: 1,
+  },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   subtitle: {
     color: Colors.dark,
@@ -36,6 +67,12 @@ const styles = StyleSheet.create({
   description: {
     color: Colors.gray,
     fontFamily: 'poppins',
+  },
+  actionText: {
+    marginRight: 10,
+    color: Colors.primary,
+    fontFamily: 'poppins',
+    fontSize: 12,
   },
 });
 

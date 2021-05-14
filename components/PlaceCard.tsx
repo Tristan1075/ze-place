@@ -14,8 +14,14 @@ type Props = {
 
 const PlaceCard = (props: Props) => {
   const {onPress, place} = props;
+
+
+  const handleAddFavorite = () => {
+    api.addFavorite(place);
+  }
+
   return (
-    <TouchableOpacity style={styles.container} onPress={onPress}>
+    <TouchableOpacity style={styles.container} onPress={handleAddFavorite}>
       <Image source={{uri: place.images[0]}} style={styles.image} />
       <View style={styles.informations}>
         <View style={styles.row}>

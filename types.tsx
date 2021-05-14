@@ -111,9 +111,29 @@ export type PlaceType = {
   name: string;
 };
 
+export type MapboxSearch = {
+  address: string;
+  context: [
+    {
+      id: string;
+      text: string;
+    },
+  ];
+  place_name: string;
+  text: string;
+};
+
+export type Location = {
+  address: string;
+  postalCode: string;
+  city: string;
+  country: string;
+};
+
 export type CreatePlaceForm = {
   title?: string;
   aboutMe?: string;
+  location?: Location;
   placeType?: PlaceType;
   surface?: string;
   price?: string;
