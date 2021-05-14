@@ -8,6 +8,8 @@ import {RootStackParamList} from '../types';
 import RootScreen from '../screens/RootScreen';
 import SigninScreen from '../screens/SigninScreen';
 import SignupScreen from '../screens/SignupScreen';
+import ProfilListScreen from '../screens/ProfilListScreen'
+import ProfilScreen from '../screens/ProfilScreen';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -18,6 +20,8 @@ const RootNavigator = () => {
       <Stack.Screen name="Signin" component={SigninScreen} />
       <Stack.Screen name="Signup" component={SignupScreen} />
       <Stack.Screen name="Tab" component={BottomTabNavigator} />
+     <Stack.Screen name="ProfilList" component={ProfilListScreen}/>
+       <Stack.Screen name="Profil" component={ProfilScreen}/>
     </Stack.Navigator>
   );
 };
