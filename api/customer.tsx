@@ -28,11 +28,11 @@ export const modifyUser = async (form:SignupForm,id:string) => {
   const token = await SecureStore.getItemAsync('access-token');
   console.log("form",form);
   console.log(id);
-  const url = `${API_URL}/customers/update?id=${id}`
+  const url = `${API_URL}/customers/update?customerID=${id}`
   console.log(url);
 
   await axios
-  .post(
+  .put(
     url,
     //"http://localhost:3000/customers/update?id=609147e8d9812e8d373f0846",
     //"http://localhost:3000/auth/register",
