@@ -40,18 +40,21 @@ type Props = {
 
 const PlaceInformations = (props: Props) => {
   const {prevStep, nextStep, createPlaceForm, setCreatePlaceForm} = props;
-  const {handleModal} = useContext(ModalContext);
+  const {handleModal, closeModal} = useContext(ModalContext);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
 
   const handleSelectPlaceType = () => {
     handleModal({
-      child: <SelectPlaceTypeScreen onPlaceTypePress={handlePlaceTypePress} />,
+      id: 'select-type-modal',
+      content: (
+        <SelectPlaceTypeScreen onPlaceTypePress={handlePlaceTypePress} />
+      ),
     });
   };
 
   const handlePlaceTypePress = (type: PlaceType) => {
     setCreatePlaceForm({...createPlaceForm, placeType: type});
-    handleModal();
+    closeModal('select-type-modal');
   };
 
   const handleFeaturePress = (feature: FeatureType) => {

@@ -1,5 +1,8 @@
 import React from 'react';
+import {View} from 'react-native';
+
 import useModal from '../hooks/useModal';
+import {ModalType} from '../hooks/useModal';
 import Modal from '../components/Modal';
 
 type Props = {

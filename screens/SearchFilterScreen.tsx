@@ -1,33 +1,58 @@
 import {Ionicons} from '@expo/vector-icons';
-import React, {useContext, useState} from 'react';
-import {ScrollView, StyleSheet, Text, View, Modal} from 'react-native';
+import React, {useContext, useEffect, useState} from 'react';
+import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import Slider from 'react-native-slider';
+
 import Button from '../components/Button';
 
 import Feature from '../components/Feature';
+import Modal from '../components/Modal';
 import SimpleInput from '../components/SimpleInput';
 import TitleWithDescription from '../components/TitleWithDescription';
 
 import Colors from '../constants/Colors';
 import {features} from '../mocks';
 import {ModalContext} from '../providers/modalContext';
+import {FeatureType, PlaceType} from '../types';
 import SelectPlaceTypeScreen from './SelectPlaceTypeScreen';
 
+type FilterForm = {
+  placeType?: PlaceType;
+  price: number;
+  surface: string;
+  features: Array<FeatureType>;
+};
+
 const SearchFilterScreen = () => {
-  const {handleModal} = useContext(ModalContext);
-  const [price, setPrice] = useState<number>(100);
-  const [surface, setSurface] = useState<string>('');
+  const [filterForm, setFilterForm] = useState<FilterForm>({
+    price: 0,
+    surface: '',
+    features: [],
+    placeType: {
+      id: '',
+      name: '',
+    },
+  });
+  const [showPlaceType, setShowPlaceType] = useState<boolean>(false);
 
   const handlePlaceTypePress = (type: PlaceType) => {
-    //setCreatePlaceForm({...createPlaceForm, placeType: type});
-    handleModal();
+    setFilterForm({...filterForm, placeType: type});
+    setShowPlaceType(false);
   };
 
-  const handleSelectPlaceType = () => (
-    <Modal visible={true}>
-      <SelectPlaceTypeScreen onPlaceTypePress={handlePlaceTypePress} />
-    </Modal>
-  );
+  const handleFeaturePress = (feature: FeatureType) => {
+    if (filterForm.features.includes(feature)) {
+      setFilterForm({
+        ...filterForm,
+        features: filterForm.features.filter((item) => item !== feature),
+      });
+    } else {
+      setFilterForm({
+        ...filterForm,
+        features: [...filterForm.features, feature],
+      });
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -36,9 +61,9 @@ const SearchFilterScreen = () => {
         <SimpleInput
           style={styles.input}
           placeholder="Choose a place type"
-          //value={createPlaceForm.placeType?.name}
+          value={filterForm.placeType?.name}
           isEditable={false}
-          onPress={handleSelectPlaceType}
+          onPress={() => setShowPlaceType(true)}
           suffix={
             <Ionicons name="chevron-down" size={20} color={Colors.dark} />
           }
@@ -51,12 +76,16 @@ const SearchFilterScreen = () => {
         <Slider
           minimumValue={0}
           maximumValue={10000}
-          value={price}
+          value={filterForm.price}
           minimumTrackTintColor={Colors.white}
           maximumTrackTintColor={Colors.primary}
-          onValueChange={(value: number) => setPrice(value)}
+          onValueChange={(value: number) =>
+            setFilterForm({...filterForm, price: value})
+          }
         />
-        <Text style={styles.price}>{price.toFixed(0).toString()}€</Text>
+        <Text style={styles.price}>
+          {filterForm.price.toFixed(0).toString()}€
+        </Text>
         <TitleWithDescription
           title="Surface"
           subtitle={true}
@@ -65,25 +94,37 @@ const SearchFilterScreen = () => {
         <SimpleInput
           placeholder="Enter the size"
           style={styles.input}
-          suffix={<Text style={styles.descriptionText}>m²</Text>}
+          suffix={<Text>m²</Text>}
           type="number-pad"
-          onChangeText={(value) => setSurface(value)}
+          onChangeText={(value) =>
+            setFilterForm({...filterForm, surface: value})
+          }
         />
         <TitleWithDescription title="Select a feature" subtitle={true} />
-        <ScrollView
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.facilitiesContainer}>
+        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
           {features.map((feature, index) => (
-            <Feature feature={feature} key={index} />
+            <Feature
+              feature={feature}
+              key={index}
+              isActive={filterForm.features.includes(feature)}
+              onPress={() => handleFeaturePress(feature)}
+            />
           ))}
         </ScrollView>
         <Button
           value="Search"
           backgroundColor={Colors.primary}
           textColor={Colors.white}
+          onPress={() => {}}
         />
       </View>
+      <Modal
+        visible={showPlaceType}
+        child={
+          <SelectPlaceTypeScreen onPlaceTypePress={handlePlaceTypePress} />
+        }
+        handleModal={() => setShowPlaceType(false)}
+      />
     </View>
   );
 };

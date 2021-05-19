@@ -1,6 +1,5 @@
 import React, {Dispatch, SetStateAction, useContext} from 'react';
 import {StyleSheet, View, TouchableWithoutFeedback, Image} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
 
 import TitleWithDescription from '../../components/TitleWithDescription';
 import SimpleInput from '../../components/SimpleInput';

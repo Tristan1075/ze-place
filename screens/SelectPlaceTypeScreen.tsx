@@ -11,17 +11,17 @@ import {FlatGrid} from 'react-native-super-grid';
 
 import Colors from '../constants/Colors';
 import SimpleInput from '../components/SimpleInput';
-import TitleWithDescription from '../components/TitleWithDescription';
 import Layout from '../constants/Layout';
 import {Ionicons} from '@expo/vector-icons';
+import {PlaceType} from '../types';
 
 type Props = {
-  onPlaceTypePress: (type) => void;
+  onPlaceTypePress: (type: PlaceType) => void;
 };
 
 const SelectPlaceTypeScreen = (props: Props) => {
   const {onPlaceTypePress} = props;
-  const [items, setItems] = React.useState([
+  const [items, setItems] = React.useState<Array<PlaceType>>([
     {name: 'Garden', id: 0},
     {name: 'Office', id: 1},
     {name: 'Parking', id: 2},

@@ -1,12 +1,10 @@
 import React, {useState, useEffect, useContext} from 'react';
 import {
-  SafeAreaView,
   StyleSheet,
   Text,
   View,
   ScrollView,
   FlatList,
-  ImageBackground,
   Image,
 } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
@@ -18,19 +16,19 @@ import Header from '../components/Header';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
 import CardWithRate from '../components/CardWithRate';
-import {HomeParamList, PlaceType} from '../types';
+import {HomeParamList, PlaceType, User} from '../types';
 import {getAllPlaces} from '../api/places';
 import DescriptionBloc from '../components/DescriptionBloc';
 import SimpleInput from '../components/SimpleInput';
 import TitleWithDescription from '../components/TitleWithDescription';
 import PlaceCard from '../components/PlaceCard';
-
+import {getUser} from '../api/customer';
 import {placesMock} from '../mocks';
 import {Ionicons} from '@expo/vector-icons';
 import {ModalContext} from '../providers/modalContext';
 import SearchFilterScreen from './SearchFilterScreen';
 import Button from '../components/Button';
-import { CommonActions } from '@react-navigation/native';
+import {CommonActions} from '@react-navigation/native';
 type RootScreenNavigationProp = StackNavigationProp<HomeParamList, 'Home'>;
 
 type Props = {
@@ -41,9 +39,13 @@ const HomeScreen = (props: Props) => {
   const {navigation} = props;
   const [places, setPlaces] = useState<Array<PlaceType>>([]);
   const {handleModal} = useContext(ModalContext);
+  const [user, setUser] = useState<User>();
 
   useEffect(() => {
-    const init = async () => setPlaces(await getAllPlaces());
+    const init = async () => {
+      setPlaces(await getAllPlaces());
+      setUser(await getUser());
+    };
     init();
   }, []);
 
@@ -92,7 +94,11 @@ const HomeScreen = (props: Props) => {
         style={styles.imageBanner}
       />
       <View style={styles.container}>
-        <Header type="menu" showProfil={true} />
+        <Header
+          type="menu"
+          showProfil={true}
+          profilPicture={user && user.avatar}
+        />
         <Text style={styles.title}>{i18n.t('discover')}</Text>
         <SimpleInput
           style={styles.input}
@@ -162,7 +168,7 @@ const styles = StyleSheet.create({
   subtitle: {
     fontFamily: 'oswald-light',
     fontSize: 26,
-    color: Colors.dark,
+    //color: Colors.dark,
     paddingVertical: 20,
     paddingLeft: Layout.padding,
   },

@@ -8,7 +8,7 @@ import {Ionicons} from '@expo/vector-icons';
 import {searchPlace} from '../api/mapbox';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import SearchCard from '../components/SearchCard';
-import {CreatePlaceForm, MapboxSearch} from '../types';
+import {CreatePlaceForm, Location, MapboxSearch} from '../types';
 
 type Props = {
   createPlaceForm: CreatePlaceForm;
@@ -29,6 +29,7 @@ const SearchPlaceScreen = ({createPlaceForm, setCreatePlaceForm}: Props) => {
   }, [query]);
 
   const handlePlacePress = (location: Location) => {
+    console.log(location);
     setCreatePlaceForm({...createPlaceForm, location: location});
   };
 
@@ -47,22 +48,30 @@ const SearchPlaceScreen = ({createPlaceForm, setCreatePlaceForm}: Props) => {
       <Text style={styles.results}>Results ({places.length})</Text>
       <ScrollView>
         {places.map((place) => {
-          const address = `${place.address} ${place.text}`;
-          const city = place && place.context
-            ? place.context.find((c) => c.id.split('.')[0] === 'place').text
-            : '';
-
-          const postalCode = place.context.find(
-            (c) => c.id.split('.')[0] === 'postcode',
-          ).text;
-          const country = place.context.find(
-            (c) => c.id.split('.')[0] === 'country',
-          ).text;
+          const address = `${place.address ? place.address : ''}${
+            place.address ? ' ' : ''
+          }${place.text}`;
+          const city =
+            place.context &&
+            place.context.find((c) => c.id && c.id.split('.')[0] === 'place')
+              ?.text;
+          const postalCode =
+            place.context &&
+            place.context.find((c) => c.id && c.id.split('.')[0] === 'postcode')
+              ?.text;
+          const country =
+            place.context &&
+            place.context.find((c) => c.id && c.id.split('.')[0] === 'country')
+              ?.text;
+          const region =
+            place.context &&
+            place.context.find((c) => c.id && c.id.split('.')[0] === 'region')
+              ?.text;
           return (
             <SearchCard
               title={place.text}
               description={`${address}, ${postalCode} ${city}`}
-              subdescription={country}
+              subdescription={country ? country : region}
               onPress={() =>
                 handlePlacePress({
                   address,

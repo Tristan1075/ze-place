@@ -1,6 +1,8 @@
-import {Ionicons} from '@expo/vector-icons';
 import React from 'react';
 import {Modal as RNModal, TouchableOpacity, StyleSheet} from 'react-native';
+
+import {Ionicons} from '@expo/vector-icons';
+
 import Colors from '../constants/Colors';
 
 type Props = {
