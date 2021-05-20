@@ -9,27 +9,34 @@ import {
 import {Ionicons} from '@expo/vector-icons';
 
 import Colors from '../constants/Colors';
-import {PlaceType} from '../types';
+import {Place} from '../types';
+import Layout from '../constants/Layout';
 
 type Props = {
   onPress: () => void;
-  place: PlaceType;
+  place: Place;
 };
 
 const CardWithRate = (props: Props) => {
   const {onPress, place} = props;
-  console.log(place);
   return (
     <TouchableWithoutFeedback style={styles.carouselItem} onPress={onPress}>
       <View style={styles.shadow}>
-        <Image source={{uri: place.images[0].url}} style={styles.image} />
+        <Image
+          source={{
+            uri: place.images[0]
+              ? place.images[0].url
+              : 'https://www.leden-spa-aqua-forme.fr/wp-content/uploads/2018/05/jk-placeholder-image.jpg',
+          }}
+          style={styles.image}
+        />
         <View style={styles.rate}>
           <Ionicons size={14} name="star" color={Colors.yellow} />
-          <Text style={styles.rateValue}> {place.rate}</Text>
+          <Text style={styles.rateValue}>{place.rate}</Text>
         </View>
         <View style={styles.content}>
           <Text style={styles.title}>{place.title}</Text>
-          <Text style={styles.subtitle}>{place.city}</Text>
+          <Text style={styles.subtitle}>{place.location.city}</Text>
         </View>
       </View>
     </TouchableWithoutFeedback>
@@ -71,6 +78,7 @@ const styles = StyleSheet.create({
     width: 220,
     height: 300,
     borderRadius: 15,
+    ...Layout.shadow,
   },
   content: {
     position: 'absolute',
@@ -78,7 +86,7 @@ const styles = StyleSheet.create({
     left: 10,
   },
   title: {
-    fontFamily: 'oswald-bold',
+    fontFamily: 'oswald-light',
     fontSize: 24,
     width: 250,
     color: Colors.white,

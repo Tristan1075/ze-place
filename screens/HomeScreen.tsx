@@ -16,7 +16,7 @@ import Header from '../components/Header';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
 import CardWithRate from '../components/CardWithRate';
-import {FilterForm, HomeParamList, PlaceType, User} from '../types';
+import {FilterForm, HomeParamList, Place, PlaceType, User} from '../types';
 import {getAllPlaces} from '../api/places';
 import DescriptionBloc from '../components/DescriptionBloc';
 import SimpleInput from '../components/SimpleInput';
@@ -59,7 +59,7 @@ const HomeScreen = (props: Props) => {
     );
   };
 
-  const handlePlacePress = (place: PlaceType) => {
+  const handlePlacePress = (place: Place) => {
     navigation.navigate('PlaceDetail', {place: place});
   };
 
@@ -78,11 +78,11 @@ const HomeScreen = (props: Props) => {
     handleModal();
   };
 
-  const renderCarouselItem = ({item}: {item: PlaceType}) => {
+  const renderCarouselItem = ({item}: {item: Place}) => {
     return <CardWithRate place={item} onPress={() => handlePlacePress(item)} />;
   };
 
-  const renderListItem = ({item, index}: {item: PlaceType; index: number}) => (
+  const renderListItem = ({item, index}: {item: Place; index: number}) => (
     <View style={styles.paddingHorizontal}>
       <PlaceCard
         key={index}
@@ -98,6 +98,7 @@ const HomeScreen = (props: Props) => {
         source={require('../assets/images/home_banner.jpg')}
         style={styles.imageBanner}
       />
+      <View style={styles.overlay} />
       <View style={styles.container}>
         <Header
           type="menu"
@@ -106,6 +107,7 @@ const HomeScreen = (props: Props) => {
         />
         <Text style={styles.title}>{i18n.t('discover')}</Text>
         <SimpleInput
+          isEditable={false}
           style={styles.input}
           placeholder="Search"
           suffix={<Ionicons name="search" size={20} color={Colors.gray} />}
@@ -155,6 +157,7 @@ const styles = StyleSheet.create({
     flex: 1,
     marginBottom: 50,
     marginTop: 50,
+    zIndex: 5,
   },
   imageBanner: {
     height: 360,
@@ -185,6 +188,13 @@ const styles = StyleSheet.create({
   },
   input: {
     marginHorizontal: 20,
+  },
+  overlay: {
+    position: 'absolute',
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    height: 360,
+    width: Layout.window.width,
+    zIndex: 2,
   },
 });
 

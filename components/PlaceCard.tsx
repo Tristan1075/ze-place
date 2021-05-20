@@ -4,12 +4,12 @@ import {Ionicons} from '@expo/vector-icons';
 import {useNavigation} from '@react-navigation/native';
 
 import Colors from '../constants/Colors';
-import {PlaceType} from '../types';
+import {Place} from '../types';
 import {Rating} from 'react-native-ratings';
 
 type Props = {
   onPress: () => void;
-  place: PlaceType;
+  place: Place;
 };
 
 const PlaceCard = (props: Props) => {
@@ -22,7 +22,14 @@ const PlaceCard = (props: Props) => {
 
   return (
     <TouchableOpacity style={styles.container} onPress={handlePlacePress}>
-      <Image source={{uri: place.images[0].url}} style={styles.image} />
+      <Image
+        source={{
+          uri: place.images[0]
+            ? place.images[0].url
+            : 'https://www.leden-spa-aqua-forme.fr/wp-content/uploads/2018/05/jk-placeholder-image.jpg',
+        }}
+        style={styles.image}
+      />
       <View style={styles.informations}>
         <View style={styles.row}>
           <Text style={styles.title}>{place.title}</Text>
@@ -40,7 +47,7 @@ const PlaceCard = (props: Props) => {
             color={Colors.primary}
             style={styles.locationIcon}
           />
-          <Text style={styles.location}>Paris</Text>
+          <Text style={styles.location}>{place.location.city}</Text>
         </View>
         <View style={styles.row}>
           <Rating
@@ -51,9 +58,9 @@ const PlaceCard = (props: Props) => {
           <Text style={styles.rate}>{place.rate}</Text>
         </View>
         <View style={styles.footer}>
-          <Text style={styles.price}>175€</Text>
+          <Text style={styles.price}>{place.price}€</Text>
           <Text style={styles.durationType}>/day</Text>
-          <Text style={styles.badge}>Place available</Text>
+          {/* <Text style={styles.badge}>Place available</Text> */}
         </View>
       </View>
     </TouchableOpacity>
@@ -86,8 +93,8 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
   },
   title: {
-    fontFamily: 'oswald-bold',
-    color: Colors.primary,
+    fontFamily: 'oswald',
+    color: Colors.dark,
     fontSize: 16,
     flex: 1,
   },

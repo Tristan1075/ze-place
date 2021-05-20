@@ -19,6 +19,7 @@ import {Ionicons} from '@expo/vector-icons';
 import SelectableItem from '../../components/SelectableItem';
 import {CreatePlaceForm} from '../../types';
 import Layout from '../../constants/Layout';
+import {createPlace} from '../../api/places';
 
 type Props = {
   prevStep: () => void;
@@ -50,8 +51,13 @@ const Customization = (props: Props) => {
     }
   };
 
-  const handleSubmitForm = () => {
-
+  const handleSubmitForm = async () => {
+    try {
+      const place = await createPlace(createPlaceForm);
+      
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (

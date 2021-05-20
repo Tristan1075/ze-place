@@ -45,7 +45,7 @@ const Header = (props: Props) => {
           <Ionicons
             size={30}
             name="arrow-back"
-            color={color ? color : Colors.primary}
+            color={color ? color : Colors.white}
           />
         </TouchableOpacity>
       ) : (

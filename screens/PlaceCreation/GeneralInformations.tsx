@@ -55,12 +55,12 @@ const GeneralInformations = (props: Props) => {
         style={styles.paddingVertical}
       />
       <SimpleInput
-        value={createPlaceForm.aboutMe}
+        value={createPlaceForm.aboutUser}
         placeholder="Choose"
         multiline={true}
         numberOfLines={1}
         onChangeText={(value) => {
-          setCreatePlaceForm({...createPlaceForm, aboutMe: value});
+          setCreatePlaceForm({...createPlaceForm, aboutUser: value});
         }}
       />
       <TitleWithDescription
@@ -71,7 +71,6 @@ const GeneralInformations = (props: Props) => {
       />
       <SimpleInput
         placeholder="Search"
-        value={createPlaceForm.placeType?.name}
         isEditable={false}
         onPress={handleMapPress}
         suffix={<Ionicons name="chevron-down" size={20} color={Colors.dark} />}

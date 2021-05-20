@@ -4,7 +4,7 @@ import {Text, StyleSheet, View, Switch} from 'react-native';
 import Colors from '../constants/Colors';
 
 type Props = {
-  onChange: (value: boolean) => void;
+  onChange?: (value: boolean) => void;
   title: string;
   icon: any;
   value: boolean;
@@ -15,14 +15,19 @@ const ToggleWithTitle = (props: Props) => {
   return (
     <View style={styles.row}>
       {icon}
-      <Text style={[styles.text, !value && styles.error]}>{title}</Text>
-      <Switch
-        trackColor={{false: '#767577', true: Colors.primary}}
-        thumbColor={value ? Colors.white : Colors.primary}
-        ios_backgroundColor={Colors.white}
-        onValueChange={(v) => onChange(v)}
-        value={value}
-      />
+      <Text
+        style={[styles.text, !value && styles.error, onChange && styles.flex]}>
+        {title}
+      </Text>
+      {onChange && (
+        <Switch
+          trackColor={{false: '#767577', true: Colors.primary}}
+          thumbColor={value ? Colors.white : Colors.primary}
+          ios_backgroundColor={Colors.white}
+          onValueChange={(v) => onChange(v)}
+          value={value}
+        />
+      )}
     </View>
   );
 };
@@ -36,11 +41,13 @@ const styles = StyleSheet.create({
   text: {
     fontFamily: 'poppins',
     color: Colors.dark,
-    flex: 1,
     paddingLeft: 10,
   },
   error: {
     color: Colors.error,
+  },
+  flex: {
+    flex: 1,
   },
 });
 

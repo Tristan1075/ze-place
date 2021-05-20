@@ -7,8 +7,59 @@ import {FeatureType} from '../types';
 type Props = {
   feature: FeatureType;
   onPress?: () => void;
-  isActive: boolean;
+  isActive?: boolean;
 };
+
+export const features = [
+  {
+    name: 'Lunch',
+    icon: {
+      url: require('../assets/icons/lunch.png'),
+    },
+  },
+  {
+    name: 'Storage',
+    icon: {
+      url: require('../assets/icons/storage.png'),
+    },
+  },
+  {
+    name: 'Gardening',
+    icon: {
+      url: require('../assets/icons/garden.png'),
+    },
+  },
+  {
+    name: 'Party',
+    icon: {
+      url: require('../assets/icons/party.png'),
+    },
+  },
+  {
+    name: 'Parking',
+    icon: {
+      url: require('../assets/icons/parking.png'),
+    },
+  },
+  {
+    name: 'Work place',
+    icon: {
+      url: require('../assets/icons/workplace.png'),
+    },
+  },
+  {
+    name: 'Camping',
+    icon: {
+      url: require('../assets/icons/camping.png'),
+    },
+  },
+  {
+    name: 'Spectacle',
+    icon: {
+      url: require('../assets/icons/spectacle.png'),
+    },
+  },
+];
 
 const Feature = (props: Props) => {
   const {feature, onPress, isActive} = props;
@@ -17,11 +68,16 @@ const Feature = (props: Props) => {
     onPress && onPress();
   };
 
+  const getImageRessource = (item: FeatureType) => {
+    const featureRessource = features.find((f) => f.name === item.name);
+    return featureRessource?.icon.url;
+  };
+
   return (
     <TouchableOpacity
       style={[styles.feature, isActive && styles.featureActive]}
       onPress={handleFeaturePress}>
-      <Image source={feature.icon.url} style={styles.featureIcon} />
+      <Image source={getImageRessource(feature)} style={styles.featureIcon} />
       <Text
         style={[styles.featureTitle, isActive && styles.featureTitleActive]}>
         {feature.name}

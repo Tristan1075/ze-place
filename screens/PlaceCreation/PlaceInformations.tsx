@@ -45,7 +45,7 @@ const PlaceInformations = (props: Props) => {
 
   const handleSelectPlaceType = () => {
     handleModal({
-      child: <SelectPlaceTypeScreen onPlaceTypePress={handlePlaceTypePress} />
+      child: <SelectPlaceTypeScreen onPlaceTypePress={handlePlaceTypePress} />,
     });
   };
 

@@ -61,6 +61,8 @@ const SearchPlaceScreen = ({onLocationPress}: Props) => {
             place.context &&
             place.context.find((c) => c.id && c.id.split('.')[0] === 'region')
               ?.text;
+          const longitude = place.center[0].toString();
+          const latitude = place.center[1].toString();
           return (
             <SearchCard
               title={place.text}
@@ -72,6 +74,8 @@ const SearchPlaceScreen = ({onLocationPress}: Props) => {
                   city,
                   postalCode,
                   country,
+                  longitude,
+                  latitude,
                 })
               }
             />
