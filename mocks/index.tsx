@@ -129,3 +129,54 @@ export const conversation = {
     },
   ],
 };
+
+export const features = [
+  {
+    name: 'Lunch',
+    icon: {
+      url: require('../assets/icons/lunch.png'),
+    },
+  },
+  {
+    name: 'Storage',
+    icon: {
+      url: require('../assets/icons/storage.png'),
+    },
+  },
+  {
+    name: 'Gardening',
+    icon: {
+      url: require('../assets/icons/garden.png'),
+    },
+  },
+  {
+    name: 'Party',
+    icon: {
+      url: require('../assets/icons/party.png'),
+    },
+  },
+  {
+    name: 'Parking',
+    icon: {
+      url: require('../assets/icons/parking.png'),
+    },
+  },
+  {
+    name: 'Work place',
+    icon: {
+      url: require('../assets/icons/workplace.png'),
+    },
+  },
+  {
+    name: 'Camping',
+    icon: {
+      url: require('../assets/icons/camping.png'),
+    },
+  },
+  {
+    name: 'Spectacle',
+    icon: {
+      url: require('../assets/icons/spectacle.png'),
+    },
+  },
+];

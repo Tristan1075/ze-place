@@ -280,7 +280,7 @@ const styles = StyleSheet.create({
     fontFamily: 'oswald-light',
     fontSize: 24,
     color: Colors.secondary,
-    paddingVertical: 10,
+    paddingVertical: 5,
   },
   description: {
     paddingTop: 10,

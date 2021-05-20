@@ -1,5 +1,11 @@
 import React from 'react';
-import {Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
+import {
+  Text,
+  StyleSheet,
+  Image,
+  View,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
 import {FeatureType} from '../types';
@@ -74,15 +80,15 @@ const Feature = (props: Props) => {
   };
 
   return (
-    <TouchableOpacity
-      style={[styles.feature, isActive && styles.featureActive]}
-      onPress={handleFeaturePress}>
-      <Image source={getImageRessource(feature)} style={styles.featureIcon} />
-      <Text
-        style={[styles.featureTitle, isActive && styles.featureTitleActive]}>
-        {feature.name}
-      </Text>
-    </TouchableOpacity>
+    <TouchableWithoutFeedback onPress={handleFeaturePress}>
+      <View style={[styles.feature, isActive && styles.featureActive]}>
+        <Image source={getImageRessource(feature)} style={styles.featureIcon} />
+        <Text
+          style={[styles.featureTitle, isActive && styles.featureTitleActive]}>
+          {feature.name}
+        </Text>
+      </View>
+    </TouchableWithoutFeedback>
   );
 };
 
