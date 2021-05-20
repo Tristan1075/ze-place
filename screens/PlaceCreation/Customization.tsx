@@ -5,10 +5,11 @@ import {
   ScrollView,
   TouchableOpacity,
   View,
+  Text,
 } from 'react-native';
 
 //@ts-ignore
-import {ModalContent, BottomModal} from 'react-native-modals';
+import Modal, {ModalContent, BottomModal} from 'react-native-modals';
 import * as ImagePicker from 'expo-image-picker';
 
 import TitleWithDescription from '../../components/TitleWithDescription';
@@ -18,6 +19,7 @@ import {Ionicons} from '@expo/vector-icons';
 import SelectableItem from '../../components/SelectableItem';
 import {CreatePlaceForm} from '../../types';
 import Layout from '../../constants/Layout';
+import {createPlace} from '../../api/places';
 
 type Props = {
   prevStep: () => void;
@@ -25,9 +27,10 @@ type Props = {
   setCreatePlaceForm: Dispatch<SetStateAction<CreatePlaceForm>>;
 };
 
-const RightsAndCustomization = (props: Props) => {
+const Customization = (props: Props) => {
   const {prevStep, createPlaceForm, setCreatePlaceForm} = props;
   const [modalVisible, setModalVisible] = useState<boolean>(false);
+  const [submitModal, setSubmitModal] = useState<boolean>(false);
 
   const handleChooseImagePress = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -45,6 +48,15 @@ const RightsAndCustomization = (props: Props) => {
         images: [...createPlaceForm.images, image],
       });
       setModalVisible(false);
+    }
+  };
+
+  const handleSubmitForm = async () => {
+    try {
+      const place = await createPlace(createPlaceForm);
+      
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -73,18 +85,22 @@ const RightsAndCustomization = (props: Props) => {
           />
         </TouchableOpacity>
       </ScrollView>
-      <TitleWithDescription
-        title="Authorization"
-        description="Choose images to describe your place"
-        subtitle={true}
-        style={styles.paddingVertical}
-      />
-      <Button
-        value="Back"
-        backgroundColor={Colors.dark}
-        textColor={Colors.white}
-        onPress={prevStep}
-      />
+      <View style={styles.row}>
+        <Button
+          value="Back"
+          backgroundColor={Colors.white}
+          textColor={Colors.dark}
+          onPress={prevStep}
+          style={{marginRight: 10, flex: 1}}
+        />
+        <Button
+          value="Submit"
+          backgroundColor={Colors.primary}
+          textColor={Colors.white}
+          onPress={() => setSubmitModal(true)}
+          style={{marginLeft: 10, flex: 1}}
+        />
+      </View>
       <BottomModal
         visible={modalVisible}
         onTouchOutside={() => setModalVisible(false)}
@@ -105,6 +121,29 @@ const RightsAndCustomization = (props: Props) => {
           />
         </ModalContent>
       </BottomModal>
+      <Modal
+        width={0.7}
+        visible={submitModal}
+        rounded={true}
+        onTouchOutside={() => {
+          setSubmitModal(false);
+        }}>
+        <ModalContent style={styles.modal}>
+          <Text style={styles.modalTitle}>Confirm the form</Text>
+          <Text style={styles.modalDescription}>
+            Your announce will be available as soon as possible
+          </Text>
+          <Button
+            backgroundColor={Colors.primary}
+            value="Confirm"
+            textColor={Colors.white}
+            onPress={handleSubmitForm}
+          />
+          <Text onPress={() => setSubmitModal(false)} style={styles.cancel}>
+            Cancel
+          </Text>
+        </ModalContent>
+      </Modal>
     </View>
   );
 };
@@ -147,6 +186,33 @@ const styles = StyleSheet.create({
   bottomModal: {
     paddingBottom: 40,
   },
+  row: {
+    flexDirection: 'row',
+  },
+  modal: {
+    backgroundColor: Colors.white,
+    justifyContent: 'center',
+  },
+  modalTitle: {
+    fontFamily: 'poppins',
+    color: Colors.dark,
+    textAlign: 'center',
+    paddingBottom: 10,
+  },
+  modalDescription: {
+    fontFamily: 'poppins-light',
+    color: Colors.dark,
+    fontSize: 12,
+    textAlign: 'center',
+    paddingBottom: 20,
+  },
+  cancel: {
+    paddingTop: 20,
+    textAlign: 'center',
+    fontFamily: 'poppins',
+    color: Colors.dark,
+    textDecorationLine: 'underline',
+  },
 });
 
-export default RightsAndCustomization;
+export default Customization;

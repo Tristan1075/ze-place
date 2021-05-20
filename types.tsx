@@ -5,6 +5,8 @@ export type RootStackParamList = {
   Signin: undefined;
   Signup: undefined;
   Tab: undefined;
+  Profil: undefined;
+  ProfilList: undefined;
 };
 
 export type BottomTabParamList = {
@@ -16,7 +18,8 @@ export type BottomTabParamList = {
 
 export type HomeParamList = {
   Home: undefined;
-  PlaceDetail: {place: PlaceType};
+  PlaceDetail: {place: Place};
+  PlaceList: {filter: FilterForm};
   CreatePlace: undefined;
   MapModal: undefined;
 };
@@ -31,33 +34,47 @@ export type MessagesParamList = {
 };
 
 export type User = {
-  _id:string;
-  avatar: String;
-  first_name: String;
-  last_name: String;
-  email: String;
-  password: String;
-  phone: String;
-  address: String;
+  _id: string;
+  avatar: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+  password: string;
+  phone: string;
+  address: string;
   birthdate: string;
-  description: String;
+  description: string;
   created_at: {type: Date; default: Date};
 };
 
 export type Place = {
-  title: String;
-  location: String;
-  description: String;
+  _id: string;
+  title: string;
+  aboutUser: string;
+  location: Location;
+  placeType: PlaceType;
+  surface: string;
+  price: string;
+  locationDuration: {
+    title: string;
+    value: string;
+  };
+  rate: string;
+  description: string;
   images: Array<Image>;
-  rate: number;
-  price: number;
+  features: Array<FeatureType>;
+  authorizeAnimals: boolean;
+  authorizeMusic: boolean;
+  authorizeSmoking: boolean;
+  authorizeFire: boolean;
+  authorizeFoodAndDrink: boolean;
   reviews: Array<Review>;
   created_at: {type: Date; default: Date};
 };
 
 export type Review = {
   from: User;
-  text: String;
+  text: string;
   rate: Number;
   created_at: {type: Date; default: Date};
 };
@@ -113,9 +130,32 @@ export type PlaceType = {
   name: string;
 };
 
+export type MapboxSearch = {
+  address: string;
+  center: Array<number>;
+  context: [
+    {
+      id: string;
+      text: string;
+    },
+  ];
+  place_name: string;
+  text: string;
+};
+
+export type Location = {
+  address?: string;
+  postalCode?: string;
+  city?: string;
+  country?: string;
+  longitude?: string;
+  latitude?: string;
+};
+
 export type CreatePlaceForm = {
   title?: string;
-  aboutMe?: string;
+  aboutUser?: string;
+  location?: Location;
   placeType?: PlaceType;
   surface?: string;
   price?: string;
@@ -126,4 +166,18 @@ export type CreatePlaceForm = {
   description?: string;
   images: Array<Image>;
   features: Array<FeatureType>;
+  authorizeAnimals: boolean;
+  authorizeMusic: boolean;
+  authorizeSmoking: boolean;
+  authorizeFire: boolean;
+  authorizeFoodAndDrink: boolean;
+
+};
+
+export type FilterForm = {
+  placeType?: PlaceType;
+  price?: number;
+  surface?: string;
+  features: Array<FeatureType>;
+  location?: Location;
 };

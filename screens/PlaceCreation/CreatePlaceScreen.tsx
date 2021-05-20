@@ -5,22 +5,24 @@ import {useNavigation} from '@react-navigation/native';
 
 // @ts-ignore
 import {ProgressSteps, ProgressStep} from 'react-native-progress-steps';
-import Button from '../components/Button';
+import Button from '../../components/Button';
 
-import Header from '../components/Header';
-import Colors from '../constants/Colors';
-import {CreatePlaceForm} from '../types';
-import GeneralInformations from './PlaceCreation/GeneralInformations';
-import PlaceInformations from './PlaceCreation/PlaceInformations';
-import RightsAndCustomization from './PlaceCreation/RightsAndCustomization';
+import Header from '../../components/Header';
+import Colors from '../../constants/Colors';
+import {CreatePlaceForm} from '../../types';
+import GeneralInformations from './GeneralInformations';
+import PlaceInformations from './PlaceInformations';
+import PlaceAuthorization from './PlaceAuthorization';
+import Customization from './Customization';
 
-const CreatePlaceModal = () => {
+const CreatePlaceScreen = () => {
   const navigation = useNavigation();
   const [activeStep, setActiveStep] = useState<number>(0);
   const [exitModal, setExitModal] = useState<boolean>(false);
   const [createPlaceForm, setCreatePlaceForm] = useState<CreatePlaceForm>({
     title: undefined,
     aboutMe: undefined,
+    location: undefined,
     surface: undefined,
     placeType: undefined,
     price: undefined,
@@ -31,6 +33,11 @@ const CreatePlaceModal = () => {
     description: undefined,
     features: [],
     images: [],
+    authorizeAnimals: true,
+    authorizeMusic: true,
+    authorizeSmoking: true,
+    authorizeFire: true,
+    authorizeFoodAndDrink: true,
   });
 
   const handleBackPress = () => {
@@ -56,7 +63,7 @@ const CreatePlaceModal = () => {
           completedProgressBarColor={Colors.primary}
           progressBarColor={Colors.primary}>
           <ProgressStep
-            label="General informations"
+            label="General"
             removeBtnRow={true}
             scrollViewProps={{showsVerticalScrollIndicator: false}}>
             <View>
@@ -68,7 +75,7 @@ const CreatePlaceModal = () => {
             </View>
           </ProgressStep>
           <ProgressStep
-            label="Places informations"
+            label="Detail"
             removeBtnRow={true}
             scrollViewProps={{showsVerticalScrollIndicator: false}}>
             <View>
@@ -81,11 +88,24 @@ const CreatePlaceModal = () => {
             </View>
           </ProgressStep>
           <ProgressStep
-            label="Rights and customization"
+            label="Authorization"
             removeBtnRow={true}
             scrollViewProps={{showsVerticalScrollIndicator: false}}>
             <View>
-              <RightsAndCustomization
+              <PlaceAuthorization
+                prevStep={prevStep}
+                nextStep={nextStep}
+                createPlaceForm={createPlaceForm}
+                setCreatePlaceForm={setCreatePlaceForm}
+              />
+            </View>
+          </ProgressStep>
+          <ProgressStep
+            label="Customization"
+            removeBtnRow={true}
+            scrollViewProps={{showsVerticalScrollIndicator: false}}>
+            <View>
+              <Customization
                 prevStep={prevStep}
                 createPlaceForm={createPlaceForm}
                 setCreatePlaceForm={setCreatePlaceForm}
@@ -97,8 +117,7 @@ const CreatePlaceModal = () => {
       <Modal
         width={0.7}
         visible={exitModal}
-        rounded
-        style={{zIndex: 1000}}
+        rounded={true}
         onTouchOutside={() => {
           setExitModal(false);
         }}>
@@ -175,4 +194,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CreatePlaceModal;
+export default CreatePlaceScreen;

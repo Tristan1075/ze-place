@@ -11,17 +11,21 @@ import {
 import {RouteProp, useRoute} from '@react-navigation/native';
 import {Rating} from 'react-native-ratings';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
-import {Ionicons} from '@expo/vector-icons';
+import {
+  FontAwesome5,
+  Ionicons,
+  MaterialCommunityIcons,
+} from '@expo/vector-icons';
 import ImageViewer from 'react-native-image-zoom-viewer';
 
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
-import {HomeParamList, PlaceType} from '../types';
+import {HomeParamList, Place, PlaceType} from '../types';
 import Header from '../components/Header';
-import {facilities, features} from '../mocks';
 import Button from '../components/Button';
 import {mapStyle} from '../utils/mapStyle';
 import Feature from '../components/Feature';
+import ToggleWithTitle from '../components/ToggleWithTitle';
 
 type PlaceScreenNavigationProp = RouteProp<HomeParamList, 'PlaceDetail'>;
 
@@ -29,17 +33,21 @@ type Props = {
   navigation: PlaceScreenNavigationProp;
 };
 
-const PlaceDetailScreen = () => {
+const PlaceDetailScreen = (props: Props) => {
   const [activeImage, setActiveImage] = useState<number>(0);
   const [seeMore, setSeeMore] = useState<boolean>(false);
   const [imagePreview, setImagePreview] = useState<boolean>(false);
   const route = useRoute<PlaceScreenNavigationProp>();
-  const item: PlaceType = route.params.place;
+  const item: Place = route.params.place;
   return (
     <View>
       <ScrollView showsVerticalScrollIndicator={false} style={styles.screen}>
         <Image
-          source={{uri: item.images[activeImage].url}}
+          source={{
+            uri: item.images[activeImage]
+              ? item.images[activeImage].url
+              : 'https://www.leden-spa-aqua-forme.fr/wp-content/uploads/2018/05/jk-placeholder-image.jpg',
+          }}
           style={styles.cover}
         />
         <View style={styles.favorite}>
@@ -49,7 +57,10 @@ const PlaceDetailScreen = () => {
           <Header type="back" />
           <View style={[styles.content, styles.paddingTop]}>
             <Text style={styles.title}>{item.title}</Text>
-            <Text style={styles.subtitle}>Island in the Aegean Sea</Text>
+            <Text style={styles.subtitle}>
+              {item.location.city}, {item.location.postalCode}{' '}
+              {item.location.country}
+            </Text>
             <View style={styles.descriptionBloc}>
               <Text style={styles.contentTitle}>About {item.title}</Text>
               <View style={styles.padding}>
@@ -75,7 +86,7 @@ const PlaceDetailScreen = () => {
               <Text
                 style={styles.description}
                 numberOfLines={seeMore ? 999 : 5}>
-                {item.description}
+                {item.aboutUser}
               </Text>
               <Text style={styles.seeMore} onPress={() => setSeeMore(!seeMore)}>
                 See more
@@ -87,11 +98,80 @@ const PlaceDetailScreen = () => {
             horizontal={true}
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={styles.facilitiesContainer}>
-            {features.map((feature, index) => (
+            {item.features.map((feature, index) => (
               <Feature feature={feature} key={index} />
             ))}
           </ScrollView>
           <View style={styles.content}>
+            <Text style={styles.contentTitle}>Authorization</Text>
+            <View style={styles.authorization}>
+              <ToggleWithTitle
+                title="Animals"
+                value={item.authorizeAnimals}
+                icon={
+                  <FontAwesome5
+                    name="dog"
+                    size={30}
+                    color={
+                      item.authorizeAnimals ? Colors.primary : Colors.error
+                    }
+                  />
+                }
+              />
+              <ToggleWithTitle
+                title="Smoking"
+                value={item.authorizeSmoking}
+                icon={
+                  <FontAwesome5
+                    name="smoking"
+                    size={30}
+                    color={
+                      item.authorizeSmoking ? Colors.primary : Colors.error
+                    }
+                  />
+                }
+              />
+            </View>
+            <View style={styles.authorization}>
+              <ToggleWithTitle
+                title="Music"
+                value={item.authorizeMusic}
+                icon={
+                  <Ionicons
+                    name="musical-note"
+                    size={30}
+                    color={item.authorizeMusic ? Colors.primary : Colors.error}
+                  />
+                }
+              />
+              <ToggleWithTitle
+                title="Fire"
+                value={item.authorizeFire}
+                icon={
+                  <MaterialCommunityIcons
+                    name="fire"
+                    size={30}
+                    color={item.authorizeFire ? Colors.primary : Colors.error}
+                  />
+                }
+              />
+            </View>
+            <ToggleWithTitle
+              title="Food and drink"
+              value={item.authorizeFoodAndDrink}
+              icon={
+                <MaterialCommunityIcons
+                  name="food-fork-drink"
+                  size={30}
+                  color={
+                    item.authorizeFoodAndDrink ? Colors.primary : Colors.error
+                  }
+                />
+              }
+            />
+            <Text style={styles.contentTitle}>About {item.title}</Text>
+            <Text style={styles.description}>{item.description}</Text>
+            <Text style={styles.contentTitle}>Location</Text>
             <MapView
               provider={PROVIDER_GOOGLE}
               customMapStyle={mapStyle}
@@ -104,27 +184,28 @@ const PlaceDetailScreen = () => {
                 longitudeDelta: 0.0421,
               }}
             />
-            <Text style={styles.contentTitle}>About Rivers runs</Text>
           </View>
-          <ScrollView
-            style={styles.imagePicker}
-            contentContainerStyle={styles.center}
-            showsVerticalScrollIndicator={false}>
-            {item.images.map((image, index) => (
-              <TouchableWithoutFeedback
-                onPress={() => setActiveImage(index)}
-                onLongPress={() => setImagePreview(true)}
-                key={index}>
-                <Image
-                  source={{uri: image.url}}
-                  style={[
-                    styles.imagePreview,
-                    activeImage === index && styles.activeImage,
-                  ]}
-                />
-              </TouchableWithoutFeedback>
-            ))}
-          </ScrollView>
+          {item.images.length > 0 && (
+            <ScrollView
+              style={styles.imagePicker}
+              contentContainerStyle={styles.center}
+              showsVerticalScrollIndicator={false}>
+              {item.images.map((image, index) => (
+                <TouchableWithoutFeedback
+                  onPress={() => setActiveImage(index)}
+                  onLongPress={() => setImagePreview(true)}
+                  key={index}>
+                  <Image
+                    source={{uri: image.url}}
+                    style={[
+                      styles.imagePreview,
+                      activeImage === index && styles.activeImage,
+                    ]}
+                  />
+                </TouchableWithoutFeedback>
+              ))}
+            </ScrollView>
+          )}
         </View>
       </ScrollView>
       <View style={styles.chooseBanner}>
@@ -166,6 +247,7 @@ const styles = StyleSheet.create({
   },
   row: {
     flexDirection: 'row',
+    alignItems: 'center',
   },
   cover: {
     position: 'absolute',
@@ -180,8 +262,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: Layout.padding,
   },
   title: {
-    fontFamily: 'playfair-bold',
-    fontSize: 32,
+    fontFamily: 'oswald-bold',
+    fontSize: 30,
     width: 250,
     color: Colors.white,
   },
@@ -195,7 +277,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
   },
   contentTitle: {
-    fontFamily: 'playfair-bold',
+    fontFamily: 'oswald-light',
     fontSize: 24,
     color: Colors.secondary,
     paddingVertical: 10,
@@ -203,7 +285,7 @@ const styles = StyleSheet.create({
   description: {
     paddingTop: 10,
     fontFamily: 'poppins-light',
-    fontSize: 16,
+    fontSize: 15,
   },
   imagePicker: {
     position: 'absolute',
@@ -251,8 +333,9 @@ const styles = StyleSheet.create({
   },
   reviewersText: {
     fontFamily: 'poppins',
-    fontSize: 16,
+    fontSize: 15,
     color: Colors.primary,
+    textAlign: 'center',
   },
   facilities: {
     backgroundColor: 'rgb(228, 236, 249)',
@@ -310,6 +393,7 @@ const styles = StyleSheet.create({
   facilitiesContainer: {
     paddingLeft: Layout.padding,
     paddingRight: 5,
+    marginVertical: 10,
   },
   favorite: {
     position: 'absolute',
@@ -318,6 +402,10 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(220, 220, 220, 0.4)',
     padding: 5,
     borderRadius: 20,
+  },
+  authorization: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
 });
 

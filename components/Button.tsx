@@ -7,6 +7,7 @@ import {
   View,
 } from 'react-native';
 import Colors from '../constants/Colors';
+import Layout from '../constants/Layout';
 
 type Props = {
   onPress: () => void;
@@ -31,17 +32,10 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: Colors.white,
     alignItems: 'center',
-    borderRadius: 15,
+    borderRadius: 10,
     paddingVertical: 15,
     paddingHorizontal: 20,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
+    ...Layout.shadow,
   },
   text: {
     fontFamily: 'poppins-semiBold',

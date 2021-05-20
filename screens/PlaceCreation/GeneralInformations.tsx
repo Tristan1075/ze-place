@@ -1,17 +1,16 @@
 import React, {Dispatch, SetStateAction, useContext} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import {StyleSheet, View, TouchableWithoutFeedback, Image} from 'react-native';
 
 import TitleWithDescription from '../../components/TitleWithDescription';
 import SimpleInput from '../../components/SimpleInput';
-import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
-import {mapStyle} from '../../utils/mapStyle';
 import Button from '../../components/Button';
 import Colors from '../../constants/Colors';
 import Layout from '../../constants/Layout';
-import {CreatePlaceForm} from '../../types';
+import {CreatePlaceForm, Location} from '../../types';
 import {ModalContext} from '../../providers/modalContext';
-import MapModal from '../MapModal';
+import SearchPlaceScreen from '../SearchPlaceScreen';
+import SearchCard from '../../components/SearchCard';
+import {Ionicons} from '@expo/vector-icons';
 
 type Props = {
   nextStep: () => void;
@@ -21,11 +20,17 @@ type Props = {
 
 const GeneralInformations = (props: Props) => {
   const {nextStep, createPlaceForm, setCreatePlaceForm} = props;
-  const navigation = useNavigation();
   const {handleModal} = useContext(ModalContext);
 
   const handleMapPress = () => {
-    handleModal({child: <MapModal />});
+    handleModal({
+      child: <SearchPlaceScreen onLocationPress={handleLocationPress} />,
+    });
+  };
+
+  const handleLocationPress = (location: Location) => {
+    setCreatePlaceForm({...createPlaceForm, location: location});
+    handleModal();
   };
 
   return (
@@ -50,12 +55,12 @@ const GeneralInformations = (props: Props) => {
         style={styles.paddingVertical}
       />
       <SimpleInput
-        value={createPlaceForm.aboutMe}
+        value={createPlaceForm.aboutUser}
         placeholder="Choose"
         multiline={true}
         numberOfLines={1}
         onChangeText={(value) => {
-          setCreatePlaceForm({...createPlaceForm, aboutMe: value});
+          setCreatePlaceForm({...createPlaceForm, aboutUser: value});
         }}
       />
       <TitleWithDescription
@@ -64,24 +69,25 @@ const GeneralInformations = (props: Props) => {
         subtitle={true}
         style={styles.paddingVertical}
       />
-      <MapView
+      <SimpleInput
+        placeholder="Search"
+        isEditable={false}
         onPress={handleMapPress}
-        provider={PROVIDER_GOOGLE}
-        customMapStyle={mapStyle}
-        scrollEnabled={false}
-        style={styles.map}
-        initialRegion={{
-          latitude: 37.78825,
-          longitude: -122.4324,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
-        }}
+        suffix={<Ionicons name="chevron-down" size={20} color={Colors.dark} />}
       />
+      {createPlaceForm.location && (
+        <SearchCard
+          title={createPlaceForm.location?.address}
+          description={`${createPlaceForm.location?.postalCode} ${createPlaceForm.location?.city}`}
+          subdescription={createPlaceForm.location?.country}
+        />
+      )}
       <Button
         value="Continuer"
         backgroundColor={Colors.dark}
         textColor={Colors.white}
         onPress={nextStep}
+        style={styles.button}
       />
     </View>
   );
@@ -96,8 +102,13 @@ const styles = StyleSheet.create({
   },
   map: {
     height: 120,
+    width: Layout.window.width - 40,
     borderRadius: 10,
     marginBottom: Layout.padding,
+    ...Layout.shadow,
+  },
+  button: {
+    marginTop: Layout.padding,
   },
 });
 

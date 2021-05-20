@@ -168,8 +168,8 @@ const PlaceInformations = (props: Props) => {
       <View style={styles.row}>
         <Button
           value="Back"
-          backgroundColor={Colors.primary}
-          textColor={Colors.white}
+          backgroundColor={Colors.white}
+          textColor={Colors.dark}
           onPress={prevStep}
           style={{marginRight: 10, flex: 1}}
         />

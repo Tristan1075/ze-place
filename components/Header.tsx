@@ -11,14 +11,23 @@ type Props = {
   showProfil?: boolean;
   title?: string;
   profilPicture?: string;
-  onBackPress?: Function;
+  onBackPress?: () => void;
   color?: string;
   rightText?: string;
-  onActionTap?:Function;
+  onActionTap?: () => void;
 };
 
 const Header = (props: Props) => {
-  const {type, showProfil, title, profilPicture, onBackPress, color,rightText,onActionTap} = props;
+  const {
+    type,
+    showProfil,
+    title,
+    profilPicture,
+    onBackPress,
+    color,
+    rightText,
+    onActionTap,
+  } = props;
   const navigation = useNavigation();
 
   const handleBackPress = () => {
@@ -26,7 +35,6 @@ const Header = (props: Props) => {
   };
   const handleProfilOption = () => {
     navigation.navigate('ProfilList');
-
   };
   return (
     <View style={[styles.row, !title && styles.space]}>
@@ -37,7 +45,7 @@ const Header = (props: Props) => {
           <Ionicons
             size={30}
             name="arrow-back"
-            color={color ? color : Colors.primary}
+            color={color ? color : Colors.white}
           />
         </TouchableOpacity>
       ) : (
@@ -47,19 +55,20 @@ const Header = (props: Props) => {
       )}
       {title && <Text style={styles.title}>{title}</Text>}
       {showProfil && (
-        <TouchableOpacity style={styles.shadow} 
-        onPress={handleProfilOption}  >
-          <Image 
+        <TouchableOpacity style={styles.shadow} onPress={handleProfilOption}>
+          <Image
             source={{
               uri: profilPicture,
             }}
             style={styles.profil}
           />
         </TouchableOpacity>
-        
       )}
-      {rightText && <TouchableOpacity style={styles.shadow}
-        onPress={onActionTap} ><Text style={styles.button}>{rightText}</Text></TouchableOpacity>}
+      {rightText && (
+        <TouchableOpacity style={styles.shadow} onPress={onActionTap}>
+          <Text style={styles.button}>{rightText}</Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 };
@@ -91,7 +100,7 @@ const styles = StyleSheet.create({
     color: Colors.primary,
     paddingVertical: 20,
     paddingLeft: Layout.padding,
-    textAlign:"right",
+    textAlign: 'right',
   },
   profil: {
     width: 40,

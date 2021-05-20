@@ -1,23 +1,22 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {
-  SafeAreaView,
   StyleSheet,
   Text,
   View,
   ScrollView,
   FlatList,
-  ImageBackground,
   Image,
 } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 import {StackNavigationProp} from '@react-navigation/stack';
 import i18n from 'i18n-js';
+import * as SecureStore from 'expo-secure-store';
 
 import Header from '../components/Header';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
 import CardWithRate from '../components/CardWithRate';
-import {HomeParamList, PlaceType,User} from '../types';
+import {FilterForm, HomeParamList, Place, PlaceType, User} from '../types';
 import {getAllPlaces} from '../api/places';
 import DescriptionBloc from '../components/DescriptionBloc';
 import SimpleInput from '../components/SimpleInput';
@@ -25,7 +24,11 @@ import TitleWithDescription from '../components/TitleWithDescription';
 import PlaceCard from '../components/PlaceCard';
 import {getUser} from '../api/customer';
 import {placesMock} from '../mocks';
-import { Ionicons } from '@expo/vector-icons';
+import {Ionicons} from '@expo/vector-icons';
+import {ModalContext} from '../providers/modalContext';
+import SearchFilterScreen from './SearchFilterScreen';
+import Button from '../components/Button';
+import {CommonActions} from '@react-navigation/native';
 type RootScreenNavigationProp = StackNavigationProp<HomeParamList, 'Home'>;
 
 type Props = {
@@ -35,14 +38,28 @@ type Props = {
 const HomeScreen = (props: Props) => {
   const {navigation} = props;
   const [places, setPlaces] = useState<Array<PlaceType>>([]);
-  const [user,setUser] = useState<User>();
+  const {handleModal} = useContext(ModalContext);
+  const [user, setUser] = useState<User>();
 
   useEffect(() => {
-    const init = async () => {setPlaces(await getAllPlaces()),setUser(await getUser())} ;
+    const init = async () => {
+      setPlaces(await getAllPlaces());
+      setUser(await getUser());
+    };
     init();
   }, []);
 
-  const handlePlacePress = (place: PlaceType) => {
+  const handleDisconnectPress = async () => {
+    await SecureStore.deleteItemAsync('access-token');
+    navigation.dispatch(
+      CommonActions.reset({
+        index: 0,
+        routes: [{name: 'Root'}],
+      }),
+    );
+  };
+
+  const handlePlacePress = (place: Place) => {
     navigation.navigate('PlaceDetail', {place: place});
   };
 
@@ -50,11 +67,22 @@ const HomeScreen = (props: Props) => {
     navigation.navigate('CreatePlace');
   };
 
-  const renderCarouselItem = ({item}: {item: PlaceType}) => {
+  const showFilterModal = () => {
+    handleModal({
+      child: <SearchFilterScreen onSearchPress={handleSeeAnnouncesPress} />,
+    });
+  };
+
+  const handleSeeAnnouncesPress = (filter: FilterForm) => {
+    navigation.navigate('PlaceList', {filter: filter});
+    handleModal();
+  };
+
+  const renderCarouselItem = ({item}: {item: Place}) => {
     return <CardWithRate place={item} onPress={() => handlePlacePress(item)} />;
   };
 
-  const renderListItem = ({item, index}: {item: PlaceType; index: number}) => (
+  const renderListItem = ({item, index}: {item: Place; index: number}) => (
     <View style={styles.paddingHorizontal}>
       <PlaceCard
         key={index}
@@ -70,10 +98,16 @@ const HomeScreen = (props: Props) => {
         source={require('../assets/images/home_banner.jpg')}
         style={styles.imageBanner}
       />
+      <View style={styles.overlay} />
       <View style={styles.container}>
-        <Header type="menu" showProfil={true} profilPicture = { user && user.avatar}/>
+        <Header
+          type="menu"
+          showProfil={true}
+          profilPicture={user && user.avatar}
+        />
         <Text style={styles.title}>{i18n.t('discover')}</Text>
         <SimpleInput
+          isEditable={false}
           style={styles.input}
           placeholder="Search"
           suffix={<Ionicons name="search" size={20} color={Colors.gray} />}
@@ -83,6 +117,8 @@ const HomeScreen = (props: Props) => {
         title="Near you"
         description="Find nearby you the available places to rent"
         style={styles.padding}
+        actionText="See map"
+        actionIcon="map"
       />
       <Carousel
         contentContainerCustomStyle={{paddingLeft: Layout.padding}}
@@ -98,13 +134,17 @@ const HomeScreen = (props: Props) => {
         title="Announces"
         description="Find nearby you the available places to rent"
         style={styles.padding}
+        actionText="See more"
+        actionIcon="list"
+        onActionPress={showFilterModal}
       />
       <FlatList
-        data={placesMock}
+        data={places}
         renderItem={renderListItem}
         keyExtractor={(item) => item.id}
         showsVerticalScrollIndicator={false}
       />
+      <Button value="Disconnnect" onPress={handleDisconnectPress} />
     </ScrollView>
   );
 };
@@ -117,6 +157,7 @@ const styles = StyleSheet.create({
     flex: 1,
     marginBottom: 50,
     marginTop: 50,
+    zIndex: 5,
   },
   imageBanner: {
     height: 360,
@@ -147,6 +188,13 @@ const styles = StyleSheet.create({
   },
   input: {
     marginHorizontal: 20,
+  },
+  overlay: {
+    position: 'absolute',
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    height: 360,
+    width: Layout.window.width,
+    zIndex: 2,
   },
 });
 
