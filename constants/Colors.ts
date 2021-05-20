@@ -1,5 +1,6 @@
 export default {
   dark: '#191919',
+  textGray: '#545454',
   white: '#fff',
   whiteOpacity: 'rgba(200, 200, 200, 0.6)',
   background: '#F5F7F8',

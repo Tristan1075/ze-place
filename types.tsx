@@ -5,6 +5,8 @@ export type RootStackParamList = {
   Signin: undefined;
   Signup: undefined;
   Tab: undefined;
+  Profil: undefined;
+  ProfilList: undefined;
 };
 
 export type BottomTabParamList = {
@@ -17,6 +19,7 @@ export type BottomTabParamList = {
 export type HomeParamList = {
   Home: undefined;
   PlaceDetail: {place: PlaceType};
+  PlaceList: {filter: FilterForm};
   CreatePlace: undefined;
   MapModal: undefined;
 };
@@ -31,7 +34,7 @@ export type MessagesParamList = {
 };
 
 export type User = {
-  _id:string;
+  _id: string;
   avatar: String;
   first_name: String;
   last_name: String;
@@ -146,4 +149,18 @@ export type CreatePlaceForm = {
   description?: string;
   images: Array<Image>;
   features: Array<FeatureType>;
+  authorizeAnimals: boolean;
+  authorizeMusic: boolean;
+  authorizeSmoking: boolean;
+  authorizeFire: boolean;
+  authorizeFoodAndDrink: boolean;
+
+};
+
+export type FilterForm = {
+  placeType?: PlaceType;
+  price?: number;
+  surface?: string;
+  features: Array<FeatureType>;
+  location?: Location;
 };

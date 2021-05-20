@@ -1,5 +1,5 @@
 Arguments: 
-  /usr/local/Cellar/node/14.9.0/bin/node /usr/local/Cellar/yarn/1.22.5/libexec/bin/yarn.js add @types/react-native-progress-steps
+  /usr/local/Cellar/node/14.9.0/bin/node /usr/local/Cellar/yarn/1.22.5/libexec/bin/yarn.js add @types/react-native-slider
 
 PATH: 
   /Users/mbp-dev1/.rvm/gems/ruby-2.7.0@latest/bin:/Users/mbp-dev1/.rvm/gems/ruby-2.7.0@global/bin:/Users/mbp-dev1/.rvm/rubies/ruby-2.7.0/bin:/Library/Frameworks/Python.framework/Versions/3.9/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin:/Users/mbp-dev1/Library/Android/sdk/tools:/Users/mbp-dev1/Library/Android/sdk/platform-tools:/Users/mbp-dev1/.rvm/bin
@@ -14,7 +14,7 @@ Platform:
   darwin x64
 
 Trace: 
-  Error: https://registry.yarnpkg.com/@types%2freact-native-progress-steps: Not found
+  Error: https://registry.yarnpkg.com/@types%2freact-native-slider: Not found
       at Request.params.callback [as _callback] (/usr/local/Cellar/yarn/1.22.5/libexec/lib/cli.js:66988:18)
       at Request.self.callback (/usr/local/Cellar/yarn/1.22.5/libexec/lib/cli.js:140749:22)
       at Request.emit (events.js:314:20)
@@ -48,7 +48,9 @@ npm manifest:
       "@react-navigation/native": "~5.8.10",
       "@react-navigation/stack": "~5.12.8",
       "@types/i18n-js": "^3.8.0",
+      "@types/react-native-calendars": "^1.505.3",
       "@types/react-native-keyboard-spacer": "^0.4.1",
+      "@types/react-native-modals": "^0.19.0",
       "@types/react-native-snap-carousel": "^3.8.2",
       "@types/validator": "^13.1.3",
       "add": "^2.0.6",
@@ -69,6 +71,7 @@ npm manifest:
       "react": "16.13.1",
       "react-dom": "16.13.1",
       "react-native": "https://github.com/expo/react-native/archive/sdk-40.0.1.tar.gz",
+      "react-native-calendars": "^1.1258.0",
       "react-native-dotenv": "^2.5.3",
       "react-native-gesture-handler": "~1.8.0",
       "react-native-image-zoom-viewer": "^3.0.1",
@@ -80,7 +83,9 @@ npm manifest:
       "react-native-ratings": "^7.4.0",
       "react-native-safe-area-context": "3.1.9",
       "react-native-screens": "~2.15.0",
+      "react-native-slider": "^0.11.0",
       "react-native-snap-carousel": "^3.9.1",
+      "react-native-super-grid": "^4.1.1",
       "react-native-vertical-tab-view": "^0.1.3",
       "react-native-web": "~0.13.12",
       "validator": "^13.6.0",
@@ -2281,10 +2286,27 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/@types/prop-types/-/prop-types-15.7.3.tgz#2ab0d5da2e5815f94b0b9d4b95d1e5f243ab2ca7"
     integrity sha512-KfRL3PuHmqQLOG+2tGpRO26Ctg+Cq1E01D2DMriKEATHgWLfeNDmq9e29Q9WIky0dQ3NPkd1mzYH8Lm936Z9qw==
   
+  "@types/react-native-calendars@^1.505.3":
+    version "1.505.3"
+    resolved "https://registry.yarnpkg.com/@types/react-native-calendars/-/react-native-calendars-1.505.3.tgz#8a3b7b6adf4a7753022cf53d72a34cdb2dc56659"
+    integrity sha512-YgJXlwf4Nznoe8hI4LC0ZlDYgAkCHAkG6iKTo8rg+lOyJyzrsFSWDrSv2mb4lLNZgNkdbMNLpT70Xdj52LueBA==
+    dependencies:
+      "@types/react" "*"
+      "@types/react-native" "*"
+      "@types/xdate" "*"
+  
   "@types/react-native-keyboard-spacer@^0.4.1":
     version "0.4.1"
     resolved "https://registry.yarnpkg.com/@types/react-native-keyboard-spacer/-/react-native-keyboard-spacer-0.4.1.tgz#2bc5bf42df1c99ddd99bd5be0f0815df3f28e938"
     integrity sha512-TEWvZjKiHDNFJ2zw+WGmrR84lIEaUw0WLj/Ory7zamFuMGK/Bqz7R+/u/H/ZgNJklw2svm/v7bJFdMvZhqefVA==
+    dependencies:
+      "@types/react" "*"
+      "@types/react-native" "*"
+  
+  "@types/react-native-modals@^0.19.0":
+    version "0.19.0"
+    resolved "https://registry.yarnpkg.com/@types/react-native-modals/-/react-native-modals-0.19.0.tgz#816833314b708a61f5d43660ff5406e88c5d1d7c"
+    integrity sha512-qhvXjZ1ltrboWrB+nAtRLZoG8opbMVLBxveWLDJ8Y4m0+9cnQyYntX3o0QUQosGyVHfcZQ7MUgQS0KsO1+sHDg==
     dependencies:
       "@types/react" "*"
       "@types/react-native" "*"
@@ -2335,6 +2357,11 @@ Lockfile:
     version "13.1.3"
     resolved "https://registry.yarnpkg.com/@types/validator/-/validator-13.1.3.tgz#366b394aa3fbeed2392bf0a20ded606fa4a3d35e"
     integrity sha512-DaOWN1zf7j+8nHhqXhIgNmS+ltAC53NXqGxYuBhWqWgqolRhddKzfZU814lkHQSTG0IUfQxU7Cg0gb8fFWo2mA==
+  
+  "@types/xdate@*":
+    version "0.8.31"
+    resolved "https://registry.yarnpkg.com/@types/xdate/-/xdate-0.8.31.tgz#7bec14a47c9bb30715d507f32bc82ab163149574"
+    integrity sha512-iZYRKKK8UZXoepNh2kwK6TPITMj/dwdv0NzNi9DFMt2foGkU7h+ncaCpGsdD2fp/CXMs9dxPAzV9uddFy7c4QA==
   
   "@types/yargs-parser@*":
     version "20.2.0"
@@ -5116,7 +5143,7 @@ Lockfile:
     dependencies:
       source-map "^0.7.3"
   
-  hoist-non-react-statics@^3.3.0:
+  hoist-non-react-statics@^3.3.0, hoist-non-react-statics@^3.3.1:
     version "3.3.2"
     resolved "https://registry.yarnpkg.com/hoist-non-react-statics/-/hoist-non-react-statics-3.3.2.tgz#ece0acaf71d62c2969c2ec59feff42a4b1a85b45"
     integrity sha512-/gGivxi8JPKWNm/W0jSmzcMPpfpPLc3dY/6GxhX2hQ9iGj3aDfklV4ET7NjKpSinLpJ5vafa9iiGIEZg10SfBw==
@@ -5221,6 +5248,11 @@ Lockfile:
     version "3.3.0"
     resolved "https://registry.yarnpkg.com/immediate/-/immediate-3.3.0.tgz#1aef225517836bcdf7f2a2de2600c79ff0269266"
     integrity sha512-HR7EVodfFUdQCTIeySw+WDRFJlPcLOJbXfwwZ7Oom6tjsvZ3bOkCDJHehQC3nxJrv7+f9XecwazynjU8e4Vw3Q==
+  
+  immutable@^4.0.0-rc.12:
+    version "4.0.0-rc.12"
+    resolved "https://registry.yarnpkg.com/immutable/-/immutable-4.0.0-rc.12.tgz#ca59a7e4c19ae8d9bf74a97bdf0f6e2f2a5d0217"
+    integrity sha512-0M2XxkZLx/mi3t8NVwIm1g8nHoEmM9p9UBl/G9k4+hm0kBgOVdMV/B3CY5dQ8qG8qc80NN4gDV4HQv6FTJ5q7A==
   
   import-fresh@^2.0.0:
     version "2.0.0"
@@ -6971,7 +7003,7 @@ Lockfile:
     dependencies:
       minimist "^1.2.5"
   
-  moment@^2.29.1:
+  moment@^2.24.0, moment@^2.29.1:
     version "2.29.1"
     resolved "https://registry.yarnpkg.com/moment/-/moment-2.29.1.tgz#b2be769fa31940be9eeea6469c075e35006fa3d3"
     integrity sha512-kHmoybcPV8Sqy59DwNDY3Jefr64lK/by/da0ViFcuA4DH0vQg5Q6Ze5VimxkfQNSC+Mls/Kx53s7TjP1RhFEDQ==
@@ -7732,7 +7764,7 @@ Lockfile:
       kleur "^3.0.3"
       sisteransi "^1.0.5"
   
-  prop-types@^15.6.0, prop-types@^15.6.1, prop-types@^15.6.2, prop-types@^15.7.2:
+  prop-types@^15.5.10, prop-types@^15.5.6, prop-types@^15.6.0, prop-types@^15.6.1, prop-types@^15.6.2, prop-types@^15.7.2:
     version "15.7.2"
     resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
     integrity sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ==
@@ -7839,6 +7871,19 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/react-is/-/react-is-17.0.1.tgz#5b3531bd76a645a4c9fb6e693ed36419e3301339"
     integrity sha512-NAnt2iGDXohE5LI7uBnLnqvLQMtzhkiAOLXTmv+qnF9Ky7xAPcX8Up/xWIhxvLVGJvuLiNc4xQLtuqDRzb4fSA==
   
+  react-native-calendars@^1.1258.0:
+    version "1.1258.0"
+    resolved "https://registry.yarnpkg.com/react-native-calendars/-/react-native-calendars-1.1258.0.tgz#7626ceaa92f6114c31e924d881890fe16981efff"
+    integrity sha512-gO4It/EU94vWZQ7/73RxV0TCm2y1+a4j44YHzjd25eo20n4NAb5+wi2A2uOC9rCunTUfKzu/jKSFwhS4IdbGtw==
+    dependencies:
+      hoist-non-react-statics "^3.3.1"
+      immutable "^4.0.0-rc.12"
+      lodash "^4.17.15"
+      moment "^2.24.0"
+      prop-types "^15.5.10"
+      react-native-swipe-gestures "^1.0.5"
+      xdate "^0.8.0"
+  
   react-native-dotenv@^2.5.3:
     version "2.5.3"
     resolved "https://registry.yarnpkg.com/react-native-dotenv/-/react-native-dotenv-2.5.3.tgz#ec70186d2b1491b0519647c53bf91f34395377a3"
@@ -7924,6 +7969,13 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/react-native-screens/-/react-native-screens-2.15.2.tgz#a449700e895b462937211ec72ed6f09652758f06"
     integrity sha512-CagNf2APXkVoRlF3Mugr264FbKbrBg9eXUkqhIPVeZB8EsdS8XPrnt99yj/pzmT+yJMBY0dGrjXT8+68WYh6YQ==
   
+  react-native-slider@^0.11.0:
+    version "0.11.0"
+    resolved "https://registry.yarnpkg.com/react-native-slider/-/react-native-slider-0.11.0.tgz#b68a0bc43c8422b24cd57947cc5ac2bcdb58fadc"
+    integrity sha512-jV9K87eu9uWr0uJIyrSpBLnCKvVlOySC2wynq9TFCdV9oGgjt7Niq8Q1A8R8v+5GHsuBw/s8vEj1AAkkUi+u+w==
+    dependencies:
+      prop-types "^15.5.6"
+  
   react-native-snap-carousel@^3.9.1:
     version "3.9.1"
     resolved "https://registry.yarnpkg.com/react-native-snap-carousel/-/react-native-snap-carousel-3.9.1.tgz#6fd9bd8839546c2c6043a41d2035afbc6fe0443e"
@@ -7931,6 +7983,18 @@ Lockfile:
     dependencies:
       prop-types "^15.6.1"
       react-addons-shallow-compare "15.6.2"
+  
+  react-native-super-grid@^4.1.1:
+    version "4.1.1"
+    resolved "https://registry.yarnpkg.com/react-native-super-grid/-/react-native-super-grid-4.1.1.tgz#54da8fe6d716edf1c87d158c5cc61cd449c20ab7"
+    integrity sha512-rJQI2zfnqZ409V7i/2MpdQjtfs52lfZ9lILFbIojYI428sP4XRgoqUcKjjL9sRr2w/X7eK4EjJ/RnCw/shVxxQ==
+    dependencies:
+      prop-types "^15.6.0"
+  
+  react-native-swipe-gestures@^1.0.5:
+    version "1.0.5"
+    resolved "https://registry.yarnpkg.com/react-native-swipe-gestures/-/react-native-swipe-gestures-1.0.5.tgz#a172cb0f3e7478ccd681fd36b8bfbcdd098bde7c"
+    integrity sha512-Ns7Bn9H/Tyw278+5SQx9oAblDZ7JixyzeOczcBK8dipQk2pD7Djkcfnf1nB/8RErAmMLL9iXgW0QHqiII8AhKw==
   
   react-native-tab-view@^1.0.2:
     version "1.4.1"
@@ -9669,6 +9733,11 @@ Lockfile:
     dependencies:
       simple-plist "^1.1.0"
       uuid "^7.0.3"
+  
+  xdate@^0.8.0:
+    version "0.8.2"
+    resolved "https://registry.yarnpkg.com/xdate/-/xdate-0.8.2.tgz#d7b033c00485d02695baf0044f4eacda3fc961a3"
+    integrity sha1-17AzwASF0CaVuvAET06s2j/JYaM=
   
   xhr@^2.0.1:
     version "2.6.0"

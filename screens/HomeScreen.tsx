@@ -16,7 +16,7 @@ import Header from '../components/Header';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
 import CardWithRate from '../components/CardWithRate';
-import {HomeParamList, PlaceType, User} from '../types';
+import {FilterForm, HomeParamList, PlaceType, User} from '../types';
 import {getAllPlaces} from '../api/places';
 import DescriptionBloc from '../components/DescriptionBloc';
 import SimpleInput from '../components/SimpleInput';
@@ -67,10 +67,15 @@ const HomeScreen = (props: Props) => {
     navigation.navigate('CreatePlace');
   };
 
-  const handleSeeAnnouncesPress = () => {
+  const showFilterModal = () => {
     handleModal({
-      child: <SearchFilterScreen />,
+      child: <SearchFilterScreen onSearchPress={handleSeeAnnouncesPress} />,
     });
+  };
+
+  const handleSeeAnnouncesPress = (filter: FilterForm) => {
+    navigation.navigate('PlaceList', {filter: filter});
+    handleModal();
   };
 
   const renderCarouselItem = ({item}: {item: PlaceType}) => {
@@ -129,10 +134,10 @@ const HomeScreen = (props: Props) => {
         style={styles.padding}
         actionText="See more"
         actionIcon="list"
-        onActionPress={handleSeeAnnouncesPress}
+        onActionPress={showFilterModal}
       />
       <FlatList
-        data={placesMock}
+        data={places}
         renderItem={renderListItem}
         keyExtractor={(item) => item.id}
         showsVerticalScrollIndicator={false}

@@ -29,7 +29,7 @@ type Props = {
   navigation: PlaceScreenNavigationProp;
 };
 
-const PlaceDetailScreen = () => {
+const PlaceDetailScreen = (props: Props) => {
   const [activeImage, setActiveImage] = useState<number>(0);
   const [seeMore, setSeeMore] = useState<boolean>(false);
   const [imagePreview, setImagePreview] = useState<boolean>(false);

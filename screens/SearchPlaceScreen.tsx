@@ -8,14 +8,13 @@ import {Ionicons} from '@expo/vector-icons';
 import {searchPlace} from '../api/mapbox';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import SearchCard from '../components/SearchCard';
-import {CreatePlaceForm, Location, MapboxSearch} from '../types';
+import {Location, MapboxSearch} from '../types';
 
 type Props = {
-  createPlaceForm: CreatePlaceForm;
-  setCreatePlaceForm: Dispatch<SetStateAction<CreatePlaceForm>>;
+  onLocationPress: (location: Location) => void;
 };
 
-const SearchPlaceScreen = ({createPlaceForm, setCreatePlaceForm}: Props) => {
+const SearchPlaceScreen = ({onLocationPress}: Props) => {
   const [query, setQuery] = useState<string>('');
   const [places, setPlaces] = useState<Array<MapboxSearch>>([]);
 
@@ -27,11 +26,6 @@ const SearchPlaceScreen = ({createPlaceForm, setCreatePlaceForm}: Props) => {
       setPlaces([]);
     }
   }, [query]);
-
-  const handlePlacePress = (location: Location) => {
-    console.log(location);
-    setCreatePlaceForm({...createPlaceForm, location: location});
-  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -73,7 +67,7 @@ const SearchPlaceScreen = ({createPlaceForm, setCreatePlaceForm}: Props) => {
               description={`${address}, ${postalCode} ${city}`}
               subdescription={country ? country : region}
               onPress={() =>
-                handlePlacePress({
+                onLocationPress({
                   address,
                   city,
                   postalCode,

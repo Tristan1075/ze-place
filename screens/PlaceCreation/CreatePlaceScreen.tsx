@@ -12,7 +12,8 @@ import Colors from '../../constants/Colors';
 import {CreatePlaceForm} from '../../types';
 import GeneralInformations from './GeneralInformations';
 import PlaceInformations from './PlaceInformations';
-import RightsAndCustomization from './RightsAndCustomization';
+import PlaceAuthorization from './PlaceAuthorization';
+import Customization from './Customization';
 
 const CreatePlaceScreen = () => {
   const navigation = useNavigation();
@@ -32,6 +33,11 @@ const CreatePlaceScreen = () => {
     description: undefined,
     features: [],
     images: [],
+    authorizeAnimals: true,
+    authorizeMusic: true,
+    authorizeSmoking: true,
+    authorizeFire: true,
+    authorizeFoodAndDrink: true,
   });
 
   const handleBackPress = () => {
@@ -57,7 +63,7 @@ const CreatePlaceScreen = () => {
           completedProgressBarColor={Colors.primary}
           progressBarColor={Colors.primary}>
           <ProgressStep
-            label="General informations"
+            label="General"
             removeBtnRow={true}
             scrollViewProps={{showsVerticalScrollIndicator: false}}>
             <View>
@@ -69,7 +75,7 @@ const CreatePlaceScreen = () => {
             </View>
           </ProgressStep>
           <ProgressStep
-            label="Places informations"
+            label="Detail"
             removeBtnRow={true}
             scrollViewProps={{showsVerticalScrollIndicator: false}}>
             <View>
@@ -82,11 +88,24 @@ const CreatePlaceScreen = () => {
             </View>
           </ProgressStep>
           <ProgressStep
-            label="Rights and customization"
+            label="Authorization"
             removeBtnRow={true}
             scrollViewProps={{showsVerticalScrollIndicator: false}}>
             <View>
-              <RightsAndCustomization
+              <PlaceAuthorization
+                prevStep={prevStep}
+                nextStep={nextStep}
+                createPlaceForm={createPlaceForm}
+                setCreatePlaceForm={setCreatePlaceForm}
+              />
+            </View>
+          </ProgressStep>
+          <ProgressStep
+            label="Customization"
+            removeBtnRow={true}
+            scrollViewProps={{showsVerticalScrollIndicator: false}}>
+            <View>
+              <Customization
                 prevStep={prevStep}
                 createPlaceForm={createPlaceForm}
                 setCreatePlaceForm={setCreatePlaceForm}
@@ -98,8 +117,7 @@ const CreatePlaceScreen = () => {
       <Modal
         width={0.7}
         visible={exitModal}
-        rounded
-        style={{zIndex: 1000}}
+        rounded={true}
         onTouchOutside={() => {
           setExitModal(false);
         }}>

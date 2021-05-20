@@ -40,21 +40,18 @@ type Props = {
 
 const PlaceInformations = (props: Props) => {
   const {prevStep, nextStep, createPlaceForm, setCreatePlaceForm} = props;
-  const {handleModal, closeModal} = useContext(ModalContext);
+  const {handleModal} = useContext(ModalContext);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
 
   const handleSelectPlaceType = () => {
     handleModal({
-      id: 'select-type-modal',
-      content: (
-        <SelectPlaceTypeScreen onPlaceTypePress={handlePlaceTypePress} />
-      ),
+      child: <SelectPlaceTypeScreen onPlaceTypePress={handlePlaceTypePress} />
     });
   };
 
   const handlePlaceTypePress = (type: PlaceType) => {
     setCreatePlaceForm({...createPlaceForm, placeType: type});
-    closeModal('select-type-modal');
+    handleModal();
   };
 
   const handleFeaturePress = (feature: FeatureType) => {
@@ -171,8 +168,8 @@ const PlaceInformations = (props: Props) => {
       <View style={styles.row}>
         <Button
           value="Back"
-          backgroundColor={Colors.primary}
-          textColor={Colors.white}
+          backgroundColor={Colors.white}
+          textColor={Colors.dark}
           onPress={prevStep}
           style={{marginRight: 10, flex: 1}}
         />

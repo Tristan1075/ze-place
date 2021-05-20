@@ -4,10 +4,10 @@ import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
 
 type Props = {
-  title: string;
+  title?: string;
   description?: string;
   subdescription?: string;
-  onPress: () => void;
+  onPress?: () => void;
 };
 
 const SearchCard = ({title, description, subdescription, onPress}: Props) => {

@@ -6,9 +6,11 @@ import SimpleInput from '../../components/SimpleInput';
 import Button from '../../components/Button';
 import Colors from '../../constants/Colors';
 import Layout from '../../constants/Layout';
-import {CreatePlaceForm} from '../../types';
+import {CreatePlaceForm, Location} from '../../types';
 import {ModalContext} from '../../providers/modalContext';
 import SearchPlaceScreen from '../SearchPlaceScreen';
+import SearchCard from '../../components/SearchCard';
+import {Ionicons} from '@expo/vector-icons';
 
 type Props = {
   nextStep: () => void;
@@ -22,13 +24,13 @@ const GeneralInformations = (props: Props) => {
 
   const handleMapPress = () => {
     handleModal({
-      child: (
-        <SearchPlaceScreen
-          createPlaceForm={createPlaceForm}
-          setCreatePlaceForm={setCreatePlaceForm}
-        />
-      ),
+      child: <SearchPlaceScreen onLocationPress={handleLocationPress} />,
     });
+  };
+
+  const handleLocationPress = (location: Location) => {
+    setCreatePlaceForm({...createPlaceForm, location: location});
+    handleModal();
   };
 
   return (
@@ -67,17 +69,26 @@ const GeneralInformations = (props: Props) => {
         subtitle={true}
         style={styles.paddingVertical}
       />
-      <TouchableWithoutFeedback onPress={handleMapPress}>
-        <Image
-          source={require('../../assets/images/map.png')}
-          style={styles.map}
+      <SimpleInput
+        placeholder="Search"
+        value={createPlaceForm.placeType?.name}
+        isEditable={false}
+        onPress={handleMapPress}
+        suffix={<Ionicons name="chevron-down" size={20} color={Colors.dark} />}
+      />
+      {createPlaceForm.location && (
+        <SearchCard
+          title={createPlaceForm.location?.address}
+          description={`${createPlaceForm.location?.postalCode} ${createPlaceForm.location?.city}`}
+          subdescription={createPlaceForm.location?.country}
         />
-      </TouchableWithoutFeedback>
+      )}
       <Button
         value="Continuer"
         backgroundColor={Colors.dark}
         textColor={Colors.white}
         onPress={nextStep}
+        style={styles.button}
       />
     </View>
   );
@@ -96,6 +107,9 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginBottom: Layout.padding,
     ...Layout.shadow,
+  },
+  button: {
+    marginTop: Layout.padding,
   },
 });
 

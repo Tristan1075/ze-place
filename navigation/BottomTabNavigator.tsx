@@ -18,7 +18,7 @@ import MessagesScreen from '../screens/MessagesScreen';
 import ConversationScreen from '../screens/ConversationScreen';
 import FavoritesScreen from '../screens/FavoritesScreen';
 import CreatePlaceScreen from '../screens/PlaceCreation/CreatePlaceScreen';
-import SearchFilterScreen from '../screens/SearchFilterScreen';
+import PlaceList from '../screens/PlaceListScreen';
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
@@ -77,7 +77,7 @@ const HomeNavigator = () => {
       <HomeStack.Screen name="Home" component={HomeScreen} />
       <HomeStack.Screen name="PlaceDetail" component={PlaceDetailScreen} />
       <HomeStack.Screen name="CreatePlace" component={CreatePlaceScreen} />
-      <HomeStack.Screen name="SearchFilter" component={SearchFilterScreen} />
+      <HomeStack.Screen name="PlaceList" component={PlaceList} />
     </HomeStack.Navigator>
   );
 };

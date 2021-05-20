@@ -1,10 +1,10 @@
 import React from 'react';
 import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 import {Ionicons} from '@expo/vector-icons';
+import {useNavigation} from '@react-navigation/native';
 
 import Colors from '../constants/Colors';
 import {PlaceType} from '../types';
-import {places} from '../mocks';
 import {Rating} from 'react-native-ratings';
 
 type Props = {
@@ -13,16 +13,16 @@ type Props = {
 };
 
 const PlaceCard = (props: Props) => {
-  const {onPress, place} = props;
+  const {place} = props;
+  const navigation = useNavigation();
 
-
-  const handleAddFavorite = () => {
-    api.addFavorite(place);
-  }
+  const handlePlacePress = () => {
+    navigation.navigate('PlaceDetail', {place: place});
+  };
 
   return (
-    <TouchableOpacity style={styles.container} onPress={handleAddFavorite}>
-      <Image source={{uri: place.images[0]}} style={styles.image} />
+    <TouchableOpacity style={styles.container} onPress={handlePlacePress}>
+      <Image source={{uri: place.images[0].url}} style={styles.image} />
       <View style={styles.informations}>
         <View style={styles.row}>
           <Text style={styles.title}>{place.title}</Text>
