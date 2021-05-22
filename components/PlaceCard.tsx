@@ -6,6 +6,7 @@ import {useNavigation} from '@react-navigation/native';
 import Colors from '../constants/Colors';
 import {Place} from '../types';
 import {Rating} from 'react-native-ratings';
+import {addFavorite} from '../api/customer';
 
 type Props = {
   onPress: () => void;
@@ -18,6 +19,10 @@ const PlaceCard = (props: Props) => {
 
   const handlePlacePress = () => {
     navigation.navigate('PlaceDetail', {place: place});
+  };
+
+  const handleAddFavorite = (place: Place) => {
+    addFavorite(place);
   };
 
   return (
@@ -33,12 +38,14 @@ const PlaceCard = (props: Props) => {
       <View style={styles.informations}>
         <View style={styles.row}>
           <Text style={styles.title}>{place.title}</Text>
-          <Ionicons
-            size={28}
-            name="heart-circle"
-            color={Colors.primary}
-            style={styles.locationIcon}
-          />
+          <TouchableOpacity onPress={() => handleAddFavorite(place)}>
+            <Ionicons
+              size={28}
+              name="heart-circle"
+              color={Colors.primary}
+              style={styles.locationIcon}
+            />
+          </TouchableOpacity>
         </View>
         <View style={styles.row}>
           <Ionicons
@@ -47,7 +54,8 @@ const PlaceCard = (props: Props) => {
             color={Colors.primary}
             style={styles.locationIcon}
           />
-          <Text style={styles.location}>{place.location.city}</Text>
+          {/* <Text style={styles.location}>{place.location.city}</Text> */}
+          <Text style={styles.location}>city</Text>
         </View>
         <View style={styles.row}>
           <Rating

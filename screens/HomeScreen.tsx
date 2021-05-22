@@ -37,7 +37,7 @@ type Props = {
 
 const HomeScreen = (props: Props) => {
   const {navigation} = props;
-  const [places, setPlaces] = useState<Array<PlaceType>>([]);
+  const [places, setPlaces] = useState<Array<Place>>([]);
   const {handleModal} = useContext(ModalContext);
   const [user, setUser] = useState<User>();
 
