@@ -1,9 +1,7 @@
-import {API_URL, API_TOKEN} from '@env';
+import {API_URL} from '@env';
 import axios, {AxiosResponse} from 'axios';
 import * as SecureStore from 'expo-secure-store';
-import {Place, SignupForm} from '../types';
-
-
+import {Place, SignupForm, User} from '../types';
 
 export const getUser = async () => {
   const token = await SecureStore.getItemAsync('access-token');
@@ -21,37 +19,37 @@ export const getUser = async () => {
     .catch((err) => {
       return Promise.reject(err);
     });
+};
 
-}
-
-export const modifyUser = async (form:SignupForm,id:string) => {
+export const modifyUser = async (form: SignupForm, id: string) => {
   const token = await SecureStore.getItemAsync('access-token');
-  console.log("form",form);
+  console.log('form', form);
   console.log(id);
-  const url = `${API_URL}/customers/update?customerID=${id}`
+  const url = `${API_URL}/customers/update?customerID=${id}`;
   console.log(url);
 
   await axios
-  .put(
-    url,
-    //"http://localhost:3000/customers/update?id=609147e8d9812e8d373f0846",
-    //"http://localhost:3000/auth/register",
-    {
-      avatar: form.avatar,
+    .put(
+      url,
+      //"http://localhost:3000/customers/update?id=609147e8d9812e8d373f0846",
+      //"http://localhost:3000/auth/register",
+      {
+        avatar: form.avatar,
         first_name: form.firstname,
         last_name: form.lastname,
         birthdate: form.birthdate,
         phoneNumber: form.phoneNumber,
         email: form.email,
         password: form.password,
-      description: form.description,
-
-  },{
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },}
-
-    ).then((response: AxiosResponse<any>) => {
+        description: form.description,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    )
+    .then((response: AxiosResponse<any>) => {
       console.log(response);
       return response.data;
     })
@@ -61,26 +59,24 @@ export const modifyUser = async (form:SignupForm,id:string) => {
     });
 };
 
-export const addFavorite = async (place: Place) => {
+export const touchFavorite = async (place: Place) => {
   const token = await SecureStore.getItemAsync('access-token');
   console.log('place : ' + place);
   console.log('place description : ' + place.description);
-  const user = await getUser();
-  const url = `${API_URL}/customers/favorite/create?customerID=${user._id}`;
+  const user = (await getUser()) as User;
+  let url = '';
+  if (!user.favorites.find((data) => data._id === place._id)) {
+    url = `${API_URL}/customers/favorite/create?customerID=${user._id}`;
+  } else {
+    url = `${API_URL}/customers/favorite/delete?customerID=${user._id}`;
+  }
   console.log(url);
   await axios
-    .put(
-      url,
-      {
-        test: 'toto',
-        place: place,
+    .post(url, place, {
+      headers: {
+        Authorization: `Bearer ${token}`,
       },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      },
-    )
+    })
     .then((response: AxiosResponse<any>) => {
       console.log(response);
       return response.data;

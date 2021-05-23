@@ -6,7 +6,7 @@ import {useNavigation} from '@react-navigation/native';
 import Colors from '../constants/Colors';
 import {Place} from '../types';
 import {Rating} from 'react-native-ratings';
-import {addFavorite} from '../api/customer';
+import {touchFavorite} from '../api/customer';
 
 type Props = {
   onPress: () => void;
@@ -22,7 +22,7 @@ const PlaceCard = (props: Props) => {
   };
 
   const handleAddFavorite = (place: Place) => {
-    addFavorite(place);
+    touchFavorite(place);
   };
 
   return (

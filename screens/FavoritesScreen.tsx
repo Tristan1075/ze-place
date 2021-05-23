@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -15,7 +15,7 @@ import {MessagesParamList, Place, User} from '../types';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
 import PlaceCard from '../components/PlaceCard';
-import {getFavorites, getUser} from '../api/customer';
+import {getUser} from '../api/customer';
 
 type MessagesScreenNavigationProp = StackNavigationProp<
   MessagesParamList,
