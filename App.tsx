@@ -4,6 +4,7 @@ import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {ModalPortal} from 'react-native-modals';
 import * as Localization from 'expo-localization';
 import i18n from 'i18n-js';
+import io from 'socket.io-client';
 
 import frFR from './localization/fr-FR';
 import enUS from './localization/en-US';
@@ -13,6 +14,25 @@ import Navigation from './navigation';
 import {ModalProvider} from './providers/modalContext';
 
 const App = () => {
+  const [socket, setSocket] = React.useState({});
+
+  React.useEffect(() => {
+    const initSocket = {
+      socket: io.connect('http://localhost:3000', {
+        transports: ['websocket'],
+        reconnectionAttempts: 10,
+        reconnection: true,
+        reconnectionDelay: 15000,
+      }),
+    };
+    initSocket.socket.emit('msgToServer', "Hello World ! I'm the client side");
+    initSocket.socket.on('msgToClient', (socketID: any) => {
+      // AppStore.updateSocketID(socketID);
+      console.warn(socketID);
+    });
+    setSocket(initSocket);
+  }, []);
+
   i18n.translations = {
     en: enUS,
     fr: frFR,
