@@ -46,6 +46,8 @@ export type User = {
   description: string;
   created_at: {type: Date; default: Date};
   favorites: Place[];
+  promoCode: String[],
+  historyCode: String[],
 };
 
 export type Place = {

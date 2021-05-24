@@ -19,6 +19,6 @@ export default {
   connexionInfo: 'Information de connexion',
   promo: "Code Promotionel",
   addCode: "Ajouter un nouveau code",
-  actif: "Actif",
-  innactif: "Innactif",
+  actif: "Promo active",
+  innactif: "Promo Innactive",
 } as LocalizationType;
