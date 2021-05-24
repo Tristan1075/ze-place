@@ -40,7 +40,7 @@ export type User = {
   last_name: string;
   email: string;
   password: string;
-  phone: string;
+  phoneNumber: string;
   address: string;
   birthdate: string;
   description: string;
@@ -76,6 +76,15 @@ export type Review = {
   from: User;
   text: string;
   rate: Number;
+  created_at: {type: Date; default: Date};
+};
+
+export type Promo = {
+  name: string;
+  end_date: string;
+  start_date:string;
+  user_limit: Number;
+  value:Number
   created_at: {type: Date; default: Date};
 };
 

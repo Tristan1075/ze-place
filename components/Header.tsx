@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
   button: {
     fontFamily: 'playfair-bold',
     fontSize: 16,
-    color: Colors.primary,
+    color: Colors.white,
     paddingVertical: 20,
     paddingLeft: Layout.padding,
     textAlign: 'right',

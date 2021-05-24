@@ -163,13 +163,18 @@ const setValues = ()=>{
   };
 
   return (
-    <SafeAreaView >
-      {}
-      {allowModification ? <ScrollView showsVerticalScrollIndicator={false}> 
+    <SafeAreaView style={styles.container}>
+     
+     { allowModification ? <Header type='back' showProfil={false}  rightText={i18n.t('modify')} onActionTap={handleModify}></Header> :
+    <Header type='back' showProfil={false} rightText={i18n.t('validate')} onActionTap={handleModify}></Header>
+    }
+     
+      {allowModification ? 
+
+      <ScrollView showsVerticalScrollIndicator={false} style={styles.scrollView}> 
 
 
-      <Header type='back' showProfil={false}  rightText={i18n.t('modify')} onActionTap={handleModify}></Header>
-        {user && <View style={styles.container}>
+        {user && <View style={styles.avatarContainer}>
             <Image
                 source={{uri: user.avatar}}
                 style={{width: 150, height: 150, borderRadius: 150/ 2}}
@@ -187,15 +192,13 @@ const setValues = ()=>{
 
 
 
-      </ScrollView> : <ScrollView>
-        {
- //setValues()    
- } 
-        <Header type='back' showProfil={false}  rightText="Valider" onActionTap={handleModify}></Header>
+      </ScrollView> : <ScrollView style={styles.scrollView}> 
+      
         <View >
           <Text style={styles.title}>Veuillez changer les informations de votre comptes</Text>
+          <View style={styles.avatarContainer}>
           <TouchableOpacity
-            style={styles.container}
+            
             onPress={handleSelectAvatarPress}>
             {form.avatar ? (
               <Image source={{uri: form.avatar}} style={styles.selectedImage} />
@@ -206,22 +209,27 @@ const setValues = ()=>{
               <Entypo size={16} name="camera" color={Colors.primary} />
             </View>
           </TouchableOpacity>
+          </View>
           {errors.avatar ? (
             <Text style={styles.error}>{errors.avatar}</Text>
           ) : null}
           <SimpleInput
+
+      style={styles.button}
             onChange={() => setErrors({...errors, firstname: ''})}
             onChangeText={(v) => setForm({...form, firstname: v})}
             placeholder={user && user.first_name}
             error={errors.firstname}
           />
           <SimpleInput
+          style={styles.button}
             onChange={() => setErrors({...errors, lastname: ''})}
             onChangeText={(v) => setForm({...form, lastname: v})}
             placeholder={user && user.last_name}
             error={errors.lastname}
           />
           <SimpleInput
+          style={styles.button}
             onPress={() => setShowDateTimePicker(true)}
             isEditable={false}
             onChange={() => setErrors({...errors, lastname: ''})}
@@ -232,19 +240,22 @@ const setValues = ()=>{
 
           />
           <SimpleInput
+          style={styles.button}
             onChange={() => setErrors({...errors, phoneNumber: ''})}
             onChangeText={(v) => setForm({...form, phoneNumber: v})}
-            placeholder="Phone Number"
+            placeholder={user && user.phoneNumber}
             error={errors.phoneNumber}
 
           />
           <SimpleInput
+          style={styles.button}
             onChange={() => setErrors({...errors, email: ''})}
             onChangeText={(v) => setForm({...form, email: v.toLowerCase()})}
             placeholder={user && user.email}
             error={errors.email}
           />
           <SimpleInput
+          style={styles.button}
             onChange={() => setErrors({...errors, password: ''})}
             onChangeText={(v) => setForm({...form, password: v})}
             placeholder="Password"
@@ -252,6 +263,7 @@ const setValues = ()=>{
             error={errors.password}
           />
           <SimpleInput
+          style={styles.button}
             onChange={() => setErrors({...errors, confirmPassword: ''})}
             onChangeText={(v) => setForm({...form, confirmPassword: v})}
             placeholder="Confirmation password"
@@ -259,6 +271,7 @@ const setValues = ()=>{
             error={errors.confirmPassword}
           />
           <SimpleInput
+          style={styles.button}
             onChangeText={(v) => setForm({...form, description: v})}
             placeholder={user && user.description}
             error={errors.description}
@@ -299,22 +312,18 @@ const styles = StyleSheet.create({
   text: {
     fontFamily: 'poppins',
     fontSize: 14,
-    color: Colors.primary,
+    color: Colors.dark,
   },
   underline: {
     textDecorationLine: 'underline',
   },
   button: {
-    marginVertical: 20,
+    paddingVertical: 20,
+    paddingHorizontal: 20,
   },
   avatarContainer: {
-    position: 'relative',
-    maxWidth: 70,
-    height: 70,
-    marginVertical: 10,
-    paddingVertical: 20,
-    borderRadius: 20,
-    justifyContent: 'center',
+    flex: 1,
+    justifyContent: 'flex-end',
     alignItems: 'center',
   },
   avatar: {
@@ -368,9 +377,15 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    paddingHorizontal: Layout.padding,
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: Colors.dark,
+    paddingTop: 130,
+  },
+  scrollView: {
+    flex: 1,
+    backgroundColor: Colors.background,
+    borderTopLeftRadius: 40,
+    borderTopRightRadius: 40,
+    paddingTop: 40,
   },
   row: {
     flex: 1,
@@ -378,7 +393,7 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: 'poppins-bold',
     fontSize: 18,
-    color: Colors.primary,
+    color: Colors.dark,
     paddingBottom: 20,
     marginLeft: 10,
     marginTop: 20
@@ -386,7 +401,7 @@ const styles = StyleSheet.create({
   subtitle: {
     fontFamily: 'poppins-bold',
     fontSize: 12,
-    color: Colors.primary,
+    color: Colors.dark,
     paddingVertical: 20,
     paddingLeft: Layout.padding,
     textAlign:"right",
