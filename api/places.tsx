@@ -2,7 +2,7 @@ import {API_URL} from '@env';
 import axios, {AxiosResponse} from 'axios';
 import * as SecureStore from 'expo-secure-store';
 
-import {CreatePlaceForm} from '../types';
+import {CreatePlaceForm, Place} from '../types';
 
 export const getAllPlaces = async () => {
   const token = await SecureStore.getItemAsync('access-token');

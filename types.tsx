@@ -45,6 +45,7 @@ export type User = {
   birthdate: string;
   description: string;
   created_at: {type: Date; default: Date};
+  favorites: Place[];
 };
 
 export type Place = {
