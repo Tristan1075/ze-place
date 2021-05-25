@@ -4,6 +4,9 @@ import {
   Text,
   View,
   ScrollView,
+SafeAreaView
+  TouchableOpacity,
+  TextInput,
   FlatList,
   Image,
 } from 'react-native';
@@ -13,6 +16,7 @@ import i18n from 'i18n-js';
 import * as SecureStore from 'expo-secure-store';
 
 import Header from '../components/Header';
+import SquaredButton from '../components/SquaredButton'
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
 import CardWithRate from '../components/CardWithRate';
@@ -23,6 +27,7 @@ import SimpleInput from '../components/SimpleInput';
 import TitleWithDescription from '../components/TitleWithDescription';
 import PlaceCard from '../components/PlaceCard';
 import {getUser} from '../api/customer';
+
 import {placesMock} from '../mocks';
 import {Ionicons} from '@expo/vector-icons';
 import {ModalContext} from '../providers/modalContext';
@@ -93,6 +98,12 @@ const HomeScreen = (props: Props) => {
   );
 
   return (
+
+
+    <SafeAreaView style={styles.container}>
+
+      
+    
     <ScrollView showsVerticalScrollIndicator={false} style={styles.scrollView}>
       <Image
         source={require('../assets/images/home_banner.jpg')}
@@ -100,11 +111,8 @@ const HomeScreen = (props: Props) => {
       />
       <View style={styles.overlay} />
       <View style={styles.container}>
-        <Header
-          type="menu"
-          showProfil={true}
-          profilPicture={user && user.avatar}
-        />
+
+      <Header type='menu' showProfil={true}  profilPicture={user && user.avatar}></Header>
         <Text style={styles.title}>{i18n.t('discover')}</Text>
         <SimpleInput
           isEditable={false}
@@ -146,6 +154,7 @@ const HomeScreen = (props: Props) => {
       />
       <Button value="Disconnnect" onPress={handleDisconnectPress} />
     </ScrollView>
+    </SafeAreaView>
   );
 };
 

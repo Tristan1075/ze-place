@@ -10,8 +10,9 @@ type Props = {
   type: 'back' | 'menu';
   showProfil?: boolean;
   title?: string;
-  profilPicture?: string;
-  onBackPress?: () => void;
+  profilPicture?: String;
+  button?: string;
+  onBackPress?: Function;
   color?: string;
   rightText?: string;
   onActionTap?: () => void;
@@ -28,6 +29,7 @@ const Header = (props: Props) => {
     rightText,
     onActionTap,
   } = props;
+
 
   const navigation = useNavigation();
 
