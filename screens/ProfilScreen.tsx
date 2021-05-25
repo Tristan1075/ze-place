@@ -180,7 +180,7 @@ const setValues = ()=>{
      
       {allowModification ? 
 
-      <ScrollView showsVerticalScrollIndicator={false} style={styles.scrollView}> 
+      <ScrollView showsVerticalScrollIndicator={false} style={styles.scrollView} contentContainerStyle={scrollStyles.center}> 
 
 
         {user && <View style={styles.avatarContainer}>
@@ -393,8 +393,8 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    position: 'relative',
-    backgroundColor: Colors.background,
+    backgroundColor: Colors.dark,
+    paddingTop: 130,
   },
   
 
@@ -404,9 +404,8 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 40,
     borderTopRightRadius: 40,
     paddingTop: 40,
-    paddingHorizontal: Layout.padding,
-    justifyContent: 'center',
-    alignItems: 'center',
+    //justifyContent: 'center',
+    //alignItems: 'center',
   },
   row: {
     flex: 1,
@@ -417,7 +416,7 @@ const styles = StyleSheet.create({
     color: Colors.dark,
     paddingBottom: 20,
     marginLeft: 10,
-    marginTop: 20
+    marginTop: 40
   },
   subtitle: {
     fontFamily: 'poppins-bold',
@@ -494,6 +493,12 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     fontFamily: 'poppins',
     alignSelf: 'flex-end',
+  },
+});
+
+const scrollStyles = StyleSheet.create({
+  center: {
+    alignItems: 'center',
   },
 });
 

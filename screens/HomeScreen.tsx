@@ -25,8 +25,6 @@ import CardWithRate from '../components/CardWithRate';
 import {FilterForm, HomeParamList, Place, PlaceType, User} from '../types';
 import {categories} from '../mocks';
 import {getAllPlaces} from '../api/places';
-import {getUser} from '../api/customer';
-import Button from '../components/Button';
 import { setupMaster } from 'cluster';
 import { getFocusedRouteNameFromRoute } from '@react-navigation/core';
 

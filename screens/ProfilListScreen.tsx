@@ -32,7 +32,6 @@ type Props = {
 
 const ProfilListScreen = (props: Props) => {
   const {navigation} = props;
-<<<<<<< HEAD
   useEffect(() => {}, []);
 
   const handleProfilpress = () => {
