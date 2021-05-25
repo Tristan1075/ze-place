@@ -1,7 +1,9 @@
-import {API_URL} from '@env';
+
+import {Place, SignupForm, User} from '../types';
+import {API_URL, API_TOKEN} from '@env';
 import axios, {AxiosResponse} from 'axios';
 import * as SecureStore from 'expo-secure-store';
-import {Place, SignupForm, User} from '../types';
+
 
 export const getUser = async () => {
   const token = await SecureStore.getItemAsync('access-token');
@@ -13,7 +15,7 @@ export const getUser = async () => {
     })
     .then((response: AxiosResponse<any>) => {
       console.log(response.data._id);
-
+      
       return response.data;
     })
     .catch((err) => {
@@ -50,7 +52,6 @@ export const modifyUser = async (form: SignupForm, id: string) => {
       },
     )
     .then((response: AxiosResponse<any>) => {
-      console.log(response);
       return response.data;
     })
     .catch((err) => {
@@ -107,3 +108,94 @@ export const getFavorites = async () => {
       return Promise.reject(err);
     });
 };
+
+export const getActivePromos = async () => {
+  const token = await SecureStore.getItemAsync('access-token');
+
+  const user = await getUser();
+  const promoId = user.promoCode
+  console.log(promoId);
+  
+  const url = `${API_URL}/promo/getSevralCode`;
+  
+  return await axios
+  .post( url,
+    //"http://localhost:3000/customers/update?id=609147e8d9812e8d373f0846",
+    //"http://localhost:3000/auth/register",
+    {
+      code:promoId
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  )
+  .then((response: AxiosResponse<any>) => {
+    return response.data;
+  })
+  .catch((err) => {
+    console.log(err);
+    
+    return Promise.reject(err);
+  });
+};
+export const getInnactivePromos = async () => {
+  const token = await SecureStore.getItemAsync('access-token');
+
+  const user = await getUser();
+  const promoId = user.historyCode
+  console.log(promoId);
+  
+  const url = `${API_URL}/promo/getSevralCode`;
+  
+  return await axios
+  .post( url,
+    {
+      code:promoId
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  )
+  .then((response: AxiosResponse<any>) => {
+    return response.data;
+  })
+  .catch((err) => {
+    console.log(err);
+    
+    return Promise.reject(err);
+  });
+};
+
+export const addPromoCode = async ( promoTitle: string) =>{
+  const token = await SecureStore.getItemAsync('access-token');
+
+
+  const user = await getUser();
+  const url = `${API_URL}/customers/addPromoCode?customerID=${user._id}`;
+
+  await axios
+    .post(
+      url,
+      {
+        name : promoTitle
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    )
+    .then((response: AxiosResponse<any>) => {
+      console.log(response.data);
+      return response.data;
+    })
+    .catch((err) => {
+      console.log(err);
+      
+      return Promise.reject(err);
+    });
+  };

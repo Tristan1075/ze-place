@@ -4,6 +4,8 @@ import {
   StyleSheet,
   Text,
   View,
+
+  TextInput,
   Image,
   ScrollView,
   TouchableOpacity,
@@ -11,19 +13,28 @@ import {
 import isEmail from 'validator/lib/isEmail';
 import {Entypo} from '@expo/vector-icons';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
+
+import Carousel from 'react-native-snap-carousel';
 import {StackNavigationProp} from '@react-navigation/stack';
+import * as SecureStore from 'expo-secure-store';
 import i18n from 'i18n-js';
 import SimpleInput from '../components/SimpleInput';
 import moment from 'moment';
 
 import Header from '../components/Header';
+
+import SquaredButton from '../components/SquaredButton';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
+import CardWithRate from '../components/CardWithRate';
 import {HomeParamList, User,SignupForm} from '../types';
+import {categories} from '../mocks';
 import {getUser,modifyUser} from '../api/customer';
 import * as ImagePicker from 'expo-image-picker';
 
+import Button from '../components/Button';
 import ProfilText from '../components/ProfilText';
+import { State } from 'react-native-gesture-handler';
 
 type RootScreenNavigationProp = StackNavigationProp<HomeParamList, 'Profil'>;
 
@@ -50,7 +61,6 @@ const ProfilScreen = (props: Props) => {
 
   const [errors, setErrors] = useState<SignupForm>(input);
   const [showDateTimePicker, setShowDateTimePicker] = useState<boolean>(false);
-
 
   useEffect(() => {
     const getUservar = async () => setUser(await getUser());
@@ -96,12 +106,13 @@ const ProfilScreen = (props: Props) => {
     }
     setErrors(e);
 
+    
     return isValid;
   };
-
+  
   const handleSigninPress = async () => {
     const isFormValid = verifyForm();
-
+    
     if (isFormValid) {
       try {
         const changeUser = async () => await modifyUser(form,user._id);
@@ -132,9 +143,10 @@ const ProfilScreen = (props: Props) => {
 
   const handleConfirmDatePress = (value: Date) => {
 
+    
     setErrors({...errors, birthdate: undefined});
     setForm({...form, birthdate: value});
-
+    
     setShowDateTimePicker(false);
   };
 const setValues = ()=>{
@@ -145,15 +157,13 @@ const setValues = ()=>{
   form.email = user.email;
   form.description = user.description;
   form.birthdate = new Date(user.birthdate) ;    
-
-
-
-
+    
 }
-
+  
   const handleModify = () => {
-
+    
     if( allowModification){
+     
 
       setAllowModification(false);
       setValues()  ;
@@ -161,19 +171,26 @@ const setValues = ()=>{
       handleSigninPress();
       }
   };
-
   return (
-    <SafeAreaView >
-      {}
-      {allowModification ? <ScrollView showsVerticalScrollIndicator={false}> 
+    <SafeAreaView style={styles.container}>
+     
+     { allowModification ? <Header type='back' showProfil={false}  rightText={i18n.t('modify')} onActionTap={handleModify}></Header> :
+    <Header type='back' showProfil={false} rightText={i18n.t('validate')} onActionTap={handleModify}></Header>
+    }
+     
+      {allowModification ? 
+
+      <ScrollView showsVerticalScrollIndicator={false} style={styles.scrollView}> 
 
 
-      <Header type='back' showProfil={false}  rightText={i18n.t('modify')} onActionTap={handleModify}></Header>
-        {user && <View style={styles.container}>
+        {user && <View style={styles.avatarContainer}>
+
+
             <Image
                 source={{uri: user.avatar}}
                 style={{width: 150, height: 150, borderRadius: 150/ 2}}
             />
+
 
         </View>}
         <Text style={styles.title}>{i18n.t('personalInfo')}</Text>
@@ -187,15 +204,14 @@ const setValues = ()=>{
 
 
 
-      </ScrollView> : <ScrollView>
-        {
- //setValues()    
- } 
-        <Header type='back' showProfil={false}  rightText="Valider" onActionTap={handleModify}></Header>
+      </ScrollView> : <ScrollView style={styles.scrollView}> 
+      
         <View >
           <Text style={styles.title}>Veuillez changer les informations de votre comptes</Text>
+          <View style={styles.avatarContainer}>
           <TouchableOpacity
-            style={styles.container}
+            
+
             onPress={handleSelectAvatarPress}>
             {form.avatar ? (
               <Image source={{uri: form.avatar}} style={styles.selectedImage} />
@@ -206,22 +222,26 @@ const setValues = ()=>{
               <Entypo size={16} name="camera" color={Colors.primary} />
             </View>
           </TouchableOpacity>
+          </View>
           {errors.avatar ? (
             <Text style={styles.error}>{errors.avatar}</Text>
           ) : null}
           <SimpleInput
+      style={styles.button}
             onChange={() => setErrors({...errors, firstname: ''})}
             onChangeText={(v) => setForm({...form, firstname: v})}
             placeholder={user && user.first_name}
             error={errors.firstname}
           />
           <SimpleInput
+          style={styles.button}
             onChange={() => setErrors({...errors, lastname: ''})}
             onChangeText={(v) => setForm({...form, lastname: v})}
             placeholder={user && user.last_name}
             error={errors.lastname}
           />
           <SimpleInput
+          style={styles.button}
             onPress={() => setShowDateTimePicker(true)}
             isEditable={false}
             onChange={() => setErrors({...errors, lastname: ''})}
@@ -229,22 +249,24 @@ const setValues = ()=>{
             placeholder="Birthdate"
             value={form.birthdate ? moment(form.birthdate).format('ll') : user.birthdate.slice(0,10)}
             error={errors.birthdate ? 'The fiels is required' : ''}
-
           />
           <SimpleInput
+          style={styles.button}
             onChange={() => setErrors({...errors, phoneNumber: ''})}
             onChangeText={(v) => setForm({...form, phoneNumber: v})}
-            placeholder="Phone Number"
+            placeholder={user && user.phoneNumber}
             error={errors.phoneNumber}
 
           />
           <SimpleInput
+          style={styles.button}
             onChange={() => setErrors({...errors, email: ''})}
             onChangeText={(v) => setForm({...form, email: v.toLowerCase()})}
             placeholder={user && user.email}
             error={errors.email}
           />
           <SimpleInput
+          style={styles.button}
             onChange={() => setErrors({...errors, password: ''})}
             onChangeText={(v) => setForm({...form, password: v})}
             placeholder="Password"
@@ -252,6 +274,7 @@ const setValues = ()=>{
             error={errors.password}
           />
           <SimpleInput
+          style={styles.button}
             onChange={() => setErrors({...errors, confirmPassword: ''})}
             onChangeText={(v) => setForm({...form, confirmPassword: v})}
             placeholder="Confirmation password"
@@ -259,6 +282,7 @@ const setValues = ()=>{
             error={errors.confirmPassword}
           />
           <SimpleInput
+          style={styles.button}
             onChangeText={(v) => setForm({...form, description: v})}
             placeholder={user && user.description}
             error={errors.description}
@@ -266,11 +290,12 @@ const setValues = ()=>{
             numberOfLines={1}
           />
 
+          
         </View>
       </ScrollView>
     }{user && <DateTimePickerModal
       isVisible={showDateTimePicker}
-
+      
       date={form.birthdate ? form.birthdate : user.birthdate}
       mode="date"
       onConfirm={handleConfirmDatePress}
@@ -368,6 +393,17 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
+    position: 'relative',
+    backgroundColor: Colors.background,
+  },
+  
+
+  scrollView: {
+    flex: 1,
+    backgroundColor: Colors.background,
+    borderTopLeftRadius: 40,
+    borderTopRightRadius: 40,
+    paddingTop: 40,
     paddingHorizontal: Layout.padding,
     justifyContent: 'center',
     alignItems: 'center',
@@ -378,7 +414,7 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: 'poppins-bold',
     fontSize: 18,
-    color: Colors.primary,
+    color: Colors.dark,
     paddingBottom: 20,
     marginLeft: 10,
     marginTop: 20
@@ -386,7 +422,7 @@ const styles = StyleSheet.create({
   subtitle: {
     fontFamily: 'poppins-bold',
     fontSize: 12,
-    color: Colors.primary,
+    color: Colors.dark,
     paddingVertical: 20,
     paddingLeft: Layout.padding,
     textAlign:"right",
