@@ -11,6 +11,8 @@ import {
 import isEmail from 'validator/lib/isEmail';
 import {Entypo} from '@expo/vector-icons';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
+
+import Carousel from 'react-native-snap-carousel';
 import {StackNavigationProp} from '@react-navigation/stack';
 import i18n from 'i18n-js';
 import SimpleInput from '../components/SimpleInput';
@@ -19,11 +21,16 @@ import moment from 'moment';
 import Header from '../components/Header';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
+
+import CardWithRate from '../components/CardWithRate';
 import {HomeParamList, User,SignupForm} from '../types';
+import {categories} from '../mocks';
 import {getUser,modifyUser} from '../api/customer';
 import * as ImagePicker from 'expo-image-picker';
 
+import Button from '../components/Button';
 import ProfilText from '../components/ProfilText';
+import { State } from 'react-native-gesture-handler';
 
 type RootScreenNavigationProp = StackNavigationProp<HomeParamList, 'Profil'>;
 
@@ -50,7 +57,6 @@ const ProfilScreen = (props: Props) => {
 
   const [errors, setErrors] = useState<SignupForm>(input);
   const [showDateTimePicker, setShowDateTimePicker] = useState<boolean>(false);
-
 
   useEffect(() => {
     const getUservar = async () => setUser(await getUser());
@@ -96,12 +102,13 @@ const ProfilScreen = (props: Props) => {
     }
     setErrors(e);
 
+    
     return isValid;
   };
-
+  
   const handleSigninPress = async () => {
     const isFormValid = verifyForm();
-
+    
     if (isFormValid) {
       try {
         const changeUser = async () => await modifyUser(form,user._id);
@@ -132,9 +139,10 @@ const ProfilScreen = (props: Props) => {
 
   const handleConfirmDatePress = (value: Date) => {
 
+    
     setErrors({...errors, birthdate: undefined});
     setForm({...form, birthdate: value});
-
+    
     setShowDateTimePicker(false);
   };
 const setValues = ()=>{
@@ -147,13 +155,16 @@ const setValues = ()=>{
   form.birthdate = new Date(user.birthdate) ;    
 
 
-
+  
+  
+  
 
 }
-
+  
   const handleModify = () => {
-
+    
     if( allowModification){
+     
 
       setAllowModification(false);
       setValues()  ;
@@ -161,6 +172,7 @@ const setValues = ()=>{
       handleSigninPress();
       }
   };
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -175,6 +187,7 @@ const setValues = ()=>{
 
 
         {user && <View style={styles.avatarContainer}>
+
             <Image
                 source={{uri: user.avatar}}
                 style={{width: 150, height: 150, borderRadius: 150/ 2}}
@@ -279,32 +292,92 @@ const setValues = ()=>{
             numberOfLines={1}
           />
 
-        </View>
-      </ScrollView>
-    }{user && <DateTimePickerModal
-      isVisible={showDateTimePicker}
-
-      date={form.birthdate ? form.birthdate : user.birthdate}
-      mode="date"
-      onConfirm={handleConfirmDatePress}
-      onCancel={() => setShowDateTimePicker(false)}
-      customConfirmButtonIOS={({onPress}) => (
-        <TouchableOpacity onPress={onPress}>
-          <Text style={styles.customConfirmButton}>Confirmer</Text>
-        </TouchableOpacity>
-      )}
-      customCancelButtonIOS={({onPress}) => (
-        <TouchableOpacity onPress={onPress}>
-          <Text style={styles.customCancelButton}>Annuler</Text>
-        </TouchableOpacity>
-      )}
-    />}
-    </SafeAreaView>
-  );
+      </View>
+      </ScrollView> 
+      
+      }
+      </SafeAreaView>
+      );
 };
 
 const styles = StyleSheet.create({
   flex: {
+
+    flex: 1,
+    position: 'relative',
+    backgroundColor: Colors.background,
+  },
+  text: {
+    fontFamily: 'poppins',
+    fontSize: 14,
+    color: Colors.primary,
+  },
+  underline: {
+    textDecorationLine: 'underline',
+  },
+  button: {
+    marginVertical: 20,
+  },
+  avatarContainer: {
+    position: 'relative',
+    maxWidth: 70,
+    height: 70,
+    marginVertical: 10,
+    paddingVertical: 20,
+    borderRadius: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  avatar: {
+    width: 50,
+    height: 50,
+  },
+  selectedImage: {
+    width: 70,
+    height: 70,
+    borderRadius: 20,
+  },
+  cameraIcon: {
+    position: 'absolute',
+    right: -10,
+    bottom: 0,
+    borderRadius: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 5,
+    backgroundColor: Colors.white,
+    shadowColor: '#2d2d2d',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    fontFamily: 'poppins',
+    shadowOpacity: 0.15,
+    shadowRadius: 3.84,
+  },
+  customConfirmButton: {
+    padding: 20,
+    fontFamily: 'poppins-bold',
+    textAlign: 'center',
+    color: Colors.white,
+    backgroundColor: Colors.primary,
+  },
+  customCancelButton: {
+    padding: 20,
+    marginBottom: 30,
+    fontFamily: 'poppins-bold',
+    textAlign: 'center',
+    color: Colors.primary,
+    backgroundColor: Colors.white,
+    borderRadius: 15,
+    overflow: 'hidden',
+  },
+  error: {
+    paddingBottom: 10,
+    color: Colors.error,
+    fontFamily: 'poppins',
+  },
+  container: {
     flex: 1,
     position: 'relative',
     backgroundColor: Colors.background,

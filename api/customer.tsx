@@ -3,6 +3,7 @@ import axios, {AxiosResponse} from 'axios';
 import * as SecureStore from 'expo-secure-store';
 import {Place, SignupForm, User} from '../types';
 
+
 export const getUser = async () => {
   const token = await SecureStore.getItemAsync('access-token');
   return await axios
@@ -12,6 +13,8 @@ export const getUser = async () => {
       },
     })
     .then((response: AxiosResponse<any>) => {
+      console.log(response.data._id);
+      
       return response.data;
     })
     .catch((err) => {
@@ -147,8 +150,6 @@ export const getInnactivePromos = async () => {
   
   return await axios
   .post( url,
-    //"http://localhost:3000/customers/update?id=609147e8d9812e8d373f0846",
-    //"http://localhost:3000/auth/register",
     {
       code:promoId
     },

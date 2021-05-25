@@ -28,6 +28,7 @@ const Header = (props: Props) => {
     rightText,
     onActionTap,
   } = props;
+
   const navigation = useNavigation();
 
   const handleBackPress = () => {
@@ -69,6 +70,7 @@ const Header = (props: Props) => {
           <Text style={styles.button}>{rightText}</Text>
         </TouchableOpacity>
       )}
+
     </View>
   );
 };

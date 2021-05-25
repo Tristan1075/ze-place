@@ -66,6 +66,7 @@ const ProfilListScreen = (props: Props) => {
         />
       </View>
       </ScrollView>
+
     </SafeAreaView>
   );
 };
