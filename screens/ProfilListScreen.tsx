@@ -1,18 +1,30 @@
-import React, {useEffect} from 'react';
-import {SafeAreaView, StyleSheet, View, ScrollView} from 'react-native';
+
+import React, {useState, useEffect} from 'react';
+import {
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  Image,
+  ScrollView,
+} from 'react-native';
+import Carousel from 'react-native-snap-carousel';
 import {StackNavigationProp} from '@react-navigation/stack';
+import * as SecureStore from 'expo-secure-store';
 import i18n from 'i18n-js';
 
 import Header from '../components/Header';
+import SquaredButton from '../components/SquaredButton';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
-import {RootStackParamList} from '../types';
+import CardWithRate from '../components/CardWithRate';
+import { PlaceType, RootStackParamList} from '../types';
+import {categories} from '../mocks';
+import {getAllPlaces} from '../api/places';
 import Button from '../components/Button';
 
-type RootScreenNavigationProp = StackNavigationProp<
-  RootStackParamList,
-  'ProfilList'
->;
+type RootScreenNavigationProp = StackNavigationProp<RootStackParamList, 'ProfilList'>;
 
 type Props = {
   navigation: RootScreenNavigationProp;
@@ -20,6 +32,7 @@ type Props = {
 
 const ProfilListScreen = (props: Props) => {
   const {navigation} = props;
+<<<<<<< HEAD
   useEffect(() => {}, []);
 
   const handleProfilpress = () => {
@@ -67,6 +80,7 @@ const ProfilListScreen = (props: Props) => {
       </View>
       </ScrollView>
 
+
     </SafeAreaView>
   );
 };
@@ -83,6 +97,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 40,
     borderTopRightRadius: 40,
     paddingTop: 40,
+    paddingHorizontal: Layout.padding,
   },
   row: {
     flex: 1,
@@ -93,6 +108,7 @@ const styles = StyleSheet.create({
     paddingVertical: 30,
     backgroundColor: Colors.background,
   }
+
 });
 
 export default ProfilListScreen;

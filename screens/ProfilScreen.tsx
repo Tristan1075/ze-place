@@ -4,6 +4,8 @@ import {
   StyleSheet,
   Text,
   View,
+
+  TextInput,
   Image,
   ScrollView,
   TouchableOpacity,
@@ -14,14 +16,16 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 import Carousel from 'react-native-snap-carousel';
 import {StackNavigationProp} from '@react-navigation/stack';
+import * as SecureStore from 'expo-secure-store';
 import i18n from 'i18n-js';
 import SimpleInput from '../components/SimpleInput';
 import moment from 'moment';
 
 import Header from '../components/Header';
+
+import SquaredButton from '../components/SquaredButton';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
-
 import CardWithRate from '../components/CardWithRate';
 import {HomeParamList, User,SignupForm} from '../types';
 import {categories} from '../mocks';
@@ -153,12 +157,7 @@ const setValues = ()=>{
   form.email = user.email;
   form.description = user.description;
   form.birthdate = new Date(user.birthdate) ;    
-
-
-  
-  
-  
-
+    
 }
   
   const handleModify = () => {
@@ -172,8 +171,6 @@ const setValues = ()=>{
       handleSigninPress();
       }
   };
-
-
   return (
     <SafeAreaView style={styles.container}>
      
@@ -188,10 +185,12 @@ const setValues = ()=>{
 
         {user && <View style={styles.avatarContainer}>
 
+
             <Image
                 source={{uri: user.avatar}}
                 style={{width: 150, height: 150, borderRadius: 150/ 2}}
             />
+
 
         </View>}
         <Text style={styles.title}>{i18n.t('personalInfo')}</Text>
@@ -212,6 +211,7 @@ const setValues = ()=>{
           <View style={styles.avatarContainer}>
           <TouchableOpacity
             
+
             onPress={handleSelectAvatarPress}>
             {form.avatar ? (
               <Image source={{uri: form.avatar}} style={styles.selectedImage} />
@@ -227,7 +227,6 @@ const setValues = ()=>{
             <Text style={styles.error}>{errors.avatar}</Text>
           ) : null}
           <SimpleInput
-
       style={styles.button}
             onChange={() => setErrors({...errors, firstname: ''})}
             onChangeText={(v) => setForm({...form, firstname: v})}
@@ -250,7 +249,6 @@ const setValues = ()=>{
             placeholder="Birthdate"
             value={form.birthdate ? moment(form.birthdate).format('ll') : user.birthdate.slice(0,10)}
             error={errors.birthdate ? 'The fiels is required' : ''}
-
           />
           <SimpleInput
           style={styles.button}
@@ -292,17 +290,33 @@ const setValues = ()=>{
             numberOfLines={1}
           />
 
-      </View>
-      </ScrollView> 
+          
+        </View>
+      </ScrollView>
+    }{user && <DateTimePickerModal
+      isVisible={showDateTimePicker}
       
-      }
-      </SafeAreaView>
-      );
+      date={form.birthdate ? form.birthdate : user.birthdate}
+      mode="date"
+      onConfirm={handleConfirmDatePress}
+      onCancel={() => setShowDateTimePicker(false)}
+      customConfirmButtonIOS={({onPress}) => (
+        <TouchableOpacity onPress={onPress}>
+          <Text style={styles.customConfirmButton}>Confirmer</Text>
+        </TouchableOpacity>
+      )}
+      customCancelButtonIOS={({onPress}) => (
+        <TouchableOpacity onPress={onPress}>
+          <Text style={styles.customCancelButton}>Annuler</Text>
+        </TouchableOpacity>
+      )}
+    />}
+    </SafeAreaView>
+  );
 };
 
 const styles = StyleSheet.create({
   flex: {
-
     flex: 1,
     position: 'relative',
     backgroundColor: Colors.background,
@@ -382,83 +396,17 @@ const styles = StyleSheet.create({
     position: 'relative',
     backgroundColor: Colors.background,
   },
-  text: {
-    fontFamily: 'poppins',
-    fontSize: 14,
-    color: Colors.dark,
-  },
-  underline: {
-    textDecorationLine: 'underline',
-  },
-  button: {
-    paddingVertical: 20,
-    paddingHorizontal: 20,
-  },
-  avatarContainer: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-  },
-  avatar: {
-    width: 50,
-    height: 50,
-  },
-  selectedImage: {
-    width: 70,
-    height: 70,
-    borderRadius: 20,
-  },
-  cameraIcon: {
-    position: 'absolute',
-    right: -10,
-    bottom: 0,
-    borderRadius: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 5,
-    backgroundColor: Colors.white,
-    shadowColor: '#2d2d2d',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    fontFamily: 'poppins',
-    shadowOpacity: 0.15,
-    shadowRadius: 3.84,
-  },
-  customConfirmButton: {
-    padding: 20,
-    fontFamily: 'poppins-bold',
-    textAlign: 'center',
-    color: Colors.white,
-    backgroundColor: Colors.primary,
-  },
-  customCancelButton: {
-    padding: 20,
-    marginBottom: 30,
-    fontFamily: 'poppins-bold',
-    textAlign: 'center',
-    color: Colors.primary,
-    backgroundColor: Colors.white,
-    borderRadius: 15,
-    overflow: 'hidden',
-  },
-  error: {
-    paddingBottom: 10,
-    color: Colors.error,
-    fontFamily: 'poppins',
-  },
-  container: {
-    flex: 1,
-    backgroundColor: Colors.dark,
-    paddingTop: 130,
-  },
+  
+
   scrollView: {
     flex: 1,
     backgroundColor: Colors.background,
     borderTopLeftRadius: 40,
     borderTopRightRadius: 40,
     paddingTop: 40,
+    paddingHorizontal: Layout.padding,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   row: {
     flex: 1,

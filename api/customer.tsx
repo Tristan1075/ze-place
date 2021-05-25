@@ -1,7 +1,8 @@
-import {API_URL} from '@env';
+
+import {Place, SignupForm, User} from '../types';
+import {API_URL, API_TOKEN} from '@env';
 import axios, {AxiosResponse} from 'axios';
 import * as SecureStore from 'expo-secure-store';
-import {Place, SignupForm, User} from '../types';
 
 
 export const getUser = async () => {
@@ -190,14 +191,11 @@ export const addPromoCode = async ( promoTitle: string) =>{
     )
     .then((response: AxiosResponse<any>) => {
       console.log(response.data);
-      
       return response.data;
     })
     .catch((err) => {
       console.log(err);
+      
       return Promise.reject(err);
     });
-  
-
-
-}
+  };
