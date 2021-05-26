@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext} from 'react';
+import React, {useState, useEffect, useContext, useCallback} from 'react';
 import {
   StyleSheet,
   Text,
@@ -23,7 +23,7 @@ import DescriptionBloc from '../components/DescriptionBloc';
 import SimpleInput from '../components/SimpleInput';
 import TitleWithDescription from '../components/TitleWithDescription';
 import PlaceCard from '../components/PlaceCard';
-import {getUser} from '../api/customer';
+import {addFavorite, getUser, removeFavorite} from '../api/customer';
 import {Ionicons} from '@expo/vector-icons';
 import {ModalContext} from '../providers/modalContext';
 import SearchFilterScreen from './SearchFilterScreen';
@@ -41,14 +41,14 @@ const HomeScreen = (props: Props) => {
   const {handleModal} = useContext(ModalContext);
   const [user, setUser] = useState<User>();
 
-  useEffect(() => {
-    const init = async () => {
-      setPlaces(await getAllPlaces());
-      setUser(await getUser());
-    };
-
-    init();
+  const init = useCallback(async () => {
+    setPlaces(await getAllPlaces());
+    setUser(await getUser());
   }, []);
+
+  useEffect(() => {
+    init();
+  }, [init]);
 
   const handleDisconnectPress = async () => {
     await SecureStore.deleteItemAsync('access-token');
@@ -82,19 +82,38 @@ const HomeScreen = (props: Props) => {
     handleModal();
   };
 
+  const handleFavoritePress = async (p: Place) => {
+    if (user) {
+      const isFavorite = Boolean(
+        user.favorites.find((foundPlace) => foundPlace._id === p._id),
+      );
+      isFavorite ? removeFavorite(p) : addFavorite(p);
+      await init();
+    }
+  };
+
   const renderCarouselItem = ({item}: {item: Place}) => {
     return <CardWithRate place={item} onPress={() => handlePlacePress(item)} />;
   };
 
-  const renderListItem = ({item, index}: {item: Place; index: number}) => (
-    <View style={styles.paddingHorizontal}>
-      <PlaceCard
-        key={index}
-        place={item}
-        onPress={() => handlePlacePress(item)}
-      />
-    </View>
-  );
+  const renderListItem = ({item, index}: {item: Place; index: number}) => {
+    if (user) {
+      const isFavorite = Boolean(
+        user.favorites.find((foundPlace) => foundPlace._id === item._id),
+      );
+      return (
+        <View style={styles.paddingHorizontal}>
+          <PlaceCard
+            key={index}
+            place={item}
+            onPress={() => handlePlacePress(item)}
+            onFavoritePress={handleFavoritePress}
+            isFavorite={isFavorite}
+          />
+        </View>
+      );
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>

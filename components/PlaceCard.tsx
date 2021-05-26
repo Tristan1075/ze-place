@@ -6,19 +6,16 @@ import Colors from '../constants/Colors';
 import {Place} from '../types';
 import {Rating} from 'react-native-ratings';
 import Layout from '../constants/Layout';
-import {touchFavorite} from '../api/customer';
 
 type Props = {
   onPress: () => void;
   place: Place;
+  onFavoritePress: (place: Place) => void;
+  isFavorite: boolean;
 };
 
 const PlaceCard = (props: Props) => {
-  const {place, onPress} = props;
-
-  const handleAddFavorite = (place: Place) => {
-    touchFavorite(place);
-  };
+  const {place, onPress, onFavoritePress, isFavorite} = props;
 
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
@@ -33,11 +30,11 @@ const PlaceCard = (props: Props) => {
       <View style={styles.informations}>
         <View style={styles.row}>
           <Text style={styles.title}>{place.title}</Text>
-          <TouchableOpacity onPress={() => handleAddFavorite(place)}>
+          <TouchableOpacity onPress={() => onFavoritePress(place)}>
             <Ionicons
               size={28}
               name="heart-circle"
-              color={Colors.primary}
+              color={isFavorite ? Colors.primary : Colors.gray}
               style={styles.locationIcon}
             />
           </TouchableOpacity>
