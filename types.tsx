@@ -164,8 +164,8 @@ export type Location = {
   postalCode?: string;
   city?: string;
   country?: string;
-  longitude?: string;
-  latitude?: string;
+  longitude?: number;
+  latitude?: number;
 };
 
 export type CreatePlaceForm = {
@@ -187,7 +187,6 @@ export type CreatePlaceForm = {
   authorizeSmoking: boolean;
   authorizeFire: boolean;
   authorizeFoodAndDrink: boolean;
-
 };
 
 export type FilterForm = {
@@ -196,4 +195,8 @@ export type FilterForm = {
   surface?: string;
   features: Array<FeatureType>;
   location?: Location;
+};
+export type Coords = {
+  longitude: number;
+  latitude: number;
 };

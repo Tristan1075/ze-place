@@ -375,9 +375,9 @@ const styles = StyleSheet.create({
     color: Colors.secondary,
   },
   map: {
-    height: 120,
+    height: 180,
     borderRadius: 20,
-    marginTop: 20,
+    marginTop: 10,
   },
   seeMore: {
     paddingTop: 5,
