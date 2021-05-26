@@ -108,14 +108,10 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   shadow: {
-    shadowColor: '#2d2d2d',
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowOpacity: 0.4,
-    shadowRadius: 1.84,
-    elevation: 5,
+    ...Layout.shadow,
+    backgroundColor: Colors.white,
+    padding: 2,
+    borderRadius: 10,
   },
   title: {
     paddingLeft: 20,

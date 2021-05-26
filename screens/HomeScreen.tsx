@@ -23,7 +23,6 @@ import SimpleInput from '../components/SimpleInput';
 import TitleWithDescription from '../components/TitleWithDescription';
 import PlaceCard from '../components/PlaceCard';
 import {getUser} from '../api/customer';
-import {placesMock} from '../mocks';
 import {Ionicons} from '@expo/vector-icons';
 import {ModalContext} from '../providers/modalContext';
 import SearchFilterScreen from './SearchFilterScreen';
@@ -37,7 +36,7 @@ type Props = {
 
 const HomeScreen = (props: Props) => {
   const {navigation} = props;
-  const [places, setPlaces] = useState<Array<PlaceType>>([]);
+  const [places, setPlaces] = useState<Array<Place>>([]);
   const {handleModal} = useContext(ModalContext);
   const [user, setUser] = useState<User>();
 
@@ -87,7 +86,7 @@ const HomeScreen = (props: Props) => {
       <PlaceCard
         key={index}
         place={item}
-        onPress={() => handleItemPress(item)}
+        onPress={() => handlePlacePress(item)}
       />
     </View>
   );

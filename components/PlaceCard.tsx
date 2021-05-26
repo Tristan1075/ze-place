@@ -1,11 +1,11 @@
 import React from 'react';
 import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 import {Ionicons} from '@expo/vector-icons';
-import {useNavigation} from '@react-navigation/native';
 
 import Colors from '../constants/Colors';
 import {Place} from '../types';
 import {Rating} from 'react-native-ratings';
+import Layout from '../constants/Layout';
 
 type Props = {
   onPress: () => void;
@@ -13,15 +13,10 @@ type Props = {
 };
 
 const PlaceCard = (props: Props) => {
-  const {place} = props;
-  const navigation = useNavigation();
-
-  const handlePlacePress = () => {
-    navigation.navigate('PlaceDetail', {place: place});
-  };
+  const {place, onPress} = props;
 
   return (
-    <TouchableOpacity style={styles.container} onPress={handlePlacePress}>
+    <TouchableOpacity style={styles.container} onPress={onPress}>
       <Image
         source={{
           uri: place.images[0]
@@ -72,6 +67,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 20,
+    backgroundColor: Colors.white,
+    borderRadius: 10,
+    ...Layout.shadow,
+    overflow: 'hidden',
   },
   row: {
     flexDirection: 'row',
@@ -84,7 +83,6 @@ const styles = StyleSheet.create({
   },
   image: {
     width: 120,
-    borderRadius: 10,
     height: 120,
     marginRight: 10,
   },
