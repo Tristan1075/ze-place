@@ -1,32 +1,24 @@
 import React from 'react';
 import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 import {Ionicons} from '@expo/vector-icons';
-import {useNavigation} from '@react-navigation/native';
 
 import Colors from '../constants/Colors';
 import {Place} from '../types';
 import {Rating} from 'react-native-ratings';
-import {touchFavorite} from '../api/customer';
+import Layout from '../constants/Layout';
 
 type Props = {
   onPress: () => void;
   place: Place;
+  onFavoritePress: (place: Place) => void;
+  isFavorite: boolean;
 };
 
 const PlaceCard = (props: Props) => {
-  const {place} = props;
-  const navigation = useNavigation();
-
-  const handlePlacePress = () => {
-    navigation.navigate('PlaceDetail', {place: place});
-  };
-
-  const handleAddFavorite = (place: Place) => {
-    touchFavorite(place);
-  };
+  const {place, onPress, onFavoritePress, isFavorite} = props;
 
   return (
-    <TouchableOpacity style={styles.container} onPress={handlePlacePress}>
+    <TouchableOpacity style={styles.container} onPress={onPress}>
       <Image
         source={{
           uri: place.images[0]
@@ -38,11 +30,11 @@ const PlaceCard = (props: Props) => {
       <View style={styles.informations}>
         <View style={styles.row}>
           <Text style={styles.title}>{place.title}</Text>
-          <TouchableOpacity onPress={() => handleAddFavorite(place)}>
+          <TouchableOpacity onPress={() => onFavoritePress(place)}>
             <Ionicons
               size={28}
               name="heart-circle"
-              color={Colors.primary}
+              color={isFavorite ? Colors.primary : Colors.gray}
               style={styles.locationIcon}
             />
           </TouchableOpacity>
@@ -80,6 +72,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 20,
+    backgroundColor: Colors.white,
+    borderRadius: 10,
+    ...Layout.shadow,
+    overflow: 'hidden',
   },
   row: {
     flexDirection: 'row',
@@ -92,7 +88,6 @@ const styles = StyleSheet.create({
   },
   image: {
     width: 120,
-    borderRadius: 10,
     height: 120,
     marginRight: 10,
   },

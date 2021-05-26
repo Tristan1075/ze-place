@@ -1,16 +1,12 @@
-import React, {useState, useEffect, useContext} from 'react';
+import React, {useState, useEffect, useContext, useCallback} from 'react';
 import {
   StyleSheet,
   Text,
   View,
   ScrollView,
-SafeAreaView,
-  TouchableOpacity,
-  TextInput,
-
+  SafeAreaView,
   FlatList,
   Image,
-
 } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 import {StackNavigationProp} from '@react-navigation/stack';
@@ -18,24 +14,16 @@ import i18n from 'i18n-js';
 import * as SecureStore from 'expo-secure-store';
 
 import Header from '../components/Header';
-import SquaredButton from '../components/SquaredButton'
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
 import CardWithRate from '../components/CardWithRate';
-import {FilterForm, HomeParamList, Place, PlaceType, User} from '../types';
-import {categories} from '../mocks';
+import {FilterForm, HomeParamList, Place, User} from '../types';
 import {getAllPlaces} from '../api/places';
-import { setupMaster } from 'cluster';
-import { getFocusedRouteNameFromRoute } from '@react-navigation/core';
-
 import DescriptionBloc from '../components/DescriptionBloc';
 import SimpleInput from '../components/SimpleInput';
 import TitleWithDescription from '../components/TitleWithDescription';
 import PlaceCard from '../components/PlaceCard';
-import {getUser} from '../api/customer';
-
-
-import {placesMock} from '../mocks';
+import {addFavorite, getUser, removeFavorite} from '../api/customer';
 import {Ionicons} from '@expo/vector-icons';
 import {ModalContext} from '../providers/modalContext';
 import SearchFilterScreen from './SearchFilterScreen';
@@ -53,15 +41,14 @@ const HomeScreen = (props: Props) => {
   const {handleModal} = useContext(ModalContext);
   const [user, setUser] = useState<User>();
 
-  useEffect(() => {
-    const init = async () => {
-      setPlaces(await getAllPlaces());
-      setUser(await getUser());
-    };
-
-    init();    
-    
+  const init = useCallback(async () => {
+    setPlaces(await getAllPlaces());
+    setUser(await getUser());
   }, []);
+
+  useEffect(() => {
+    init();
+  }, [init]);
 
   const handleDisconnectPress = async () => {
     await SecureStore.deleteItemAsync('access-token');
@@ -78,7 +65,6 @@ const HomeScreen = (props: Props) => {
   };
   const handleProfilOption = () => {
     navigation.navigate('Signin');
-    
   };
 
   const handleCreatePlacePress = () => {
@@ -96,74 +82,96 @@ const HomeScreen = (props: Props) => {
     handleModal();
   };
 
+  const handleFavoritePress = async (p: Place) => {
+    if (user) {
+      const isFavorite = Boolean(
+        user.favorites.find((foundPlace) => foundPlace._id === p._id),
+      );
+      isFavorite ? removeFavorite(p) : addFavorite(p);
+      await init();
+    }
+  };
+
   const renderCarouselItem = ({item}: {item: Place}) => {
     return <CardWithRate place={item} onPress={() => handlePlacePress(item)} />;
   };
 
-  const renderListItem = ({item, index}: {item: Place; index: number}) => (
-    <View style={styles.paddingHorizontal}>
-      <PlaceCard
-        key={index}
-        place={item}
-        onPress={() => handleItemPress(item)}
-      />
-    </View>
-  );
+  const renderListItem = ({item, index}: {item: Place; index: number}) => {
+    if (user) {
+      const isFavorite = Boolean(
+        user.favorites.find((foundPlace) => foundPlace._id === item._id),
+      );
+      return (
+        <View style={styles.paddingHorizontal}>
+          <PlaceCard
+            key={index}
+            place={item}
+            onPress={() => handlePlacePress(item)}
+            onFavoritePress={handleFavoritePress}
+            isFavorite={isFavorite}
+          />
+        </View>
+      );
+    }
+  };
 
   return (
-
     <SafeAreaView style={styles.container}>
-
-    <ScrollView showsVerticalScrollIndicator={false} style={styles.scrollView}>
-      <Image
-        source={require('../assets/images/home_banner.jpg')}
-        style={styles.imageBanner}
-      />
-      <View style={styles.overlay} />
-      <View style={styles.container}>
-
-      <Header type='menu' showProfil={true}  profilPicture={user && user.avatar}></Header>
-        <Text style={styles.title}>{i18n.t('discover')}</Text>
-        <SimpleInput
-          isEditable={false}
-          style={styles.input}
-          placeholder="Search"
-          suffix={<Ionicons name="search" size={20} color={Colors.gray} />}
-        />
-      </View>
-      <TitleWithDescription
-        title="Near you"
-        description="Find nearby you the available places to rent"
-        style={styles.padding}
-        actionText="See map"
-        actionIcon="map"
-      />
-      <Carousel
-        contentContainerCustomStyle={{paddingLeft: Layout.padding}}
-        useScrollView={true}
-        data={places}
-        renderItem={renderCarouselItem}
-        sliderWidth={Layout.window.width}
-        activeSlideAlignment="start"
-        itemWidth={220}
-      />
-      <DescriptionBloc onPress={handleCreatePlacePress} />
-      <TitleWithDescription
-        title="Announces"
-        description="Find nearby you the available places to rent"
-        style={styles.padding}
-        actionText="See more"
-        actionIcon="list"
-        onActionPress={showFilterModal}
-      />
-      <FlatList
-        data={places}
-        renderItem={renderListItem}
-        keyExtractor={(item) => item.id}
+      <ScrollView
         showsVerticalScrollIndicator={false}
-      />
-      <Button value="Disconnnect" onPress={handleDisconnectPress} />
-    </ScrollView>
+        style={styles.scrollView}>
+        <Image
+          source={require('../assets/images/home_banner.jpg')}
+          style={styles.imageBanner}
+        />
+        <View style={styles.overlay} />
+        <View style={styles.container}>
+          <Header
+            type="menu"
+            showProfil={true}
+            profilPicture={user && user.avatar}
+          />
+          <Text style={styles.title}>{i18n.t('discover')}</Text>
+          <SimpleInput
+            isEditable={false}
+            style={styles.input}
+            placeholder="Search"
+            suffix={<Ionicons name="search" size={20} color={Colors.gray} />}
+          />
+        </View>
+        <TitleWithDescription
+          title="Near you"
+          description="Find nearby you the available places to rent"
+          style={styles.padding}
+          actionText="See map"
+          actionIcon="map"
+        />
+        <Carousel
+          contentContainerCustomStyle={{paddingLeft: Layout.padding}}
+          useScrollView={true}
+          data={places}
+          renderItem={renderCarouselItem}
+          sliderWidth={Layout.window.width}
+          activeSlideAlignment="start"
+          itemWidth={220}
+        />
+        <DescriptionBloc onPress={handleCreatePlacePress} />
+        <TitleWithDescription
+          title="Announces"
+          description="Find nearby you the available places to rent"
+          style={styles.padding}
+          actionText="See more"
+          actionIcon="list"
+          onActionPress={showFilterModal}
+        />
+        <FlatList
+          data={places}
+          renderItem={renderListItem}
+          keyExtractor={(item) => item.id}
+          showsVerticalScrollIndicator={false}
+        />
+        <Button value="Disconnnect" onPress={handleDisconnectPress} />
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -215,7 +223,7 @@ const styles = StyleSheet.create({
     width: Layout.window.width,
     zIndex: 2,
   },
-    profil: {
+  profil: {
     width: 40,
     height: 40,
     borderRadius: 10,

@@ -38,22 +38,20 @@ export type MessagesParamList = {
 };
 
 export type User = {
-
-  _id:string;
+  _id: string;
   avatar: string;
   first_name: string;
   last_name: string;
   email: string;
   password: string;
-
   phoneNumber: string;
   birthdate: string;
   address: string;
   description: string;
   created_at: {type: Date; default: Date};
   favorites: Place[];
-  promoCode: String[],
-  historyCode: String[],
+  promoCode: String[];
+  historyCode: String[];
 };
 
 export type Place = {

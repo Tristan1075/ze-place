@@ -22,7 +22,7 @@ const CreatePlaceScreen = () => {
   const [exitModal, setExitModal] = useState<boolean>(false);
   const [createPlaceForm, setCreatePlaceForm] = useState<CreatePlaceForm>({
     title: undefined,
-    aboutMe: undefined,
+    aboutUser: undefined,
     location: undefined,
     surface: undefined,
     placeType: undefined,
