@@ -29,7 +29,6 @@ type Props = {
 const FavoritesScreen = (props: Props) => {
   const {navigation} = props;
   const [user, setUser] = useState<User>();
-  const places = user?.favorites;
   useEffect(() => {
     const init = async () => {
       setUser(await getUser());
@@ -41,8 +40,22 @@ const FavoritesScreen = (props: Props) => {
     navigation.navigate('PlaceDetail', {place: place});
   };
 
+  const handleFavoritePress = (place: Place) => {
+    if(user){
+      setUser({
+        ...user,
+        favorites: [...user.favorites, place],
+      });
+    }
+  }
+
   const renderItem = ({item, index}: {item: Place; index: number}) => (
-    <PlaceCard key={index} place={item} onPress={() => handleItemPress(item)} />
+    <PlaceCard
+      key={index}
+      place={item}
+      onFavoritePress={handleFavoritePress}
+      onPress={() => handleItemPress(item)}
+    />
   );
 
   return (
@@ -56,7 +69,7 @@ const FavoritesScreen = (props: Props) => {
           placeholderTextColor={Colors.gray}
         />
         <FlatList
-          data={places}
+          data={user?.favorites}
           renderItem={renderItem}
           keyExtractor={(item) => item._id}
           showsVerticalScrollIndicator={false}

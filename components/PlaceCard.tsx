@@ -9,20 +9,17 @@ import {Rating} from 'react-native-ratings';
 import {touchFavorite} from '../api/customer';
 
 type Props = {
+  onFavoritePress: (place: Place) => void;
   onPress: () => void;
   place: Place;
 };
 
 const PlaceCard = (props: Props) => {
-  const {place} = props;
+  const {place, onFavoritePress} = props;
   const navigation = useNavigation();
 
   const handlePlacePress = () => {
     navigation.navigate('PlaceDetail', {place: place});
-  };
-
-  const handleAddFavorite = (place: Place) => {
-    touchFavorite(place);
   };
 
   return (
@@ -38,7 +35,7 @@ const PlaceCard = (props: Props) => {
       <View style={styles.informations}>
         <View style={styles.row}>
           <Text style={styles.title}>{place.title}</Text>
-          <TouchableOpacity onPress={() => handleAddFavorite(place)}>
+          <TouchableOpacity onPress={() => onFavoritePress(place)}>
             <Ionicons
               size={28}
               name="heart-circle"
