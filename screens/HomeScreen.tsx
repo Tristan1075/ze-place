@@ -4,8 +4,13 @@ import {
   Text,
   View,
   ScrollView,
+SafeAreaView,
+  TouchableOpacity,
+  TextInput,
+
   FlatList,
   Image,
+
 } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 import {StackNavigationProp} from '@react-navigation/stack';
@@ -13,16 +18,23 @@ import i18n from 'i18n-js';
 import * as SecureStore from 'expo-secure-store';
 
 import Header from '../components/Header';
+import SquaredButton from '../components/SquaredButton'
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
 import CardWithRate from '../components/CardWithRate';
 import {FilterForm, HomeParamList, Place, PlaceType, User} from '../types';
+import {categories} from '../mocks';
 import {getAllPlaces} from '../api/places';
+import { setupMaster } from 'cluster';
+import { getFocusedRouteNameFromRoute } from '@react-navigation/core';
+
 import DescriptionBloc from '../components/DescriptionBloc';
 import SimpleInput from '../components/SimpleInput';
 import TitleWithDescription from '../components/TitleWithDescription';
 import PlaceCard from '../components/PlaceCard';
 import {getUser} from '../api/customer';
+
+
 import {placesMock} from '../mocks';
 import {Ionicons} from '@expo/vector-icons';
 import {ModalContext} from '../providers/modalContext';
@@ -46,7 +58,9 @@ const HomeScreen = (props: Props) => {
       setPlaces(await getAllPlaces());
       setUser(await getUser());
     };
-    init();
+
+    init();    
+    
   }, []);
 
   const handleDisconnectPress = async () => {
@@ -61,6 +75,10 @@ const HomeScreen = (props: Props) => {
 
   const handlePlacePress = (place: Place) => {
     navigation.navigate('PlaceDetail', {place: place});
+  };
+  const handleProfilOption = () => {
+    navigation.navigate('Signin');
+    
   };
 
   const handleCreatePlacePress = () => {
@@ -93,6 +111,9 @@ const HomeScreen = (props: Props) => {
   );
 
   return (
+
+    <SafeAreaView style={styles.container}>
+
     <ScrollView showsVerticalScrollIndicator={false} style={styles.scrollView}>
       <Image
         source={require('../assets/images/home_banner.jpg')}
@@ -100,11 +121,8 @@ const HomeScreen = (props: Props) => {
       />
       <View style={styles.overlay} />
       <View style={styles.container}>
-        <Header
-          type="menu"
-          showProfil={true}
-          profilPicture={user && user.avatar}
-        />
+
+      <Header type='menu' showProfil={true}  profilPicture={user && user.avatar}></Header>
         <Text style={styles.title}>{i18n.t('discover')}</Text>
         <SimpleInput
           isEditable={false}
@@ -146,6 +164,7 @@ const HomeScreen = (props: Props) => {
       />
       <Button value="Disconnnect" onPress={handleDisconnectPress} />
     </ScrollView>
+    </SafeAreaView>
   );
 };
 
@@ -195,6 +214,12 @@ const styles = StyleSheet.create({
     height: 360,
     width: Layout.window.width,
     zIndex: 2,
+  },
+    profil: {
+    width: 40,
+    height: 40,
+    borderRadius: 10,
+    alignSelf: 'flex-end',
   },
 });
 
