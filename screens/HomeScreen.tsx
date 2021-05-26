@@ -47,8 +47,9 @@ const HomeScreen = (props: Props) => {
   }, []);
 
   useEffect(() => {
-    init();
-  }, [init]);
+    console.log(user);
+    navigation.addListener('focus', init);
+  }, [init, navigation]);
 
   const handleDisconnectPress = async () => {
     await SecureStore.deleteItemAsync('access-token');
@@ -83,13 +84,11 @@ const HomeScreen = (props: Props) => {
   };
 
   const handleFavoritePress = async (p: Place) => {
-    if (user) {
-      const isFavorite = Boolean(
-        user.favorites.find((foundPlace) => foundPlace._id === p._id),
-      );
-      isFavorite ? removeFavorite(p) : addFavorite(p);
-      await init();
-    }
+    const isFavorite = Boolean(
+      user && user.favorites.find((foundPlace) => foundPlace._id === p._id),
+    );
+    isFavorite ? removeFavorite(p) : addFavorite(p);
+    await init();
   };
 
   const renderCarouselItem = ({item}: {item: Place}) => {
@@ -97,22 +96,20 @@ const HomeScreen = (props: Props) => {
   };
 
   const renderListItem = ({item, index}: {item: Place; index: number}) => {
-    if (user) {
-      const isFavorite = Boolean(
-        user.favorites.find((foundPlace) => foundPlace._id === item._id),
-      );
-      return (
-        <View style={styles.paddingHorizontal}>
-          <PlaceCard
-            key={index}
-            place={item}
-            onPress={() => handlePlacePress(item)}
-            onFavoritePress={handleFavoritePress}
-            isFavorite={isFavorite}
-          />
-        </View>
-      );
-    }
+    const isFavorite = Boolean(
+      user && user.favorites.find((foundPlace) => foundPlace._id === item._id),
+    );
+    return (
+      <View style={styles.paddingHorizontal} key={index}>
+        <PlaceCard
+          key={index}
+          place={item}
+          onPress={() => handlePlacePress(item)}
+          onFavoritePress={handleFavoritePress}
+          isFavorite={isFavorite}
+        />
+      </View>
+    );
   };
 
   return (

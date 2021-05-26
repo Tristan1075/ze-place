@@ -13,6 +13,8 @@ export const getAllPlaces = async () => {
       },
     })
     .then((response: AxiosResponse<any>) => {
+      console.log(token);
+      console.log(response.data);
       return response.data;
     })
     .catch((err) => {

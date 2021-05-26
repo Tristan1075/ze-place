@@ -8,7 +8,7 @@ import {RootStackParamList, SigninForm} from '../types';
 import Button from '../components/Button';
 import Colors from '../constants/Colors';
 import Header from '../components/Header';
-import {login} from '../api/auth';
+import {login, test} from '../api/auth';
 
 type RootScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -40,12 +40,6 @@ const SigninScreen = (props: Props) => {
     } catch (e) {
       setError(true);
       console.log(e);
-      navigation.dispatch(
-        CommonActions.reset({
-          index: 0,
-          routes: [{name: 'Tab'}],
-        }),
-      );
     }
   };
 

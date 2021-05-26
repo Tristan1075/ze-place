@@ -25,7 +25,7 @@ const CardWithRate = (props: Props) => {
         <Image
           source={{
             uri: place.images[0]
-              ? place.images[0].url
+              ? 'https://www.leden-spa-aqua-forme.fr/wp-content/uploads/2018/05/jk-placeholder-image.jpg'
               : 'https://www.leden-spa-aqua-forme.fr/wp-content/uploads/2018/05/jk-placeholder-image.jpg',
           }}
           style={styles.image}
