@@ -1,6 +1,7 @@
 import React from 'react';
 import {Text, StyleSheet, View} from 'react-native';
 import Colors from '../constants/Colors';
+import {Message} from '../types';
 type Props = {
   message: String;
   value: String;
@@ -28,7 +29,7 @@ const styles = StyleSheet.create({
     title: {
         fontFamily: 'playfair-bold',
         fontSize: 14,
-        color: Colors.primary,
+        color: Colors.gray,
         paddingBottom: 20,
         marginLeft: 20,
         marginTop: 20,
@@ -38,7 +39,7 @@ const styles = StyleSheet.create({
       subtitle: {
         fontFamily: 'playfair',
         fontSize: 14,        
-        color: Colors.primary,
+        color: Colors.gray,
         paddingBottom: 20,
         alignItems:'flex-end',
         marginTop: 20,

@@ -17,4 +17,8 @@ export default {
   validate: 'Validate',
   personalInfo: 'Personal information',
   connexionInfo: 'Connexion information',
+  promo: "Promotional code",
+  addCode: 'Add a new code',
+  actif: "Active promo",
+  innactif: "Innactive promo",
 } as LocalizationType;

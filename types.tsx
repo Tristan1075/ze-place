@@ -27,6 +27,10 @@ export type HomeParamList = {
 export type CreatePlaceParamList = {
   CreatePlace: undefined;
 };
+export type HeaderParamList = {
+  Home: undefined;
+  PlaceDetail: {place: PlaceType};
+};
 
 export type MessagesParamList = {
   Messages: undefined;
@@ -34,17 +38,22 @@ export type MessagesParamList = {
 };
 
 export type User = {
-  _id: string;
+
+  _id:string;
   avatar: string;
   first_name: string;
   last_name: string;
   email: string;
   password: string;
-  phone: string;
-  address: string;
+
+  phoneNumber: string;
   birthdate: string;
+  address: string;
   description: string;
   created_at: {type: Date; default: Date};
+  favorites: Place[];
+  promoCode: String[],
+  historyCode: String[],
 };
 
 export type Place = {
@@ -76,6 +85,15 @@ export type Review = {
   from: User;
   text: string;
   rate: Number;
+  created_at: {type: Date; default: Date};
+};
+
+export type Promo = {
+  name: string;
+  end_date: string;
+  start_date:string;
+  user_limit: Number;
+  value:Number
   created_at: {type: Date; default: Date};
 };
 

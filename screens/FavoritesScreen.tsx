@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -11,11 +11,11 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import i18n from 'i18n-js';
 
 import Header from '../components/Header';
-import {MessagesParamList, PlaceType} from '../types';
-import {placesMock} from '../mocks';
+import {MessagesParamList, Place, User} from '../types';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
 import PlaceCard from '../components/PlaceCard';
+import {getUser} from '../api/customer';
 
 type MessagesScreenNavigationProp = StackNavigationProp<
   MessagesParamList,
@@ -28,12 +28,20 @@ type Props = {
 
 const FavoritesScreen = (props: Props) => {
   const {navigation} = props;
+  const [user, setUser] = useState<User>();
+  const places = user?.favorites;
+  useEffect(() => {
+    const init = async () => {
+      setUser(await getUser());
+    };
+    init();
+  }, []);
 
-  const handleItemPress = (place: PlaceType) => {
+  const handleItemPress = (place: Place) => {
     navigation.navigate('PlaceDetail', {place: place});
   };
 
-  const renderItem = ({item, index}: {item: PlaceType; index: number}) => (
+  const renderItem = ({item, index}: {item: Place; index: number}) => (
     <PlaceCard key={index} place={item} onPress={() => handleItemPress(item)} />
   );
 
@@ -48,9 +56,9 @@ const FavoritesScreen = (props: Props) => {
           placeholderTextColor={Colors.gray}
         />
         <FlatList
-          data={placesMock}
+          data={places}
           renderItem={renderItem}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) => item._id}
           showsVerticalScrollIndicator={false}
         />
       </View>

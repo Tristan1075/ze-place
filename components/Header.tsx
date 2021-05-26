@@ -10,8 +10,9 @@ type Props = {
   type: 'back' | 'menu';
   showProfil?: boolean;
   title?: string;
-  profilPicture?: string;
-  onBackPress?: () => void;
+  profilPicture?: String;
+  button?: string;
+  onBackPress?: Function;
   color?: string;
   rightText?: string;
   onActionTap?: () => void;
@@ -28,6 +29,8 @@ const Header = (props: Props) => {
     rightText,
     onActionTap,
   } = props;
+
+
   const navigation = useNavigation();
 
   const handleBackPress = () => {
@@ -69,6 +72,7 @@ const Header = (props: Props) => {
           <Text style={styles.button}>{rightText}</Text>
         </TouchableOpacity>
       )}
+
     </View>
   );
 };
@@ -97,7 +101,7 @@ const styles = StyleSheet.create({
   button: {
     fontFamily: 'playfair-bold',
     fontSize: 16,
-    color: Colors.primary,
+    color: Colors.white,
     paddingVertical: 20,
     paddingLeft: Layout.padding,
     textAlign: 'right',

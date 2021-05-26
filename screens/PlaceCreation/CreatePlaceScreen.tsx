@@ -7,6 +7,7 @@ import {useNavigation} from '@react-navigation/native';
 import {ProgressSteps, ProgressStep} from 'react-native-progress-steps';
 import Button from '../../components/Button';
 
+
 import Header from '../../components/Header';
 import Colors from '../../constants/Colors';
 import {CreatePlaceForm} from '../../types';
