@@ -2,7 +2,7 @@ import {API_URL} from '@env';
 import axios, {AxiosResponse} from 'axios';
 import * as SecureStore from 'expo-secure-store';
 
-import {CreatePlaceForm, Place} from '../types';
+import {Coords, CreatePlaceForm, Place} from '../types';
 
 export const getAllPlaces = async () => {
   const token = await SecureStore.getItemAsync('access-token');
@@ -12,6 +12,32 @@ export const getAllPlaces = async () => {
         Authorization: `Bearer ${token}`,
       },
     })
+    .then((response: AxiosResponse<any>) => {
+      return response.data;
+    })
+    .catch((err) => {
+      return Promise.reject(err);
+    });
+};
+
+export const getPlacesNearbyCoordinates = async (
+  coords: Coords,
+  distance: number,
+) => {
+  const token = await SecureStore.getItemAsync('access-token');
+  return await axios
+    .post(
+      `${API_URL}/places`,
+      {
+        coords: coords,
+        distance: distance,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    )
     .then((response: AxiosResponse<any>) => {
       return response.data;
     })

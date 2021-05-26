@@ -1,14 +1,14 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {StyleSheet, View, Image} from 'react-native';
 import MapView, {Marker, PROVIDER_GOOGLE} from 'react-native-maps';
 import Carousel from 'react-native-snap-carousel';
 import {useNavigation} from '@react-navigation/native';
 
-import {getAllPlaces} from '../api/places';
+import {getPlacesNearbyCoordinates} from '../api/places';
 import PlaceCard from '../components/PlaceCard';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
-import {Place} from '../types';
+import {Coords, Place} from '../types';
 
 import {mapStyle} from '../utils/mapStyle';
 
@@ -32,37 +32,67 @@ const CustomMarker = () => {
   );
 };
 
+const initialCoords: Coords = {
+  longitude: 2.34767746925354,
+  latitude: 48.853797912597656,
+};
+
 const MapScreen = ({place}: Props) => {
   const {longitude, latitude} = place.location;
   const [places, setPlaces] = useState<Array<Place>>([]);
+  const [coords, setCoords] = useState<Coords>({
+    longitude: longitude || initialCoords.longitude,
+    latitude: latitude || initialCoords.latitude,
+  });
+  let mapRef: any;
 
   useEffect(() => {
     const init = async () => {
-      setPlaces(await getAllPlaces());
+      setPlaces(await getPlacesNearbyCoordinates(coords, 5000));
     };
     init();
-  }, []);
+  }, [coords]);
 
   const renderCarouselItem = ({item}: {item: Place}) => {
     return <PlaceCard place={item} />;
   };
 
+  const onRegionChange = (c: Coords) => {
+    setCoords({longitude: c.longitude, latitude: c.latitude});
+  };
+
+  const onItemSlide = (index: number) => {
+    mapRef.animateCamera({
+      center: {
+        longitude: places[index].location.longitude,
+        latitude: places[index].location.latitude,
+      },
+    });
+  };
+
   return (
     <View style={styles.flex}>
       <MapView
+        ref={(ref) => (mapRef = ref)}
         provider={PROVIDER_GOOGLE}
         style={styles.flex}
         showsUserLocation={true}
         showsMyLocationButton={true}
+        onRegionChange={onRegionChange}
         initialRegion={{
-          latitude: (latitude && parseFloat(latitude)) || 0,
-          longitude: (longitude && parseFloat(longitude)) || 0,
+          latitude: coords.latitude,
+          longitude: coords.longitude,
           latitudeDelta: 0.02,
           longitudeDelta: 0.02,
         }}>
-        <Marker coordinate={{longitude, latitude}}>
-          <CustomMarker />
-        </Marker>
+        {places.map((place: Place) => {
+          const {longitude, latitude} = place.location;
+          return (
+            <Marker coordinate={{longitude, latitude}}>
+              <CustomMarker />
+            </Marker>
+          );
+        })}
       </MapView>
       <View style={styles.carousel}>
         <Carousel
@@ -74,6 +104,7 @@ const MapScreen = ({place}: Props) => {
           inactiveSlideOpacity={0.9}
           activeSlideAlignment="start"
           itemWidth={Layout.window.width - 80}
+          onSnapToItem={onItemSlide}
         />
       </View>
     </View>
