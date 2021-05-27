@@ -6,7 +6,8 @@ export type RootStackParamList = {
   Signup: undefined;
   Tab: undefined;
   Profil: undefined;
-  ProfilList: undefined;
+  Menu: undefined;
+  PaymentMethods: undefined;
 };
 
 export type BottomTabParamList = {
@@ -89,9 +90,9 @@ export type Review = {
 export type Promo = {
   name: string;
   end_date: string;
-  start_date:string;
+  start_date: string;
   user_limit: Number;
-  value:Number
+  value: number;
   created_at: {type: Date; default: Date};
 };
 
@@ -164,8 +165,8 @@ export type Location = {
   postalCode?: string;
   city?: string;
   country?: string;
-  longitude?: number;
-  latitude?: number;
+  longitude: number;
+  latitude: number;
 };
 
 export type CreatePlaceForm = {
@@ -199,4 +200,48 @@ export type FilterForm = {
 export type Coords = {
   longitude: number;
   latitude: number;
+};
+
+export type CreditCardInformations = {
+  cardNumber?: string;
+  expMonth?: number;
+  expYear?: number;
+  cvcNumber?: string;
+};
+
+export type PaymentMethod = {
+  billing_details: {
+    address: {
+      city: string;
+      country: string;
+      line1: string;
+      line2: string;
+      postal_code: string;
+    };
+    email: string;
+    name: string;
+    phone: string;
+  };
+  card: {
+    brand: string;
+    country: string;
+    exp_month: number;
+    exp_year: number;
+    fingerprint: string;
+    funding: string;
+    last4: string;
+    networks: {
+      available: String[];
+    };
+    three_d_secure_usage: {
+      supported: boolean;
+    };
+  };
+  created: number;
+  customer: string;
+  id: string;
+  livemode: boolean;
+  object: string;
+  type: string;
+  is_default: boolean;
 };

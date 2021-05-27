@@ -8,9 +8,11 @@ import {RootStackParamList} from '../types';
 import RootScreen from '../screens/RootScreen';
 import SigninScreen from '../screens/SigninScreen';
 import SignupScreen from '../screens/SignupScreen';
-import ProfilListScreen from '../screens/ProfilListScreen';
 import ProfilScreen from '../screens/ProfilScreen';
 import PromoScreen from '../screens/PromoScreen';
+import PaymentMethods from '../screens/PaymentMethods';
+import PaymentMethodForm from '../screens/PaymentMethodForm';
+import MenuScreen from '../screens/MenuScreen';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -21,9 +23,11 @@ const RootNavigator = () => {
       <Stack.Screen name="Signin" component={SigninScreen} />
       <Stack.Screen name="Signup" component={SignupScreen} />
       <Stack.Screen name="Tab" component={BottomTabNavigator} />
-      <Stack.Screen name="ProfilList" component={ProfilListScreen} />
+      <Stack.Screen name="Menu" component={MenuScreen} />
       <Stack.Screen name="Profil" component={ProfilScreen} />
       <Stack.Screen name="Promo" component={PromoScreen} />
+      <Stack.Screen name="PaymentMethods" component={PaymentMethods} />
+      <Stack.Screen name="PaymentMethodForm" component={PaymentMethodForm} />
     </Stack.Navigator>
   );
 };

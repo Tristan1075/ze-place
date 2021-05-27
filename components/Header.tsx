@@ -30,14 +30,13 @@ const Header = (props: Props) => {
     onActionTap,
   } = props;
 
-
   const navigation = useNavigation();
 
   const handleBackPress = () => {
     navigation.goBack();
   };
-  const handleProfilOption = () => {
-    navigation.navigate('ProfilList');
+  const handleMenuPress = () => {
+    navigation.navigate('Menu');
   };
   return (
     <View style={[styles.row, !title && styles.space]}>
@@ -58,7 +57,7 @@ const Header = (props: Props) => {
       )}
       {title && <Text style={styles.title}>{title}</Text>}
       {showProfil && (
-        <TouchableOpacity style={styles.shadow} onPress={handleProfilOption}>
+        <TouchableOpacity style={styles.shadow} onPress={handleMenuPress}>
           <Image
             source={{
               uri: profilPicture,
@@ -72,7 +71,6 @@ const Header = (props: Props) => {
           <Text style={styles.button}>{rightText}</Text>
         </TouchableOpacity>
       )}
-
     </View>
   );
 };
