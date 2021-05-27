@@ -116,6 +116,7 @@ const CreditCard = (props: Props) => {
           onChangeText={creditCardNumberManager}
           value={creditCardNumber}
           placeholder="4242 4242 4242 4242"
+          maxLength={19}
         />
       </View>
       <View style={styles.row}>
@@ -125,6 +126,7 @@ const CreditCard = (props: Props) => {
             onChangeText={expirationDateManager}
             value={expDate}
             placeholder="MM/YY"
+            maxLength={5}
           />
         </View>
         <View style={styles.embedInput}>
@@ -133,6 +135,7 @@ const CreditCard = (props: Props) => {
             onChangeText={cvcManager}
             value={cvc}
             placeholder="123"
+            maxLength={3}
           />
         </View>
       </View>

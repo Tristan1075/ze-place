@@ -90,9 +90,9 @@ export type Review = {
 export type Promo = {
   name: string;
   end_date: string;
-  start_date:string;
+  start_date: string;
   user_limit: Number;
-  value:Number
+  value: number;
   created_at: {type: Date; default: Date};
 };
 

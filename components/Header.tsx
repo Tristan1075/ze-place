@@ -30,7 +30,6 @@ const Header = (props: Props) => {
     onActionTap,
   } = props;
 
-
   const navigation = useNavigation();
 
   const handleBackPress = () => {
