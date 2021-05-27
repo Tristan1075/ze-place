@@ -1,20 +1,13 @@
 import {Ionicons} from '@expo/vector-icons';
 import React, {useState} from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  Image,
-  StyleSheet,
-  TouchableOpacity,
-  Platform,
-} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity, Platform} from 'react-native';
 import {CardIOModule} from 'react-native-awesome-card-io';
 
 import Colors from '../constants/Colors';
 import {CreditCardInformations} from '../types';
 
 import Button from './Button';
+import SimpleInput from './SimpleInput';
 
 const scanCardConfig = {
   useCardIOLogo: true,
@@ -135,16 +128,10 @@ const CreditCard = (props: Props) => {
     <View style={styles.container}>
       <Text style={styles.label}>Numéro de carte</Text>
       <View>
-        <TextInput
-          style={[styles.input, error.number && styles.error]}
-          autoCompleteType="off"
-          autoCorrect={false}
-          keyboardType="number-pad"
-          maxLength={19}
-          returnKeyType="next"
-          textContentType="creditCardNumber"
+        <SimpleInput
+          onChangeText={creditCardNumberManager}
           value={creditCardNumber}
-          onChangeText={(number) => creditCardNumberManager(number)}
+          placeholder="4242 4242 4242 4242"
         />
         {Platform.OS === 'ios' && (
           <TouchableOpacity
@@ -157,43 +144,27 @@ const CreditCard = (props: Props) => {
       <View style={styles.row}>
         <View style={[styles.embedInput, styles.marginRight]}>
           <Text style={styles.label}>Expire le</Text>
-          <TextInput
-            style={[styles.input, error.expDate && styles.error]}
-            autoCompleteType="off"
-            autoCorrect={false}
-            keyboardType="number-pad"
-            maxLength={5}
-            returnKeyType="next"
-            textContentType="none"
+          <SimpleInput
+            onChangeText={expirationDateManager}
             value={expDate}
-            placeholder="MM/AA"
-            onChangeText={(number) => expirationDateManager(number)}
+            placeholder="MM/YY"
           />
         </View>
         <View style={styles.embedInput}>
           <Text style={styles.label}>Code CVC</Text>
-          <TextInput
-            style={[styles.input, error.cvc && styles.error]}
-            autoCompleteType="off"
-            autoCorrect={false}
-            keyboardType="number-pad"
-            maxLength={3}
-            returnKeyType="done"
-            textContentType="none"
+          <SimpleInput
+            onChangeText={cvcManager}
             value={cvc}
-            placeholder="XXX"
-            onChangeText={(number) => cvcManager(number)}
+            placeholder="123"
           />
         </View>
       </View>
-      <View style={styles.buttonContainer}>
-        <Button
-          backgroundColor={Colors.primary}
-          value={'Confirmer'}
-          textColor={Colors.white}
-          onPress={handleSubmitCreditCardPress}
-        />
-      </View>
+      <Button
+        backgroundColor={Colors.primary}
+        value={'Save card'}
+        textColor={Colors.white}
+        onPress={handleSubmitCreditCardPress}
+      />
     </View>
   );
 };
@@ -203,39 +174,15 @@ const styles = StyleSheet.create({
     flex: 1,
     position: 'relative',
   },
-  title: {
-    paddingVertical: 5,
-    fontSize: 18,
-    lineHeight: 20,
-    color: Colors.primary,
-    fontFamily: 'Avenir',
-    letterSpacing: 0.5,
-  },
   label: {
     fontSize: 14,
     color: Colors.dark,
-    fontFamily: 'Metropolis-Medium',
-    paddingBottom: 10,
+    fontFamily: 'poppins',
+    paddingVertical: 10,
   },
   embedInput: {
     flex: 1,
     marginVertical: 10,
-  },
-  input: {
-    marginVertical: 2,
-    paddingVertical: 5,
-    paddingHorizontal: 15,
-    height: 50,
-    letterSpacing: 2,
-    color: Colors.dark,
-    fontFamily: 'Metropolis-SemiBold',
-    fontSize: 14,
-    backgroundColor: Colors.lightblue,
-    borderRadius: 10,
-  },
-  error: {
-    backgroundColor: Colors.inputError,
-    color: Colors.error,
   },
   row: {
     flexDirection: 'row',
@@ -254,9 +201,6 @@ const styles = StyleSheet.create({
   },
   marginRight: {
     marginRight: 20,
-  },
-  buttonContainer: {
-    alignItems: 'center',
   },
 });
 

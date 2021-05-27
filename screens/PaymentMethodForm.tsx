@@ -8,6 +8,7 @@ import CreditCard from '../components/CreditCard';
 import Colors from '../constants/Colors';
 import {CreditCardInformations} from '../types';
 import {getCardType} from '../utils';
+import Header from '../components/Header';
 
 const PaymentMethodForm = () => {
   const [creditCardNumber, setCreditCardNumber] = useState<string>('...XXXX');
@@ -50,42 +51,46 @@ const PaymentMethodForm = () => {
   };
 
   return (
-    <>
-      <StatusBar barStyle="dark-content" />
-      <View style={styles.flexContainer}>
-        <View style={styles.contentContainer}>
-          <View style={styles.creditCardBloc}>
-            {/* <CreditCardBloc
-              type={getCardType(creditCardNumber)}
-              name={'Default'}
-              number={creditCardNumber}
-              expDate={expDate}
-              available={true}
-            /> */}
-          </View>
-          <View style={styles.validationCodeContainer}>
-            {/* <CreditCard
-              onSubmitCreditCard={handleSubmitCreditCard}
-              onChangeCreditCard={setCreditCardNumber}
-              onChangeExpDate={setExpdate}
-              isFetching={isFetching}
-            /> */}
-          </View>
+    <View style={styles.screen}>
+      <View style={styles.headerBloc}>
+        <Header type="back" />
+      </View>
+      <View style={styles.contentContainer}>
+        <View style={styles.creditCardBloc}>
+          <CreditCardBloc
+            type={getCardType(creditCardNumber)}
+            name={'Default'}
+            number={creditCardNumber}
+            expDate={expDate}
+            available={true}
+          />
+        </View>
+        <View style={styles.validationCodeContainer}>
+          <CreditCard
+            onSubmitCreditCard={handleSubmitCreditCard}
+            onChangeCreditCard={setCreditCardNumber}
+            onChangeExpDate={setExpdate}
+            isFetching={isFetching}
+          />
         </View>
       </View>
-    </>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  flexContainer: {
+  screen: {
     flex: 1,
-    flexDirection: 'column',
-    backgroundColor: Colors.white,
-    position: 'relative',
+  },
+  headerBloc: {
+    backgroundColor: Colors.dark,
+    paddingTop: 50,
+    borderBottomLeftRadius: 50,
+    borderBottomRightRadius: 50,
+    height: 200,
   },
   contentContainer: {
-    marginTop: -140,
+    marginTop: -50,
     flex: 1,
   },
   creditCardBloc: {
@@ -93,8 +98,8 @@ const styles = StyleSheet.create({
   },
   validationCodeContainer: {
     flex: 1,
-    backgroundColor: Colors.white,
     padding: 30,
+    backgroundColor: Colors.background,
   },
 });
 

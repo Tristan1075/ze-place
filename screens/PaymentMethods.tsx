@@ -41,6 +41,7 @@ const PaymentMethods = () => {
   );
 
   const handleAddNewCardPress = () => {
+    console.warn('test');
     navigation.navigate('PaymentMethodForm');
   };
 
@@ -51,10 +52,7 @@ const PaymentMethods = () => {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollView}>
         <TouchableOpacity
-          style={[
-            styles.plusIconContainer,
-            cardIndex === paymentMethods.length - 1 && styles.zIndex,
-          ]}
+          style={[styles.plusIconContainer]}
           onPress={handleAddNewCardPress}>
           <Ionicons name="add" />
         </TouchableOpacity>
@@ -159,9 +157,7 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
   },
   plusIconContainer: {
-    position: 'absolute',
-    top: 180,
-    right: 25,
+    zIndex: 999,
     backgroundColor: Colors.white,
     width: 35,
     height: 35,
