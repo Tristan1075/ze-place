@@ -1,7 +1,6 @@
 import {Ionicons} from '@expo/vector-icons';
 import React, {useState} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity, Platform} from 'react-native';
-import {CardIOModule} from 'react-native-awesome-card-io';
 
 import Colors from '../constants/Colors';
 import {CreditCardInformations} from '../types';
@@ -39,21 +38,6 @@ const CreditCard = (props: Props) => {
     expDate: false,
     cvc: false,
   });
-
-  const scanCard = () => {
-    // CardIOModule.scanCard(scanCardConfig)
-    //   .then((card) => {
-    //     creditCardNumberManager(card.cardNumber);
-    //     const month =
-    //       card.expiryMonth < 10 ? `0${card.expiryMonth}` : card.expiryMonth;
-    //     const year = card.expiryYear.toString().substr(2);
-    //     setExpDate(`${month}/${year}`);
-    //     onChangeExpDate(`${month}/${year}`);
-    //   })
-    //   .catch(() => {
-    //     console.log('cancel');
-    //   });
-  };
 
   const creditCardNumberManager = (number: string) => {
     setError({...error, number: false});
@@ -133,13 +117,6 @@ const CreditCard = (props: Props) => {
           value={creditCardNumber}
           placeholder="4242 4242 4242 4242"
         />
-        {Platform.OS === 'ios' && (
-          <TouchableOpacity
-            onPress={scanCard}
-            style={styles.touchableContainer}>
-            <Ionicons name="camera" />
-          </TouchableOpacity>
-        )}
       </View>
       <View style={styles.row}>
         <View style={[styles.embedInput, styles.marginRight]}>

@@ -16,14 +16,7 @@ const visa = require('../assets/icons/visa.png');
 const paypal = require('../assets/icons/paypal.png');
 const mastercard = require('../assets/icons/mastercard.png');
 
-const CreditCardBloc = ({
-  type,
-  name,
-  number,
-  available,
-  expDate,
-  isDefault,
-}: Props) => {
+const CreditCardBloc = ({type, name, number, expDate, isDefault}: Props) => {
   const [card, setCard] = useState({
     backgroundColor: '',
     transparentColor: '',
@@ -65,7 +58,6 @@ const CreditCardBloc = ({
   return (
     <View
       style={[styles.creditCardBloc, {backgroundColor: card.backgroundColor}]}>
-      {/* {!available && <Image source={notif} style={styles.notif} />} */}
       <View
         style={[styles.leftCircle, {backgroundColor: card.transparentColor}]}
       />

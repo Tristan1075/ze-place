@@ -136,64 +136,60 @@ const HomeScreen = (props: Props) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView
+    <ScrollView showsVerticalScrollIndicator={false} style={styles.scrollView}>
+      <Image
+        source={require('../assets/images/home_banner.jpg')}
+        style={styles.imageBanner}
+      />
+      <View style={styles.overlay} />
+      <View style={styles.container}>
+        <Header
+          type="menu"
+          showProfil={true}
+          profilPicture={user && user.avatar}
+        />
+        <Text style={styles.title}>{i18n.t('discover')}</Text>
+        <SimpleInput
+          isEditable={false}
+          style={styles.input}
+          placeholder="Search"
+          suffix={<Ionicons name="search" size={20} color={Colors.gray} />}
+        />
+      </View>
+      <TitleWithDescription
+        title="Near you"
+        description="Find nearby you the available places to rent"
+        style={styles.padding}
+        actionText="See map"
+        actionIcon="map"
+        onActionPress={showMapModal}
+      />
+      <Carousel
+        contentContainerCustomStyle={{paddingLeft: Layout.padding}}
+        useScrollView={true}
+        data={places}
+        renderItem={renderCarouselItem}
+        sliderWidth={Layout.window.width}
+        activeSlideAlignment="start"
+        itemWidth={220}
+      />
+      <DescriptionBloc onPress={handleCreatePlacePress} />
+      <TitleWithDescription
+        title="Announces"
+        description="Find nearby you the available places to rent"
+        style={styles.padding}
+        actionText="See more"
+        actionIcon="list"
+        onActionPress={showFilterModal}
+      />
+      <FlatList
+        data={places}
+        renderItem={renderListItem}
+        keyExtractor={(item) => item.id}
         showsVerticalScrollIndicator={false}
-        style={styles.scrollView}>
-        <Image
-          source={require('../assets/images/home_banner.jpg')}
-          style={styles.imageBanner}
-        />
-        <View style={styles.overlay} />
-        <View style={styles.container}>
-          <Header
-            type="menu"
-            showProfil={true}
-            profilPicture={user && user.avatar}
-          />
-          <Text style={styles.title}>{i18n.t('discover')}</Text>
-          <SimpleInput
-            isEditable={false}
-            style={styles.input}
-            placeholder="Search"
-            suffix={<Ionicons name="search" size={20} color={Colors.gray} />}
-          />
-        </View>
-        <TitleWithDescription
-          title="Near you"
-          description="Find nearby you the available places to rent"
-          style={styles.padding}
-          actionText="See map"
-          actionIcon="map"
-          onActionPress={showMapModal}
-        />
-        <Carousel
-          contentContainerCustomStyle={{paddingLeft: Layout.padding}}
-          useScrollView={true}
-          data={places}
-          renderItem={renderCarouselItem}
-          sliderWidth={Layout.window.width}
-          activeSlideAlignment="start"
-          itemWidth={220}
-        />
-        <DescriptionBloc onPress={handleCreatePlacePress} />
-        <TitleWithDescription
-          title="Announces"
-          description="Find nearby you the available places to rent"
-          style={styles.padding}
-          actionText="See more"
-          actionIcon="list"
-          onActionPress={showFilterModal}
-        />
-        <FlatList
-          data={places}
-          renderItem={renderListItem}
-          keyExtractor={(item) => item.id}
-          showsVerticalScrollIndicator={false}
-        />
-        <Button value="Disconnnect" onPress={handleDisconnectPress} />
-      </ScrollView>
-    </SafeAreaView>
+      />
+      <Button value="Disconnnect" onPress={handleDisconnectPress} />
+    </ScrollView>
   );
 };
 
