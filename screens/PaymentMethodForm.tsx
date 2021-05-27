@@ -1,8 +1,6 @@
 import React, {useState} from 'react';
 import {View, StatusBar, StyleSheet} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import stripe from 'tipsi-stripe';
-import {PUBLIC_KEY_STRIPE} from '@env';
 
 import CreditCardBloc from '../components/CreditCardBloc';
 import CreditCard from '../components/CreditCard';
@@ -10,10 +8,6 @@ import CreditCard from '../components/CreditCard';
 import Colors from '../constants/Colors';
 import {CreditCardInformations} from '../types';
 import {getCardType} from '../utils';
-
-stripe.setOptions({
-  publishableKey: PUBLIC_KEY_STRIPE,
-});
 
 const PaymentMethodForm = () => {
   const [creditCardNumber, setCreditCardNumber] = useState<string>('...XXXX');
@@ -61,21 +55,21 @@ const PaymentMethodForm = () => {
       <View style={styles.flexContainer}>
         <View style={styles.contentContainer}>
           <View style={styles.creditCardBloc}>
-            <CreditCardBloc
+            {/* <CreditCardBloc
               type={getCardType(creditCardNumber)}
               name={'Default'}
               number={creditCardNumber}
               expDate={expDate}
               available={true}
-            />
+            /> */}
           </View>
           <View style={styles.validationCodeContainer}>
-            <CreditCard
+            {/* <CreditCard
               onSubmitCreditCard={handleSubmitCreditCard}
               onChangeCreditCard={setCreditCardNumber}
               onChangeExpDate={setExpdate}
               isFetching={isFetching}
-            />
+            /> */}
           </View>
         </View>
       </View>
