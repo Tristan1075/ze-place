@@ -7761,6 +7761,13 @@ react-is@^17.0.1:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-17.0.1.tgz#5b3531bd76a645a4c9fb6e693ed36419e3301339"
   integrity sha512-NAnt2iGDXohE5LI7uBnLnqvLQMtzhkiAOLXTmv+qnF9Ky7xAPcX8Up/xWIhxvLVGJvuLiNc4xQLtuqDRzb4fSA==
 
+react-native-awesome-card-io@^0.9.0:
+  version "0.9.0"
+  resolved "https://registry.yarnpkg.com/react-native-awesome-card-io/-/react-native-awesome-card-io-0.9.0.tgz#2c9e95dc790e79d6361e2ca8f32adca5a94cff45"
+  integrity sha512-23c8oI973H+9VYJ5DwKWkFBbE+Ng5e68NC377hO7yXF0OTJAvtilu4O3DSQnVIHxNDtMocxQJ2eH293o7dEvDw==
+  dependencies:
+    prop-types "^15.6.2"
+
 react-native-calendars@^1.1258.0:
   version "1.1258.0"
   resolved "https://registry.yarnpkg.com/react-native-calendars/-/react-native-calendars-1.1258.0.tgz#7626ceaa92f6114c31e924d881890fe16981efff"
@@ -9001,6 +9008,11 @@ tinycolor2@^1.4.1:
   version "1.4.2"
   resolved "https://registry.yarnpkg.com/tinycolor2/-/tinycolor2-1.4.2.tgz#3f6a4d1071ad07676d7fa472e1fac40a719d8803"
   integrity sha512-vJhccZPs965sV/L2sU4oRQVAos0pQXwsvTLkWYdqJ+a8Q5kPFzJTuOFwy7UniPli44NKQGAglksjvOcpo95aZA==
+
+tipsi-stripe@^9.0.0:
+  version "9.0.0"
+  resolved "https://registry.yarnpkg.com/tipsi-stripe/-/tipsi-stripe-9.0.0.tgz#fd7e72167af297a5a5e1a5409e347cad5350b7fc"
+  integrity sha512-nOfFsRYlqvsr0zbDfCUmXypmZ8stWpp++zHmaKSVge67M5Sc4Swpg+p9+tBZYkssatg2MSYv1WRalCIni0TEIA==
 
 tmp@^0.0.33:
   version "0.0.33"

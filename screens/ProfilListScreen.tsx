@@ -1,4 +1,3 @@
-
 import React, {useState, useEffect} from 'react';
 import {
   SafeAreaView,
@@ -19,12 +18,15 @@ import SquaredButton from '../components/SquaredButton';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
 import CardWithRate from '../components/CardWithRate';
-import { PlaceType, RootStackParamList} from '../types';
+import {PlaceType, RootStackParamList} from '../types';
 import {categories} from '../mocks';
 import {getAllPlaces} from '../api/places';
 import Button from '../components/Button';
 
-type RootScreenNavigationProp = StackNavigationProp<RootStackParamList, 'ProfilList'>;
+type RootScreenNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  'ProfilList'
+>;
 
 type Props = {
   navigation: RootScreenNavigationProp;
@@ -32,7 +34,6 @@ type Props = {
 
 const ProfilListScreen = (props: Props) => {
   const {navigation} = props;
-  useEffect(() => {}, []);
 
   const handleProfilpress = () => {
     navigation.navigate('Profil');
@@ -45,41 +46,39 @@ const ProfilListScreen = (props: Props) => {
     <SafeAreaView style={styles.container}>
       <Header type="back" />
       <ScrollView style={styles.scrollView}>
-      <View style={styles.view}>
-              <Button
-          value={i18n.t('profil')}
-          onPress={handleProfilpress}
-          backgroundColor={Colors.white}
-          textColor={Colors.dark}
-        />
-      </View>
-      <View style={styles.view}>
-              <Button
-          value={i18n.t('paiementMethod')}
-          onPress={() => console.log('Pay')}
-          backgroundColor={Colors.white}
-          textColor={Colors.dark}
-        />
-      </View>
-      <View style={styles.view}>
-              <Button
-          value={i18n.t('myAnnonces')}
-          onPress={() => console.log('Annonces')}
-          backgroundColor={Colors.white}
-          textColor={Colors.dark}
-        />
-      </View>
-      <View style={styles.view}>
-        <Button
-          value={i18n.t('promo')}
-          onPress={handlePromopress}
-          backgroundColor={Colors.white}
-          textColor={Colors.dark}
-        />
-      </View>
+        <View style={styles.view}>
+          <Button
+            value={i18n.t('profil')}
+            onPress={handleProfilpress}
+            backgroundColor={Colors.white}
+            textColor={Colors.dark}
+          />
+        </View>
+        <View style={styles.view}>
+          <Button
+            value={i18n.t('paiementMethod')}
+            onPress={() => navigation.navigate('PaymentMethods')}
+            backgroundColor={Colors.white}
+            textColor={Colors.dark}
+          />
+        </View>
+        <View style={styles.view}>
+          <Button
+            value={i18n.t('myAnnonces')}
+            onPress={() => console.log('Annonces')}
+            backgroundColor={Colors.white}
+            textColor={Colors.dark}
+          />
+        </View>
+        <View style={styles.view}>
+          <Button
+            value={i18n.t('promo')}
+            onPress={handlePromopress}
+            backgroundColor={Colors.white}
+            textColor={Colors.dark}
+          />
+        </View>
       </ScrollView>
-
-
     </SafeAreaView>
   );
 };
@@ -106,8 +105,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: Layout.padding,
     paddingVertical: 30,
     backgroundColor: Colors.background,
-  }
-
+  },
 });
 
 export default ProfilListScreen;

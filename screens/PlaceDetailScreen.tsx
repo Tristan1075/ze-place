@@ -28,6 +28,8 @@ import Feature from '../components/Feature';
 import ToggleWithTitle from '../components/ToggleWithTitle';
 import {ModalContext} from '../providers/modalContext';
 import MapScreen from './MapScreen';
+import BookingScreen from './BookingScreen';
+import CalendarPicker from '../components/CalendarPicker';
 
 type PlaceScreenNavigationProp = RouteProp<HomeParamList, 'PlaceDetail'>;
 
@@ -43,9 +45,22 @@ const PlaceDetailScreen = (props: Props) => {
   const route = useRoute<PlaceScreenNavigationProp>();
   const item: Place = route.params.place;
 
+  const handleBookPress = () => {
+    handleModal({
+      child: <BookingScreen />,
+    });
+  };
+
   const handleMapPress = () => {
     handleModal({
-      child: <MapScreen place={item} />,
+      child: (
+        <MapScreen
+          initialCoords={{
+            longitude: item.location.longitude,
+            latitude: item.location.latitude,
+          }}
+        />
+      ),
     });
   };
 
@@ -201,6 +216,8 @@ const PlaceDetailScreen = (props: Props) => {
                 longitudeDelta: 0.0421,
               }}
             />
+            <Text style={styles.contentTitle}>Availabilities</Text>
+            <CalendarPicker />
           </View>
           {item.images.length > 0 && (
             <ScrollView
@@ -232,6 +249,7 @@ const PlaceDetailScreen = (props: Props) => {
           backgroundColor={Colors.white}
           textColor={Colors.primary}
           value={'Select place'}
+          onPress={handleBookPress}
         />
       </View>
       <Modal visible={imagePreview} transparent={true}>

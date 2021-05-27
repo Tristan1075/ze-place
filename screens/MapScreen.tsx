@@ -12,17 +12,13 @@ import {Coords, Place} from '../types';
 
 import {mapStyle} from '../utils/mapStyle';
 
-type Props = {
-  place: Place;
-};
-
-const CustomMarker = () => {
+const CustomMarker = ({isActive}) => {
   return (
     <View style={styles.calloutContainer}>
       <View style={styles.callout}>
         <Image
           source={require('../assets/images/home_banner.jpg')}
-          style={styles.calloutImage}
+          style={[styles.calloutImage, isActive && styles.activeImage]}
         />
       </View>
       <View style={styles.pinCircleOpacity}>
@@ -32,18 +28,14 @@ const CustomMarker = () => {
   );
 };
 
-const initialCoords: Coords = {
-  longitude: 2.34767746925354,
-  latitude: 48.853797912597656,
+type Props = {
+  initialCoords: Coords;
 };
 
-const MapScreen = ({place}: Props) => {
-  const {longitude, latitude} = place.location;
+const MapScreen = ({initialCoords}: Props) => {
+  const [activeIndex, setActiveIndex] = useState<number>(0);
   const [places, setPlaces] = useState<Array<Place>>([]);
-  const [coords, setCoords] = useState<Coords>({
-    longitude: longitude || initialCoords.longitude,
-    latitude: latitude || initialCoords.latitude,
-  });
+  const [coords, setCoords] = useState<Coords>(initialCoords);
   let mapRef: any;
 
   useEffect(() => {
@@ -68,6 +60,7 @@ const MapScreen = ({place}: Props) => {
         latitude: places[index].location.latitude,
       },
     });
+    setActiveIndex(index);
   };
 
   return (
@@ -78,18 +71,21 @@ const MapScreen = ({place}: Props) => {
         style={styles.flex}
         showsUserLocation={true}
         showsMyLocationButton={true}
-        onRegionChange={onRegionChange}
+        onRegionChangeComplete={onRegionChange}
         initialRegion={{
           latitude: coords.latitude,
           longitude: coords.longitude,
           latitudeDelta: 0.02,
           longitudeDelta: 0.02,
         }}>
-        {places.map((place: Place) => {
-          const {longitude, latitude} = place.location;
+        {places.map((place: Place, index) => {
+          const markerCoords = {
+            longitude: place.location.longitude,
+            latitude: place.location.latitude,
+          };
           return (
-            <Marker coordinate={{longitude, latitude}}>
-              <CustomMarker />
+            <Marker coordinate={markerCoords}>
+              <CustomMarker isActive={activeIndex === index} />
             </Marker>
           );
         })}
@@ -127,9 +123,13 @@ const styles = StyleSheet.create({
     ...Layout.shadow,
   },
   calloutImage: {
+    width: 30,
+    height: 30,
+    borderRadius: 5,
+  },
+  activeImage: {
     width: 50,
     height: 50,
-    borderRadius: 10,
   },
   calloutContainer: {
     alignItems: 'center',

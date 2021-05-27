@@ -53,7 +53,7 @@ const PlaceCard = (props: Props) => {
           <Rating
             startingValue={place.rate}
             imageSize={10}
-            tintColor={Colors.background}
+            tintColor={Colors.white}
           />
           <Text style={styles.rate}>{place.rate}</Text>
         </View>

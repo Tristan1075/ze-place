@@ -11,6 +11,8 @@ import SignupScreen from '../screens/SignupScreen';
 import ProfilListScreen from '../screens/ProfilListScreen';
 import ProfilScreen from '../screens/ProfilScreen';
 import PromoScreen from '../screens/PromoScreen';
+import PaymentMethods from '../screens/PaymentMethods';
+import PaymentMethodForm from '../screens/PaymentMethodForm';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -24,6 +26,8 @@ const RootNavigator = () => {
       <Stack.Screen name="ProfilList" component={ProfilListScreen} />
       <Stack.Screen name="Profil" component={ProfilScreen} />
       <Stack.Screen name="Promo" component={PromoScreen} />
+      <Stack.Screen name="PaymentMethods" component={PaymentMethods} />
+      <Stack.Screen name="PaymentMethodForm" component={PaymentMethodForm} />
     </Stack.Navigator>
   );
 };
