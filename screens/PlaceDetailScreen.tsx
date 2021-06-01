@@ -20,7 +20,7 @@ import ImageViewer from 'react-native-image-zoom-viewer';
 
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
-import {HomeParamList, Place, PlaceType} from '../types';
+import {HomeParamList, Place} from '../types';
 import Header from '../components/Header';
 import Button from '../components/Button';
 import {mapStyle} from '../utils/mapStyle';
@@ -47,7 +47,7 @@ const PlaceDetailScreen = (props: Props) => {
 
   const handleBookPress = () => {
     handleModal({
-      child: <BookingScreen />,
+      child: <BookingScreen place={item} />,
     });
   };
 

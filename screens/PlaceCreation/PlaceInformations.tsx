@@ -23,12 +23,13 @@ import {ModalContext} from '../../providers/modalContext';
 import SelectPlaceTypeScreen from '../SelectPlaceTypeScreen';
 import SelectableItem from '../../components/SelectableItem';
 import {CreatePlaceForm, FeatureType, PlaceType} from '../../types';
+import Constants from '../../utils/Constants';
 
 const locationDuration = [
-  {title: 'Day', value: 'day'},
-  {title: 'Night', value: 'night'},
-  {title: 'Week', value: 'week'},
-  {title: 'Month', value: 'month'},
+  {title: 'Day', value: Constants.DAY},
+  {title: 'Night', value: Constants.NIGHT},
+  {title: 'Week', value: Constants.WEEK},
+  {title: 'Month', value: Constants.MONTH},
 ];
 
 type Props = {

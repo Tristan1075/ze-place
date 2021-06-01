@@ -14,6 +14,7 @@ import CreditCardBloc from '../components/CreditCardBloc';
 import Header from '../components/Header';
 import {Ionicons} from '@expo/vector-icons';
 import Layout from '../constants/Layout';
+import {confirmSetupIntent} from '@stripe/stripe-react-native';
 
 const PaymentMethods = () => {
   const navigation = useNavigation();
@@ -23,7 +24,8 @@ const PaymentMethods = () => {
   );
   const [isFetching, setIsFetching] = useState(true);
 
-  const handleStateChange = useCallback(async () => {}, []);
+  const handleStateChange = useCallback(async () => {
+  }, []);
 
   useEffect(() => {
     navigation.addListener('focus', handleStateChange);

@@ -28,6 +28,7 @@ export const login = async (credentials: Credentials) => {
 };
 
 export const register = async (form: SignupForm) => {
+  console.log(API_URL);
   return await axios
     .post(
       `${API_URL}/auth/register`,
