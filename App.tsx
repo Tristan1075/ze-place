@@ -16,6 +16,7 @@ import enUS from './localization/en-US';
 import useCachedResources from './hooks/useCachedResources';
 import Navigation from './navigation';
 import {ModalProvider} from './providers/modalContext';
+import {SocketProvider} from './components/SocketProvider';
 
 const App = () => {
   const [socket, setSocket] = React.useState({});
@@ -29,7 +30,12 @@ const App = () => {
         reconnectionDelay: 15000,
       }),
     };
-    initSocket.socket.emit('msgToServer', "Hello World ! I'm the client side");
+
+    // initSocket.socket.emit('msgToServer', "Hello World ! I'm the client side");
+    initSocket.socket.emit('events', {name: 'Nest'}, (data) => {
+      console.log(data);
+      console.log('eyooo !');
+    });
     initSocket.socket.on('msgToClient', (socketID: any) => {
       // AppStore.updateSocketID(socketID);
       console.warn(socketID);
@@ -48,15 +54,17 @@ const App = () => {
     return null;
   } else {
     return (
-      <SafeAreaProvider>
-        <StripeProvider publishableKey={PUBLIC_KEY_STRIPE}>
-          <ModalProvider>
-            <Navigation />
-            <StatusBar />
-            <ModalPortal />
-          </ModalProvider>
-        </StripeProvider>
-      </SafeAreaProvider>
+      <SocketProvider socket={socket}>
+        <SafeAreaProvider>
+          <StripeProvider publishableKey={PUBLIC_KEY_STRIPE}>
+            <ModalProvider>
+              <Navigation />
+              <StatusBar />
+              <ModalPortal />
+            </ModalProvider>
+          </StripeProvider>
+        </SafeAreaProvider>
+      </SocketProvider>
     );
   }
 };
