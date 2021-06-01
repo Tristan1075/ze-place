@@ -5,6 +5,8 @@ export default {
   whiteOpacity: 'rgba(200, 200, 200, 0.6)',
   background: '#F5F7F8',
   primary: '#0E4A86',
+  primaryDark: '#0a3560',
+  primaryOpacity: 'rgba(14, 74, 134, 0.5)',
   secondary: '#24253D',
   yellow: '#edb910',
   gray: '#8C8C98',

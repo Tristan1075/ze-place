@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import {
   StyleSheet,
   Text,
@@ -26,6 +26,10 @@ import Button from '../components/Button';
 import {mapStyle} from '../utils/mapStyle';
 import Feature from '../components/Feature';
 import ToggleWithTitle from '../components/ToggleWithTitle';
+import {ModalContext} from '../providers/modalContext';
+import MapScreen from './MapScreen';
+import BookingScreen from './BookingScreen';
+import CalendarPicker from '../components/CalendarPicker';
 
 type PlaceScreenNavigationProp = RouteProp<HomeParamList, 'PlaceDetail'>;
 
@@ -34,11 +38,32 @@ type Props = {
 };
 
 const PlaceDetailScreen = (props: Props) => {
+  const {handleModal} = useContext(ModalContext);
   const [activeImage, setActiveImage] = useState<number>(0);
   const [seeMore, setSeeMore] = useState<boolean>(false);
   const [imagePreview, setImagePreview] = useState<boolean>(false);
   const route = useRoute<PlaceScreenNavigationProp>();
   const item: Place = route.params.place;
+
+  const handleBookPress = () => {
+    handleModal({
+      child: <BookingScreen />,
+    });
+  };
+
+  const handleMapPress = () => {
+    handleModal({
+      child: (
+        <MapScreen
+          initialCoords={{
+            longitude: item.location.longitude,
+            latitude: item.location.latitude,
+          }}
+        />
+      ),
+    });
+  };
+
   return (
     <View>
       <ScrollView showsVerticalScrollIndicator={false} style={styles.screen}>
@@ -173,17 +198,26 @@ const PlaceDetailScreen = (props: Props) => {
             <Text style={styles.description}>{item.description}</Text>
             <Text style={styles.contentTitle}>Location</Text>
             <MapView
+              onTouchStart={handleMapPress}
               provider={PROVIDER_GOOGLE}
               customMapStyle={mapStyle}
               scrollEnabled={false}
               style={styles.map}
               initialRegion={{
-                latitude: 37.78825,
-                longitude: -122.4324,
+                latitude:
+                  (item.location.latitude &&
+                    parseFloat(item.location.latitude)) ||
+                  0,
+                longitude:
+                  (item.location.longitude &&
+                    parseFloat(item.location.longitude)) ||
+                  0,
                 latitudeDelta: 0.0922,
                 longitudeDelta: 0.0421,
               }}
             />
+            <Text style={styles.contentTitle}>Availabilities</Text>
+            <CalendarPicker />
           </View>
           {item.images.length > 0 && (
             <ScrollView
@@ -215,6 +249,7 @@ const PlaceDetailScreen = (props: Props) => {
           backgroundColor={Colors.white}
           textColor={Colors.primary}
           value={'Select place'}
+          onPress={handleBookPress}
         />
       </View>
       <Modal visible={imagePreview} transparent={true}>
@@ -358,9 +393,9 @@ const styles = StyleSheet.create({
     color: Colors.secondary,
   },
   map: {
-    height: 120,
+    height: 180,
     borderRadius: 20,
-    marginTop: 20,
+    marginTop: 10,
   },
   seeMore: {
     paddingTop: 5,

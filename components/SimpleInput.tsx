@@ -16,7 +16,7 @@ type Props = {
   onChange?: () => void;
   onChangeText?: (v: string) => void;
   error?: string;
-  placeholder: string;
+  placeholder?: string;
   isEditable?: boolean;
   value?: string;
   secureTextEntry?: boolean;
@@ -25,6 +25,7 @@ type Props = {
   suffix?: any;
   style?: ViewStyle;
   type?: KeyboardType;
+  maxLength?: number;
 };
 
 const SimpleInput = (props: Props) => {
@@ -42,6 +43,7 @@ const SimpleInput = (props: Props) => {
     suffix,
     style,
     type,
+    maxLength,
   } = props;
 
   return (
@@ -50,6 +52,7 @@ const SimpleInput = (props: Props) => {
         <TextInput
           keyboardType={type}
           onTouchStart={onPress}
+          maxLength={maxLength}
           editable={isEditable}
           onChange={onChange}
           onChangeText={onChangeText}

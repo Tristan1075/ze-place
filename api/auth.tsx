@@ -7,6 +7,7 @@ const headers = {
 };
 
 export const login = async (credentials: Credentials) => {
+  
   return await axios
     .post(
       `${API_URL}/auth/login`,
@@ -22,12 +23,11 @@ export const login = async (credentials: Credentials) => {
       return response.data;
     })
     .catch((err) => {
-      return Promise.reject(err);
+      return Promise.reject(err.response.data);
     });
 };
 
 export const register = async (form: SignupForm) => {
-  console.log(form);
   return await axios
     .post(
       `${API_URL}/auth/register`,
@@ -50,7 +50,7 @@ export const register = async (form: SignupForm) => {
       return response.data;
     })
     .catch((err) => {
-      console.log(err);
+      console.log(err.response.data);
       return Promise.reject(err);
     });
 };

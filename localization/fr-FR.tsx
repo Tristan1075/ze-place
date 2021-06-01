@@ -21,4 +21,6 @@ export default {
   addCode: "Ajouter un nouveau code",
   actif: "Promo active",
   innactif: "Promo Innactive",
+  places_title: 'Mes annonces !',
+
 } as LocalizationType;

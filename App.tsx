@@ -1,6 +1,10 @@
 import {StatusBar} from 'expo-status-bar';
 import React from 'react';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
+import {StripeProvider} from '@stripe/stripe-react-native';
+import {PUBLIC_KEY_STRIPE} from '@env';
+
+// @ts-ignore
 import {ModalPortal} from 'react-native-modals';
 import * as Localization from 'expo-localization';
 import i18n from 'i18n-js';
@@ -45,11 +49,13 @@ const App = () => {
   } else {
     return (
       <SafeAreaProvider>
-        <ModalProvider>
-          <Navigation />
-          <StatusBar />
-          <ModalPortal />
-        </ModalProvider>
+        <StripeProvider publishableKey={PUBLIC_KEY_STRIPE}>
+          <ModalProvider>
+            <Navigation />
+            <StatusBar />
+            <ModalPortal />
+          </ModalProvider>
+        </StripeProvider>
       </SafeAreaProvider>
     );
   }

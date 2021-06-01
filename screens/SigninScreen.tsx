@@ -8,7 +8,7 @@ import {RootStackParamList, SigninForm} from '../types';
 import Button from '../components/Button';
 import Colors from '../constants/Colors';
 import Header from '../components/Header';
-import {login} from '../api/auth';
+import {login, test} from '../api/auth';
 
 type RootScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -27,6 +27,10 @@ const SigninScreen = (props: Props) => {
     password: '',
   });
 
+  const handleSignupPress = () => {
+    navigation.navigate('Signup');
+  };
+
   const handleSigninPress = async () => {
     try {
       const token = await login(credentials);
@@ -40,12 +44,6 @@ const SigninScreen = (props: Props) => {
     } catch (e) {
       setError(true);
       console.log(e);
-      navigation.dispatch(
-        CommonActions.reset({
-          index: 0,
-          routes: [{name: 'Tab'}],
-        }),
-      );
     }
   };
 
@@ -70,6 +68,7 @@ const SigninScreen = (props: Props) => {
           style={styles.input}
           placeholder="Password"
           autoCapitalize="none"
+          secureTextEntry={true}
           placeholderTextColor={Colors.gray}
         />
         {error && (
@@ -86,7 +85,7 @@ const SigninScreen = (props: Props) => {
         />
         <View style={styles.row}>
           <Text style={styles.text}>Forgot your password ?</Text>
-          <Text style={[styles.text, styles.underline]}>Sign up</Text>
+          <Text style={[styles.text, styles.underline]} onPress={handleSignupPress}>Sign up</Text>
         </View>
       </View>
     </SafeAreaView>
