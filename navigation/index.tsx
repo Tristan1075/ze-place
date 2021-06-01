@@ -13,6 +13,7 @@ import PromoScreen from '../screens/PromoScreen';
 import PaymentMethods from '../screens/PaymentMethods';
 import PaymentMethodForm from '../screens/PaymentMethodForm';
 import MenuScreen from '../screens/MenuScreen';
+import MyPlaceScreen from '../screens/MyPlaceScreen';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -28,6 +29,8 @@ const RootNavigator = () => {
       <Stack.Screen name="Promo" component={PromoScreen} />
       <Stack.Screen name="PaymentMethods" component={PaymentMethods} />
       <Stack.Screen name="PaymentMethodForm" component={PaymentMethodForm} />
+      <Stack.Screen name="MyPlace" component={MyPlaceScreen} />
+
     </Stack.Navigator>
   );
 };

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import i18n from 'i18n-js';
@@ -9,6 +9,9 @@ import Layout from '../constants/Layout';
 import {RootStackParamList} from '../types';
 import Button from '../components/Button';
 import {Entypo, Ionicons} from '@expo/vector-icons';
+import {User} from '../types';
+import {getUser} from '../api/customer';
+
 
 type RootScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Menu'>;
 
@@ -18,12 +21,27 @@ type Props = {
 
 const MenuScreen = (props: Props) => {
   const {navigation} = props;
+  const [user, setUser] = useState<User>();
+
+  useEffect(() => {
+    const init = async () => setUser(await getUser());
+    init();
+  }, []);
 
   const menu = [
     {
       title: 'Payment methods',
       onPress: () => navigation.navigate('PaymentMethods'),
     },
+    {
+      title: 'Promo Codes',
+      onPress: () => navigation.navigate('Promo'),
+    },
+    {
+      title: 'My places',
+      onPress: () => navigation.navigate('MyPlace'),
+    },
+    
   ];
 
   return (
@@ -36,11 +54,11 @@ const MenuScreen = (props: Props) => {
           style={styles.profilBloc}
           onPress={() => navigation.navigate('Profil')}>
           <Image
-            source={require('../assets/images/profile.jpeg')}
+            source={user && {uri: user.avatar}}
             style={styles.profilImage}
           />
-          <Text style={styles.title}>Tristan Luong</Text>
-          <Text style={styles.description}>Paris, France</Text>
+          <Text style={styles.title}>{user && user.first_name}{user && user.last_name}</Text>
+          <Text style={styles.description}>{user && user.address}</Text>
         </TouchableOpacity>
         {menu.map((item) => (
           <TouchableOpacity style={styles.item} onPress={item.onPress}>
@@ -96,6 +114,7 @@ const styles = StyleSheet.create({
   },
   item: {
     padding: 20,
+    marginBottom:10,
     alignItems: 'center',
     flexDirection: 'row',
     backgroundColor: Colors.white,

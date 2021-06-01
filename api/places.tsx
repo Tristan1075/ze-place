@@ -3,6 +3,7 @@ import axios, {AxiosResponse} from 'axios';
 import * as SecureStore from 'expo-secure-store';
 
 import {Coords, CreatePlaceForm, Place} from '../types';
+import {getUser} from './customer'
 
 export const getAllPlaces = async () => {
   const token = await SecureStore.getItemAsync('access-token');
@@ -50,6 +51,8 @@ export const getPlacesNearbyCoordinates = async (
 
 export const createPlace = async (form: CreatePlaceForm) => {
   const token = await SecureStore.getItemAsync('access-token');
+
+  const ownerId = await getUser()  
   return await axios
     .post(
       `${API_URL}/places/create`,
@@ -69,6 +72,7 @@ export const createPlace = async (form: CreatePlaceForm) => {
         authorizeSmoking: form.authorizeSmoking,
         authorizeFire: form.authorizeFire,
         authorizeFoodAndDrink: form.authorizeFoodAndDrink,
+        ownerId: ownerId._id
       },
       {
         headers: {
