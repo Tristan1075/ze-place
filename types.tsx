@@ -53,6 +53,7 @@ export type User = {
   favorites: Place[];
   promoCode: String[];
   historyCode: String[];
+  ownedPlaces: Place[];
 };
 
 export type Place = {

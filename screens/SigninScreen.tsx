@@ -27,6 +27,10 @@ const SigninScreen = (props: Props) => {
     password: '',
   });
 
+  const handleSignupPress = () => {
+    navigation.navigate('Signup');
+  };
+
   const handleSigninPress = async () => {
     try {
       const token = await login(credentials);
@@ -64,6 +68,7 @@ const SigninScreen = (props: Props) => {
           style={styles.input}
           placeholder="Password"
           autoCapitalize="none"
+          secureTextEntry={true}
           placeholderTextColor={Colors.gray}
         />
         {error && (
@@ -80,7 +85,7 @@ const SigninScreen = (props: Props) => {
         />
         <View style={styles.row}>
           <Text style={styles.text}>Forgot your password ?</Text>
-          <Text style={[styles.text, styles.underline]}>Sign up</Text>
+          <Text style={[styles.text, styles.underline]} onPress={handleSignupPress}>Sign up</Text>
         </View>
       </View>
     </SafeAreaView>

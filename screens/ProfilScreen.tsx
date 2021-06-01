@@ -34,7 +34,7 @@ const ProfilScreen = () => {
           <View>
             <View style={styles.avatarContainer}>
               <Image
-                source={require('../assets/images/profile.jpeg')}
+                source={{uri: user.avatar}}
                 style={styles.avatar}
               />
             </View>
