@@ -1,4 +1,5 @@
 import * as Location from 'expo-location';
+import Constants from './Constants';
 
 export const isEmailValid = (email: String) => {
   const re = /^(([^<>()[]\\.,;:s@"]+(.[^<>()[]\\.,;:s@"]+)*)|(".+"))@(([[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}])|(([a-zA-Z-0-9]+.)+[a-zA-Z]{2,}))$/;
@@ -12,6 +13,22 @@ export const getUserLocation = async () => {
   }
 
   return await Location.getCurrentPositionAsync({});
+};
+
+export const getBookingPriceWithDuration = (
+  price: number,
+  duration: string,
+) => {
+  switch (duration) {
+    case Constants.DAY:
+      return 1 * (price * 100);
+    case Constants.NIGHT:
+      return 1 * (price * 100);
+    case Constants.WEEK:
+      return 7 * (price * 100);
+    case Constants.MONTH:
+      return 30 * (price * 100);
+  }
 };
 
 export const getCardType = (cardNum: string) => {

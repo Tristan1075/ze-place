@@ -62,11 +62,8 @@ export type Place = {
   location: Location;
   placeType: PlaceType;
   surface: string;
-  price: string;
-  locationDuration: {
-    title: string;
-    value: string;
-  };
+  price: number;
+  rentingDuration: string;
   rate: string;
   description: string;
   images: Array<Image>;

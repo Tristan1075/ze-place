@@ -1,52 +1,82 @@
-import React, {useState} from 'react';
-import {View, StatusBar, StyleSheet} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {View, StyleSheet, Alert} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import {
+  PaymentMethodCreateParams,
+  useStripe,
+} from '@stripe/stripe-react-native';
 
 import CreditCardBloc from '../components/CreditCardBloc';
 import CreditCard from '../components/CreditCard';
-
 import Colors from '../constants/Colors';
 import {CreditCardInformations} from '../types';
 import {getCardType} from '../utils';
 import Header from '../components/Header';
+import {initPaymentMethod} from '../api/payment';
 
 const PaymentMethodForm = () => {
   const [creditCardNumber, setCreditCardNumber] = useState<string>('...XXXX');
   const [expDate, setExpdate] = useState<string>('MM/YY');
-  const [isFetching, setIsFetching] = useState<boolean>(false);
+  const {
+    confirmSetupIntent,
+    createPaymentMethod,
+    presentPaymentSheet,
+    createToken,
+    initPaymentSheet,
+  } = useStripe();
+  const [paymentSheetEnabled, setPaymentSheetEnabled] = useState(false);
+  const [clientSecret, setClientSecret] = useState<string>();
   const navigation = useNavigation();
+
+  useEffect(() => {
+    // In your app’s checkout, make a network request to the backend and initialize PaymentSheet.
+    // To reduce loading time, make this request before the Checkout button is tapped, e.g. when the screen is loaded.
+    initialisePaymentSheet();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const initialisePaymentSheet = async () => {
+    const {paymentIntent, ephemeralKey, customer} = await initPaymentMethod();
+    setClientSecret(paymentIntent);
+    const {error} = await initPaymentSheet({
+      customerId: customer,
+      customerEphemeralKeySecret: ephemeralKey,
+      paymentIntentClientSecret: paymentIntent,
+      customFlow: false,
+      merchantDisplayName: 'Example Inc.',
+      style: 'alwaysDark',
+    });
+    if (!error) {
+      setPaymentSheetEnabled(true);
+    }
+  };
+
+  const openPaymentSheet = async () => {
+    if (!clientSecret) {
+      return;
+    }
+    const { error } = await presentPaymentSheet({
+      clientSecret,
+      confirmPayment: true,
+    });
+
+    if (error) {
+      Alert.alert(`Error code: ${error.code}`, error.message);
+    } else {
+      Alert.alert('Success', 'The payment was confirmed successfully');
+    }
+    setPaymentSheetEnabled(false);
+  };
 
   const handleSubmitCreditCard = async (
     creditCardInformations: CreditCardInformations,
   ) => {
     const {cardNumber, cvcNumber, expMonth, expYear} = creditCardInformations;
     if (cardNumber && cvcNumber && expMonth && expYear) {
-      setIsFetching(true);
       try {
-        // const clientSecret = await api.getClientSecret(UserStore.token);
-        // const setupIntent = await stripe.confirmSetupIntent({
-        //   clientSecret: clientSecret,
-        //   paymentMethod: {
-        //     card: {
-        //       expMonth: expMonth,
-        //       expYear: expYear,
-        //       cvc: cvcNumber,
-        //       number: cardNumber,
-        //     },
-        //   },
-        // });
-        // const card = await api.createPaymentMethod(
-        //   setupIntent.paymentMethodId,
-        //   UserStore.token,
-        // );
-        // if (card) {
-        //   setIsFetching(false);
-        //   navigation.navigate('PaymentMethods');
-        // }
-      } catch (err) {
-        console.log(err);
-        setIsFetching(false);
-      }
+        openPaymentSheet();
+      } catch (err) {}
     }
   };
 
@@ -70,7 +100,6 @@ const PaymentMethodForm = () => {
             onSubmitCreditCard={handleSubmitCreditCard}
             onChangeCreditCard={setCreditCardNumber}
             onChangeExpDate={setExpdate}
-            isFetching={isFetching}
           />
         </View>
       </View>
