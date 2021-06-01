@@ -30,7 +30,6 @@ const RootNavigator = () => {
       <Stack.Screen name="PaymentMethods" component={PaymentMethods} />
       <Stack.Screen name="PaymentMethodForm" component={PaymentMethodForm} />
       <Stack.Screen name="MyPlace" component={MyPlaceScreen} />
-
     </Stack.Navigator>
   );
 };

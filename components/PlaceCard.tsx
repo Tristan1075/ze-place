@@ -75,7 +75,6 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     borderRadius: 10,
     ...Layout.shadow,
-    overflow: 'hidden',
   },
   row: {
     flexDirection: 'row',
