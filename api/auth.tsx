@@ -7,6 +7,7 @@ const headers = {
 };
 
 export const login = async (credentials: Credentials) => {
+  
   return await axios
     .post(
       `${API_URL}/auth/login`,

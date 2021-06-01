@@ -21,4 +21,6 @@ export default {
   addCode: 'Add a new code',
   actif: "Active promo",
   innactif: "Innactive promo",
+  places_title: 'Your places !',
+
 } as LocalizationType;
