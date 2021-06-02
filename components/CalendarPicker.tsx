@@ -30,7 +30,7 @@ const CalendarPicker = ({showDates, onChange}: Props) => {
   const handleDayPress = (day: DateObject) => {
     if (Object.keys(markerDates.length === 2)) {
       setMarkedDates({});
-      onChange && onChange(undefined, undefined, undefined);
+      onChange && onChange('', '', undefined);
     }
     if (Object.keys(markerDates).length === 0) {
       setMarkedDates({

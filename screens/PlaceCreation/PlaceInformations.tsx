@@ -24,6 +24,7 @@ import SelectPlaceTypeScreen from '../SelectPlaceTypeScreen';
 import SelectableItem from '../../components/SelectableItem';
 import {CreatePlaceForm, FeatureType, PlaceType} from '../../types';
 import Constants from '../../utils/Constants';
+import FeatureList from '../../components/FeatureList';
 
 const locationDuration = [
   {title: 'Day', value: Constants.DAY},
@@ -53,20 +54,6 @@ const PlaceInformations = (props: Props) => {
   const handlePlaceTypePress = (type: PlaceType) => {
     setCreatePlaceForm({...createPlaceForm, placeType: type});
     handleModal();
-  };
-
-  const handleFeaturePress = (feature: FeatureType) => {
-    if (createPlaceForm.features.includes(feature)) {
-      setCreatePlaceForm({
-        ...createPlaceForm,
-        features: createPlaceForm.features.filter((item) => item !== feature),
-      });
-    } else {
-      setCreatePlaceForm({
-        ...createPlaceForm,
-        features: [...createPlaceForm.features, feature],
-      });
-    }
   };
 
   return (
@@ -146,19 +133,12 @@ const PlaceInformations = (props: Props) => {
         subtitle={true}
         style={styles.paddingVertical}
       />
-      <ScrollView
-        horizontal={true}
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.facilitiesContainer}>
-        {features.map((feature, index) => (
-          <Feature
-            feature={feature}
-            key={index}
-            isActive={createPlaceForm.features.includes(feature)}
-            onPress={() => handleFeaturePress(feature)}
-          />
-        ))}
-      </ScrollView>
+      <FeatureList
+        features={features}
+        list={createPlaceForm}
+        onChange={setCreatePlaceForm}
+        onlyOne={false}
+      />
       <TitleWithDescription
         title="Availability"
         description="Select  the type that fit your place !"

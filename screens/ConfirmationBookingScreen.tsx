@@ -35,6 +35,8 @@ const ConfirmationBookingScreen = ({place, booking}: Props) => {
   const [activePaymentMethod, setActivePaymentMethod] = useState(0);
   const [promotionalCode, showPromotionalCode] = useState<boolean>(false);
 
+  console.log(booking);
+
   const getClientSecret = async () => {
     const {paymentIntent, ephemeralKey, customer} = await initPaymentIntent(
       getBookingPriceWithDuration(place.price, place.rentingDuration),
