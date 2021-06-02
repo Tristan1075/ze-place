@@ -63,11 +63,8 @@ export type Place = {
   location: Location;
   placeType: PlaceType;
   surface: string;
-  price: string;
-  locationDuration: {
-    title: string;
-    value: string;
-  };
+  price: number;
+  rentingDuration: string;
   rate: string;
   description: string;
   images: Array<Image>;
@@ -245,4 +242,14 @@ export type PaymentMethod = {
   object: string;
   type: string;
   is_default: boolean;
+};
+
+export type Booking = {
+  features: Array<FeatureType>;
+  bookingPeriod: {
+    startDate?: string;
+    endDate?: string;
+    duration?: number;
+  };
+  description: string;
 };

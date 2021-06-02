@@ -45,6 +45,7 @@ const HomeScreen = (props: Props) => {
   const [userLocation, setUserLocation] = useState(null);
 
   const init = useCallback(async () => {
+    console.log('test');
     setPlaces(await getAllPlaces());
     setUser(await getUser());
   }, []);
@@ -83,7 +84,6 @@ const HomeScreen = (props: Props) => {
   const showMapModal = async () => {
     try {
       const location = await getUserLocation();
-      console.log(location);
       if (location) {
         handleModal({
           child: (

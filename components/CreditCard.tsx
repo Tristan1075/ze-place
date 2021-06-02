@@ -1,20 +1,12 @@
-import {Ionicons} from '@expo/vector-icons';
 import React, {useState} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity, Platform} from 'react-native';
+import {View, Text, StyleSheet} from 'react-native';
+import CryptoJS from 'crypto-js';
 
 import Colors from '../constants/Colors';
 import {CreditCardInformations} from '../types';
 
 import Button from './Button';
 import SimpleInput from './SimpleInput';
-
-const scanCardConfig = {
-  useCardIOLogo: true,
-  hideCardIOLogo: true,
-  suppressManualEntry: true,
-  suppressConfirmation: true,
-  guideColor: Colors.white,
-};
 
 type Props = {
   onSubmitCreditCard: (creditCardInformations: CreditCardInformations) => void;

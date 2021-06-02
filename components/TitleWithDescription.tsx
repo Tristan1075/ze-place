@@ -32,7 +32,7 @@ const TitleWithDescription = (props: Props) => {
     onActionPress,
   } = props;
   return (
-    <View style={style}>
+    <View style={styles.container}>
       <View style={styles.row}>
         <Text
           style={[subtitle ? styles.subtitle : styles.title, {color: color}]}>
@@ -49,6 +49,9 @@ const TitleWithDescription = (props: Props) => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    paddingVertical: 20,
+  },
   title: {
     color: Colors.dark,
     fontFamily: 'oswald-bold',
