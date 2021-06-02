@@ -1,4 +1,4 @@
-import moment, {Moment} from 'moment';
+import moment from 'moment';
 import React, {useState} from 'react';
 import {View, StyleSheet, Text} from 'react-native';
 import {Calendar, DateObject} from 'react-native-calendars';
@@ -6,11 +6,12 @@ import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
 
 type Props = {
+  minDate?: string;
   showDates?: boolean;
   onChange?: (startDate?: string, endDate?: string, duration?: number) => void;
 };
 
-const getPeriodDuration = (startDate, endDate) => {
+const getPeriodDuration = (startDate: string, endDate: string) => {
   const startMoment = moment([
     startDate.split('-')[0],
     startDate.split('-')[1],
@@ -24,39 +25,40 @@ const getPeriodDuration = (startDate, endDate) => {
   return endMoment.diff(startMoment, 'days');
 };
 
-const CalendarPicker = ({showDates, onChange}: Props) => {
+const CalendarPicker = ({showDates, onChange, minDate}: Props) => {
   const [markerDates, setMarkedDates] = useState<any>({});
-
   const handleDayPress = (day: DateObject) => {
-    if (Object.keys(markerDates.length === 2)) {
-      setMarkedDates({});
-      onChange && onChange('', '', undefined);
-    }
-    if (Object.keys(markerDates).length === 0) {
-      setMarkedDates({
-        ...markerDates,
-        [day.dateString]: {
-          startingDay: true,
-          color: Colors.primary,
-          textColor: Colors.white,
-        },
-      });
-    }
-    if (Object.keys(markerDates).length === 1) {
-      setMarkedDates({
-        ...markerDates,
-        [day.dateString]: {
-          endingDay: true,
-          color: Colors.primary,
-          textColor: Colors.white,
-        },
-      });
-      onChange &&
+    if (onChange) {
+      if (Object.keys(markerDates.length === 2)) {
+        setMarkedDates({});
+        onChange('', '', undefined);
+      }
+      if (Object.keys(markerDates).length === 0) {
+        setMarkedDates({
+          ...markerDates,
+          [day.dateString]: {
+            startingDay: true,
+            color: Colors.primary,
+            textColor: Colors.white,
+          },
+        });
+        onChange(day.dateString, '', undefined);
+      }
+      if (Object.keys(markerDates).length === 1) {
+        setMarkedDates({
+          ...markerDates,
+          [day.dateString]: {
+            endingDay: true,
+            color: Colors.primary,
+            textColor: Colors.white,
+          },
+        });
         onChange(
           Object.keys(markerDates)[0],
           day.dateString,
           getPeriodDuration(Object.keys(markerDates)[0], day.dateString),
         );
+      }
     }
   };
 
@@ -65,7 +67,7 @@ const CalendarPicker = ({showDates, onChange}: Props) => {
       <Calendar
         style={styles.calendar}
         current={Date()}
-        minDate={Date()}
+        minDate={minDate ? minDate : Date()}
         onDayPress={handleDayPress}
         monthFormat={'yyyy MMMM'}
         hideArrows={false}

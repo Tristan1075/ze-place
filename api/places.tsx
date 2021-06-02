@@ -2,8 +2,8 @@ import {API_URL} from '@env';
 import axios, {AxiosResponse} from 'axios';
 import * as SecureStore from 'expo-secure-store';
 
-import {Coords, CreatePlaceForm, Place} from '../types';
-import {getUser} from './customer'
+import {Booking, Coords, CreatePlaceForm, Place} from '../types';
+import {getUser} from './customer';
 
 export const getAllPlaces = async () => {
   const token = await SecureStore.getItemAsync('access-token');
@@ -14,8 +14,6 @@ export const getAllPlaces = async () => {
       },
     })
     .then((response: AxiosResponse<any>) => {
-      console.log(token);
-      console.log(response.data);
       return response.data;
     })
     .catch((err) => {
@@ -51,8 +49,7 @@ export const getPlacesNearbyCoordinates = async (
 
 export const createPlace = async (form: CreatePlaceForm) => {
   const token = await SecureStore.getItemAsync('access-token');
-
-  const ownerId = await getUser()  
+  const ownerId = await getUser();
   return await axios
     .post(
       `${API_URL}/places/create`,
@@ -72,7 +69,7 @@ export const createPlace = async (form: CreatePlaceForm) => {
         authorizeSmoking: form.authorizeSmoking,
         authorizeFire: form.authorizeFire,
         authorizeFoodAndDrink: form.authorizeFoodAndDrink,
-        ownerId: ownerId._id
+        ownerId: ownerId._id,
       },
       {
         headers: {
@@ -87,3 +84,26 @@ export const createPlace = async (form: CreatePlaceForm) => {
       return Promise.reject(err.response.data);
     });
 };
+
+export const bookPlace = async (place: Place, booking: Booking) => {
+  const token = await SecureStore.getItemAsync('access-token');
+  return await axios
+    .post(
+      `${API_URL}/places/booking`,
+      {
+        placeId: place._id,
+        booking: booking,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    )
+    .then((response: AxiosResponse<any>) => {
+      return response.data.place;
+    })
+    .catch((err) => {
+      return Promise.reject(err.response.data);
+    });
+}

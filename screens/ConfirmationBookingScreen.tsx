@@ -1,5 +1,5 @@
-import {AntDesign, Ionicons} from '@expo/vector-icons';
-import React, {useState, useEffect, useCallback} from 'react';
+import {AntDesign} from '@expo/vector-icons';
+import React, {useContext, useState} from 'react';
 import {
   View,
   StyleSheet,
@@ -12,19 +12,18 @@ import {
 import {useStripe} from '@stripe/stripe-react-native';
 
 import Button from '../components/Button';
-import CalendarPicker from '../components/CalendarPicker';
 import SimpleInput from '../components/SimpleInput';
 import TitleWithDescription from '../components/TitleWithDescription';
 import Colors from '../constants/Colors';
 import {initPaymentIntent} from '../api/payment';
-import {Place} from '../types';
+import {Booking, Place} from '../types';
 import {getBookingPriceWithDuration} from '../utils';
-import FeatureList from '../components/FeatureList';
-import Modal from '../components/Modal';
+import {bookPlace} from '../api/places';
+import { ModalContext } from '../providers/modalContext';
 
 type Props = {
   place: Place;
-  booking: any;
+  booking: Booking;
 };
 
 const creditCard = require('../assets/images/card.png');
@@ -34,8 +33,7 @@ const ConfirmationBookingScreen = ({place, booking}: Props) => {
   const {presentPaymentSheet, initPaymentSheet} = useStripe();
   const [activePaymentMethod, setActivePaymentMethod] = useState(0);
   const [promotionalCode, showPromotionalCode] = useState<boolean>(false);
-
-  console.log(booking);
+  const {handleModal} = useContext(ModalContext);
 
   const getClientSecret = async () => {
     const {paymentIntent, ephemeralKey, customer} = await initPaymentIntent(
@@ -55,10 +53,15 @@ const ConfirmationBookingScreen = ({place, booking}: Props) => {
 
   const onBookPress = async () => {
     const clientSecret = await getClientSecret();
-    await presentPaymentSheet({
+    const {error} = await presentPaymentSheet({
       clientSecret,
       confirmPayment: true,
     });
+
+    if (!error) {
+      bookPlace(place, booking);
+      handleModal();
+    }
     setPaymentSheetEnabled(false);
   };
 
@@ -82,20 +85,36 @@ const ConfirmationBookingScreen = ({place, booking}: Props) => {
         <TitleWithDescription title="Payment and details" subtitle={true} />
         <View style={styles.row}>
           <TouchableWithoutFeedback onPress={() => setActivePaymentMethod(0)}>
-            <View style={styles.paymentMethodContainer}>
+            <View
+              style={[
+                styles.paymentMethodContainer,
+                activePaymentMethod === 0 && styles.isActive,
+              ]}>
               <Image
                 source={require('../assets/icons/credit-card.png')}
                 style={styles.paymentMethodIcon}
               />
             </View>
           </TouchableWithoutFeedback>
-          <TouchableWithoutFeedback onPress={() => setActivePaymentMethod(0)}>
-            <View style={styles.paymentMethodContainer}>
-              <AntDesign name="apple1" color={Colors.dark} size={20} />
+          <TouchableWithoutFeedback onPress={() => setActivePaymentMethod(1)}>
+            <View
+              style={[
+                styles.paymentMethodContainer,
+                activePaymentMethod === 1 && styles.isActive,
+              ]}>
+              <AntDesign
+                name="apple1"
+                color={activePaymentMethod === 1 ? Colors.white : Colors.dark}
+                size={20}
+              />
             </View>
           </TouchableWithoutFeedback>
-          <TouchableWithoutFeedback onPress={() => setActivePaymentMethod(0)}>
-            <View style={styles.paymentMethodContainer}>
+          <TouchableWithoutFeedback onPress={() => setActivePaymentMethod(2)}>
+            <View
+              style={[
+                styles.paymentMethodContainer,
+                activePaymentMethod === 2 && styles.isActive,
+              ]}>
               <Image
                 source={require('../assets/icons/google.png')}
                 style={styles.googleIcon}
@@ -131,7 +150,7 @@ const ConfirmationBookingScreen = ({place, booking}: Props) => {
         <View style={styles.paymentRow}>
           <Text style={styles.key}>Servicing charge</Text>
           <Text style={styles.value}>
-            {place.price * booking.bookingPeriod.duration * 0.20}€
+            {place.price * booking.bookingPeriod.duration * 0.2}€
           </Text>
         </View>
         <View style={styles.paymentRow}>
@@ -265,6 +284,9 @@ const styles = StyleSheet.create({
   },
   input: {
     flex: 1,
+  },
+  isActive: {
+    backgroundColor: Colors.primary,
   },
 });
 

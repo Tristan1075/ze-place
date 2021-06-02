@@ -22,6 +22,7 @@ type Error = {
 
 const BookingScreen = ({place}: Props) => {
   const [confirmationBooking, showConfirmationBooking] = useState(false);
+  const [minDate, setMinDate] = useState<string>(Date());
   const [booking, setBooking] = useState<Booking>({
     features: [],
     bookingPeriod: {
@@ -80,7 +81,9 @@ const BookingScreen = ({place}: Props) => {
           <TitleWithDescription title="Booking date" subtitle={true} />
           <CalendarPicker
             showDates={true}
-            onChange={(startDate, endDate, duration) =>
+            minDate={minDate}
+            onChange={(startDate, endDate, duration) => {
+              startDate && setMinDate(startDate);
               setBooking({
                 ...booking,
                 bookingPeriod: {
@@ -88,8 +91,8 @@ const BookingScreen = ({place}: Props) => {
                   endDate: endDate,
                   duration,
                 },
-              })
-            }
+              });
+            }}
           />
           {errors.date ? <Text style={styles.error}>{errors.date}</Text> : null}
           <TitleWithDescription title="Information" subtitle={true} />
