@@ -30,6 +30,8 @@ import {ModalContext} from '../providers/modalContext';
 import MapScreen from './MapScreen';
 import BookingScreen from './BookingScreen';
 import CalendarPicker from '../components/CalendarPicker';
+import TitleWithDescription from '../components/TitleWithDescription';
+import FeatureList from '../components/FeatureList';
 
 type PlaceScreenNavigationProp = RouteProp<HomeParamList, 'PlaceDetail'>;
 
@@ -87,7 +89,10 @@ const PlaceDetailScreen = (props: Props) => {
               {item.location.country}
             </Text>
             <View style={styles.descriptionBloc}>
-              <Text style={styles.contentTitle}>About {item.title}</Text>
+              <TitleWithDescription
+                title={`About ${item.title}`}
+                subtitle={true}
+              />
               <View style={styles.padding}>
                 <Rating
                   startingValue={item.rate}
@@ -117,18 +122,13 @@ const PlaceDetailScreen = (props: Props) => {
                 See more
               </Text>
             </View>
-            <Text style={styles.contentTitle}>Features</Text>
+            <TitleWithDescription title="Features" subtitle={true} />
           </View>
-          <ScrollView
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.facilitiesContainer}>
-            {item.features.map((feature, index) => (
-              <Feature feature={feature} key={index} />
-            ))}
-          </ScrollView>
+          <View style={styles.facilitiesContainer}>
+            <FeatureList features={item.features} />
+          </View>
           <View style={styles.content}>
-            <Text style={styles.contentTitle}>Authorization</Text>
+            <TitleWithDescription title="Authorization" subtitle={true} />
             <View style={styles.authorization}>
               <ToggleWithTitle
                 title="Animals"
@@ -194,9 +194,12 @@ const PlaceDetailScreen = (props: Props) => {
                 />
               }
             />
-            <Text style={styles.contentTitle}>About {item.title}</Text>
+            <TitleWithDescription
+              title={`About ${item.title}`}
+              subtitle={true}
+            />
             <Text style={styles.description}>{item.description}</Text>
-            <Text style={styles.contentTitle}>Location</Text>
+            <TitleWithDescription title="Place location" subtitle={true} />
             <MapView
               onTouchStart={handleMapPress}
               provider={PROVIDER_GOOGLE}
@@ -216,7 +219,7 @@ const PlaceDetailScreen = (props: Props) => {
                 longitudeDelta: 0.0421,
               }}
             />
-            <Text style={styles.contentTitle}>Availabilities</Text>
+            <TitleWithDescription title="Availabilities" subtitle={true} />
             <CalendarPicker />
           </View>
           {item.images.length > 0 && (
@@ -278,7 +281,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 50,
     position: 'relative',
-    paddingBottom: 100,
+    paddingBottom: 150,
   },
   row: {
     flexDirection: 'row',
@@ -311,14 +314,7 @@ const styles = StyleSheet.create({
     paddingTop: 40,
     alignItems: 'flex-start',
   },
-  contentTitle: {
-    fontFamily: 'oswald-light',
-    fontSize: 24,
-    color: Colors.secondary,
-    paddingVertical: 5,
-  },
   description: {
-    paddingTop: 10,
     fontFamily: 'poppins-light',
     fontSize: 15,
   },
@@ -395,7 +391,6 @@ const styles = StyleSheet.create({
   map: {
     height: 180,
     borderRadius: 20,
-    marginTop: 10,
   },
   seeMore: {
     paddingTop: 5,

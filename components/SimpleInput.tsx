@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
   },
   input: {
     flex: 1,
-    padding: 20,
+    padding: 15,
     borderRadius: 10,
     fontFamily: 'poppins',
   },

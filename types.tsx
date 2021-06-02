@@ -243,3 +243,13 @@ export type PaymentMethod = {
   type: string;
   is_default: boolean;
 };
+
+export type Booking = {
+  features: Array<FeatureType>;
+  bookingPeriod: {
+    startDate?: string;
+    endDate?: string;
+    duration?: number;
+  };
+  description: string;
+};
