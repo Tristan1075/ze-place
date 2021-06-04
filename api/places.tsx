@@ -106,4 +106,46 @@ export const bookPlace = async (place: Place, booking: Booking) => {
     .catch((err) => {
       return Promise.reject(err.response.data);
     });
-}
+};
+
+export const getBookings = async (placeId: string): Promise<Booking[]> => {
+  const token = await SecureStore.getItemAsync('access-token');
+  return await axios
+    .get(`${API_URL}/places/${placeId}/bookings`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .then((response: AxiosResponse<any>) => {
+      return response.data.bookings;
+    })
+    .catch((err) => {
+      return Promise.reject(err);
+    });
+};
+
+export const acceptBooking = async (
+  placeId: string,
+  bookingId: string,
+): Promise<Booking[]> => {
+  const token = await SecureStore.getItemAsync('access-token');
+  return await axios
+    .post(
+      `${API_URL}/places/booking/accept`,
+      {
+        placeId,
+        bookingId,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    )
+    .then((response: AxiosResponse<any>) => {
+      return response.data.bookings;
+    })
+    .catch((err) => {
+      return Promise.reject(err.response.data);
+    });
+};

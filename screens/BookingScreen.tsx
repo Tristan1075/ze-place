@@ -25,11 +25,10 @@ const BookingScreen = ({place}: Props) => {
   const [minDate, setMinDate] = useState<string>(Date());
   const [booking, setBooking] = useState<Booking>({
     features: [],
-    bookingPeriod: {
-      startDate: '',
-      endDate: '',
-      duration: undefined,
-    },
+    startDate: '',
+    endDate: '',
+    duration: undefined,
+    price: undefined,
     description: '',
   });
   const [errors, setErrors] = useState<Error>({
@@ -47,7 +46,7 @@ const BookingScreen = ({place}: Props) => {
       formErrors.features = 'You have to choose a feature';
       isValid = false;
     }
-    if (booking.bookingPeriod.startDate?.length === 0) {
+    if (booking.startDate?.length === 0 || booking.endDate?.length === 0) {
       formErrors.date = 'You have to choose a period';
       isValid = false;
     }
@@ -84,14 +83,15 @@ const BookingScreen = ({place}: Props) => {
             minDate={minDate}
             onChange={(startDate, endDate, duration) => {
               startDate && setMinDate(startDate);
-              setBooking({
-                ...booking,
-                bookingPeriod: {
-                  startDate: startDate,
-                  endDate: endDate,
+              if (duration) {
+                setBooking({
+                  ...booking,
+                  startDate,
+                  endDate,
                   duration,
-                },
-              });
+                  price: place.price * duration,
+                });
+              }
             }}
           />
           {errors.date ? <Text style={styles.error}>{errors.date}</Text> : null}

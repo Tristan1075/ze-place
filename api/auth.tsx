@@ -1,13 +1,20 @@
-import {API_URL, API_TOKEN} from '@env';
+import {API_URL} from '@env';
 import axios, {AxiosResponse} from 'axios';
-import {Credentials, SignupForm} from '../types';
+import {SignupForm} from '../types';
+import * as SecureStore from 'expo-secure-store';
+import { useDebugValue } from 'react';
+import { registerForPushNotificationsAsync } from './notifications';
 
 const headers = {
   'Content-Type': 'application/json',
 };
 
+type Credentials = {
+  email: string;
+  password: string;
+};
+
 export const login = async (credentials: Credentials) => {
-  
   return await axios
     .post(
       `${API_URL}/auth/login`,
@@ -28,7 +35,7 @@ export const login = async (credentials: Credentials) => {
 };
 
 export const register = async (form: SignupForm) => {
-  console.log(API_URL);
+  const pushToken = registerForPushNotificationsAsync();
   return await axios
     .post(
       `${API_URL}/auth/register`,
@@ -41,17 +48,24 @@ export const register = async (form: SignupForm) => {
         email: form.email,
         password: form.password,
         description: form.description,
+        pushToken: pushToken,
       },
       {
         headers: headers,
       },
     )
     .then((response: AxiosResponse<any>) => {
-      console.log(response);
       return response.data;
     })
     .catch((err) => {
       console.log(err.response.data);
       return Promise.reject(err);
     });
+};
+
+export const getUserId = async () => {
+  const id = await SecureStore.getItemAsync('userId');
+  if (id) {
+    return id;
+  }
 };

@@ -32,7 +32,7 @@ const TitleWithDescription = (props: Props) => {
     onActionPress,
   } = props;
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, style]}>
       <View style={styles.row}>
         <Text
           style={[subtitle ? styles.subtitle : styles.title, {color: color}]}>

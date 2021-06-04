@@ -11,6 +11,8 @@ import Layout from '../constants/Layout';
 import {Coords, Place} from '../types';
 
 import {mapStyle} from '../utils/mapStyle';
+import Modal from '../components/Modal';
+import PlaceDetailScreen from './PlaceDetailScreen';
 
 const CustomMarker = ({isActive}) => {
   return (
@@ -36,6 +38,8 @@ const MapScreen = ({initialCoords}: Props) => {
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const [places, setPlaces] = useState<Array<Place>>([]);
   const [coords, setCoords] = useState<Coords>(initialCoords);
+  const [placeModal, showPlaceModal] = useState<boolean>(false);
+  const [selectedPlace, setSelectedPlace] = useState<Place>();
   let mapRef: any;
 
   useEffect(() => {
@@ -45,8 +49,13 @@ const MapScreen = ({initialCoords}: Props) => {
     init();
   }, [coords]);
 
+  const onCardPlacePress = (p: Place) => {
+    setSelectedPlace(p);
+    showPlaceModal(true);
+  };
+
   const renderCarouselItem = ({item}: {item: Place}) => {
-    return <PlaceCard place={item} />;
+    return <PlaceCard place={item} onPress={() => onCardPlacePress(item)} />;
   };
 
   const onRegionChange = (c: Coords) => {
@@ -103,6 +112,11 @@ const MapScreen = ({initialCoords}: Props) => {
           onSnapToItem={onItemSlide}
         />
       </View>
+      <Modal
+        visible={placeModal}
+        child={<PlaceDetailScreen place={selectedPlace} />}
+        handleModal={() => showPlaceModal(false)}
+      />
     </View>
   );
 };

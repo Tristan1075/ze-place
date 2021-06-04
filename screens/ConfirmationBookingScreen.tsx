@@ -19,7 +19,7 @@ import {initPaymentIntent} from '../api/payment';
 import {Booking, Place} from '../types';
 import {getBookingPriceWithDuration} from '../utils';
 import {bookPlace} from '../api/places';
-import { ModalContext } from '../providers/modalContext';
+import {ModalContext} from '../providers/modalContext';
 
 type Props = {
   place: Place;
@@ -57,7 +57,6 @@ const ConfirmationBookingScreen = ({place, booking}: Props) => {
       clientSecret,
       confirmPayment: true,
     });
-
     if (!error) {
       bookPlace(place, booking);
       handleModal();
@@ -75,11 +74,9 @@ const ConfirmationBookingScreen = ({place, booking}: Props) => {
           description={`${place.location.city}, ${place.location.postalCode} ${place.location.country}`}
         />
         <Text style={styles.title}>Arrival</Text>
-        <Text style={styles.description}>
-          {booking.bookingPeriod.startDate}
-        </Text>
+        <Text style={styles.description}>{booking.startDate}</Text>
         <Text style={styles.title}>Departure</Text>
-        <Text style={styles.description}>{booking.bookingPeriod.endDate}</Text>
+        <Text style={styles.description}>{booking.endDate}</Text>
       </View>
       <View style={styles.paymentBloc}>
         <TitleWithDescription title="Payment and details" subtitle={true} />
@@ -139,19 +136,19 @@ const ConfirmationBookingScreen = ({place, booking}: Props) => {
           </View>
         )}
         <View style={styles.paymentRow}>
-          <Text style={styles.keyBold}>
-            {booking.bookingPeriod.duration} days
-          </Text>
-          <Text style={styles.value}>
-            {booking.bookingPeriod.duration * place.price}€
-          </Text>
+          <Text style={styles.keyBold}>{booking.duration} days</Text>
+          {booking.duration && (
+            <Text style={styles.value}>{booking.duration * place.price}€</Text>
+          )}
         </View>
         <View style={styles.border} />
         <View style={styles.paymentRow}>
           <Text style={styles.key}>Servicing charge</Text>
-          <Text style={styles.value}>
-            {place.price * booking.bookingPeriod.duration * 0.2}€
-          </Text>
+          {booking.duration && (
+            <Text style={styles.value}>
+              {place.price * booking.duration * 0.2}€
+            </Text>
+          )}
         </View>
         <View style={styles.paymentRow}>
           <Text style={styles.key}>TVA 20%</Text>
@@ -160,12 +157,14 @@ const ConfirmationBookingScreen = ({place, booking}: Props) => {
         <View style={styles.resume}>
           <View style={styles.totalRow}>
             <Text style={styles.total}>TOTAL </Text>
-            <Text style={styles.total}>
-              {place.price * 0.4 +
-                place.price * 0.2 +
-                booking.bookingPeriod.duration * place.price}
-              €
-            </Text>
+            {booking.duration && (
+              <Text style={styles.total}>
+                {place.price * 0.4 +
+                  place.price * 0.2 +
+                  booking.duration * place.price}
+                €
+              </Text>
+            )}
           </View>
           <Button
             onPress={onBookPress}

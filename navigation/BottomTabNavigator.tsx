@@ -13,12 +13,12 @@ import Colors from '../constants/Colors';
 
 import HomeScreen from '../screens/HomeScreen';
 import PlaceDetailScreen from '../screens/PlaceDetailScreen';
-
 import MessagesScreen from '../screens/MessagesScreen';
 import ConversationScreen from '../screens/ConversationScreen';
 import FavoritesScreen from '../screens/FavoritesScreen';
 import CreatePlaceScreen from '../screens/PlaceCreation/CreatePlaceScreen';
 import PlaceList from '../screens/PlaceListScreen';
+import UserBookingsScreen from '../screens/UserBookingsScreen';
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
@@ -78,6 +78,7 @@ const HomeNavigator = () => {
       <HomeStack.Screen name="PlaceDetail" component={PlaceDetailScreen} />
       <HomeStack.Screen name="CreatePlace" component={CreatePlaceScreen} />
       <HomeStack.Screen name="PlaceList" component={PlaceList} />
+      <HomeStack.Screen name="UserBookings" component={UserBookingsScreen} />
     </HomeStack.Navigator>
   );
 };
