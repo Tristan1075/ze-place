@@ -305,19 +305,19 @@ const PlaceDetailScreen = (props: Props) => {
       </ScrollView>
       <View style={styles.chooseBanner}>
         <Text style={styles.chooseBannerText}>
-          {userId === item.ownerId ? 'Active bookings' : 'Per day'}
+          {user?._id === item.ownerId ? 'Active bookings' : 'Per day'}
         </Text>
         <Text style={styles.chooseBannerPrice}>
-          {userId === item.ownerId
+          {user?._id === item.ownerId
             ? `${item.bookings.length}`
             : `${item.price}€`}
         </Text>
         <Button
           backgroundColor={Colors.white}
           textColor={Colors.primary}
-          value={userId === item.ownerId ? 'See bookings' : 'Book'}
+          value={user?._id === item.ownerId ? 'See bookings' : 'Book'}
           onPress={
-            userId === item.ownerId ? handleSeeBookingsPress : handleSeeBookingsPress
+            user?._id === item.ownerId ? handleSeeBookingsPress : handleSeeBookingsPress
           }
         />
       </View>

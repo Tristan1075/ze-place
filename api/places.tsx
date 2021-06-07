@@ -150,8 +150,6 @@ export const acceptBooking = async (
     });
 };
 
-};
-
 export const getSimilarPlaces = async (placeID: String) => {
   const token = await SecureStore.getItemAsync('access-token');
   console.log(placeID);
