@@ -9,7 +9,7 @@ import {
   Modal,
   FlatList,
 } from 'react-native';
-import {RouteProp, useRoute} from '@react-navigation/native';
+import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
 import {Rating} from 'react-native-ratings';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import {
@@ -25,7 +25,6 @@ import {HomeParamList, Place, User} from '../types';
 import Header from '../components/Header';
 import Button from '../components/Button';
 import {mapStyle} from '../utils/mapStyle';
-import Feature from '../components/Feature';
 import ToggleWithTitle from '../components/ToggleWithTitle';
 import {ModalContext} from '../providers/modalContext';
 import MapScreen from './MapScreen';
@@ -41,6 +40,7 @@ type PlaceScreenNavigationProp = RouteProp<HomeParamList, 'PlaceDetail'>;
 
 type Props = {
   navigation: PlaceScreenNavigationProp;
+  place?: Place;
 };
 
 const PlaceDetailScreen = (props: Props) => {
@@ -96,6 +96,10 @@ const PlaceDetailScreen = (props: Props) => {
     handleModal({
       child: <BookingScreen place={item} />,
     });
+  };
+
+  const handleSeeBookingsPress = () => {
+    navigation.navigate('UserBookings', {placeId: item._id});
   };
 
   const handleMapPress = () => {
@@ -300,13 +304,21 @@ const PlaceDetailScreen = (props: Props) => {
         </View>
       </ScrollView>
       <View style={styles.chooseBanner}>
-        <Text style={styles.chooseBannerText}>Per day</Text>
-        <Text style={styles.chooseBannerPrice}>{item.price}€</Text>
+        <Text style={styles.chooseBannerText}>
+          {userId === item.ownerId ? 'Active bookings' : 'Per day'}
+        </Text>
+        <Text style={styles.chooseBannerPrice}>
+          {userId === item.ownerId
+            ? `${item.bookings.length}`
+            : `${item.price}€`}
+        </Text>
         <Button
           backgroundColor={Colors.white}
           textColor={Colors.primary}
-          value={'Select place'}
-          onPress={handleBookPress}
+          value={userId === item.ownerId ? 'See bookings' : 'Book'}
+          onPress={
+            userId === item.ownerId ? handleSeeBookingsPress : handleSeeBookingsPress
+          }
         />
       </View>
       <Modal visible={imagePreview} transparent={true}>

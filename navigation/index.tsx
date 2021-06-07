@@ -15,9 +15,11 @@ import PaymentMethodForm from '../screens/PaymentMethodForm';
 import MenuScreen from '../screens/MenuScreen';
 import MyPlaceScreen from '../screens/MyPlaceScreen';
 
+import {navigationRef} from '../App';
+
 const Stack = createStackNavigator<RootStackParamList>();
 
-const RootNavigator = () => {
+const RootNavigator = (props) => {
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen name="Root" component={RootScreen} />
@@ -36,7 +38,7 @@ const RootNavigator = () => {
 
 const Navigation = () => {
   return (
-    <NavigationContainer linking={LinkingConfiguration}>
+    <NavigationContainer ref={navigationRef} linking={LinkingConfiguration}>
       <RootNavigator />
     </NavigationContainer>
   );

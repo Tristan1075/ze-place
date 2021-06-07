@@ -23,6 +23,7 @@ export type HomeParamList = {
   PlaceList: {filter: FilterForm};
   CreatePlace: undefined;
   MapModal: undefined;
+  UserBookings: {placeId: string};
 };
 
 export type CreatePlaceParamList = {
@@ -67,14 +68,16 @@ export type Place = {
   rentingDuration: string;
   rate: string;
   description: string;
-  images: Array<Image>;
-  features: Array<FeatureType>;
+  images: Image[];
+  features: FeatureType[];
   authorizeAnimals: boolean;
   authorizeMusic: boolean;
   authorizeSmoking: boolean;
   authorizeFire: boolean;
   authorizeFoodAndDrink: boolean;
-  reviews: Array<Review>;
+  reviews: Review[];
+  ownerId: string;
+  bookings: Booking[];
   created_at: {type: Date; default: Date};
 };
 
@@ -245,11 +248,16 @@ export type PaymentMethod = {
 };
 
 export type Booking = {
-  features: Array<FeatureType>;
-  bookingPeriod: {
-    startDate?: string;
-    endDate?: string;
-    duration?: number;
-  };
+  _id: string;
+  userId: string;
+  firstname: string;
+  lastname: string;
+  avatar: string;
+  feature: FeatureType;
+  startDate: string;
+  endDate: string;
+  duration: number;
+  price: number;
   description: string;
+  isAccepted: boolean;
 };

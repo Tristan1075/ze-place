@@ -99,6 +99,7 @@ const SignupScreen = (props: Props) => {
     if (isFormValid) {
       try {
         const token = await register(form);
+        await SecureStore.setItemAsync('userId', token.userId);
         await SecureStore.setItemAsync('access-token', token.access_token);
         navigation.dispatch(
           CommonActions.reset({

@@ -66,9 +66,6 @@ const HomeScreen = (props: Props) => {
   const handlePlacePress = (place: Place) => {
     navigation.navigate('PlaceDetail', {place: place});
   };
-  const handleProfilOption = () => {
-    navigation.navigate('Signin');
-  };
 
   const handleCreatePlacePress = () => {
     navigation.navigate('CreatePlace');
@@ -114,17 +111,22 @@ const HomeScreen = (props: Props) => {
   };
 
   const renderCarouselItem = ({item}: {item: Place}) => {
-    return <CardWithRate place={item} onPress={() => handlePlacePress(item)} />;
+    return (
+      <CardWithRate
+        place={item}
+        onPress={() => handlePlacePress(item)}
+        key={item._id}
+      />
+    );
   };
 
-  const renderListItem = ({item, index}: {item: Place; index: number}) => {
+  const renderListItem = ({item}: {item: Place}) => {
     const isFavorite = Boolean(
       user && user.favorites.find((foundPlace) => foundPlace._id === item._id),
     );
     return (
-      <View style={styles.paddingHorizontal} key={index}>
+      <View style={styles.paddingHorizontal} key={item._id}>
         <PlaceCard
-          key={index}
           place={item}
           onPress={() => handlePlacePress(item)}
           onFavoritePress={handleFavoritePress}
@@ -183,8 +185,9 @@ const HomeScreen = (props: Props) => {
       />
       <FlatList
         data={places}
+        scrollEnabled={false}
         renderItem={renderListItem}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item._id}
         showsVerticalScrollIndicator={false}
       />
       <Button value="Disconnnect" onPress={handleDisconnectPress} />

@@ -11,6 +11,7 @@ import {
 //@ts-ignore
 import Modal, {ModalContent, BottomModal} from 'react-native-modals';
 import * as ImagePicker from 'expo-image-picker';
+import {StackActions, useNavigation} from '@react-navigation/native';
 
 import TitleWithDescription from '../../components/TitleWithDescription';
 import Button from '../../components/Button';
@@ -31,6 +32,7 @@ const Customization = (props: Props) => {
   const {prevStep, createPlaceForm, setCreatePlaceForm} = props;
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [submitModal, setSubmitModal] = useState<boolean>(false);
+  const navigation = useNavigation();
 
   const handleChooseImagePress = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -54,7 +56,8 @@ const Customization = (props: Props) => {
   const handleSubmitForm = async () => {
     try {
       const place = await createPlace(createPlaceForm);
-      
+      setSubmitModal(false);
+      navigation.dispatch(StackActions.popToTop());
     } catch (err) {
       console.log(err);
     }
