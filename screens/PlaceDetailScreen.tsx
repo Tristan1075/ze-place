@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react';
+import React, {useState, useContext, useEffect} from 'react';
 import {
   StyleSheet,
   Text,
@@ -7,6 +7,7 @@ import {
   Image,
   ScrollView,
   Modal,
+  FlatList,
 } from 'react-native';
 import {RouteProp, useRoute} from '@react-navigation/native';
 import {Rating} from 'react-native-ratings';
@@ -20,7 +21,7 @@ import ImageViewer from 'react-native-image-zoom-viewer';
 
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
-import {HomeParamList, Place} from '../types';
+import {HomeParamList, Place, User} from '../types';
 import Header from '../components/Header';
 import Button from '../components/Button';
 import {mapStyle} from '../utils/mapStyle';
@@ -32,6 +33,9 @@ import BookingScreen from './BookingScreen';
 import CalendarPicker from '../components/CalendarPicker';
 import TitleWithDescription from '../components/TitleWithDescription';
 import FeatureList from '../components/FeatureList';
+import {getSimilarPlaces} from '../api/places';
+import PlaceCard from '../components/PlaceCard';
+import {addFavorite, getUser, removeFavorite} from '../api/customer';
 
 type PlaceScreenNavigationProp = RouteProp<HomeParamList, 'PlaceDetail'>;
 
@@ -40,12 +44,53 @@ type Props = {
 };
 
 const PlaceDetailScreen = (props: Props) => {
+  const {navigation} = props;
   const {handleModal} = useContext(ModalContext);
   const [activeImage, setActiveImage] = useState<number>(0);
   const [seeMore, setSeeMore] = useState<boolean>(false);
   const [imagePreview, setImagePreview] = useState<boolean>(false);
   const route = useRoute<PlaceScreenNavigationProp>();
   const item: Place = route.params.place;
+  const [user, setUser] = useState<User>();
+  const [similarPlaces,setSimilarPlaces] = useState<Place[]>();
+
+  const init = async () => {
+    setSimilarPlaces(await getSimilarPlaces(item._id));
+    setUser(await getUser());
+  };
+
+  useEffect(() => {
+    init();
+  }, []);
+
+  const handlePlacePress = (place: Place) => {
+    navigation.navigate('PlaceDetail', {place: place});
+  };
+
+  const handleFavoritePress = async (p: Place) => {
+    const isFavorite = Boolean(
+      user && user.favorites.find((foundPlace) => foundPlace._id === p._id),
+    );
+    isFavorite ? removeFavorite(p) : addFavorite(p);
+    await init();
+  };
+
+  const renderItem = ({item, index}: {item: Place; index: number}) => {
+    const isFavorite = Boolean(
+      user && user.favorites.find((foundPlace) => foundPlace._id === item._id),
+    );
+    return (
+      <View key={index}>
+        <PlaceCard
+          key={index}
+          place={item}
+          onPress={() => handlePlacePress(item)}
+          onFavoritePress={handleFavoritePress}
+          isFavorite={isFavorite}
+        />
+      </View>
+    );
+  };
 
   const handleBookPress = () => {
     handleModal({
@@ -221,6 +266,15 @@ const PlaceDetailScreen = (props: Props) => {
             />
             <TitleWithDescription title="Availabilities" subtitle={true} />
             <CalendarPicker />
+            <View style={styles.paddingCardView}>
+              <TitleWithDescription title="Similar Places" subtitle={true} />
+              <FlatList
+                data={similarPlaces}
+                renderItem={renderItem}
+                keyExtractor={(item) => item._id}
+                showsVerticalScrollIndicator={false}
+              />
+            </View>
           </View>
           {item.images.length > 0 && (
             <ScrollView
@@ -424,6 +478,12 @@ const styles = StyleSheet.create({
     paddingLeft: Layout.padding,
     paddingRight: 5,
     marginVertical: 10,
+  },
+  paddingHorizontal: {
+    paddingHorizontal: Layout.padding,
+  },
+  paddingCardView: {
+    padding: 10,
   },
   favorite: {
     position: 'absolute',
