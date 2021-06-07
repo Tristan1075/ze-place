@@ -35,6 +35,7 @@ import FeatureList from '../components/FeatureList';
 import {getSimilarPlaces} from '../api/places';
 import PlaceCard from '../components/PlaceCard';
 import {addFavorite, getUser, removeFavorite} from '../api/customer';
+import i18n from 'i18n-js';
 
 type PlaceScreenNavigationProp = RouteProp<HomeParamList, 'PlaceDetail'>;
 
@@ -139,7 +140,7 @@ const PlaceDetailScreen = (props: Props) => {
             </Text>
             <View style={styles.descriptionBloc}>
               <TitleWithDescription
-                title={`About ${item.title}`}
+                title={i18n.t('place_detail_about') + ' ' + item.title}
                 subtitle={true}
               />
               <View style={styles.padding}>
@@ -160,27 +161,35 @@ const PlaceDetailScreen = (props: Props) => {
                 <View style={styles.reviewersNumber}>
                   <Text style={styles.subtitle}>{item.reviews.length}+</Text>
                 </View>
-                <Text style={styles.reviewersText}>People reviewed this</Text>
+                <Text style={styles.reviewersText}>
+                  {i18n.t('place_detail_people_review_this')}
+                </Text>
               </View>
               <Text
                 style={styles.description}
                 numberOfLines={seeMore ? 999 : 5}>
                 {item.aboutUser}
               </Text>
-              <Text style={styles.seeMore} onPress={() => setSeeMore(!seeMore)}>
-                See more
-              </Text>
+              {/* <Text style={styles.seeMore} onPress={() => setSeeMore(!seeMore)}>
+              {i18n.t('place_detail_see_more')}
+              </Text> */}
             </View>
-            <TitleWithDescription title="Features" subtitle={true} />
+            <TitleWithDescription
+              title={i18n.t('place_detail_features')}
+              subtitle={true}
+            />
           </View>
           <View style={styles.facilitiesContainer}>
             <FeatureList features={item.features} />
           </View>
           <View style={styles.content}>
-            <TitleWithDescription title="Authorization" subtitle={true} />
+            <TitleWithDescription
+              title={i18n.t('place_detail_authorization')}
+              subtitle={true}
+            />
             <View style={styles.authorization}>
               <ToggleWithTitle
-                title="Animals"
+                title={i18n.t('place_detail_animals')}
                 value={item.authorizeAnimals}
                 icon={
                   <FontAwesome5
@@ -193,7 +202,7 @@ const PlaceDetailScreen = (props: Props) => {
                 }
               />
               <ToggleWithTitle
-                title="Smoking"
+                title={i18n.t('place_detail_smoking')}
                 value={item.authorizeSmoking}
                 icon={
                   <FontAwesome5
@@ -208,7 +217,7 @@ const PlaceDetailScreen = (props: Props) => {
             </View>
             <View style={styles.authorization}>
               <ToggleWithTitle
-                title="Music"
+                title={i18n.t('place_detail_music')}
                 value={item.authorizeMusic}
                 icon={
                   <Ionicons
@@ -219,7 +228,7 @@ const PlaceDetailScreen = (props: Props) => {
                 }
               />
               <ToggleWithTitle
-                title="Fire"
+                title={i18n.t('place_detail_fire')}
                 value={item.authorizeFire}
                 icon={
                   <MaterialCommunityIcons
@@ -231,7 +240,7 @@ const PlaceDetailScreen = (props: Props) => {
               />
             </View>
             <ToggleWithTitle
-              title="Food and drink"
+              title={i18n.t('place_detail_food_and_drink')}
               value={item.authorizeFoodAndDrink}
               icon={
                 <MaterialCommunityIcons
@@ -244,11 +253,14 @@ const PlaceDetailScreen = (props: Props) => {
               }
             />
             <TitleWithDescription
-              title={`About ${item.title}`}
+              title={i18n.t('place_detail_about') + ' ' + item.title}
               subtitle={true}
             />
             <Text style={styles.description}>{item.description}</Text>
-            <TitleWithDescription title="Place location" subtitle={true} />
+            <TitleWithDescription
+              title={i18n.t('place_detail_location')}
+              subtitle={true}
+            />
             <MapView
               onTouchStart={handleMapPress}
               provider={PROVIDER_GOOGLE}
@@ -268,10 +280,16 @@ const PlaceDetailScreen = (props: Props) => {
                 longitudeDelta: 0.0421,
               }}
             />
-            <TitleWithDescription title="Availabilities" subtitle={true} />
+            <TitleWithDescription
+              title={i18n.t('place_detail_availavilities')}
+              subtitle={true}
+            />
             <CalendarPicker />
             <View style={styles.paddingCardView}>
-              <TitleWithDescription title="Similar Places" subtitle={true} />
+              <TitleWithDescription
+                title={i18n.t('place_detail_similar_places')}
+                subtitle={true}
+              />
               <FlatList
                 data={similarPlaces}
                 renderItem={renderItem}
@@ -305,7 +323,9 @@ const PlaceDetailScreen = (props: Props) => {
       </ScrollView>
       <View style={styles.chooseBanner}>
         <Text style={styles.chooseBannerText}>
-          {user?._id === item.ownerId ? 'Active bookings' : 'Per day'}
+          {user?._id === item.ownerId
+            ? i18n.t('place_detail_active_bookings')
+            : i18n.t('place_detail_per_day')}
         </Text>
         <Text style={styles.chooseBannerPrice}>
           {user?._id === item.ownerId
@@ -315,7 +335,11 @@ const PlaceDetailScreen = (props: Props) => {
         <Button
           backgroundColor={Colors.white}
           textColor={Colors.primary}
-          value={user?._id === item.ownerId ? 'See bookings' : 'Book'}
+          value={
+            user?._id === item.ownerId
+              ? i18n.t('place_detail_see_bookings')
+              : i18n.t('place_detail_book')
+          }
           onPress={
             user?._id === item.ownerId ? handleSeeBookingsPress : handleSeeBookingsPress
           }
