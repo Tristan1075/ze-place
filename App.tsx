@@ -31,14 +31,14 @@ const App = () => {
       }),
     };
 
-    // initSocket.socket.emit('msgToServer', "Hello World ! I'm the client side");
-    initSocket.socket.emit('events', {name: 'Nest'}, (data) => {
-      console.log(data);
-      console.log('eyooo !');
-    });
+    initSocket.socket.emit('msgToServer', "Hello World ! I'm the client side");
+    // initSocket.socket.emit('events', {name: 'Nest'}, (data) => {
+    // console.log(data);
+    // console.log('eyooo !');
+    // });
     initSocket.socket.on('msgToClient', (socketID: any) => {
       // AppStore.updateSocketID(socketID);
-      console.warn(socketID);
+      console.warn('SocketID : ' + socketID);
     });
     setSocket(initSocket);
   }, []);
