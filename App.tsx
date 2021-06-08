@@ -10,6 +10,7 @@ import * as Notifications from 'expo-notifications';
 import {ModalPortal} from 'react-native-modals';
 import * as Localization from 'expo-localization';
 import i18n from 'i18n-js';
+// import io from 'socket.io-client';
 
 import frFR from './localization/fr-FR';
 import enUS from './localization/en-US';
@@ -17,6 +18,7 @@ import enUS from './localization/en-US';
 import useCachedResources from './hooks/useCachedResources';
 import Navigation from './navigation';
 import {ModalProvider} from './providers/modalContext';
+// import {SocketProvider} from './components/SocketProvider';
 import {NavigationContainerRef} from '@react-navigation/core';
 import {registerForPushNotificationsAsync} from './api/notifications';
 
@@ -83,6 +85,7 @@ const App = () => {
     return null;
   } else {
     return (
+      // <SocketProvider socket={socket}>
       <SafeAreaProvider>
         <StripeProvider publishableKey={PUBLIC_KEY_STRIPE}>
           <ModalProvider>
@@ -92,6 +95,7 @@ const App = () => {
           </ModalProvider>
         </StripeProvider>
       </SafeAreaProvider>
+      // </SocketProvider>
     );
   }
 };

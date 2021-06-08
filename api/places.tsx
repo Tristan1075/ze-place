@@ -149,3 +149,28 @@ export const acceptBooking = async (
       return Promise.reject(err.response.data);
     });
 };
+
+export const getSimilarPlaces = async (placeID: String) => {
+  const token = await SecureStore.getItemAsync('access-token');
+  console.log(placeID);
+
+  return await axios
+    .post(
+      `${API_URL}/places/similarPlaces`,
+      {
+        placeID: placeID,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    )
+    .then((response: AxiosResponse<any>) => {
+      console.log(response.data);
+      return response.data.places;
+    })
+    .catch((err) => {
+      return Promise.reject(err.response.data);
+    });
+};
