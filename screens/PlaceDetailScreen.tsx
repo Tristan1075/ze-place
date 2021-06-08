@@ -20,7 +20,7 @@ import ImageViewer from 'react-native-image-zoom-viewer';
 
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
-import {HomeParamList, Place} from '../types';
+import {Booking, HomeParamList, Place} from '../types';
 import Header from '../components/Header';
 import Button from '../components/Button';
 import {mapStyle} from '../utils/mapStyle';
@@ -46,12 +46,15 @@ const PlaceDetailScreen = (props: Props) => {
   const [seeMore, setSeeMore] = useState<boolean>(false);
   const [imagePreview, setImagePreview] = useState<boolean>(false);
   const [userId, setUserId] = useState<string>();
+  const [userBooking, setUserBooking] = useState<Booking>();
   const item = useRoute<PlaceScreenNavigationProp>().params.place;
   const navigation = useNavigation();
 
   const init = useCallback(async () => {
+    const id = await getUserId();
+    setUserBooking(item.bookings.find((booking) => booking.userId === id));
     setUserId(await getUserId());
-  }, []);
+  }, [item.bookings]);
 
   useEffect(() => {
     init();
@@ -64,7 +67,10 @@ const PlaceDetailScreen = (props: Props) => {
   };
 
   const handleSeeBookingsPress = () => {
-    navigation.navigate('UserBookings', {placeId: item._id});
+    navigation.navigate('UserBookings', {
+      placeId: item._id,
+      userBooking: userBooking,
+    });
   };
 
   const handleMapPress = () => {
@@ -261,19 +267,35 @@ const PlaceDetailScreen = (props: Props) => {
       </ScrollView>
       <View style={styles.chooseBanner}>
         <Text style={styles.chooseBannerText}>
-          {userId === item.ownerId ? 'Active bookings' : 'Per day'}
+          {userId === item.ownerId
+            ? 'Active bookings'
+            : userBooking
+            ? ''
+            : 'Per day'}
         </Text>
         <Text style={styles.chooseBannerPrice}>
           {userId === item.ownerId
             ? `${item.bookings.length}`
+            : userBooking
+            ? userBooking.startDate
             : `${item.price}€`}
         </Text>
         <Button
           backgroundColor={Colors.white}
           textColor={Colors.primary}
-          value={userId === item.ownerId ? 'See bookings' : 'Book'}
+          value={
+            userId === item.ownerId
+              ? 'See bookings'
+              : userBooking != null
+              ? 'My reservation'
+              : 'Book'
+          }
           onPress={
-            userId === item.ownerId ? handleSeeBookingsPress : handleSeeBookingsPress
+            userId === item.ownerId
+              ? handleSeeBookingsPress
+              : userBooking != null
+              ? handleSeeBookingsPress
+              : handleBookPress
           }
         />
       </View>

@@ -185,9 +185,6 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 40,
     paddingTop: 40,
   },
-  input: {
-    paddingVertical: 20,
-  },
   paddingHorizontal: {
     paddingHorizontal: 20,
   },
@@ -199,11 +196,10 @@ const styles = StyleSheet.create({
     marginVertical: 20,
   },
   contentScrollView: {
-    paddingBottom: 50,
+    paddingBottom: 80,
   },
   featureList: {
     paddingLeft: 20,
-    marginVertical: 20,
   },
 });
 

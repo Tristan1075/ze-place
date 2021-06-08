@@ -37,7 +37,7 @@ const ConfirmationBookingScreen = ({place, booking}: Props) => {
 
   const getClientSecret = async () => {
     const {paymentIntent, ephemeralKey, customer} = await initPaymentIntent(
-      getBookingPriceWithDuration(place.price, place.rentingDuration),
+      place.price * 100 * booking.duration,
     );
     const {error} = await initPaymentSheet({
       customerId: customer,

@@ -8,16 +8,16 @@ import {Booking} from '../types';
 type Props = {
   item: Booking;
   onAcceptPress: (bookingId: string) => void;
+  isUser: boolean;
 };
 
-const BookingCard = ({item, onAcceptPress}: Props) => {
+const BookingCard = ({item, onAcceptPres, isUser}: Props) => {
   return (
     <View style={styles.card}>
       <View style={styles.row}>
         <View style={styles.content}>
           <Text style={styles.name}>
-            {item.firstname}
-            {item.lastname}
+            {item.firstname} {item.lastname}
           </Text>
           <Text style={styles.date}>From: {item.startDate}</Text>
           <Text style={styles.date}>To: {item.endDate}</Text>
@@ -34,17 +34,19 @@ const BookingCard = ({item, onAcceptPress}: Props) => {
         <TouchableOpacity>
           <AntDesign name="closecircleo" size={30} color={Colors.dark} />
         </TouchableOpacity>
-        {item.isAccepted && <Text style={styles.date}>CANCEL</Text>}
-        {!item.isAccepted && (
-          <TouchableOpacity onPress={() => onAcceptPress(item._id)}>
-            <AntDesign
-              name="checkcircleo"
-              size={30}
-              color={Colors.primary}
-              style={styles.icon}
-            />
-          </TouchableOpacity>
-        )}
+        {item.isAccepted ||
+          (isUser && <Text style={styles.date}>CANCEL BOOKING</Text>)}
+        {!item.isAccepted ||
+          (!isUser && (
+            <TouchableOpacity onPress={() => onAcceptPress(item._id)}>
+              <AntDesign
+                name="checkcircleo"
+                size={30}
+                color={Colors.primary}
+                style={styles.icon}
+              />
+            </TouchableOpacity>
+          ))}
       </View>
     </View>
   );
