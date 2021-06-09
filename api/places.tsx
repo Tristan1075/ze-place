@@ -61,6 +61,8 @@ export const createPlace = async (form: CreatePlaceForm) => {
         price: form.price && parseInt(form.price, 10),
         description: form.description,
         features: form.features,
+        startDate: form.startDate,
+        endDate: form.endDate,
         images: form.images,
         authorizeAnimals: form.authorizeAnimals,
         authorizeMusic: form.authorizeMusic,

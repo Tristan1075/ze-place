@@ -51,9 +51,7 @@ const Header = (props: Props) => {
           />
         </TouchableOpacity>
       ) : (
-        <TouchableOpacity style={styles.headerContainer}>
-          <Ionicons size={30} name="menu" color={Colors.white} />
-        </TouchableOpacity>
+        <TouchableOpacity style={styles.headerContainer} />
       )}
       {title && <Text style={styles.title}>{title}</Text>}
       {showProfil && (

@@ -176,6 +176,8 @@ export type CreatePlaceForm = {
   title?: string;
   location?: Location;
   placeType?: PlaceType;
+  startDate?: string;
+  endDate?: string;
   surface?: string;
   price?: string;
   description?: string;

@@ -25,7 +25,6 @@ import {addFavorite, getUser, removeFavorite} from '../api/customer';
 import {Ionicons} from '@expo/vector-icons';
 import {ModalContext} from '../providers/modalContext';
 import SearchFilterScreen from './SearchFilterScreen';
-import Button from '../components/Button';
 import MapScreen from './MapScreen';
 import {getUserLocation} from '../utils';
 
@@ -147,6 +146,7 @@ const HomeScreen = (props: Props) => {
       </View>
       <TitleWithDescription
         title="Near you"
+        subtitle={true}
         description="Find nearby you the available places to rent"
         style={styles.padding}
         actionText="See map"
@@ -169,10 +169,11 @@ const HomeScreen = (props: Props) => {
         style={styles.padding}
         actionText="See more"
         actionIcon="list"
+        subtitle={true}
         onActionPress={showFilterModal}
       />
       <FlatList
-        data={places}
+        data={places.slice(0, 5)}
         scrollEnabled={false}
         renderItem={renderListItem}
         keyExtractor={(item) => item._id}
@@ -188,7 +189,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    paddingBottom: 50,
+    paddingBottom: 60,
     marginTop: 50,
     zIndex: 5,
   },

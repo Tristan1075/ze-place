@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
     left: 10,
   },
   title: {
-    fontFamily: 'oswald-light',
+    fontFamily: 'oswald',
     fontSize: 24,
     width: 250,
     color: Colors.white,
