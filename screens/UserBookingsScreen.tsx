@@ -1,14 +1,22 @@
+import {Feather, Ionicons} from '@expo/vector-icons';
 import {RouteProp, useRoute} from '@react-navigation/native';
-import React, {useEffect, useState} from 'react';
-import {View, StyleSheet, FlatList, ScrollView} from 'react-native';
+import React, {useCallback, useEffect, useState} from 'react';
+import {
+  View,
+  StyleSheet,
+  FlatList,
+  ScrollView,
+  Image,
+  Text,
+} from 'react-native';
+import {getUser, getUserById} from '../api/customer';
 import {acceptBooking, getBookings} from '../api/places';
 import BookingCard from '../components/BookingCard';
-import CalendarPicker from '../components/CalendarPicker';
 import Header from '../components/Header';
 import TitleWithDescription from '../components/TitleWithDescription';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
-import {HomeParamList, Booking, BookingTab} from '../types';
+import {HomeParamList, Booking, BookingTab, User} from '../types';
 
 type UserBookingsScreenNavigationProp = RouteProp<
   HomeParamList | BookingTab,
@@ -17,28 +25,35 @@ type UserBookingsScreenNavigationProp = RouteProp<
 
 const UserBookingsScreen = () => {
   const params = useRoute<UserBookingsScreenNavigationProp>().params;
-  const [bookings, setBookings] = useState<Booking[]>([params.userBooking]);
+  const [bookings, setBookings] = useState<Booking[]>([]);
+  const [owner, setOwner] = useState<User>();
+  const [user, setUser] = useState<User>();
+  const [userBooking, setUserBooking] = useState<Booking>();
+
+  const init = useCallback(async () => {
+    setUser(await getUser());
+    setOwner(await getUserById(params.ownerId));
+    setBookings(await getBookings(params.placeId));
+  }, [params.ownerId, params.placeId]);
 
   useEffect(() => {
-    if (!params.userBooking) {
-      getBookings(params.placeId).then((bookingsResult) =>
-        setBookings(bookingsResult),
-      );
-    }
-  }, [params.placeId, params.userBooking]);
+    init();
+  }, [init]);
 
   const handleAcceptPress = async (bookingId: string) => {
     setBookings(await acceptBooking(params.placeId, bookingId));
   };
 
   const renderItems = ({item}: {item: Booking}) => {
-    return (
-      <BookingCard
-        item={item}
-        onAcceptPress={handleAcceptPress}
-        isUser={Boolean(params.userBooking)}
-      />
-    );
+    if ((params.isBooked && item.userId === user?._id) || !params.isBooked) {
+      return (
+        <BookingCard
+          item={item}
+          onAcceptPress={handleAcceptPress}
+          isUser={item.userId === user?._id}
+        />
+      );
+    }
   };
 
   return (
@@ -48,31 +63,24 @@ const UserBookingsScreen = () => {
       showsVerticalScrollIndicator={false}>
       <Header type="back" />
       <View style={styles.content}>
-        <View style={styles.paddingHorizontal}>
-          <CalendarPicker bookings={bookings} />
-        </View>
-        <TitleWithDescription
-          title={
-            params.userBooking != null ? 'Reservation' : 'Pending Bookings'
-          }
-          subtitle={true}
-          style={styles.paddingHorizontal}
-        />
-        <View style={styles.list}>
-          {bookings.length > 0 && (
-            <FlatList
-              scrollEnabled={false}
-              data={bookings.filter((booking) => booking.isAccepted !== true)}
-              renderItem={renderItems}
-              keyExtractor={(item) => item._id}
-              showsVerticalScrollIndicator={false}
-            />
-          )}
-        </View>
-        {params.userBooking === null && (
+        {user?._id !== owner?._id && (
+          <View style={styles.ownerContainer}>
+            <Image source={{uri: owner?.avatar}} style={styles.avatar} />
+            <View>
+              <Text style={styles.ownerName}>
+                {owner?.first_name} {owner?.last_name}
+              </Text>
+              <View style={styles.row}>
+                <Text style={styles.text}>Envoyer un message</Text>
+                <Feather name="message-circle" size={16} />
+              </View>
+            </View>
+          </View>
+        )}
+        {bookings.length > 0 && (
           <>
             <TitleWithDescription
-              title="Accepted Bookings"
+              title="Pending reservation"
               subtitle={true}
               style={styles.paddingHorizontal}
             />
@@ -81,13 +89,27 @@ const UserBookingsScreen = () => {
                 <FlatList
                   scrollEnabled={false}
                   data={bookings.filter(
-                    (booking) => booking.isAccepted === true,
+                    (booking) => booking.isAccepted !== true,
                   )}
                   renderItem={renderItems}
                   keyExtractor={(item) => item._id}
                   showsVerticalScrollIndicator={false}
                 />
               )}
+            </View>
+            <TitleWithDescription
+              title="Accepted reservation"
+              subtitle={true}
+              style={styles.paddingHorizontal}
+            />
+            <View style={styles.list}>
+              <FlatList
+                scrollEnabled={false}
+                data={bookings.filter((booking) => booking.isAccepted === true)}
+                renderItem={renderItems}
+                keyExtractor={(item) => item._id}
+                showsVerticalScrollIndicator={false}
+              />
             </View>
           </>
         )}
@@ -100,6 +122,11 @@ const styles = StyleSheet.create({
   screen: {
     paddingTop: 50,
     flex: 1,
+  },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   scrollView: {
     paddingBottom: 50,
@@ -114,6 +141,28 @@ const styles = StyleSheet.create({
   },
   paddingHorizontal: {
     paddingHorizontal: 20,
+  },
+  ownerContainer: {
+    backgroundColor: Colors.white,
+    flexDirection: 'row',
+    padding: 20,
+    ...Layout.shadow,
+  },
+  avatar: {
+    borderRadius: 20,
+    width: 100,
+    height: 100,
+    marginRight: 10,
+  },
+  ownerName: {
+    fontFamily: 'oswald',
+    fontSize: 18,
+    flex: 1,
+  },
+  text: {
+    fontFamily: 'poppins-light',
+    fontSize: 12,
+    paddingRight: 10,
   },
 });
 

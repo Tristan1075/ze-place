@@ -8,6 +8,7 @@ import {Rating} from 'react-native-ratings';
 import Layout from '../constants/Layout';
 
 type Props = {
+  onFavoritePress: (place: Place) => void;
   onPress: () => void;
   place: Place;
   onFavoritePress: (place: Place) => void;

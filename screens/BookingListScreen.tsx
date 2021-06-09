@@ -14,7 +14,7 @@ import Header from '../components/Header';
 import TitleWithDescription from '../components/TitleWithDescription';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
-import {User} from '../types';
+import {Place, User} from '../types';
 
 const BookingListScreen = (props: Props) => {
   const {navigation} = props;
@@ -29,14 +29,13 @@ const BookingListScreen = (props: Props) => {
   }, [init, navigation]);
 
   const handlePlacePress = (place: Place) => {
-    navigation.navigate('PlaceDetail', {place: place});
+    navigation.navigate('PlaceDetail', {place: place, showUserBooking: true});
   };
 
   return (
     <SafeAreaView>
       <Header type="menu" />
       <View>
-        <TitleWithDescription title="My places" subtitle={true} />
         {user && user.bookings.length > 0 && (
           <FlatGrid
             data={user.bookings}
@@ -56,8 +55,10 @@ const BookingListScreen = (props: Props) => {
                     <Text style={styles.badge}>4</Text>
                   </View>
                   <View style={styles.flex} />
-                  <Text style={styles.title}>saluzd,qld,zdklt</Text>
-                  <Text style={styles.text}>Paris</Text>
+                  <Text style={styles.title}>{item.title}</Text>
+                  {item.location && (
+                    <Text style={styles.text}>{item.location.city}</Text>
+                  )}
                 </ImageBackground>
               </TouchableOpacity>
             )}

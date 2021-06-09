@@ -11,7 +11,7 @@ type Props = {
   isUser: boolean;
 };
 
-const BookingCard = ({item, onAcceptPres, isUser}: Props) => {
+const BookingCard = ({item, onAcceptPress, isUser}: Props) => {
   return (
     <View style={styles.card}>
       <View style={styles.row}>
@@ -19,6 +19,7 @@ const BookingCard = ({item, onAcceptPres, isUser}: Props) => {
           <Text style={styles.name}>
             {item.firstname} {item.lastname}
           </Text>
+          <Text style={styles.date}>{item.price}€</Text>
           <Text style={styles.date}>From: {item.startDate}</Text>
           <Text style={styles.date}>To: {item.endDate}</Text>
           <Text style={styles.date}>{item.duration} days</Text>
@@ -34,19 +35,17 @@ const BookingCard = ({item, onAcceptPres, isUser}: Props) => {
         <TouchableOpacity>
           <AntDesign name="closecircleo" size={30} color={Colors.dark} />
         </TouchableOpacity>
-        {item.isAccepted ||
-          (isUser && <Text style={styles.date}>CANCEL BOOKING</Text>)}
-        {!item.isAccepted ||
-          (!isUser && (
-            <TouchableOpacity onPress={() => onAcceptPress(item._id)}>
-              <AntDesign
-                name="checkcircleo"
-                size={30}
-                color={Colors.primary}
-                style={styles.icon}
-              />
-            </TouchableOpacity>
-          ))}
+        <Text style={[styles.status, item.isAccepted && styles.success]}>{item.isAccepted ? 'ACCEPTED' : "WAITING"}</Text>
+        {!item.isAccepted && !isUser && (
+          <TouchableOpacity onPress={() => onAcceptPress(item._id)}>
+            <AntDesign
+              name="checkcircleo"
+              size={30}
+              color={Colors.primary}
+              style={styles.icon}
+            />
+          </TouchableOpacity>
+        )}
       </View>
     </View>
   );
@@ -89,9 +88,17 @@ const styles = StyleSheet.create({
   actions: {
     justifyContent: 'space-between',
     flexDirection: 'row',
+    alignItems: 'center',
   },
   icon: {
     marginLeft: 20,
+  },
+  status: {
+    fontFamily: 'oswald-light',
+    fontSize: 16,
+  },
+  success: {
+    color: Colors.success,
   },
 });
 

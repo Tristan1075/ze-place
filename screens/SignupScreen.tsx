@@ -24,7 +24,6 @@ import Colors from '../constants/Colors';
 import Header from '../components/Header';
 import SimpleInput from '../components/SimpleInput';
 import {register} from '../api/auth';
-import { getAllPlaces } from '../api/places';
 
 type RootScreenNavigationProp = StackNavigationProp<
   RootStackParamList,

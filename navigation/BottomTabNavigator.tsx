@@ -6,7 +6,6 @@ import * as React from 'react';
 import {
   BookingTab,
   BottomTabParamList,
-  CreatePlaceParamList,
   HomeParamList,
   MessagesParamList,
 } from '../types';
@@ -14,8 +13,6 @@ import Colors from '../constants/Colors';
 
 import HomeScreen from '../screens/HomeScreen';
 import PlaceDetailScreen from '../screens/PlaceDetailScreen';
-import MessagesScreen from '../screens/MessagesScreen';
-import ConversationScreen from '../screens/ConversationScreen';
 import FavoritesScreen from '../screens/FavoritesScreen';
 import CreatePlaceScreen from '../screens/PlaceCreation/CreatePlaceScreen';
 import PlaceList from '../screens/PlaceListScreen';
@@ -42,15 +39,6 @@ export default function BottomTabNavigator() {
         options={{
           tabBarIcon: ({color}) => (
             <Ionicons name="list" color={color} size={30} />
-          ),
-        }}
-      />
-      <BottomTab.Screen
-        name="Messages"
-        component={MessagesNavigator}
-        options={{
-          tabBarIcon: ({color}) => (
-            <TabBarIcon name="chatbubbles-outline" color={color} />
           ),
         }}
       />
@@ -94,20 +82,6 @@ const BookingNavigator = () => {
       <BookingStack.Screen name="PlaceDetail" component={PlaceDetailScreen} />
       <BookingStack.Screen name="UserBookings" component={UserBookingsScreen} />
     </BookingStack.Navigator>
-  );
-};
-
-const MessagesStack = createStackNavigator<MessagesParamList>();
-
-const MessagesNavigator = () => {
-  return (
-    <MessagesStack.Navigator screenOptions={{headerShown: false}}>
-      <MessagesStack.Screen name="Messages" component={MessagesScreen} />
-      <MessagesStack.Screen
-        name="Conversation"
-        component={ConversationScreen}
-      />
-    </MessagesStack.Navigator>
   );
 };
 

@@ -7,6 +7,7 @@ import {
   Image,
   ScrollView,
   Modal,
+  FlatList,
 } from 'react-native';
 import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
 import {Rating} from 'react-native-ratings';
@@ -20,7 +21,7 @@ import ImageViewer from 'react-native-image-zoom-viewer';
 
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
-import {Booking, HomeParamList, Place} from '../types';
+import {Booking, HomeParamList, Place, User} from '../types';
 import Header from '../components/Header';
 import Button from '../components/Button';
 import {mapStyle} from '../utils/mapStyle';
@@ -31,34 +32,68 @@ import BookingScreen from './BookingScreen';
 import CalendarPicker from '../components/CalendarPicker';
 import TitleWithDescription from '../components/TitleWithDescription';
 import FeatureList from '../components/FeatureList';
-import {getUserId} from '../api/auth';
+import {getSimilarPlaces} from '../api/places';
+import PlaceCard from '../components/PlaceCard';
+import {addFavorite, getUser, removeFavorite} from '../api/customer';
+import i18n from 'i18n-js';
 
 type PlaceScreenNavigationProp = RouteProp<HomeParamList, 'PlaceDetail'>;
 
 type Props = {
-  navigation: PlaceScreenNavigationProp;
   place?: Place;
 };
 
 const PlaceDetailScreen = (props: Props) => {
+  const navigation = useNavigation();
   const {handleModal} = useContext(ModalContext);
   const [activeImage, setActiveImage] = useState<number>(0);
   const [seeMore, setSeeMore] = useState<boolean>(false);
   const [imagePreview, setImagePreview] = useState<boolean>(false);
-  const [userId, setUserId] = useState<string>();
-  const [userBooking, setUserBooking] = useState<Booking>();
   const item = useRoute<PlaceScreenNavigationProp>().params.place;
-  const navigation = useNavigation();
+  const [isBooked, setIsBooked] = useState<boolean>(false);
+  const [user, setUser] = useState<User>();
+  const [similarPlaces, setSimilarPlaces] = useState<Place[]>();
 
   const init = useCallback(async () => {
-    const id = await getUserId();
-    setUserBooking(item.bookings.find((booking) => booking.userId === id));
-    setUserId(await getUserId());
-  }, [item.bookings]);
+    const userFetched = await getUser();
+    setIsBooked(Boolean(userFetched.bookings.find((u) => u._id === item._id)));
+    setUser(userFetched);
+    setSimilarPlaces(await getSimilarPlaces(item._id));
+  }, [item._id]);
 
   useEffect(() => {
     init();
   }, [init]);
+
+  const handlePlacePress = (p: Place) => {
+    // @ts-ignore
+    navigation.push('PlaceDetail', {place: p});
+  };
+
+  const handleFavoritePress = async (p: Place) => {
+    const isFavorite = Boolean(
+      user && user.favorites.find((foundPlace) => foundPlace._id === p._id),
+    );
+    isFavorite ? removeFavorite(p) : addFavorite(p);
+    await init();
+  };
+
+  const renderItem = ({item, index}: {item: Place; index: number}) => {
+    const isFavorite = Boolean(
+      user && user.favorites.find((foundPlace) => foundPlace._id === item._id),
+    );
+    return (
+      <View key={index}>
+        <PlaceCard
+          key={index}
+          place={item}
+          onPress={() => handlePlacePress(item)}
+          onFavoritePress={handleFavoritePress}
+          isFavorite={isFavorite}
+        />
+      </View>
+    );
+  };
 
   const handleBookPress = () => {
     handleModal({
@@ -69,7 +104,8 @@ const PlaceDetailScreen = (props: Props) => {
   const handleSeeBookingsPress = () => {
     navigation.navigate('UserBookings', {
       placeId: item._id,
-      userBooking: userBooking,
+      ownerId: item.ownerId,
+      isBooked: isBooked,
     });
   };
 
@@ -110,7 +146,7 @@ const PlaceDetailScreen = (props: Props) => {
             </Text>
             <View style={styles.descriptionBloc}>
               <TitleWithDescription
-                title={`About ${item.title}`}
+                title={i18n.t('place_detail_about') + ' ' + item.title}
                 subtitle={true}
               />
               <View style={styles.padding}>
@@ -131,27 +167,35 @@ const PlaceDetailScreen = (props: Props) => {
                 <View style={styles.reviewersNumber}>
                   <Text style={styles.subtitle}>{item.reviews.length}+</Text>
                 </View>
-                <Text style={styles.reviewersText}>People reviewed this</Text>
+                <Text style={styles.reviewersText}>
+                  {i18n.t('place_detail_people_review_this')}
+                </Text>
               </View>
               <Text
                 style={styles.description}
                 numberOfLines={seeMore ? 999 : 5}>
                 {item.aboutUser}
               </Text>
-              <Text style={styles.seeMore} onPress={() => setSeeMore(!seeMore)}>
-                See more
-              </Text>
+              {/* <Text style={styles.seeMore} onPress={() => setSeeMore(!seeMore)}>
+              {i18n.t('place_detail_see_more')}
+              </Text> */}
             </View>
-            <TitleWithDescription title="Features" subtitle={true} />
+            <TitleWithDescription
+              title={i18n.t('place_detail_features')}
+              subtitle={true}
+            />
           </View>
           <View style={styles.facilitiesContainer}>
             <FeatureList features={item.features} />
           </View>
           <View style={styles.content}>
-            <TitleWithDescription title="Authorization" subtitle={true} />
+            <TitleWithDescription
+              title={i18n.t('place_detail_authorization')}
+              subtitle={true}
+            />
             <View style={styles.authorization}>
               <ToggleWithTitle
-                title="Animals"
+                title={i18n.t('place_detail_animals')}
                 value={item.authorizeAnimals}
                 icon={
                   <FontAwesome5
@@ -164,7 +208,7 @@ const PlaceDetailScreen = (props: Props) => {
                 }
               />
               <ToggleWithTitle
-                title="Smoking"
+                title={i18n.t('place_detail_smoking')}
                 value={item.authorizeSmoking}
                 icon={
                   <FontAwesome5
@@ -179,7 +223,7 @@ const PlaceDetailScreen = (props: Props) => {
             </View>
             <View style={styles.authorization}>
               <ToggleWithTitle
-                title="Music"
+                title={i18n.t('place_detail_music')}
                 value={item.authorizeMusic}
                 icon={
                   <Ionicons
@@ -190,7 +234,7 @@ const PlaceDetailScreen = (props: Props) => {
                 }
               />
               <ToggleWithTitle
-                title="Fire"
+                title={i18n.t('place_detail_fire')}
                 value={item.authorizeFire}
                 icon={
                   <MaterialCommunityIcons
@@ -202,7 +246,7 @@ const PlaceDetailScreen = (props: Props) => {
               />
             </View>
             <ToggleWithTitle
-              title="Food and drink"
+              title={i18n.t('place_detail_food_and_drink')}
               value={item.authorizeFoodAndDrink}
               icon={
                 <MaterialCommunityIcons
@@ -215,11 +259,14 @@ const PlaceDetailScreen = (props: Props) => {
               }
             />
             <TitleWithDescription
-              title={`About ${item.title}`}
+              title={i18n.t('place_detail_about') + ' ' + item.title}
               subtitle={true}
             />
             <Text style={styles.description}>{item.description}</Text>
-            <TitleWithDescription title="Place location" subtitle={true} />
+            <TitleWithDescription
+              title={i18n.t('place_detail_location')}
+              subtitle={true}
+            />
             <MapView
               onTouchStart={handleMapPress}
               provider={PROVIDER_GOOGLE}
@@ -239,8 +286,23 @@ const PlaceDetailScreen = (props: Props) => {
                 longitudeDelta: 0.0421,
               }}
             />
-            <TitleWithDescription title="Availabilities" subtitle={true} />
+            <TitleWithDescription
+              title={i18n.t('place_detail_availavilities')}
+              subtitle={true}
+            />
             <CalendarPicker />
+            <View style={styles.paddingCardView}>
+              <TitleWithDescription
+                title={i18n.t('place_detail_similar_places')}
+                subtitle={true}
+              />
+              <FlatList
+                data={similarPlaces}
+                renderItem={renderItem}
+                keyExtractor={(item) => item._id}
+                showsVerticalScrollIndicator={false}
+              />
+            </View>
           </View>
           {item.images.length > 0 && (
             <ScrollView
@@ -267,33 +329,27 @@ const PlaceDetailScreen = (props: Props) => {
       </ScrollView>
       <View style={styles.chooseBanner}>
         <Text style={styles.chooseBannerText}>
-          {userId === item.ownerId
-            ? 'Active bookings'
-            : userBooking
-            ? ''
-            : 'Per day'}
+          {user?._id === item.ownerId
+            ? i18n.t('place_detail_active_bookings')
+            : i18n.t('place_detail_per_day')}
         </Text>
         <Text style={styles.chooseBannerPrice}>
-          {userId === item.ownerId
+          {user?._id === item.ownerId
             ? `${item.bookings.length}`
-            : userBooking
-            ? userBooking.startDate
             : `${item.price}€`}
         </Text>
         <Button
           backgroundColor={Colors.white}
           textColor={Colors.primary}
           value={
-            userId === item.ownerId
-              ? 'See bookings'
-              : userBooking != null
-              ? 'My reservation'
-              : 'Book'
+            user?._id === item.ownerId
+              ? i18n.t('place_detail_see_bookings')
+              : isBooked
+              ? 'Voir ma réservation'
+              : i18n.t('place_detail_book')
           }
           onPress={
-            userId === item.ownerId
-              ? handleSeeBookingsPress
-              : userBooking != null
+            user?._id === item.ownerId || isBooked
               ? handleSeeBookingsPress
               : handleBookPress
           }
@@ -468,6 +524,12 @@ const styles = StyleSheet.create({
     paddingLeft: Layout.padding,
     paddingRight: 5,
     marginVertical: 10,
+  },
+  paddingHorizontal: {
+    paddingHorizontal: Layout.padding,
+  },
+  paddingCardView: {
+    padding: 10,
   },
   favorite: {
     position: 'absolute',

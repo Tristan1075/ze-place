@@ -35,7 +35,7 @@ export const login = async (credentials: Credentials) => {
 };
 
 export const register = async (form: SignupForm) => {
-  const pushToken = registerForPushNotificationsAsync();
+  const pushToken = await registerForPushNotificationsAsync();
   return await axios
     .post(
       `${API_URL}/auth/register`,
