@@ -23,4 +23,22 @@ export default {
   innactif: "Promo Innactive",
   places_title: 'Mes annonces !',
 
+  //Place_detail
+  place_detail_about: 'A propos de',
+  place_detail_people_review_this: 'Avis des utilisateurs',
+  place_detail_see_more: 'En voir plus',
+  place_detail_features: 'Fonctionnalités',
+  place_detail_authorization: 'Autorisations',
+  place_detail_animals: 'Animaux',
+  place_detail_smoking: 'Tabac',
+  place_detail_music: 'Musique',
+  place_detail_fire: 'Feu de camp',
+  place_detail_food_and_drink: 'Nourriture et boisson',
+  place_detail_location: 'Emplacement',
+  place_detail_availavilities: 'Disponibilités',
+  place_detail_similar_places: 'Espaces similaires',
+  place_detail_active_bookings: 'Réservations actives',
+  place_detail_per_day: 'Par jour',
+  place_detail_see_bookings: 'Voir les réservation',
+  place_detail_book: 'Réserver',
 } as LocalizationType;
