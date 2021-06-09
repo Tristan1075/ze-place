@@ -61,6 +61,8 @@ export const createPlace = async (form: CreatePlaceForm) => {
         price: form.price && parseInt(form.price, 10),
         description: form.description,
         features: form.features,
+        startDate: form.startDate,
+        endDate: form.endDate,
         images: form.images,
         authorizeAnimals: form.authorizeAnimals,
         authorizeMusic: form.authorizeMusic,
@@ -150,8 +152,6 @@ export const acceptBooking = async (
 
 export const getSimilarPlaces = async (placeID: String) => {
   const token = await SecureStore.getItemAsync('access-token');
-  console.log(placeID);
-
   return await axios
     .post(
       `${API_URL}/places/similarPlaces`,
@@ -165,7 +165,6 @@ export const getSimilarPlaces = async (placeID: String) => {
       },
     )
     .then((response: AxiosResponse<any>) => {
-      console.log(response.data);
       return response.data.places;
     })
     .catch((err) => {

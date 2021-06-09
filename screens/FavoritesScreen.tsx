@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -15,7 +15,7 @@ import {MessagesParamList, Place, User} from '../types';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
 import PlaceCard from '../components/PlaceCard';
-import {getUser} from '../api/customer';
+import {addFavorite, getUser, removeFavorite} from '../api/customer';
 
 type MessagesScreenNavigationProp = StackNavigationProp<
   MessagesParamList,
@@ -29,45 +29,47 @@ type Props = {
 const FavoritesScreen = (props: Props) => {
   const {navigation} = props;
   const [user, setUser] = useState<User>();
-  useEffect(() => {
-    const init = async () => {
-      setUser(await getUser());
-    };
-    init();
+
+  const init = useCallback(async () => {
+    setUser(await getUser());
   }, []);
+
+  useEffect(() => {
+    navigation.addListener('focus', init);
+  }, [init, navigation]);
 
   const handleItemPress = (place: Place) => {
     navigation.navigate('PlaceDetail', {place: place});
   };
 
-  const handleFavoritePress = (place: Place) => {
-    if(user){
-      setUser({
-        ...user,
-        favorites: [...user.favorites, place],
-      });
-    }
-  }
+  const handleFavoritePress = async (p: Place) => {
+    const isFavorite = Boolean(
+      user && user.favorites.find((foundPlace) => foundPlace._id === p._id),
+    );
+    isFavorite ? removeFavorite(p) : addFavorite(p);
+    await init();
+  };
 
-  const renderItem = ({item, index}: {item: Place; index: number}) => (
-    <PlaceCard
-      key={index}
-      place={item}
-      onFavoritePress={handleFavoritePress}
-      onPress={() => handleItemPress(item)}
-    />
-  );
+  const renderItem = ({item, index}: {item: Place; index: number}) => {
+    const isFavorite = Boolean(
+      user && user.favorites.find((foundPlace) => foundPlace._id === item._id),
+    );
+    return (
+      <PlaceCard
+        key={index}
+        isFavorite={isFavorite}
+        place={item}
+        onFavoritePress={handleFavoritePress}
+        onPress={() => handleItemPress(item)}
+      />
+    );
+  };
 
   return (
     <SafeAreaView style={styles.container}>
       <Header type="menu" showProfil={true} />
       <View style={styles.content}>
         <Text style={styles.title}>{i18n.t('favorites_title')}</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Search a user"
-          placeholderTextColor={Colors.gray}
-        />
         <FlatList
           data={user?.favorites}
           renderItem={renderItem}

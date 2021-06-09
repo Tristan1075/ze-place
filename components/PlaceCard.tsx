@@ -20,14 +20,7 @@ const PlaceCard = (props: Props) => {
 
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
-      <Image
-        source={{
-          uri: place.images[0]
-            ? "https://www.leden-spa-aqua-forme.fr/wp-content/uploads/2018/05/jk-placeholder-image.jpg"
-            : 'https://www.leden-spa-aqua-forme.fr/wp-content/uploads/2018/05/jk-placeholder-image.jpg',
-        }}
-        style={styles.image}
-      />
+      <Image source={{uri: place.images[0].url}} style={styles.image} />
       <View style={styles.informations}>
         <View style={styles.row}>
           <Text style={styles.title}>{place.title}</Text>
@@ -90,6 +83,8 @@ const styles = StyleSheet.create({
     width: 120,
     height: 120,
     marginRight: 10,
+    borderTopLeftRadius: 10,
+    borderBottomLeftRadius: 10,
   },
   informations: {
     flex: 1,

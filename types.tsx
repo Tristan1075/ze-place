@@ -23,12 +23,15 @@ export type HomeParamList = {
   PlaceList: {filter: FilterForm};
   CreatePlace: undefined;
   MapModal: undefined;
-  UserBookings: {placeId: string};
+  UserBookings: {placeId: string; userBooking: Booking};
 };
 
-export type CreatePlaceParamList = {
-  CreatePlace: undefined;
+export type BookingTab = {
+  BookingList: undefined;
+  PlaceDetail: {place: PlaceType};
+  UserBookings: {placeId: string; userBooking: Booking};
 };
+
 export type HeaderParamList = {
   Home: undefined;
   PlaceDetail: {place: PlaceType};
@@ -55,6 +58,7 @@ export type User = {
   promoCode: String[];
   historyCode: String[];
   ownedPlaces: Place[];
+  bookings: Place[];
 };
 
 export type Place = {
@@ -172,6 +176,8 @@ export type CreatePlaceForm = {
   title?: string;
   location?: Location;
   placeType?: PlaceType;
+  startDate?: string;
+  endDate?: string;
   surface?: string;
   price?: string;
   description?: string;

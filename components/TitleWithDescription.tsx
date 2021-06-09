@@ -66,6 +66,7 @@ const styles = StyleSheet.create({
     color: Colors.dark,
     fontFamily: 'oswald-light',
     fontSize: 20,
+    flex: 1,
   },
   description: {
     color: Colors.gray,

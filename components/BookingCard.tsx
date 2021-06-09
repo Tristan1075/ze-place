@@ -8,16 +8,16 @@ import {Booking} from '../types';
 type Props = {
   item: Booking;
   onAcceptPress: (bookingId: string) => void;
+  isUser: boolean;
 };
 
-const BookingCard = ({item, onAcceptPress}: Props) => {
+const BookingCard = ({item, onAcceptPress, isUser}: Props) => {
   return (
     <View style={styles.card}>
       <View style={styles.row}>
         <View style={styles.content}>
           <Text style={styles.name}>
-            {item.firstname}
-            {item.lastname}
+            {item.firstname} {item.lastname}
           </Text>
           <Text style={styles.date}>From: {item.startDate}</Text>
           <Text style={styles.date}>To: {item.endDate}</Text>
@@ -34,8 +34,8 @@ const BookingCard = ({item, onAcceptPress}: Props) => {
         <TouchableOpacity>
           <AntDesign name="closecircleo" size={30} color={Colors.dark} />
         </TouchableOpacity>
-        {item.isAccepted && <Text style={styles.date}>CANCEL</Text>}
-        {!item.isAccepted && (
+        <Text style={[styles.status, item.isAccepted && styles.success]}>{item.isAccepted ? 'ACCEPTED' : "WAITING"}</Text>
+        {!item.isAccepted && !isUser && (
           <TouchableOpacity onPress={() => onAcceptPress(item._id)}>
             <AntDesign
               name="checkcircleo"
@@ -87,9 +87,17 @@ const styles = StyleSheet.create({
   actions: {
     justifyContent: 'space-between',
     flexDirection: 'row',
+    alignItems: 'center',
   },
   icon: {
     marginLeft: 20,
+  },
+  status: {
+    fontFamily: 'oswald-light',
+    fontSize: 16,
+  },
+  success: {
+    color: Colors.success,
   },
 });
 

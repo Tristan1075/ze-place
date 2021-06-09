@@ -22,14 +22,7 @@ const CardWithRate = (props: Props) => {
   return (
     <TouchableWithoutFeedback style={styles.carouselItem} onPress={onPress}>
       <View style={styles.shadow}>
-        <Image
-          source={{
-            uri: place.images[0]
-              ? 'https://www.leden-spa-aqua-forme.fr/wp-content/uploads/2018/05/jk-placeholder-image.jpg'
-              : 'https://www.leden-spa-aqua-forme.fr/wp-content/uploads/2018/05/jk-placeholder-image.jpg',
-          }}
-          style={styles.image}
-        />
+        <Image source={{uri: place.images[0].url}} style={styles.image} />
         <View style={styles.rate}>
           <Ionicons size={14} name="star" color={Colors.yellow} />
           <Text style={styles.rateValue}>{place.rate}</Text>
@@ -85,7 +78,7 @@ const styles = StyleSheet.create({
     left: 10,
   },
   title: {
-    fontFamily: 'oswald-light',
+    fontFamily: 'oswald',
     fontSize: 24,
     width: 250,
     color: Colors.white,

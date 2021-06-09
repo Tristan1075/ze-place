@@ -2,8 +2,7 @@ import {API_URL} from '@env';
 import axios, {AxiosResponse} from 'axios';
 import {SignupForm} from '../types';
 import * as SecureStore from 'expo-secure-store';
-import { useDebugValue } from 'react';
-import { registerForPushNotificationsAsync } from './notifications';
+import {registerForPushNotificationsAsync} from './notifications';
 
 const headers = {
   'Content-Type': 'application/json',
@@ -35,10 +34,7 @@ export const login = async (credentials: Credentials) => {
 };
 
 export const register = async (form: SignupForm) => {
-  const pushToken = registerForPushNotificationsAsync();
-  console.log(form);
-  console.log(API_URL);
-  
+  const pushToken = await registerForPushNotificationsAsync();
   return await axios
     .post(
       `${API_URL}/auth/register`,

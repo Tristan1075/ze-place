@@ -36,7 +36,7 @@ type Props = {
 const PlaceInformations = (props: Props) => {
   const {prevStep, nextStep, createPlaceForm, setCreatePlaceForm} = props;
   const {handleModal} = useContext(ModalContext);
-  const [modalVisible, setModalVisible] = useState<boolean>(false);
+  const [minDate, setMinDate] = useState<string>();
 
   const handleSelectPlaceType = () => {
     handleModal({
@@ -85,18 +85,16 @@ const PlaceInformations = (props: Props) => {
         subtitle={true}
         style={styles.paddingVertical}
       />
-      <View style={styles.row}>
-        <SimpleInput
-          value={createPlaceForm.price}
-          placeholder="Type your price"
-          style={styles.flex}
-          suffix={<Text style={styles.descriptionText}>€</Text>}
-          type="number-pad"
-          onChangeText={(value) =>
-            setCreatePlaceForm({...createPlaceForm, price: value})
-          }
-        />
-      </View>
+      <SimpleInput
+        value={createPlaceForm.price}
+        placeholder="Type your price"
+        style={styles.flex}
+        suffix={<Text style={styles.descriptionText}>€</Text>}
+        type="number-pad"
+        onChangeText={(value) =>
+          setCreatePlaceForm({...createPlaceForm, price: value})
+        }
+      />
       <TitleWithDescription
         title="Description"
         description="Description of your !"
@@ -130,7 +128,22 @@ const PlaceInformations = (props: Props) => {
         subtitle={true}
         style={styles.paddingVertical}
       />
-      <CalendarPicker />
+      <CalendarPicker
+        startDate={createPlaceForm.startDate}
+        endDate={createPlaceForm.endDate}
+        minDate={minDate}
+        showDates={true}
+        onChange={(startDate, endDate, duration) => {
+          startDate && setMinDate(startDate);
+          if (duration) {
+            setCreatePlaceForm({
+              ...createPlaceForm,
+              startDate: startDate,
+              endDate: endDate,
+            });
+          }
+        }}
+      />
       <View style={styles.row}>
         <Button
           value="Back"
@@ -155,11 +168,8 @@ const styles = StyleSheet.create({
   flex: {
     flex: 1,
   },
-  container: {
-    marginBottom: 20,
-  },
   paddingVertical: {
-    paddingVertical: 10,
+    paddingVertical: 20,
   },
   map: {
     height: 120,
@@ -167,6 +177,8 @@ const styles = StyleSheet.create({
   },
   row: {
     flexDirection: 'row',
+    marginTop: 80,
+    marginBottom: 20,
   },
   durationBloc: {
     marginLeft: 10,

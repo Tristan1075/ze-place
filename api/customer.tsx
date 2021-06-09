@@ -3,7 +3,7 @@ import {API_URL, API_TOKEN} from '@env';
 import axios, {AxiosResponse} from 'axios';
 import * as SecureStore from 'expo-secure-store';
 
-export const getUser = async () => {
+export const getUser = async (): Promise<User> => {
   const token = await SecureStore.getItemAsync('access-token');
   return await axios
     .get(`${API_URL}/auth/me`, {
@@ -12,8 +12,23 @@ export const getUser = async () => {
       },
     })
     .then((response: AxiosResponse<any>) => {
-      console.log(response.data._id);
+      return response.data;
+    })
+    .catch((err) => {
+      return Promise.reject(err);
+    });
+};
 
+export const getUserById = async (id: string) => {
+  console.log(`${API_URL}/customers/${id}`);
+  const token = await SecureStore.getItemAsync('access-token');
+  return await axios
+    .get(`${API_URL}/customers/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .then((response: AxiosResponse<any>) => {
       return response.data;
     })
     .catch((err) => {
@@ -24,10 +39,7 @@ export const getUser = async () => {
 export const modifyUser = async (form: SignupForm, id: string) => {
   const token = await SecureStore.getItemAsync('access-token');
   console.log('form', form);
-  console.log(id);
   const url = `${API_URL}/customers/update?customerID=${id}`;
-  console.log(url);
-
   await axios
     .put(
       url,

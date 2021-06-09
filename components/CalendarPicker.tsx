@@ -7,9 +7,11 @@ import Layout from '../constants/Layout';
 import {Booking} from '../types';
 
 type Props = {
+  startDate?: string;
+  endDate?: string;
   minDate?: string;
   showDates?: boolean;
-  onChange?: (startDate: string, endDate?: string, duration?: number) => void;
+  onChange?: (startDate: string, endDate: string, duration?: number) => void;
   bookings?: Booking[];
 };
 
@@ -27,41 +29,45 @@ const getPeriodDuration = (startDate: string, endDate: string) => {
   return endMoment.diff(startMoment, 'days');
 };
 
-const CalendarPicker = ({showDates, onChange, minDate, bookings}: Props) => {
+const CalendarPicker = ({startDate, endDate, showDates, onChange, minDate, bookings}: Props) => {
   const [markerDates, setMarkedDates] = useState<any>({});
 
-  const getDateBetween = (start, end) => {
-    const startSplited = start.split('-');
-    const endSplited = end.split('-');
-    for (let month = endSplited[1]; month <= startSplited[1]; month--) {
-      for (let day = endSplited[2]; day <= startSplited[2]; day--) {
-        console.log(month);
-        console.log(day);
-      }
-    }
-  };
-
   useEffect(() => {
-    let busyDates = {};
-    bookings &&
-      bookings?.length > 0 &&
-      bookings.forEach((booking) => {
-        busyDates = {
-          ...busyDates,
-          [booking.startDate]: {
-            startingDay: true,
-            color: Colors.primary,
-            textColor: Colors.white,
-          },
-          [booking.endDate]: {
-            endingDay: true,
-            color: Colors.primary,
-            textColor: Colors.white,
-          },
-        };
+    if (startDate || endDate) {
+      setMarkedDates({
+        ...markerDates,
+        [startDate!]: {
+          startingDay: true,
+          color: Colors.primary,
+          textColor: Colors.white,
+        },
+        [endDate!]: {
+          endingDay: true,
+          color: Colors.primary,
+          textColor: Colors.white,
+        },
       });
-    setMarkedDates(busyDates);
-  }, [bookings]);
+    }
+    // let busyDates = {};
+    // bookings &&
+    //   bookings?.length > 0 &&
+    //   bookings.forEach((booking) => {
+    //     busyDates = {
+    //       ...busyDates,
+    //       [booking.startDate]: {
+    //         startingDay: true,
+    //         color: Colors.primary,
+    //         textColor: Colors.white,
+    //       },
+    //       [booking.endDate]: {
+    //         endingDay: true,
+    //         color: Colors.primary,
+    //         textColor: Colors.white,
+    //       },
+    //     };
+    //   });
+    // setMarkedDates(busyDates);
+  }, [bookings, endDate, startDate]);
 
   const handleDayPress = (day: DateObject) => {
     if (onChange) {

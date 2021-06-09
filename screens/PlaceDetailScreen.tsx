@@ -1,4 +1,4 @@
-import React, {useState, useContext, useEffect} from 'react';
+import React, {useState, useContext, useEffect, useCallback} from 'react';
 import {
   StyleSheet,
   Text,
@@ -36,34 +36,35 @@ import {getSimilarPlaces} from '../api/places';
 import PlaceCard from '../components/PlaceCard';
 import {addFavorite, getUser, removeFavorite} from '../api/customer';
 import i18n from 'i18n-js';
+import EmptyBloc from '../components/EmptyBloc';
 
 type PlaceScreenNavigationProp = RouteProp<HomeParamList, 'PlaceDetail'>;
 
-type Props = {
-  place?: Place;
-};
-
-const PlaceDetailScreen = (props: Props) => {
+const PlaceDetailScreen = () => {
+  const navigation = useNavigation();
   const {handleModal} = useContext(ModalContext);
   const [activeImage, setActiveImage] = useState<number>(0);
   const [seeMore, setSeeMore] = useState<boolean>(false);
   const [imagePreview, setImagePreview] = useState<boolean>(false);
-  const route = useRoute<PlaceScreenNavigationProp>();
-  const item: Place = route.params.place;
+  const item = useRoute<PlaceScreenNavigationProp>().params.place;
+  const [isBooked, setIsBooked] = useState<boolean>(false);
   const [user, setUser] = useState<User>();
   const [similarPlaces, setSimilarPlaces] = useState<Place[]>([]);
-  const navigation = useNavigation();
-  const init = async () => {
+
+  const init = useCallback(async () => {
+    const userFetched = await getUser();
+    setIsBooked(Boolean(userFetched.bookings.find((u) => u._id === item._id)));
+    setUser(userFetched);
     setSimilarPlaces(await getSimilarPlaces(item._id));
-    setUser(await getUser());
-  };
+  }, [item._id]);
 
   useEffect(() => {
     init();
-  }, []);
+  }, [init]);
 
   const handlePlacePress = (p: Place) => {
-    navigation.navigate('PlaceDetail', {place: p});
+    // @ts-ignore
+    navigation.push('PlaceDetail', {place: p});
   };
 
   const handleFavoritePress = async (p: Place) => {
@@ -98,7 +99,11 @@ const PlaceDetailScreen = (props: Props) => {
   };
 
   const handleSeeBookingsPress = () => {
-    navigation.navigate('UserBookings', {placeId: item._id});
+    navigation.navigate('UserBookings', {
+      placeId: item._id,
+      ownerId: item.ownerId,
+      isBooked: isBooked,
+    });
   };
 
   const handleMapPress = () => {
@@ -137,10 +142,6 @@ const PlaceDetailScreen = (props: Props) => {
               {item.location.country}
             </Text>
             <View style={styles.descriptionBloc}>
-              <TitleWithDescription
-                title={i18n.t('place_detail_about') + ' ' + item.title}
-                subtitle={true}
-              />
               <View style={styles.padding}>
                 <Rating
                   startingValue={item.rate}
@@ -283,12 +284,18 @@ const PlaceDetailScreen = (props: Props) => {
                 title={i18n.t('place_detail_similar_places')}
                 subtitle={true}
               />
-              {similarPlaces.length > 0 && (
+              {similarPlaces.length > 0 ? (
                 <FlatList
                   data={similarPlaces}
                   renderItem={renderItem}
                   keyExtractor={(item) => item._id}
                   showsVerticalScrollIndicator={false}
+                />
+              ) : (
+                <EmptyBloc
+                  title="You have to wait, there is no place similar !"
+                  image={require('../assets/images/impatient.png')}
+                  size={100}
                 />
               )}
             </View>
@@ -333,12 +340,16 @@ const PlaceDetailScreen = (props: Props) => {
           value={
             user?._id === item.ownerId
               ? i18n.t('place_detail_see_bookings')
+              : isBooked
+              ? 'Ma réservation'
               : i18n.t('place_detail_book')
           }
           onPress={
             user?._id === item.ownerId
               ? handleSeeBookingsPress
-              : handleSeeBookingsPress
+              : isBooked
+              ? handleSeeBookingsPress
+              : handleBookPress
           }
         />
       </View>
@@ -368,7 +379,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 50,
     position: 'relative',
-    paddingBottom: 150,
+    paddingBottom: 130,
   },
   row: {
     flexDirection: 'row',
@@ -387,7 +398,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: Layout.padding,
   },
   title: {
-    fontFamily: 'oswald-bold',
+    fontFamily: 'oswald',
     fontSize: 30,
     width: 250,
     color: Colors.white,
@@ -398,7 +409,7 @@ const styles = StyleSheet.create({
     color: Colors.white,
   },
   descriptionBloc: {
-    paddingTop: 40,
+    paddingTop: 60,
     alignItems: 'flex-start',
   },
   description: {

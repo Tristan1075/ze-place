@@ -4,14 +4,12 @@ import {
   Text,
   View,
   ScrollView,
-  SafeAreaView,
   FlatList,
   Image,
 } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 import {StackNavigationProp} from '@react-navigation/stack';
 import i18n from 'i18n-js';
-import * as SecureStore from 'expo-secure-store';
 
 import Header from '../components/Header';
 import Colors from '../constants/Colors';
@@ -27,10 +25,9 @@ import {addFavorite, getUser, removeFavorite} from '../api/customer';
 import {Ionicons} from '@expo/vector-icons';
 import {ModalContext} from '../providers/modalContext';
 import SearchFilterScreen from './SearchFilterScreen';
-import Button from '../components/Button';
-import {CommonActions} from '@react-navigation/native';
 import MapScreen from './MapScreen';
 import {getUserLocation} from '../utils';
+
 type RootScreenNavigationProp = StackNavigationProp<HomeParamList, 'Home'>;
 
 type Props = {
@@ -52,16 +49,6 @@ const HomeScreen = (props: Props) => {
   useEffect(() => {
     navigation.addListener('focus', init);
   }, [init, navigation]);
-
-  const handleDisconnectPress = async () => {
-    await SecureStore.deleteItemAsync('access-token');
-    navigation.dispatch(
-      CommonActions.reset({
-        index: 0,
-        routes: [{name: 'Root'}],
-      }),
-    );
-  };
 
   const handlePlacePress = (place: Place) => {
     navigation.navigate('PlaceDetail', {place: place});
@@ -159,6 +146,7 @@ const HomeScreen = (props: Props) => {
       </View>
       <TitleWithDescription
         title="Near you"
+        subtitle={true}
         description="Find nearby you the available places to rent"
         style={styles.padding}
         actionText="See map"
@@ -181,16 +169,16 @@ const HomeScreen = (props: Props) => {
         style={styles.padding}
         actionText="See more"
         actionIcon="list"
+        subtitle={true}
         onActionPress={showFilterModal}
       />
       <FlatList
-        data={places}
+        data={places.slice(0, 5)}
         scrollEnabled={false}
         renderItem={renderListItem}
         keyExtractor={(item) => item._id}
         showsVerticalScrollIndicator={false}
       />
-      <Button value="Disconnnect" onPress={handleDisconnectPress} />
     </ScrollView>
   );
 };
@@ -201,7 +189,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    paddingBottom: 50,
+    paddingBottom: 60,
     marginTop: 50,
     zIndex: 5,
   },
