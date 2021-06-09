@@ -26,13 +26,6 @@ import {CreatePlaceForm, FeatureType, PlaceType} from '../../types';
 import Constants from '../../utils/Constants';
 import FeatureList from '../../components/FeatureList';
 
-const locationDuration = [
-  {title: 'Day', value: Constants.DAY},
-  {title: 'Night', value: Constants.NIGHT},
-  {title: 'Week', value: Constants.WEEK},
-  {title: 'Month', value: Constants.MONTH},
-];
-
 type Props = {
   prevStep: () => void;
   nextStep: () => void;
@@ -103,14 +96,6 @@ const PlaceInformations = (props: Props) => {
             setCreatePlaceForm({...createPlaceForm, price: value})
           }
         />
-        <TouchableOpacity
-          style={styles.durationBloc}
-          onPress={() => setModalVisible(true)}>
-          <Text style={styles.text}>
-            {createPlaceForm.locationDuration.title}
-          </Text>
-          <Ionicons name="chevron-down" size={20} color={Colors.dark} />
-        </TouchableOpacity>
       </View>
       <TitleWithDescription
         title="Description"
@@ -162,29 +147,6 @@ const PlaceInformations = (props: Props) => {
           style={{marginLeft: 10, flex: 1}}
         />
       </View>
-      <BottomModal
-        visible={modalVisible}
-        onTouchOutside={() => setModalVisible(false)}
-        width={1}
-        onSwipeOut={() => setModalVisible(false)}>
-        <ModalContent style={styles.bottomModal}>
-          {locationDuration.map((duration) => (
-            <SelectableItem
-              value={duration.title}
-              onPress={() => {
-                setCreatePlaceForm({
-                  ...createPlaceForm,
-                  locationDuration: duration,
-                });
-                setModalVisible(false);
-              }}
-              isActive={
-                createPlaceForm.locationDuration.value === duration.value
-              }
-            />
-          ))}
-        </ModalContent>
-      </BottomModal>
     </View>
   );
 };

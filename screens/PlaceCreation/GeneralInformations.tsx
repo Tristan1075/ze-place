@@ -49,21 +49,6 @@ const GeneralInformations = (props: Props) => {
         }}
       />
       <TitleWithDescription
-        title="Description"
-        description="Description of your !"
-        subtitle={true}
-        style={styles.paddingVertical}
-      />
-      <SimpleInput
-        value={createPlaceForm.aboutUser}
-        placeholder="Choose"
-        multiline={true}
-        numberOfLines={1}
-        onChangeText={(value) => {
-          setCreatePlaceForm({...createPlaceForm, aboutUser: value});
-        }}
-      />
-      <TitleWithDescription
         title="Location"
         description="Where is located your place ?"
         subtitle={true}

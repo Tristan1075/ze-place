@@ -60,12 +60,10 @@ export type User = {
 export type Place = {
   _id: string;
   title: string;
-  aboutUser: string;
   location: Location;
   placeType: PlaceType;
-  surface: string;
+  surface: number;
   price: number;
-  rentingDuration: string;
   rate: string;
   description: string;
   images: Image[];
@@ -172,15 +170,10 @@ export type Location = {
 
 export type CreatePlaceForm = {
   title?: string;
-  aboutUser?: string;
   location?: Location;
   placeType?: PlaceType;
   surface?: string;
   price?: string;
-  locationDuration: {
-    title: string;
-    value: string;
-  };
   description?: string;
   images: Array<Image>;
   features: Array<FeatureType>;

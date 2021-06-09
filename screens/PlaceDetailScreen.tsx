@@ -40,12 +40,10 @@ import i18n from 'i18n-js';
 type PlaceScreenNavigationProp = RouteProp<HomeParamList, 'PlaceDetail'>;
 
 type Props = {
-  navigation: PlaceScreenNavigationProp;
   place?: Place;
 };
 
 const PlaceDetailScreen = (props: Props) => {
-  const {navigation} = props;
   const {handleModal} = useContext(ModalContext);
   const [activeImage, setActiveImage] = useState<number>(0);
   const [seeMore, setSeeMore] = useState<boolean>(false);
@@ -53,8 +51,8 @@ const PlaceDetailScreen = (props: Props) => {
   const route = useRoute<PlaceScreenNavigationProp>();
   const item: Place = route.params.place;
   const [user, setUser] = useState<User>();
-  const [similarPlaces,setSimilarPlaces] = useState<Place[]>();
-
+  const [similarPlaces, setSimilarPlaces] = useState<Place[]>([]);
+  const navigation = useNavigation();
   const init = async () => {
     setSimilarPlaces(await getSimilarPlaces(item._id));
     setUser(await getUser());
@@ -64,8 +62,8 @@ const PlaceDetailScreen = (props: Props) => {
     init();
   }, []);
 
-  const handlePlacePress = (place: Place) => {
-    navigation.navigate('PlaceDetail', {place: place});
+  const handlePlacePress = (p: Place) => {
+    navigation.navigate('PlaceDetail', {place: p});
   };
 
   const handleFavoritePress = async (p: Place) => {
@@ -165,14 +163,6 @@ const PlaceDetailScreen = (props: Props) => {
                   {i18n.t('place_detail_people_review_this')}
                 </Text>
               </View>
-              <Text
-                style={styles.description}
-                numberOfLines={seeMore ? 999 : 5}>
-                {item.aboutUser}
-              </Text>
-              {/* <Text style={styles.seeMore} onPress={() => setSeeMore(!seeMore)}>
-              {i18n.t('place_detail_see_more')}
-              </Text> */}
             </View>
             <TitleWithDescription
               title={i18n.t('place_detail_features')}
@@ -257,6 +247,9 @@ const PlaceDetailScreen = (props: Props) => {
               subtitle={true}
             />
             <Text style={styles.description}>{item.description}</Text>
+            <Text style={styles.seeMore} onPress={() => setSeeMore(!seeMore)}>
+              {i18n.t('place_detail_see_more')}
+            </Text>
             <TitleWithDescription
               title={i18n.t('place_detail_location')}
               subtitle={true}
@@ -290,12 +283,14 @@ const PlaceDetailScreen = (props: Props) => {
                 title={i18n.t('place_detail_similar_places')}
                 subtitle={true}
               />
-              <FlatList
-                data={similarPlaces}
-                renderItem={renderItem}
-                keyExtractor={(item) => item._id}
-                showsVerticalScrollIndicator={false}
-              />
+              {similarPlaces.length > 0 && (
+                <FlatList
+                  data={similarPlaces}
+                  renderItem={renderItem}
+                  keyExtractor={(item) => item._id}
+                  showsVerticalScrollIndicator={false}
+                />
+              )}
             </View>
           </View>
           {item.images.length > 0 && (
@@ -341,7 +336,9 @@ const PlaceDetailScreen = (props: Props) => {
               : i18n.t('place_detail_book')
           }
           onPress={
-            user?._id === item.ownerId ? handleSeeBookingsPress : handleSeeBookingsPress
+            user?._id === item.ownerId
+              ? handleSeeBookingsPress
+              : handleSeeBookingsPress
           }
         />
       </View>

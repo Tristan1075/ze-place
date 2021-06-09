@@ -50,19 +50,15 @@ export const getPlacesNearbyCoordinates = async (
 export const createPlace = async (form: CreatePlaceForm) => {
   const token = await SecureStore.getItemAsync('access-token');
   const ownerId = await getUser();
-  console.log('api',API_URL);
-  
   return await axios
     .post(
       `${API_URL}/places/create`,
       {
         title: form.title,
-        aboutUser: form.aboutUser,
         location: form.location,
-        surface: form.surface,
+        surface: form.surface && parseInt(form.surface, 10),
         placeType: form.placeType,
         price: form.price && parseInt(form.price, 10),
-        rentingDuration: form.locationDuration.value,
         description: form.description,
         features: form.features,
         images: form.images,
