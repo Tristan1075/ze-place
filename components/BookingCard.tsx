@@ -19,7 +19,6 @@ const BookingCard = ({item, onAcceptPress, isUser}: Props) => {
           <Text style={styles.name}>
             {item.firstname} {item.lastname}
           </Text>
-          <Text style={styles.date}>{item.price}€</Text>
           <Text style={styles.date}>From: {item.startDate}</Text>
           <Text style={styles.date}>To: {item.endDate}</Text>
           <Text style={styles.date}>{item.duration} days</Text>

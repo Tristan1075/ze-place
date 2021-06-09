@@ -2,8 +2,7 @@ import {API_URL} from '@env';
 import axios, {AxiosResponse} from 'axios';
 import {SignupForm} from '../types';
 import * as SecureStore from 'expo-secure-store';
-import { useDebugValue } from 'react';
-import { registerForPushNotificationsAsync } from './notifications';
+import {registerForPushNotificationsAsync} from './notifications';
 
 const headers = {
   'Content-Type': 'application/json',

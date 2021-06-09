@@ -21,7 +21,7 @@ import ImageViewer from 'react-native-image-zoom-viewer';
 
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
-import {Booking, HomeParamList, Place, User} from '../types';
+import {HomeParamList, Place, User} from '../types';
 import Header from '../components/Header';
 import Button from '../components/Button';
 import {mapStyle} from '../utils/mapStyle';
@@ -36,14 +36,11 @@ import {getSimilarPlaces} from '../api/places';
 import PlaceCard from '../components/PlaceCard';
 import {addFavorite, getUser, removeFavorite} from '../api/customer';
 import i18n from 'i18n-js';
+import EmptyBloc from '../components/EmptyBloc';
 
 type PlaceScreenNavigationProp = RouteProp<HomeParamList, 'PlaceDetail'>;
 
-type Props = {
-  place?: Place;
-};
-
-const PlaceDetailScreen = (props: Props) => {
+const PlaceDetailScreen = () => {
   const navigation = useNavigation();
   const {handleModal} = useContext(ModalContext);
   const [activeImage, setActiveImage] = useState<number>(0);
@@ -52,7 +49,7 @@ const PlaceDetailScreen = (props: Props) => {
   const item = useRoute<PlaceScreenNavigationProp>().params.place;
   const [isBooked, setIsBooked] = useState<boolean>(false);
   const [user, setUser] = useState<User>();
-  const [similarPlaces, setSimilarPlaces] = useState<Place[]>();
+  const [similarPlaces, setSimilarPlaces] = useState<Place[]>([]);
 
   const init = useCallback(async () => {
     const userFetched = await getUser();
@@ -145,10 +142,6 @@ const PlaceDetailScreen = (props: Props) => {
               {item.location.country}
             </Text>
             <View style={styles.descriptionBloc}>
-              <TitleWithDescription
-                title={i18n.t('place_detail_about') + ' ' + item.title}
-                subtitle={true}
-              />
               <View style={styles.padding}>
                 <Rating
                   startingValue={item.rate}
@@ -171,14 +164,6 @@ const PlaceDetailScreen = (props: Props) => {
                   {i18n.t('place_detail_people_review_this')}
                 </Text>
               </View>
-              <Text
-                style={styles.description}
-                numberOfLines={seeMore ? 999 : 5}>
-                {item.aboutUser}
-              </Text>
-              {/* <Text style={styles.seeMore} onPress={() => setSeeMore(!seeMore)}>
-              {i18n.t('place_detail_see_more')}
-              </Text> */}
             </View>
             <TitleWithDescription
               title={i18n.t('place_detail_features')}
@@ -263,6 +248,9 @@ const PlaceDetailScreen = (props: Props) => {
               subtitle={true}
             />
             <Text style={styles.description}>{item.description}</Text>
+            <Text style={styles.seeMore} onPress={() => setSeeMore(!seeMore)}>
+              {i18n.t('place_detail_see_more')}
+            </Text>
             <TitleWithDescription
               title={i18n.t('place_detail_location')}
               subtitle={true}
@@ -296,12 +284,20 @@ const PlaceDetailScreen = (props: Props) => {
                 title={i18n.t('place_detail_similar_places')}
                 subtitle={true}
               />
-              <FlatList
-                data={similarPlaces}
-                renderItem={renderItem}
-                keyExtractor={(item) => item._id}
-                showsVerticalScrollIndicator={false}
-              />
+              {similarPlaces.length > 0 ? (
+                <FlatList
+                  data={similarPlaces}
+                  renderItem={renderItem}
+                  keyExtractor={(item) => item._id}
+                  showsVerticalScrollIndicator={false}
+                />
+              ) : (
+                <EmptyBloc
+                  title="You have to wait, there is no place similar !"
+                  image={require('../assets/images/impatient.png')}
+                  size={100}
+                />
+              )}
             </View>
           </View>
           {item.images.length > 0 && (
@@ -345,11 +341,13 @@ const PlaceDetailScreen = (props: Props) => {
             user?._id === item.ownerId
               ? i18n.t('place_detail_see_bookings')
               : isBooked
-              ? 'Voir ma réservation'
+              ? 'Ma réservation'
               : i18n.t('place_detail_book')
           }
           onPress={
-            user?._id === item.ownerId || isBooked
+            user?._id === item.ownerId
+              ? handleSeeBookingsPress
+              : isBooked
               ? handleSeeBookingsPress
               : handleBookPress
           }
@@ -381,7 +379,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 50,
     position: 'relative',
-    paddingBottom: 150,
+    paddingBottom: 130,
   },
   row: {
     flexDirection: 'row',
@@ -400,7 +398,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: Layout.padding,
   },
   title: {
-    fontFamily: 'oswald-bold',
+    fontFamily: 'oswald',
     fontSize: 30,
     width: 250,
     color: Colors.white,
@@ -411,7 +409,7 @@ const styles = StyleSheet.create({
     color: Colors.white,
   },
   descriptionBloc: {
-    paddingTop: 40,
+    paddingTop: 60,
     alignItems: 'flex-start',
   },
   description: {

@@ -5,13 +5,14 @@ import {
   StyleSheet,
   TouchableOpacity,
   ImageBackground,
+  Image,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {FlatGrid} from 'react-native-super-grid';
 import {getUser} from '../api/customer';
+import EmptyBloc from '../components/EmptyBloc';
 
 import Header from '../components/Header';
-import TitleWithDescription from '../components/TitleWithDescription';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
 import {Place, User} from '../types';
@@ -36,7 +37,7 @@ const BookingListScreen = (props: Props) => {
     <SafeAreaView>
       <Header type="menu" />
       <View>
-        {user && user.bookings.length > 0 && (
+        {user && user.bookings.length > 0 ? (
           <FlatGrid
             data={user.bookings}
             showsVerticalScrollIndicator={false}
@@ -62,6 +63,12 @@ const BookingListScreen = (props: Props) => {
                 </ImageBackground>
               </TouchableOpacity>
             )}
+          />
+        ) : (
+          <EmptyBloc
+            title="Sorry, you don't have any new reservations..."
+            image={require('../assets/images/broke.png')}
+            size={100}
           />
         )}
       </View>
@@ -107,6 +114,20 @@ const styles = StyleSheet.create({
   text: {
     fontFamily: 'oswald',
     color: Colors.white,
+  },
+  emptyContainer: {
+    alignItems: 'center',
+  },
+  empty: {
+    marginTop: 40,
+    width: 250,
+    height: 250,
+  },
+  titleEmpty: {
+    paddingTop: 40,
+    fontFamily: 'oswald',
+    color: Colors.dark,
+    fontSize: 24,
   },
 });
 

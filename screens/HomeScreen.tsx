@@ -4,14 +4,12 @@ import {
   Text,
   View,
   ScrollView,
-  SafeAreaView,
   FlatList,
   Image,
 } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 import {StackNavigationProp} from '@react-navigation/stack';
 import i18n from 'i18n-js';
-import * as SecureStore from 'expo-secure-store';
 
 import Header from '../components/Header';
 import Colors from '../constants/Colors';
@@ -28,9 +26,9 @@ import {Ionicons} from '@expo/vector-icons';
 import {ModalContext} from '../providers/modalContext';
 import SearchFilterScreen from './SearchFilterScreen';
 import Button from '../components/Button';
-import {CommonActions} from '@react-navigation/native';
 import MapScreen from './MapScreen';
 import {getUserLocation} from '../utils';
+
 type RootScreenNavigationProp = StackNavigationProp<HomeParamList, 'Home'>;
 
 type Props = {
@@ -52,16 +50,6 @@ const HomeScreen = (props: Props) => {
   useEffect(() => {
     navigation.addListener('focus', init);
   }, [init, navigation]);
-
-  const handleDisconnectPress = async () => {
-    await SecureStore.deleteItemAsync('access-token');
-    navigation.dispatch(
-      CommonActions.reset({
-        index: 0,
-        routes: [{name: 'Root'}],
-      }),
-    );
-  };
 
   const handlePlacePress = (place: Place) => {
     navigation.navigate('PlaceDetail', {place: place});
@@ -190,7 +178,6 @@ const HomeScreen = (props: Props) => {
         keyExtractor={(item) => item._id}
         showsVerticalScrollIndicator={false}
       />
-      <Button value="Disconnnect" onPress={handleDisconnectPress} />
     </ScrollView>
   );
 };

@@ -85,17 +85,13 @@ const UserBookingsScreen = () => {
               style={styles.paddingHorizontal}
             />
             <View style={styles.list}>
-              {bookings.length > 0 && (
-                <FlatList
-                  scrollEnabled={false}
-                  data={bookings.filter(
-                    (booking) => booking.isAccepted !== true,
-                  )}
-                  renderItem={renderItems}
-                  keyExtractor={(item) => item._id}
-                  showsVerticalScrollIndicator={false}
-                />
-              )}
+              <FlatList
+                scrollEnabled={false}
+                data={bookings.filter((booking) => booking.isAccepted !== true)}
+                renderItem={renderItems}
+                keyExtractor={(item) => item._id}
+                showsVerticalScrollIndicator={false}
+              />
             </View>
             <TitleWithDescription
               title="Accepted reservation"

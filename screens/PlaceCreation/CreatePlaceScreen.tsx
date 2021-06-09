@@ -22,15 +22,10 @@ const CreatePlaceScreen = () => {
   const [exitModal, setExitModal] = useState<boolean>(false);
   const [createPlaceForm, setCreatePlaceForm] = useState<CreatePlaceForm>({
     title: undefined,
-    aboutUser: undefined,
     location: undefined,
     surface: undefined,
     placeType: undefined,
     price: undefined,
-    locationDuration: {
-      title: 'Day',
-      value: 'day',
-    },
     description: undefined,
     features: [],
     images: [],

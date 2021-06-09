@@ -2,16 +2,16 @@ import React, {useState, useEffect} from 'react';
 import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import i18n from 'i18n-js';
+import * as SecureStore from 'expo-secure-store';
 
 import Header from '../components/Header';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
 import {RootStackParamList} from '../types';
-import Button from '../components/Button';
-import {Entypo, Ionicons} from '@expo/vector-icons';
+import {Entypo, MaterialCommunityIcons} from '@expo/vector-icons';
 import {User} from '../types';
 import {getUser} from '../api/customer';
-
+import {CommonActions} from '@react-navigation/native';
 
 type RootScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Menu'>;
 
@@ -28,6 +28,16 @@ const MenuScreen = (props: Props) => {
     init();
   }, []);
 
+  const handleDisconnectPress = async () => {
+    await SecureStore.deleteItemAsync('access-token');
+    navigation.dispatch(
+      CommonActions.reset({
+        index: 0,
+        routes: [{name: 'Root'}],
+      }),
+    );
+  };
+
   const menu = [
     {
       title: 'Payment methods',
@@ -41,7 +51,10 @@ const MenuScreen = (props: Props) => {
       title: 'My places',
       onPress: () => navigation.navigate('MyPlace'),
     },
-    
+    {
+      title: 'Logout',
+      onPress: () => handleDisconnectPress(),
+    },
   ];
 
   return (
@@ -57,14 +70,23 @@ const MenuScreen = (props: Props) => {
             source={user && {uri: user.avatar}}
             style={styles.profilImage}
           />
-          <Text style={styles.title}>{user && user.first_name}{user && user.last_name}</Text>
+          <Text style={styles.title}>
+            {user && user.first_name} {user && user.last_name}
+          </Text>
           <Text style={styles.description}>{user && user.address}</Text>
         </TouchableOpacity>
-        {menu.map((item) => (
-          <TouchableOpacity style={styles.item} onPress={item.onPress}>
-            <Text style={styles.itemValue}>{item.title}</Text>
-            <Entypo name="chevron-thin-right" size={16} />
-          </TouchableOpacity>
+        {menu.map((item, index) => (
+          <>
+            {index === menu.length - 1 && <View style={styles.screen} />}
+            <TouchableOpacity style={[styles.item]} onPress={item.onPress}>
+              <Text style={styles.itemValue}>{item.title}</Text>
+              {index !== menu.length - 1 ? (
+                <Entypo name="chevron-thin-right" size={16} />
+              ) : (
+                <MaterialCommunityIcons name="location-exit" size={20} />
+              )}
+            </TouchableOpacity>
+          </>
         ))}
       </View>
     </View>
@@ -83,6 +105,7 @@ const styles = StyleSheet.create({
     height: 250,
   },
   contentContainer: {
+    paddingBottom: 50,
     marginTop: -120,
     flex: 1,
     paddingHorizontal: 20,
@@ -114,7 +137,7 @@ const styles = StyleSheet.create({
   },
   item: {
     padding: 20,
-    marginBottom:10,
+    marginBottom: 10,
     alignItems: 'center',
     flexDirection: 'row',
     backgroundColor: Colors.white,
