@@ -1,9 +1,11 @@
 import {Ionicons} from '@expo/vector-icons';
+import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useState} from 'react';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
 // @ts-ignore
 import Slider from 'react-native-slider';
 
+import {searchPlaces} from '../api/places';
 import Button from '../components/Button';
 import Feature from '../components/Feature';
 import Modal from '../components/Modal';
@@ -13,16 +15,25 @@ import TitleWithDescription from '../components/TitleWithDescription';
 
 import Colors from '../constants/Colors';
 import {features} from '../mocks';
-import {FeatureType, Location, PlaceType, FilterForm} from '../types';
+import {
+  FeatureType,
+  Location,
+  PlaceType,
+  FilterForm,
+  HomeParamList,
+} from '../types';
 
 import SearchPlaceScreen from './SearchPlaceScreen';
 import SelectPlaceTypeScreen from './SelectPlaceTypeScreen';
+
+type HomeScreenNavigationProp = StackNavigationProp<HomeParamList, 'PlaceList'>;
 
 type Props = {
   onSearchPress: (filter: FilterForm) => void;
 };
 
 const SearchFilterScreen = ({onSearchPress}: Props) => {
+  // const {navigation} = props;
   const [showSearchLocation, setShowSearchLocation] = useState<boolean>(false);
   const [showPlaceType, setShowPlaceType] = useState<boolean>(false);
   const [filterForm, setFilterForm] = useState<FilterForm>({
@@ -57,6 +68,10 @@ const SearchFilterScreen = ({onSearchPress}: Props) => {
     setShowSearchLocation(false);
   };
 
+  const handleSearchPress = async () => {
+    const places = await searchPlaces(filterForm);
+  };
+
   return (
     <View style={styles.container}>
       <ScrollView
@@ -82,7 +97,7 @@ const SearchFilterScreen = ({onSearchPress}: Props) => {
           />
           <Slider
             minimumValue={0}
-            maximumValue={10000}
+            maximumValue={3000}
             value={filterForm.price}
             minimumTrackTintColor={Colors.white}
             maximumTrackTintColor={Colors.primary}
@@ -104,7 +119,7 @@ const SearchFilterScreen = ({onSearchPress}: Props) => {
             suffix={<Text>m²</Text>}
             type="number-pad"
             onChangeText={(value) =>
-              setFilterForm({...filterForm, surface: value})
+              setFilterForm({...filterForm, surface: parseInt(value, 10)})
             }
           />
           <TitleWithDescription title="Select a feature" subtitle={true} />
