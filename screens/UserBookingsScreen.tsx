@@ -9,6 +9,7 @@ import {
   Image,
   Text,
 } from 'react-native';
+import {Rating} from 'react-native-ratings';
 import {getUser, getUserById} from '../api/customer';
 import {acceptBooking, getBookings} from '../api/places';
 import BookingCard from '../components/BookingCard';
@@ -70,6 +71,12 @@ const UserBookingsScreen = () => {
               <Text style={styles.ownerName}>
                 {owner?.first_name} {owner?.last_name}
               </Text>
+              <Rating
+                startingValue={5}
+                imageSize={12}
+                tintColor={Colors.background}
+                style={styles.rate}
+              />
               <View style={styles.row}>
                 <Text style={styles.text}>Envoyer un message</Text>
                 <Feather name="message-circle" size={16} />
@@ -153,12 +160,16 @@ const styles = StyleSheet.create({
   ownerName: {
     fontFamily: 'oswald',
     fontSize: 18,
-    flex: 1,
   },
   text: {
     fontFamily: 'poppins-light',
     fontSize: 12,
     paddingRight: 10,
+  },
+  rate: {
+    alignSelf: 'flex-start',
+    flex: 1,
+    paddingTop: 5,
   },
 });
 

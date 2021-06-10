@@ -1,6 +1,6 @@
-import {API_URL} from '@env';
 import axios, {AxiosResponse} from 'axios';
 import * as SecureStore from 'expo-secure-store';
+import {API_URL} from '../env';
 
 export const initPaymentIntent = async (bookingPrice) => {
   const token = await SecureStore.getItemAsync('access-token');

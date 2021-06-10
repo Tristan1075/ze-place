@@ -55,7 +55,7 @@ const FeatureList = ({features, onChange, list, onlyOne}: Props) => {
       horizontal={true}
       data={features}
       renderItem={renderListItem}
-      keyExtractor={(item) => item.id}
+      keyExtractor={(item) => item.name}
       showsHorizontalScrollIndicator={false}
     />
   );

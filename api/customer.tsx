@@ -1,7 +1,7 @@
 import {Place, SignupForm, User} from '../types';
-import {API_URL, API_TOKEN} from '@env';
 import axios, {AxiosResponse} from 'axios';
 import * as SecureStore from 'expo-secure-store';
+import {API_URL} from '../env';
 
 export const getUser = async (): Promise<User> => {
   const token = await SecureStore.getItemAsync('access-token');

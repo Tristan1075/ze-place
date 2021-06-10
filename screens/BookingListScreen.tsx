@@ -30,7 +30,12 @@ const BookingListScreen = (props: Props) => {
   }, [init, navigation]);
 
   const handlePlacePress = (place: Place) => {
-    navigation.navigate('PlaceDetail', {place: place, showUserBooking: true});
+    navigation.navigate('UserBookings', {
+      placeId: place._id,
+      ownerId: place.ownerId,
+      isBooked: true,
+    });
+    // navigation.navigate('PlaceDetail', {place: place, showUserBooking: true});
   };
 
   return (

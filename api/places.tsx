@@ -1,6 +1,6 @@
-import {API_URL} from '@env';
 import axios, {AxiosResponse} from 'axios';
 import * as SecureStore from 'expo-secure-store';
+import {API_URL} from '../env';
 
 import {Booking, Coords, CreatePlaceForm, Place} from '../types';
 import {getUser} from './customer';

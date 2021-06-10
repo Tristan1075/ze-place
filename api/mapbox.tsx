@@ -1,5 +1,5 @@
-import {MAPBOX_TOKEN} from '@env';
 import axios, {AxiosResponse} from 'axios';
+import {MAPBOX_TOKEN} from '../env';
 
 export const searchPlace = async (query: string) => {
   return await axios
