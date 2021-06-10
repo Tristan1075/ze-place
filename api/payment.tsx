@@ -8,7 +8,7 @@ export const initPaymentIntent = async (bookingPrice) => {
 
   return await axios
     .post(
-      'http://localhost:3000/payment/init',
+      `${API_URL}/payment/init`,
       {
         bookingPrice: bookingPrice,
       },

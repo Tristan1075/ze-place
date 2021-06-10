@@ -91,6 +91,7 @@ const FavoritesNavigator = () => {
   return (
     <FavoritesStack.Navigator screenOptions={{headerShown: false}}>
       <FavoritesStack.Screen name="Messages" component={FavoritesScreen} />
+      <HomeStack.Screen name="PlaceDetail" component={PlaceDetailScreen} />
     </FavoritesStack.Navigator>
   );
 };
