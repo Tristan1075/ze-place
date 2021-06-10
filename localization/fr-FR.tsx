@@ -3,7 +3,8 @@ import type {LocalizationType} from './type';
 export default {
   hello: 'bonjour',
   discover: 'Discover world with us!',
-  favorites_title: 'Your favorites places !',
+  favorites_title: 'Vos espaces favoris',
+  search_place_title: 'Résultat de recherche',
   profil: 'Profile',
   paiementMethod: 'Moyen de paiement',
   myAnnonces: 'Mes annonces',

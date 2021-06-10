@@ -42,6 +42,10 @@ export type MessagesParamList = {
   Conversation: {sender: Sender};
 };
 
+export type PlacesParamList = {
+  Places: Place[];
+};
+
 export type User = {
   _id: string;
   avatar: string;
@@ -193,7 +197,7 @@ export type CreatePlaceForm = {
 export type FilterForm = {
   placeType?: PlaceType;
   price?: number;
-  surface?: string;
+  surface?: number;
   features: Array<FeatureType>;
   location?: Location;
 };

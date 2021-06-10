@@ -2,7 +2,7 @@ import {API_URL} from '@env';
 import axios, {AxiosResponse} from 'axios';
 import * as SecureStore from 'expo-secure-store';
 
-import {Booking, Coords, CreatePlaceForm, Place} from '../types';
+import {Booking, Coords, CreatePlaceForm, FilterForm, Place} from '../types';
 import {getUser} from './customer';
 
 export const getAllPlaces = async () => {
@@ -157,6 +157,33 @@ export const getSimilarPlaces = async (placeID: String) => {
       `${API_URL}/places/similarPlaces`,
       {
         placeID: placeID,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    )
+    .then((response: AxiosResponse<any>) => {
+      return response.data.places;
+    })
+    .catch((err) => {
+      return Promise.reject(err.response.data);
+    });
+};
+
+export const searchPlaces = async (filterForm: FilterForm) => {
+  const token = await SecureStore.getItemAsync('access-token');
+
+  return await axios
+    .post(
+      `${API_URL}/places/searchPlaces`,
+      {
+        placeTypeName: filterForm.placeType?.name,
+        price: filterForm.price,
+        surface: filterForm.surface,
+        features: filterForm.features,
+        location: filterForm.location,
       },
       {
         headers: {

@@ -4,6 +4,7 @@ export default {
   hello: 'bonjour',
   discover: 'Discover world with us !',
   favorites_title: 'Your favorites places !',
+  search_place_title: 'Result of research',
   profil: 'Profil',
   paiementMethod: 'Payment method ',
   myAnnonces: 'My places',
