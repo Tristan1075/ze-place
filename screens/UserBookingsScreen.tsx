@@ -1,4 +1,4 @@
-import {Feather, Ionicons} from '@expo/vector-icons';
+import {Feather} from '@expo/vector-icons';
 import {RouteProp, useRoute} from '@react-navigation/native';
 import React, {useCallback, useEffect, useState} from 'react';
 import {
@@ -10,13 +10,14 @@ import {
   Text,
 } from 'react-native';
 import {Rating} from 'react-native-ratings';
-import {getUser, getUserById} from '../api/customer';
-import {acceptBooking, getBookings} from '../api/places';
+import {denyBooking, acceptBooking, getBookingsByPlace} from '../api/bookings';
+import {getUserById} from '../api/customer';
 import BookingCard from '../components/BookingCard';
 import Header from '../components/Header';
 import TitleWithDescription from '../components/TitleWithDescription';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
+import UserStore from '../store/UserStore';
 import {HomeParamList, Booking, BookingTab, User} from '../types';
 
 type UserBookingsScreenNavigationProp = RouteProp<
@@ -26,35 +27,45 @@ type UserBookingsScreenNavigationProp = RouteProp<
 
 const UserBookingsScreen = () => {
   const params = useRoute<UserBookingsScreenNavigationProp>().params;
-  const [bookings, setBookings] = useState<Booking[]>([]);
+  const userBooking = params.userBooking && params.userBooking[0];
+  const [activeBooking, setActiveBooking] = useState<Booking>(userBooking);
   const [owner, setOwner] = useState<User>();
-  const [user, setUser] = useState<User>();
-  const [userBooking, setUserBooking] = useState<Booking>();
+  const [bookings, setBookings] = useState<Booking[]>([]);
 
   const init = useCallback(async () => {
-    setUser(await getUser());
-    setOwner(await getUserById(params.ownerId));
-    setBookings(await getBookings(params.placeId));
-  }, [params.ownerId, params.placeId]);
+    if (activeBooking) {
+      setOwner(await getUserById(activeBooking.ownerId));
+    } else {
+      setBookings(await getBookingsByPlace(params.placeId));
+    }
+  }, [activeBooking, params.placeId]);
 
   useEffect(() => {
     init();
   }, [init]);
 
   const handleAcceptPress = async (bookingId: string) => {
-    setBookings(await acceptBooking(params.placeId, bookingId));
+    await acceptBooking(bookingId);
+    setBookings(await getBookingsByPlace(params.placeId));
+  };
+
+  const handleDenyPress = async (bookingId: string) => {
+    const booking = await denyBooking(bookingId);
+    if (activeBooking) {
+      setActiveBooking(booking);
+    }
+    setBookings(await getBookingsByPlace(params.placeId));
   };
 
   const renderItems = ({item}: {item: Booking}) => {
-    if ((params.isBooked && item.userId === user?._id) || !params.isBooked) {
-      return (
-        <BookingCard
-          item={item}
-          onAcceptPress={handleAcceptPress}
-          isUser={item.userId === user?._id}
-        />
-      );
-    }
+    return (
+      <BookingCard
+        item={item}
+        onDenyPress={handleDenyPress}
+        onAcceptPress={handleAcceptPress}
+        isUser={item.userId === UserStore.user._id}
+      />
+    );
   };
 
   return (
@@ -64,7 +75,7 @@ const UserBookingsScreen = () => {
       showsVerticalScrollIndicator={false}>
       <Header type="back" />
       <View style={styles.content}>
-        {user?._id !== owner?._id && (
+        {owner && (
           <View style={styles.ownerContainer}>
             <Image source={{uri: owner?.avatar}} style={styles.avatar} />
             <View>
@@ -84,31 +95,25 @@ const UserBookingsScreen = () => {
             </View>
           </View>
         )}
+        {activeBooking && (
+          <BookingCard
+            item={activeBooking}
+            onDenyPress={handleDenyPress}
+            onAcceptPress={handleAcceptPress}
+            isUser={activeBooking.userId === UserStore.user._id}
+          />
+        )}
         {bookings.length > 0 && (
           <>
             <TitleWithDescription
-              title="Pending reservation"
+              title="Reservations"
               subtitle={true}
               style={styles.paddingHorizontal}
             />
             <View style={styles.list}>
               <FlatList
                 scrollEnabled={false}
-                data={bookings.filter((booking) => booking.isAccepted !== true)}
-                renderItem={renderItems}
-                keyExtractor={(item) => item._id}
-                showsVerticalScrollIndicator={false}
-              />
-            </View>
-            <TitleWithDescription
-              title="Accepted reservation"
-              subtitle={true}
-              style={styles.paddingHorizontal}
-            />
-            <View style={styles.list}>
-              <FlatList
-                scrollEnabled={false}
-                data={bookings.filter((booking) => booking.isAccepted === true)}
+                data={bookings}
                 renderItem={renderItems}
                 keyExtractor={(item) => item._id}
                 showsVerticalScrollIndicator={false}

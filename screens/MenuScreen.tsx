@@ -25,6 +25,7 @@ const MenuScreen = (props: Props) => {
 
   const handleDisconnectPress = async () => {
     await SecureStore.deleteItemAsync('access-token');
+    UserStore.updateUser({});
     navigation.dispatch(
       CommonActions.reset({
         index: 0,

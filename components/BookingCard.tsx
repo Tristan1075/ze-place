@@ -8,10 +8,11 @@ import {Booking} from '../types';
 type Props = {
   item: Booking;
   onAcceptPress: (bookingId: string) => void;
+  onDenyPress: (bookingId: string) => void;
   isUser: boolean;
 };
 
-const BookingCard = ({item, onAcceptPress, isUser}: Props) => {
+const BookingCard = ({item, onAcceptPress, onDenyPress, isUser}: Props) => {
   return (
     <View style={styles.card}>
       <View style={styles.row}>
@@ -31,12 +32,20 @@ const BookingCard = ({item, onAcceptPress, isUser}: Props) => {
       ) : null}
       <View style={styles.border} />
       <View style={styles.actions}>
-        <TouchableOpacity>
-          <AntDesign name="closecircleo" size={30} color={Colors.dark} />
-        </TouchableOpacity>
-        <Text style={[styles.status, item.isAccepted && styles.success]}>{item.isAccepted ? 'ACCEPTED' : "WAITING"}</Text>
-        {!item.isAccepted && !isUser && (
-          <TouchableOpacity onPress={() => onAcceptPress(item._id)}>
+        {!item.isDenied && (
+          <TouchableOpacity onPress={() => item._id && onDenyPress(item._id)}>
+            <AntDesign name="closecircleo" size={30} color={Colors.dark} />
+          </TouchableOpacity>
+        )}
+        <Text
+          style={[
+            styles.status,
+            !item.isDenied && item.isAccepted && styles.success,
+          ]}>
+          {item.isDenied ? 'DENIED' : item.isAccepted ? 'ACCEPTED' : 'WAITING'}
+        </Text>
+        {!item.isDenied && !item.isAccepted && !isUser && (
+          <TouchableOpacity onPress={() => item._id && onAcceptPress(item._id)}>
             <AntDesign
               name="checkcircleo"
               size={30}

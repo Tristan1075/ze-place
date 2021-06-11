@@ -21,7 +21,7 @@ import ImageViewer from 'react-native-image-zoom-viewer';
 
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
-import {HomeParamList, Place, User} from '../types';
+import {Booking, BookingTab, HomeParamList, Place, User} from '../types';
 import Header from '../components/Header';
 import Button from '../components/Button';
 import {mapStyle} from '../utils/mapStyle';
@@ -38,6 +38,7 @@ import {addFavorite, removeFavorite} from '../api/customer';
 import i18n from 'i18n-js';
 import EmptyBloc from '../components/EmptyBloc';
 import UserStore from '../store/UserStore';
+import {getBookingByPlaceAndUser, getBookingsByPlace} from '../api/bookings';
 
 type PlaceScreenNavigationProp = RouteProp<HomeParamList, 'PlaceDetail'>;
 
@@ -48,14 +49,11 @@ const PlaceDetailScreen = () => {
   const [seeMore, setSeeMore] = useState<boolean>(false);
   const [imagePreview, setImagePreview] = useState<boolean>(false);
   const item = useRoute<PlaceScreenNavigationProp>().params.place;
-  const [isBooked, setIsBooked] = useState<boolean>(false);
-  const [user] = useState<User>(UserStore.user);
   const [similarPlaces, setSimilarPlaces] = useState<Place[]>([]);
+  const [userBooking, setUserBooking] = useState<Booking[]>([]);
 
   const init = useCallback(async () => {
-    setIsBooked(
-      Boolean(UserStore.user.bookings.find((u) => u._id === item._id)),
-    );
+    setUserBooking(await getBookingByPlaceAndUser(item._id));
     setSimilarPlaces(await getSimilarPlaces(item._id));
   }, [item._id]);
 
@@ -99,11 +97,15 @@ const PlaceDetailScreen = () => {
     });
   };
 
-  const handleSeeBookingsPress = () => {
+  const handleSeeOwnerBookingsPress = () => {
     navigation.navigate('UserBookings', {
       placeId: item._id,
-      ownerId: item.ownerId,
-      isBooked: isBooked,
+    });
+  };
+
+  const handleSeeBookingPress = () => {
+    navigation.navigate('UserBookings', {
+      userBooking,
     });
   };
 
@@ -326,30 +328,32 @@ const PlaceDetailScreen = () => {
       </ScrollView>
       <View style={styles.chooseBanner}>
         <Text style={styles.chooseBannerText}>
-          {user?._id === item.ownerId
+          {UserStore.user._id === item.ownerId
             ? i18n.t('place_detail_active_bookings')
             : i18n.t('place_detail_per_day')}
         </Text>
         <Text style={styles.chooseBannerPrice}>
-          {user?._id === item.ownerId
+          {UserStore.user._id === item.ownerId
             ? `${item.bookings.length}`
+            : userBooking.length > 0
+            ? ''
             : `${item.price}€`}
         </Text>
         <Button
           backgroundColor={Colors.white}
           textColor={Colors.primary}
           value={
-            user?._id === item.ownerId
+            UserStore.user._id === item.ownerId
               ? i18n.t('place_detail_see_bookings')
-              : isBooked
+              : userBooking.length > 0
               ? 'Ma réservation'
               : i18n.t('place_detail_book')
           }
           onPress={
-            user?._id === item.ownerId
-              ? handleSeeBookingsPress
-              : isBooked
-              ? handleSeeBookingsPress
+            UserStore.user._id === item.ownerId
+              ? handleSeeOwnerBookingsPress
+              : userBooking.length > 0
+              ? handleSeeBookingPress
               : handleBookPress
           }
         />

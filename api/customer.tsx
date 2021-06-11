@@ -20,7 +20,7 @@ export const getUser = async (): Promise<User> => {
     });
 };
 
-export const getUserById = async (id: string) => {
+export const getUserById = async (id?: string) => {
   const token = await SecureStore.getItemAsync('access-token');
   return await axios
     .get(`${API_URL}/customers/${id}`, {

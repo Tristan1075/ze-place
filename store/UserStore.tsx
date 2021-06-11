@@ -2,9 +2,7 @@ import {observable, action} from 'mobx';
 import {User} from '../types';
 
 class UserStore {
-  @observable user: User = {
-    favorites: [],
-  };
+  @observable user: User = {};
 
   @action updateUser(user: User) {
     this.user = user;
