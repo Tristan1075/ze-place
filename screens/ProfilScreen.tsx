@@ -11,19 +11,12 @@ import i18n from 'i18n-js';
 
 import Header from '../components/Header';
 import Colors from '../constants/Colors';
-import {User} from '../types';
-import {getUser} from '../api/customer';
 
 import ProfilText from '../components/ProfilText';
+import UserStore from '../store/UserStore';
 
 const ProfilScreen = () => {
-  const [user, setUser] = useState<User>();
-
-  useEffect(() => {
-    const init = async () => setUser(await getUser());
-    init();
-  }, []);
-
+  const {user} = UserStore;
   return (
     <SafeAreaView style={styles.container}>
       <Header type="back" showProfil={false} />
@@ -33,10 +26,7 @@ const ProfilScreen = () => {
         {user && (
           <View>
             <View style={styles.avatarContainer}>
-              <Image
-                source={{uri: user.avatar}}
-                style={styles.avatar}
-              />
+              <Image source={{uri: user.avatar}} style={styles.avatar} />
             </View>
             <Text style={styles.title}>{i18n.t('personalInfo')}</Text>
             <ProfilText message={i18n.t('lastname')} value={user.last_name} />

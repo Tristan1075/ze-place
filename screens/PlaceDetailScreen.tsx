@@ -34,9 +34,10 @@ import TitleWithDescription from '../components/TitleWithDescription';
 import FeatureList from '../components/FeatureList';
 import {getSimilarPlaces} from '../api/places';
 import PlaceCard from '../components/PlaceCard';
-import {addFavorite, getUser, removeFavorite} from '../api/customer';
+import {addFavorite, removeFavorite} from '../api/customer';
 import i18n from 'i18n-js';
 import EmptyBloc from '../components/EmptyBloc';
+import UserStore from '../store/UserStore';
 
 type PlaceScreenNavigationProp = RouteProp<HomeParamList, 'PlaceDetail'>;
 
@@ -48,13 +49,13 @@ const PlaceDetailScreen = () => {
   const [imagePreview, setImagePreview] = useState<boolean>(false);
   const item = useRoute<PlaceScreenNavigationProp>().params.place;
   const [isBooked, setIsBooked] = useState<boolean>(false);
-  const [user, setUser] = useState<User>();
+  const [user] = useState<User>(UserStore.user);
   const [similarPlaces, setSimilarPlaces] = useState<Place[]>([]);
 
   const init = useCallback(async () => {
-    const userFetched = await getUser();
-    setIsBooked(Boolean(userFetched.bookings.find((u) => u._id === item._id)));
-    setUser(userFetched);
+    setIsBooked(
+      Boolean(UserStore.user.bookings.find((u) => u._id === item._id)),
+    );
     setSimilarPlaces(await getSimilarPlaces(item._id));
   }, [item._id]);
 
@@ -68,25 +69,25 @@ const PlaceDetailScreen = () => {
   };
 
   const handleFavoritePress = async (p: Place) => {
-    const isFavorite = Boolean(
-      user && user.favorites.find((foundPlace) => foundPlace._id === p._id),
-    );
-    isFavorite ? removeFavorite(p) : addFavorite(p);
+    p.isFavorite ? removeFavorite(p) : addFavorite(p);
     await init();
   };
 
-  const renderItem = ({item, index}: {item: Place; index: number}) => {
-    const isFavorite = Boolean(
-      user && user.favorites.find((foundPlace) => foundPlace._id === item._id),
-    );
+  const renderItem = ({
+    item: placeItem,
+    index,
+  }: {
+    item: Place;
+    index: number;
+  }) => {
     return (
       <View key={index}>
         <PlaceCard
           key={index}
-          place={item}
-          onPress={() => handlePlacePress(item)}
+          place={placeItem}
+          onPress={() => handlePlacePress(placeItem)}
           onFavoritePress={handleFavoritePress}
-          isFavorite={isFavorite}
+          isFavorite={placeItem.isFavorite}
         />
       </View>
     );

@@ -1,8 +1,7 @@
 import axios, {AxiosResponse} from 'axios';
 import {SignupForm} from '../types';
-import * as SecureStore from 'expo-secure-store';
 import {registerForPushNotificationsAsync} from './notifications';
-import { API_URL } from '../env';
+import {API_URL} from '../env';
 
 const headers = {
   'Content-Type': 'application/json',
@@ -60,11 +59,4 @@ export const register = async (form: SignupForm) => {
       console.log(err.response.data);
       return Promise.reject(err);
     });
-};
-
-export const getUserId = async () => {
-  const id = await SecureStore.getItemAsync('userId');
-  if (id) {
-    return id;
-  }
 };

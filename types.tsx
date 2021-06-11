@@ -84,6 +84,7 @@ export type Place = {
   reviews: Review[];
   ownerId: string;
   bookings: Booking[];
+  isFavorite: boolean;
   created_at: {type: Date; default: Date};
 };
 

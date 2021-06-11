@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import i18n from 'i18n-js';
@@ -10,8 +10,8 @@ import Layout from '../constants/Layout';
 import {RootStackParamList} from '../types';
 import {Entypo, MaterialCommunityIcons} from '@expo/vector-icons';
 import {User} from '../types';
-import {getUser} from '../api/customer';
 import {CommonActions} from '@react-navigation/native';
+import UserStore from '../store/UserStore';
 
 type RootScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Menu'>;
 
@@ -21,12 +21,7 @@ type Props = {
 
 const MenuScreen = (props: Props) => {
   const {navigation} = props;
-  const [user, setUser] = useState<User>();
-
-  useEffect(() => {
-    const init = async () => setUser(await getUser());
-    init();
-  }, []);
+  const [user] = useState<User>(UserStore.user);
 
   const handleDisconnectPress = async () => {
     await SecureStore.deleteItemAsync('access-token');
@@ -76,7 +71,7 @@ const MenuScreen = (props: Props) => {
           <Text style={styles.description}>{user && user.address}</Text>
         </TouchableOpacity>
         {menu.map((item, index) => (
-          <>
+          <View key={index}>
             {index === menu.length - 1 && <View style={styles.screen} />}
             <TouchableOpacity style={[styles.item]} onPress={item.onPress}>
               <Text style={styles.itemValue}>{item.title}</Text>
@@ -86,7 +81,7 @@ const MenuScreen = (props: Props) => {
                 <MaterialCommunityIcons name="location-exit" size={20} />
               )}
             </TouchableOpacity>
-          </>
+          </View>
         ))}
       </View>
     </View>

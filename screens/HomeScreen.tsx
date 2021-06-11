@@ -15,18 +15,19 @@ import Header from '../components/Header';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
 import CardWithRate from '../components/CardWithRate';
-import {FilterForm, HomeParamList, Place, User} from '../types';
+import {FilterForm, HomeParamList, Place} from '../types';
 import {getAllPlaces} from '../api/places';
 import DescriptionBloc from '../components/DescriptionBloc';
 import SimpleInput from '../components/SimpleInput';
 import TitleWithDescription from '../components/TitleWithDescription';
 import PlaceCard from '../components/PlaceCard';
-import {addFavorite, getUser, removeFavorite} from '../api/customer';
+import {addFavorite, removeFavorite} from '../api/customer';
 import {Ionicons} from '@expo/vector-icons';
 import {ModalContext} from '../providers/modalContext';
 import SearchFilterScreen from './SearchFilterScreen';
 import MapScreen from './MapScreen';
 import {getUserLocation} from '../utils';
+import UserStore from '../store/UserStore';
 
 type RootScreenNavigationProp = StackNavigationProp<HomeParamList, 'Home'>;
 
@@ -38,12 +39,9 @@ const HomeScreen = (props: Props) => {
   const {navigation} = props;
   const [places, setPlaces] = useState<Array<Place>>([]);
   const {handleModal} = useContext(ModalContext);
-  const [user, setUser] = useState<User>();
-  const [userLocation, setUserLocation] = useState(null);
 
   const init = useCallback(async () => {
     setPlaces(await getAllPlaces());
-    setUser(await getUser());
   }, []);
 
   useEffect(() => {
@@ -52,10 +50,6 @@ const HomeScreen = (props: Props) => {
 
   const handlePlacePress = (place: Place) => {
     navigation.navigate('PlaceDetail', {place: place});
-  };
-
-  const handleCreatePlacePress = () => {
-    navigation.navigate('CreatePlace');
   };
 
   const showFilterModal = () => {
@@ -90,10 +84,7 @@ const HomeScreen = (props: Props) => {
   };
 
   const handleFavoritePress = async (p: Place) => {
-    const isFavorite = Boolean(
-      user && user.favorites.find((foundPlace) => foundPlace._id === p._id),
-    );
-    isFavorite ? removeFavorite(p) : addFavorite(p);
+    p.isFavorite ? await removeFavorite(p) : await addFavorite(p);
     await init();
   };
 
@@ -108,16 +99,13 @@ const HomeScreen = (props: Props) => {
   };
 
   const renderListItem = ({item}: {item: Place}) => {
-    const isFavorite = Boolean(
-      user && user.favorites.find((foundPlace) => foundPlace._id === item._id),
-    );
     return (
       <View style={styles.paddingHorizontal} key={item._id}>
         <PlaceCard
           place={item}
           onPress={() => handlePlacePress(item)}
           onFavoritePress={handleFavoritePress}
-          isFavorite={isFavorite}
+          isFavorite={item.isFavorite}
         />
       </View>
     );
@@ -134,7 +122,7 @@ const HomeScreen = (props: Props) => {
         <Header
           type="menu"
           showProfil={true}
-          profilPicture={user && user.avatar}
+          profilPicture={UserStore.user.avatar}
         />
         <Text style={styles.title}>{i18n.t('discover')}</Text>
         <SimpleInput
@@ -162,7 +150,7 @@ const HomeScreen = (props: Props) => {
         activeSlideAlignment="start"
         itemWidth={220}
       />
-      <DescriptionBloc onPress={handleCreatePlacePress} />
+      <DescriptionBloc onPress={() => navigation.navigate('CreatePlace')} />
       <TitleWithDescription
         title="Announces"
         description="Find nearby you the available places to rent"
@@ -172,13 +160,16 @@ const HomeScreen = (props: Props) => {
         subtitle={true}
         onActionPress={showFilterModal}
       />
-      <FlatList
-        data={places.slice(0, 5)}
-        scrollEnabled={false}
-        renderItem={renderListItem}
-        keyExtractor={(item) => item._id}
-        showsVerticalScrollIndicator={false}
-      />
+      {places.slice(0, 5).map((item) => (
+        <View style={styles.paddingHorizontal} key={item._id}>
+          <PlaceCard
+            place={item}
+            onPress={() => handlePlacePress(item)}
+            onFavoritePress={handleFavoritePress}
+            isFavorite={item.isFavorite}
+          />
+        </View>
+      ))}
     </ScrollView>
   );
 };

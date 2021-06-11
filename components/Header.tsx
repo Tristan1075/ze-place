@@ -5,12 +5,12 @@ import {Ionicons} from '@expo/vector-icons';
 
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
+import UserStore from '../store/UserStore';
 
 type Props = {
   type: 'back' | 'menu';
   showProfil?: boolean;
   title?: string;
-  profilPicture?: String;
   button?: string;
   onBackPress?: Function;
   color?: string;
@@ -23,7 +23,6 @@ const Header = (props: Props) => {
     type,
     showProfil,
     title,
-    profilPicture,
     onBackPress,
     color,
     rightText,
@@ -54,11 +53,11 @@ const Header = (props: Props) => {
         <TouchableOpacity style={styles.headerContainer} />
       )}
       {title && <Text style={styles.title}>{title}</Text>}
-      {showProfil && (
+      {type === 'menu' && (
         <TouchableOpacity style={styles.shadow} onPress={handleMenuPress}>
           <Image
             source={{
-              uri: profilPicture,
+              uri: UserStore.user.avatar,
             }}
             style={styles.profil}
           />

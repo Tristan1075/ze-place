@@ -16,6 +16,8 @@ import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
 import PlaceCard from '../components/PlaceCard';
 import {addFavorite, getUser, removeFavorite} from '../api/customer';
+import UserStore from '../store/UserStore';
+import TitleWithDescription from '../components/TitleWithDescription';
 
 type MessagesScreenNavigationProp = StackNavigationProp<
   MessagesParamList,
@@ -28,7 +30,7 @@ type Props = {
 
 const FavoritesScreen = (props: Props) => {
   const {navigation} = props;
-  const [user, setUser] = useState<User>();
+  const [user, setUser] = useState<User>(UserStore.user);
 
   const init = useCallback(async () => {
     setUser(await getUser());
@@ -43,21 +45,15 @@ const FavoritesScreen = (props: Props) => {
   };
 
   const handleFavoritePress = async (p: Place) => {
-    const isFavorite = Boolean(
-      user && user.favorites.find((foundPlace) => foundPlace._id === p._id),
-    );
-    isFavorite ? removeFavorite(p) : addFavorite(p);
+    await removeFavorite(p);
     await init();
   };
 
   const renderItem = ({item, index}: {item: Place; index: number}) => {
-    const isFavorite = Boolean(
-      user && user.favorites.find((foundPlace) => foundPlace._id === item._id),
-    );
     return (
       <PlaceCard
         key={index}
-        isFavorite={isFavorite}
+        isFavorite={true}
         place={item}
         onFavoritePress={handleFavoritePress}
         onPress={() => handleItemPress(item)}
@@ -69,9 +65,13 @@ const FavoritesScreen = (props: Props) => {
     <SafeAreaView style={styles.container}>
       <Header type="menu" showProfil={true} />
       <View style={styles.content}>
-        <Text style={styles.title}>{i18n.t('favorites_title')}</Text>
+        <TitleWithDescription
+          title="Favorites"
+          subtitle={true}
+          description="Find nearby you the available places to rent"
+        />
         <FlatList
-          data={user?.favorites}
+          data={user.favorites}
           renderItem={renderItem}
           keyExtractor={(item) => item._id}
           showsVerticalScrollIndicator={false}
