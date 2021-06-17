@@ -71,7 +71,7 @@ const FavoritesScreen = (props: Props) => {
           subtitle={true}
           description="Find nearby you the available places to rent"
         />
-        {user.favorites.length > 0 ? (
+        {user.favorites && user.favorites.length > 0 ? (
           <FlatList
             data={user.favorites}
             renderItem={renderItem}

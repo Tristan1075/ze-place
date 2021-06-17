@@ -7,31 +7,27 @@ import {
   StyleSheet,
 } from 'react-native';
 import Colors from '../constants/Colors';
-import Layout from '../constants/Layout';
-import {Place} from '../types';
+import {Booking} from '../types';
 
 type Props = {
-  item: Place;
-  onPress: (place: Place) => void;
+  item: Booking;
+  onPress: (placeId?: string) => void;
 };
 
 const PlaceCardSquare = ({item, onPress}: Props) => {
   return (
     <TouchableOpacity
       style={styles.itemContainer}
-      onPress={() => onPress(item)}>
+      onPress={() => onPress(item.placeId)}>
       <ImageBackground
         source={{
-          uri:
-            'https://www.leden-spa-aqua-forme.fr/wp-content/uploads/2018/05/jk-placeholder-image.jpg',
+          uri: item.placeCover
+            ? item.placeCover
+            : 'https://www.leden-spa-aqua-forme.fr/wp-content/uploads/2018/05/jk-placeholder-image.jpg',
         }}
         style={styles.cover}>
-        {/* <View style={styles.badgeContainer}>
-          <Text style={styles.badge}>4</Text>
-        </View> */}
         <View style={styles.flex} />
-        <Text style={styles.title}>{item.title}</Text>
-        {item.location && <Text style={styles.text}>{item.location.city}</Text>}
+        <Text style={styles.title}>{item.placeTitle}</Text>
       </ImageBackground>
     </TouchableOpacity>
   );
@@ -45,7 +41,7 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 150,
     backgroundColor: Colors.white,
-    ...Layout.shadow,
+    marginBottom: 10,
   },
   title: {
     fontFamily: 'oswald-bold',

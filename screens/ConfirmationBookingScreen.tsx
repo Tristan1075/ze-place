@@ -191,7 +191,7 @@ const styles = StyleSheet.create({
     paddingBottom: 50,
   },
   content: {
-    paddingTop: 200,
+    paddingTop: 150,
     paddingHorizontal: 20,
     width: 240,
     flex: 1,
@@ -200,8 +200,8 @@ const styles = StyleSheet.create({
     top: 150,
     right: -100,
     position: 'absolute',
-    width: 300,
-    height: 300,
+    width: 270,
+    height: 270,
   },
   title: {
     fontFamily: 'oswald',

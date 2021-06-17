@@ -19,7 +19,7 @@ export type BottomTabParamList = {
 
 export type HomeParamList = {
   Home: undefined;
-  PlaceDetail: {place: Place};
+  PlaceDetail: {place: string};
   PlaceList: {filter: FilterForm};
   CreatePlace: undefined;
   MapModal: undefined;
@@ -173,8 +173,8 @@ export type Location = {
   postalCode?: string;
   city?: string;
   country?: string;
-  longitude: number;
-  latitude: number;
+  longitude: string;
+  latitude: string;
 };
 
 export type CreatePlaceForm = {
@@ -254,6 +254,8 @@ export type PaymentMethod = {
 export type Booking = {
   _id?: string;
   placeId?: string;
+  placeCover?: string;
+  placeTitle?: string;
   ownerId?: string;
   userId?: string;
   firstname?: string;

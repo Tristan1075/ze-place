@@ -32,34 +32,36 @@ import BookingScreen from './BookingScreen';
 import CalendarPicker from '../components/CalendarPicker';
 import TitleWithDescription from '../components/TitleWithDescription';
 import FeatureList from '../components/FeatureList';
-import {getSimilarPlaces} from '../api/places';
+import {getPlaceById, getSimilarPlaces} from '../api/places';
 import PlaceCard from '../components/PlaceCard';
 import {addFavorite, removeFavorite} from '../api/customer';
 import i18n from 'i18n-js';
 import EmptyBloc from '../components/EmptyBloc';
 import UserStore from '../store/UserStore';
-import {getBookingByPlaceAndUser, getBookingsByPlace} from '../api/bookings';
+import {getBookingByPlaceAndUser} from '../api/bookings';
 
 type PlaceScreenNavigationProp = RouteProp<HomeParamList, 'PlaceDetail'>;
 
 const PlaceDetailScreen = () => {
+  const item = useRoute<PlaceScreenNavigationProp>().params.place;
   const navigation = useNavigation();
   const {handleModal} = useContext(ModalContext);
   const [activeImage, setActiveImage] = useState<number>(0);
   const [seeMore, setSeeMore] = useState<boolean>(false);
   const [imagePreview, setImagePreview] = useState<boolean>(false);
-  const item = useRoute<PlaceScreenNavigationProp>().params.place;
   const [similarPlaces, setSimilarPlaces] = useState<Place[]>([]);
   const [userBooking, setUserBooking] = useState<Booking[]>([]);
+  const [place, setPlace] = useState<Place>();
 
   const init = useCallback(async () => {
-    setUserBooking(await getBookingByPlaceAndUser(item._id));
-    setSimilarPlaces(await getSimilarPlaces(item._id));
-  }, [item._id]);
+    setPlace(await getPlaceById(item));
+    setUserBooking(await getBookingByPlaceAndUser(item));
+    setSimilarPlaces(await getSimilarPlaces(item));
+  }, [item]);
 
   useEffect(() => {
-    init();
-  }, [init]);
+    navigation.addListener('focus', init);
+  }, [init, navigation]);
 
   const handlePlacePress = (p: Place) => {
     // @ts-ignore
@@ -93,13 +95,13 @@ const PlaceDetailScreen = () => {
 
   const handleBookPress = () => {
     handleModal({
-      child: <BookingScreen place={item} />,
+      child: <BookingScreen place={place} />,
     });
   };
 
   const handleSeeOwnerBookingsPress = () => {
     navigation.navigate('UserBookings', {
-      placeId: item._id,
+      placeId: place?._id,
     });
   };
 
@@ -114,8 +116,8 @@ const PlaceDetailScreen = () => {
       child: (
         <MapScreen
           initialCoords={{
-            longitude: item.location.longitude,
-            latitude: item.location.latitude,
+            longitude: parseFloat(place?.location.longitude) || 0,
+            latitude: parseFloat(place?.location.latitude) || 0,
           }}
         />
       ),
@@ -127,8 +129,8 @@ const PlaceDetailScreen = () => {
       <ScrollView showsVerticalScrollIndicator={false} style={styles.screen}>
         <Image
           source={{
-            uri: item.images[activeImage]
-              ? item.images[activeImage].url
+            uri: place?.images[activeImage]
+              ? place?.images[activeImage].url
               : 'https://www.leden-spa-aqua-forme.fr/wp-content/uploads/2018/05/jk-placeholder-image.jpg',
           }}
           style={styles.cover}
@@ -140,30 +142,30 @@ const PlaceDetailScreen = () => {
           <Header type="back" />
           <View style={[styles.content, styles.paddingTop]}>
             <Text style={styles.title} numberOfLines={1}>
-              {item.title}
+              {place?.title}
             </Text>
             <Text style={styles.subtitle}>
-              {item.location.city}, {item.location.postalCode}{' '}
-              {item.location.country}
+              {place?.location.city}, {place?.location.postalCode}{' '}
+              {place?.location.country}
             </Text>
             <View style={styles.descriptionBloc}>
               <View style={styles.padding}>
                 <Rating
-                  startingValue={item.rate}
+                  startingValue={place?.rate}
                   imageSize={20}
                   tintColor={Colors.background}
                 />
               </View>
               <View style={styles.row}>
-                {item.reviews.map((review, index) => (
+                {place?.reviews.map((review, index) => (
                   <Image
                     key={index}
-                    source={{uri: item.images[0].url}}
+                    source={{uri: place?.images[0].url}}
                     style={styles.reviewers}
                   />
                 ))}
                 <View style={styles.reviewersNumber}>
-                  <Text style={styles.subtitle}>{item.reviews.length}+</Text>
+                  <Text style={styles.subtitle}>{place?.reviews.length}+</Text>
                 </View>
                 <Text style={styles.reviewersText}>
                   {i18n.t('place_detail_people_review_this')}
@@ -176,7 +178,7 @@ const PlaceDetailScreen = () => {
             />
           </View>
           <View style={styles.facilitiesContainer}>
-            <FeatureList features={item.features} />
+            <FeatureList features={place?.features} />
           </View>
           <View style={styles.content}>
             <TitleWithDescription
@@ -186,26 +188,26 @@ const PlaceDetailScreen = () => {
             <View style={styles.authorization}>
               <ToggleWithTitle
                 title={i18n.t('place_detail_animals')}
-                value={item.authorizeAnimals}
+                value={place?.authorizeAnimals}
                 icon={
                   <FontAwesome5
                     name="dog"
                     size={30}
                     color={
-                      item.authorizeAnimals ? Colors.primary : Colors.error
+                      place?.authorizeAnimals ? Colors.primary : Colors.error
                     }
                   />
                 }
               />
               <ToggleWithTitle
                 title={i18n.t('place_detail_smoking')}
-                value={item.authorizeSmoking}
+                value={place?.authorizeSmoking}
                 icon={
                   <FontAwesome5
                     name="smoking"
                     size={30}
                     color={
-                      item.authorizeSmoking ? Colors.primary : Colors.error
+                      place?.authorizeSmoking ? Colors.primary : Colors.error
                     }
                   />
                 }
@@ -214,45 +216,47 @@ const PlaceDetailScreen = () => {
             <View style={styles.authorization}>
               <ToggleWithTitle
                 title={i18n.t('place_detail_music')}
-                value={item.authorizeMusic}
+                value={place?.authorizeMusic}
                 icon={
                   <Ionicons
                     name="musical-note"
                     size={30}
-                    color={item.authorizeMusic ? Colors.primary : Colors.error}
+                    color={
+                      place?.authorizeMusic ? Colors.primary : Colors.error
+                    }
                   />
                 }
               />
               <ToggleWithTitle
                 title={i18n.t('place_detail_fire')}
-                value={item.authorizeFire}
+                value={place?.authorizeFire}
                 icon={
                   <MaterialCommunityIcons
                     name="fire"
                     size={30}
-                    color={item.authorizeFire ? Colors.primary : Colors.error}
+                    color={place?.authorizeFire ? Colors.primary : Colors.error}
                   />
                 }
               />
             </View>
             <ToggleWithTitle
               title={i18n.t('place_detail_food_and_drink')}
-              value={item.authorizeFoodAndDrink}
+              value={place?.authorizeFoodAndDrink}
               icon={
                 <MaterialCommunityIcons
                   name="food-fork-drink"
                   size={30}
                   color={
-                    item.authorizeFoodAndDrink ? Colors.primary : Colors.error
+                    place?.authorizeFoodAndDrink ? Colors.primary : Colors.error
                   }
                 />
               }
             />
             <TitleWithDescription
-              title={i18n.t('place_detail_about') + ' ' + item.title}
+              title={i18n.t('place_detail_about') + ' ' + place?.title}
               subtitle={true}
             />
-            <Text style={styles.description}>{item.description}</Text>
+            <Text style={styles.description}>{place?.description}</Text>
             <Text style={styles.seeMore} onPress={() => setSeeMore(!seeMore)}>
               {i18n.t('place_detail_see_more')}
             </Text>
@@ -267,14 +271,8 @@ const PlaceDetailScreen = () => {
               scrollEnabled={false}
               style={styles.map}
               initialRegion={{
-                latitude:
-                  (item.location.latitude &&
-                    parseFloat(item.location.latitude)) ||
-                  0,
-                longitude:
-                  (item.location.longitude &&
-                    parseFloat(item.location.longitude)) ||
-                  0,
+                latitude: parseFloat(place?.location.latitude) || 0,
+                longitude: parseFloat(place?.location.longitude) || 0,
                 latitudeDelta: 0.0922,
                 longitudeDelta: 0.0421,
               }}
@@ -305,12 +303,12 @@ const PlaceDetailScreen = () => {
               )}
             </View>
           </View>
-          {item.images.length > 0 && (
+          {place && place?.images.length > 0 && (
             <ScrollView
               style={styles.imagePicker}
               contentContainerStyle={styles.center}
               showsVerticalScrollIndicator={false}>
-              {item.images.map((image, index) => (
+              {place?.images.map((image, index) => (
                 <TouchableWithoutFeedback
                   onPress={() => setActiveImage(index)}
                   onLongPress={() => setImagePreview(true)}
@@ -330,7 +328,7 @@ const PlaceDetailScreen = () => {
       </ScrollView>
       <View style={styles.chooseBanner}>
         <Text style={styles.chooseBannerText}>
-          {UserStore.user._id === item.ownerId
+          {UserStore.user._id === place?.ownerId
             ? i18n.t('place_detail_active_bookings')
             : userBooking.length > 0 &&
               userBooking.find((booking) => !booking.isPast)
@@ -338,18 +336,18 @@ const PlaceDetailScreen = () => {
             : i18n.t('place_detail_per_day')}
         </Text>
         <Text style={styles.chooseBannerPrice}>
-          {UserStore.user._id === item.ownerId
-            ? `${item.bookings.length}`
+          {UserStore.user._id === place?.ownerId
+            ? `${place?.bookings.length}`
             : userBooking.length > 0 &&
               userBooking.find((booking) => !booking.isPast)
             ? userBooking.find((booking) => !booking.isPast)?.startDate
-            : `${item.price}€`}
+            : `${place?.price}€`}
         </Text>
         <Button
           backgroundColor={Colors.white}
           textColor={Colors.primary}
           value={
-            UserStore.user._id === item.ownerId
+            UserStore.user._id === place?.ownerId
               ? i18n.t('place_detail_see_bookings')
               : userBooking.length > 0 &&
                 Boolean(!userBooking.find((booking) => booking.isPast))
@@ -357,7 +355,7 @@ const PlaceDetailScreen = () => {
               : i18n.t('place_detail_book')
           }
           onPress={
-            UserStore.user._id === item.ownerId
+            UserStore.user._id === place?.ownerId
               ? handleSeeOwnerBookingsPress
               : userBooking.length > 0 &&
                 Boolean(!userBooking.find((booking) => booking.isPast))
@@ -369,7 +367,7 @@ const PlaceDetailScreen = () => {
       <Modal visible={imagePreview} transparent={true}>
         <TouchableWithoutFeedback onPress={() => setImagePreview(false)}>
           <ImageViewer
-            imageUrls={item.images}
+            imageUrls={place?.images}
             index={activeImage}
             enablePreload={true}
             backgroundColor={'rgba(0,0,0, 0.8)'}

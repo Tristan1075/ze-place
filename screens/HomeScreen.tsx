@@ -49,7 +49,7 @@ const HomeScreen = (props: Props) => {
   }, [init, navigation]);
 
   const handlePlacePress = (place: Place) => {
-    navigation.navigate('PlaceDetail', {place: place});
+    navigation.navigate('PlaceDetail', {place: place._id});
   };
 
   const showFilterModal = () => {

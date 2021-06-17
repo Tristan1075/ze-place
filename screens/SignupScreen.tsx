@@ -102,7 +102,6 @@ const SignupScreen = (props: Props) => {
 
   const uploadToS3 = async () => {
     const file = {
-      // `uri` can also be a file system path (i.e. file://)
       uri: form.avatar,
       name: `${form.email}${form.lastname}.png`,
       type: 'image/png',
@@ -131,9 +130,6 @@ const SignupScreen = (props: Props) => {
       try {
         uploadToS3();
         const token = await register(form);
-        console.log(token);
-
-        await SecureStore.setItemAsync('userId', token.userId);
         await SecureStore.setItemAsync('access-token', token.access_token);
         navigation.dispatch(
           CommonActions.reset({
