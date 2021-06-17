@@ -55,6 +55,10 @@ const MenuScreen = (props: Props) => {
       onPress: () => navigation.navigate('MyPlace'),
     },
     {
+      title: 'Report Bug',
+      onPress: () => navigation.navigate('BugTicket'),
+    },
+    {
       title: 'Logout',
       onPress: () => handleDisconnectPress(),
     },

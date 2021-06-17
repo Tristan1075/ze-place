@@ -16,6 +16,7 @@ import MenuScreen from '../screens/MenuScreen';
 import MyPlaceScreen from '../screens/MyPlaceScreen';
 
 import {navigationRef} from '../App';
+import BugTicketScreen from '../screens/BugTicketScreen';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -32,6 +33,8 @@ const RootNavigator = (props) => {
       <Stack.Screen name="PaymentMethods" component={PaymentMethods} />
       <Stack.Screen name="PaymentMethodForm" component={PaymentMethodForm} />
       <Stack.Screen name="MyPlace" component={MyPlaceScreen} />
+      <Stack.Screen name="BugTicket" component={BugTicketScreen} />
+
     </Stack.Navigator>
   );
 };
