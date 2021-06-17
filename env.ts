@@ -1,4 +1,4 @@
-const environnment = 'dev';
+const environnment = 'production';
 
 export const API_URL =
   environnment === 'production'

@@ -14,7 +14,7 @@ import { RNS3 } from 'react-native-aws3';
 import Modal, {ModalContent, BottomModal} from 'react-native-modals';
 import * as ImagePicker from 'expo-image-picker';
 import {StackActions, useNavigation} from '@react-navigation/native';
-import {REACT_APP_BUCKET_NAME,REACT_APP_REGION,REACT_APP_ACCESS_ID,REACT_APP_ACCESS_KEY} from '@env';
+import {REACT_APP_BUCKET_NAME,REACT_APP_REGION,REACT_APP_ACCESS_ID,REACT_APP_ACCESS_KEY} from '../../env';
 import TitleWithDescription from '../../components/TitleWithDescription';
 import Button from '../../components/Button';
 import Colors from '../../constants/Colors';

@@ -9,7 +9,7 @@ import {
   ScrollView,
 } from 'react-native';
 
-import {REACT_APP_BUCKET_NAME,REACT_APP_REGION,REACT_APP_ACCESS_ID,REACT_APP_ACCESS_KEY} from '@env';
+import {REACT_APP_BUCKET_NAME,REACT_APP_REGION,REACT_APP_ACCESS_ID,REACT_APP_ACCESS_KEY} from '../env';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {CommonActions} from '@react-navigation/routers';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
@@ -120,13 +120,16 @@ const SignupScreen = (props: Props) => {
       form.avatar = response.body.postResponse.location;
   });
 };
-
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
   const handleSigninPress = async () => {
     const isFormValid = verifyForm();
     if (isFormValid) {
       try {
 
-        uploadToS3();
+         await  uploadToS3();
+         await  sleep(2000);
         const token = await register(form);
         console.log(token);
         
