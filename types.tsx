@@ -168,6 +168,12 @@ export type MapboxSearch = {
   text: string;
 };
 
+export type BugForm = {
+  name:string,
+  description:string,
+  senderId:string
+};
+
 export type Location = {
   address?: string;
   postalCode?: string;

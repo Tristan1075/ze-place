@@ -23,7 +23,7 @@ const ProfilScreen = () => {
       <ScrollView
         showsVerticalScrollIndicator={false}
         style={styles.scrollView}>
-        {user && (
+        {user && (          
           <View>
             <View style={styles.avatarContainer}>
               <Image source={{uri: user.avatar}} style={styles.avatar} />
