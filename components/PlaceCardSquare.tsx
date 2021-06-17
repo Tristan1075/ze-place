@@ -10,20 +10,25 @@ import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
 import {Place} from '../types';
 
-const PlaceCardSquare = ({item}: {item: Place}) => {
+type Props = {
+  item: Place;
+  onPress: (place: Place) => void;
+};
+
+const PlaceCardSquare = ({item, onPress}: Props) => {
   return (
     <TouchableOpacity
       style={styles.itemContainer}
-      onPress={() => handlePlacePress(item)}>
+      onPress={() => onPress(item)}>
       <ImageBackground
         source={{
           uri:
             'https://www.leden-spa-aqua-forme.fr/wp-content/uploads/2018/05/jk-placeholder-image.jpg',
         }}
         style={styles.cover}>
-        <View style={styles.badgeContainer}>
+        {/* <View style={styles.badgeContainer}>
           <Text style={styles.badge}>4</Text>
-        </View>
+        </View> */}
         <View style={styles.flex} />
         <Text style={styles.title}>{item.title}</Text>
         {item.location && <Text style={styles.text}>{item.location.city}</Text>}

@@ -4,12 +4,12 @@ import * as SecureStore from 'expo-secure-store';
 import {API_URL} from '../env';
 import UserStore from '../store/UserStore';
 
-export const getUser = async (): Promise<User> => {
+export const getUser = async (t?: string): Promise<User> => {
   const token = await SecureStore.getItemAsync('access-token');
   return await axios
     .get(`${API_URL}/auth/me`, {
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${t ? t : token}`,
       },
     })
     .then((response: AxiosResponse<any>) => {

@@ -3,7 +3,7 @@ import React, {useRef, useState, useEffect} from 'react';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {StripeProvider} from '@stripe/stripe-react-native';
 import {Subscription} from '@unimodules/core';
-import {PUBLIC_KEY_STRIPE} from '@env';
+import {PUBLIC_KEY_STRIPE} from './env';
 import * as Notifications from 'expo-notifications';
 
 // @ts-ignore
