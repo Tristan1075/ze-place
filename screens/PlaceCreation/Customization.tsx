@@ -7,14 +7,18 @@ import {
   View,
   Text,
 } from 'react-native';
-import { RNS3 } from 'react-native-aws3';
-
+import {RNS3} from 'react-native-aws3';
 
 //@ts-ignore
 import Modal, {ModalContent, BottomModal} from 'react-native-modals';
 import * as ImagePicker from 'expo-image-picker';
 import {StackActions, useNavigation} from '@react-navigation/native';
-import {REACT_APP_BUCKET_NAME,REACT_APP_REGION,REACT_APP_ACCESS_ID,REACT_APP_ACCESS_KEY} from '@env';
+import {
+  REACT_APP_BUCKET_NAME,
+  REACT_APP_REGION,
+  REACT_APP_ACCESS_ID,
+  REACT_APP_ACCESS_KEY,
+} from '../../env';
 import TitleWithDescription from '../../components/TitleWithDescription';
 import Button from '../../components/Button';
 import Colors from '../../constants/Colors';
@@ -24,7 +28,7 @@ import {CreatePlaceForm} from '../../types';
 import Layout from '../../constants/Layout';
 import {createPlace} from '../../api/places';
 import * as SecureStore from 'expo-secure-store';
-import { element } from 'prop-types';
+import {element} from 'prop-types';
 
 type Props = {
   prevStep: () => void;
@@ -57,51 +61,46 @@ const Customization = (props: Props) => {
     }
   };
   const uploadToS3 = async () => {
-
-    
-    const images = []
+    const images = [];
     const id = await SecureStore.getItemAsync('access-token');
     let cpt = 0;
     let cpt2 = 0;
 
-    for( const element of createPlaceForm.images){
-    const options = {
-      bucket: REACT_APP_BUCKET_NAME,
-      region: REACT_APP_REGION,
-      accessKey: REACT_APP_ACCESS_ID,
-      secretKey: REACT_APP_ACCESS_KEY,
-      successActionStatus: 201
-    }
+    for (const element of createPlaceForm.images) {
+      const options = {
+        bucket: REACT_APP_BUCKET_NAME,
+        region: REACT_APP_REGION,
+        accessKey: REACT_APP_ACCESS_ID,
+        secretKey: REACT_APP_ACCESS_KEY,
+        successActionStatus: 201,
+      };
       const file = {
-      // `uri` can also be a file system path (i.e. file://)
-      uri: element.url,
-      name: `${createPlaceForm.title}${id}index${cpt}.png`,
-      type: "image/png"
+        // `uri` can also be a file system path (i.e. file://)
+        uri: element.url,
+        name: `${createPlaceForm.title}${id}index${cpt}.png`,
+        type: 'image/png',
+      };
+
+      RNS3.put(file, options).then((response) => {
+        if (response.status !== 201)
+          throw new Error('Failed to upload image to S3');
+        createPlaceForm.images[cpt2].url = response.body.postResponse.location;
+        console.log('cpt', createPlaceForm.images[cpt2].url);
+
+        cpt2++;
+      });
+
+      cpt++;
     }
-          
-    RNS3.put(file, options).then(response => {
-      if (response.status !== 201)
-        throw new Error("Failed to upload image to S3");
-      createPlaceForm.images[cpt2].url = response.body.postResponse.location;
-      console.log('cpt',createPlaceForm.images[cpt2].url);
-      
-      cpt2++;
-  });
-  
-  cpt++;
-  
-  
+  };
+  function sleep(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
-  
-};
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
   const handleSubmitForm = async () => {
     try {
       await uploadToS3();
       await sleep(2000);
-     await createPlace(createPlaceForm);
+      await createPlace(createPlaceForm);
       setSubmitModal(false);
       navigation.dispatch(StackActions.popToTop());
     } catch (err) {
