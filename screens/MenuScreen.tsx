@@ -43,11 +43,7 @@ const MenuScreen = (props: Props) => {
 
   const menu = [
     {
-      title: 'Payment methods',
-      onPress: () => navigation.navigate('PaymentMethods'),
-    },
-    {
-      title: 'Promo Codes',
+      title: 'Promotional codes',
       onPress: () => navigation.navigate('Promo'),
     },
     {
@@ -55,12 +51,8 @@ const MenuScreen = (props: Props) => {
       onPress: () => navigation.navigate('MyPlace'),
     },
     {
-      title: 'Report Bug',
+      title: 'Report a bug',
       onPress: () => navigation.navigate('BugTicket'),
-    },
-    {
-      title: 'Logout',
-      onPress: () => handleDisconnectPress(),
     },
   ];
 
@@ -84,17 +76,17 @@ const MenuScreen = (props: Props) => {
         </TouchableWithoutFeedback>
         {menu.map((item, index) => (
           <View key={index}>
-            {index === 3 && <View style={styles.screen} />}
             <TouchableOpacity style={[styles.item]} onPress={item.onPress}>
               <Text style={styles.itemValue}>{item.title}</Text>
-              {index !== 3 ? (
                 <Entypo name="chevron-thin-right" size={16} />
-              ) : (
-                <MaterialCommunityIcons name="location-exit" size={20} />
-              )}
             </TouchableOpacity>
           </View>
         ))}
+        <View style={styles.screen} />
+        <TouchableOpacity style={[styles.item]} onPress={handleDisconnectPress}>
+          <Text style={styles.itemValue}>Logout</Text>
+          <MaterialCommunityIcons name="location-exit" size={20} />
+        </TouchableOpacity>
       </View>
     </View>
   );
