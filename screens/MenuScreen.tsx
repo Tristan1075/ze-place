@@ -1,5 +1,12 @@
-import React, {useState, useEffect} from 'react';
-import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
+import React, {useState} from 'react';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import i18n from 'i18n-js';
 import * as SecureStore from 'expo-secure-store';
@@ -10,8 +17,8 @@ import Layout from '../constants/Layout';
 import {RootStackParamList} from '../types';
 import {Entypo, MaterialCommunityIcons} from '@expo/vector-icons';
 import {User} from '../types';
-import {getUser} from '../api/customer';
 import {CommonActions} from '@react-navigation/native';
+import UserStore from '../store/UserStore';
 
 type RootScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Menu'>;
 
@@ -21,15 +28,11 @@ type Props = {
 
 const MenuScreen = (props: Props) => {
   const {navigation} = props;
-  const [user, setUser] = useState<User>();
-
-  useEffect(() => {
-    const init = async () => setUser(await getUser());
-    init();
-  }, []);
+  const [user] = useState<User>(UserStore.user);
 
   const handleDisconnectPress = async () => {
     await SecureStore.deleteItemAsync('access-token');
+    UserStore.updateUser({});
     navigation.dispatch(
       CommonActions.reset({
         index: 0,
@@ -63,30 +66,30 @@ const MenuScreen = (props: Props) => {
         <Header type="back" />
       </View>
       <View style={styles.contentContainer}>
-        <TouchableOpacity
-          style={styles.profilBloc}
-          onPress={() => navigation.navigate('Profil')}>
-          <Image
-            source={user && {uri: user.avatar}}
-            style={styles.profilImage}
-          />
-          <Text style={styles.title}>
-            {user && user.first_name} {user && user.last_name}
-          </Text>
-          <Text style={styles.description}>{user && user.address}</Text>
-        </TouchableOpacity>
+        <TouchableWithoutFeedback onPress={() => navigation.navigate('Profil')}>
+          <View style={styles.profilBloc}>
+            <Image
+              source={user && {uri: user.avatar}}
+              style={styles.profilImage}
+            />
+            <Text style={styles.title}>
+              {user && user.first_name} {user && user.last_name}
+            </Text>
+            <Text style={styles.description}>{user && user.address}</Text>
+          </View>
+        </TouchableWithoutFeedback>
         {menu.map((item, index) => (
-          <>
-            {index === menu.length - 1 && <View style={styles.screen} />}
+          <View key={index}>
+            {index === 3 && <View style={styles.screen} />}
             <TouchableOpacity style={[styles.item]} onPress={item.onPress}>
               <Text style={styles.itemValue}>{item.title}</Text>
-              {index !== menu.length - 1 ? (
+              {index !== 3 ? (
                 <Entypo name="chevron-thin-right" size={16} />
               ) : (
                 <MaterialCommunityIcons name="location-exit" size={20} />
               )}
             </TouchableOpacity>
-          </>
+          </View>
         ))}
       </View>
     </View>

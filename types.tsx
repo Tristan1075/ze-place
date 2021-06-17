@@ -23,13 +23,13 @@ export type HomeParamList = {
   PlaceList: {filter: FilterForm};
   CreatePlace: undefined;
   MapModal: undefined;
-  UserBookings: {placeId: string; userBooking: Booking};
+  UserBookings: {userBooking: Booking[]; placeId: string};
 };
 
 export type BookingTab = {
   BookingList: undefined;
   PlaceDetail: {place: PlaceType};
-  UserBookings: {placeId: string; userBooking: Booking};
+  UserBookings: {userBooking: Booking[]; placeId: string};
 };
 
 export type HeaderParamList = {
@@ -84,6 +84,7 @@ export type Place = {
   reviews: Review[];
   ownerId: string;
   bookings: Booking[];
+  isFavorite: boolean;
   created_at: {type: Date; default: Date};
 };
 
@@ -251,16 +252,20 @@ export type PaymentMethod = {
 };
 
 export type Booking = {
-  _id: string;
-  userId: string;
-  firstname: string;
-  lastname: string;
-  avatar: string;
-  feature: FeatureType;
+  _id?: string;
+  placeId?: string;
+  ownerId?: string;
+  userId?: string;
+  firstname?: string;
+  lastname?: string;
+  avatar?: string;
+  features: FeatureType[];
   startDate: string;
   endDate: string;
-  duration: number;
-  price: number;
+  duration?: number;
+  price?: number;
   description: string;
-  isAccepted: boolean;
+  isAccepted?: boolean;
+  isDenied?: boolean;
+  isPast?: boolean;
 };

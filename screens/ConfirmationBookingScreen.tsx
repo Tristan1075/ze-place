@@ -18,8 +18,8 @@ import Colors from '../constants/Colors';
 import {initPaymentIntent} from '../api/payment';
 import {Booking, Place} from '../types';
 import {getBookingPriceWithDuration} from '../utils';
-import {bookPlace} from '../api/places';
 import {ModalContext} from '../providers/modalContext';
+import {bookPlace} from '../api/bookings';
 
 type Props = {
   place: Place;

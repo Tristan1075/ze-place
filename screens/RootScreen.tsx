@@ -7,6 +7,8 @@ import * as SecureStore from 'expo-secure-store';
 import Button from '../components/Button';
 import Colors from '../constants/Colors';
 import {RootStackParamList} from '../types';
+import {getUser} from '../api/customer';
+import UserStore from '../store/UserStore';
 
 type RootScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Root'>;
 
@@ -21,6 +23,8 @@ const RootScreen = (props: Props) => {
     async function getToken() {
       const token = await SecureStore.getItemAsync('access-token');
       if (token != null) {
+        const user = await getUser();
+        UserStore.updateUser(user);
         navigation.dispatch(
           CommonActions.reset({
             index: 0,
@@ -28,7 +32,6 @@ const RootScreen = (props: Props) => {
           }),
         );
       }
-      // ...
     }
     getToken();
   });

@@ -2,13 +2,14 @@ import {Place, SignupForm, User} from '../types';
 import axios, {AxiosResponse} from 'axios';
 import * as SecureStore from 'expo-secure-store';
 import {API_URL} from '../env';
+import UserStore from '../store/UserStore';
 
-export const getUser = async (): Promise<User> => {
+export const getUser = async (t?: string): Promise<User> => {
   const token = await SecureStore.getItemAsync('access-token');
   return await axios
     .get(`${API_URL}/auth/me`, {
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${t ? t : token}`,
       },
     })
     .then((response: AxiosResponse<any>) => {
@@ -19,8 +20,7 @@ export const getUser = async (): Promise<User> => {
     });
 };
 
-export const getUserById = async (id: string) => {
-  console.log(`${API_URL}/customers/${id}`);
+export const getUserById = async (id?: string) => {
   const token = await SecureStore.getItemAsync('access-token');
   return await axios
     .get(`${API_URL}/customers/${id}`, {
@@ -38,7 +38,6 @@ export const getUserById = async (id: string) => {
 
 export const modifyUser = async (form: SignupForm, id: string) => {
   const token = await SecureStore.getItemAsync('access-token');
-  console.log('form', form);
   const url = `${API_URL}/customers/update?customerID=${id}`;
   await axios
     .put(
@@ -106,9 +105,7 @@ export const removeFavorite = async (place: Place) => {
 
 export const getFavorites = async () => {
   const token = await SecureStore.getItemAsync('access-token');
-  const user = await getUser();
-  const url = `${API_URL}/customers/favorite?customerID=${user._id}`;
-  console.log(url);
+  const url = `${API_URL}/customers/favorite?customerID=${UserStore.user._id}`;
   return await axios
     .get(url, {
       headers: {
@@ -116,7 +113,6 @@ export const getFavorites = async () => {
       },
     })
     .then((response: AxiosResponse<any>) => {
-      console.log(response);
       return response.data;
     })
     .catch((err) => {
@@ -127,11 +123,7 @@ export const getFavorites = async () => {
 
 export const getActivePromos = async () => {
   const token = await SecureStore.getItemAsync('access-token');
-
-  const user = await getUser();
-  const promoId = user.promoCode;
-  console.log(promoId);
-
+  const promoId = UserStore.user.promoCode;
   const url = `${API_URL}/promo/getSevralCode`;
 
   return await axios
@@ -159,13 +151,8 @@ export const getActivePromos = async () => {
 };
 export const getInnactivePromos = async () => {
   const token = await SecureStore.getItemAsync('access-token');
-
-  const user = await getUser();
-  const promoId = user.historyCode;
-  console.log(promoId);
-
+  const promoId = UserStore.user.historyCode;
   const url = `${API_URL}/promo/getSevralCode`;
-
   return await axios
     .post(
       url,
@@ -183,17 +170,13 @@ export const getInnactivePromos = async () => {
     })
     .catch((err) => {
       console.log(err);
-
       return Promise.reject(err);
     });
 };
 
 export const addPromoCode = async (promoTitle: string) => {
   const token = await SecureStore.getItemAsync('access-token');
-
-  const user = await getUser();
-  const url = `${API_URL}/customers/addPromoCode?customerID=${user._id}`;
-
+  const url = `${API_URL}/customers/addPromoCode?customerID=${UserStore.user._id}`;
   await axios
     .post(
       url,
@@ -207,7 +190,6 @@ export const addPromoCode = async (promoTitle: string) => {
       },
     )
     .then((response: AxiosResponse<any>) => {
-      console.log(response.data);
       return response.data;
     })
     .catch((err) => {

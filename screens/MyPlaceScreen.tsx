@@ -16,6 +16,7 @@ import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
 import PlaceCard from '../components/PlaceCard';
 import {getUser} from '../api/customer';
+import UserStore from '../store/UserStore';
 
 type MessagesScreenNavigationProp = StackNavigationProp<
   MessagesParamList,
@@ -28,14 +29,8 @@ type Props = {
 
 const FavoritesScreen = (props: Props) => {
   const {navigation} = props;
-  const [user, setUser] = useState<User>();
+  const [user, setUser] = useState<User>(UserStore.user);
   const places = user?.ownedPlaces;
-  useEffect(() => {
-    const init = async () => {
-      setUser(await getUser());
-    };
-    init();
-  }, []);
 
   const handleItemPress = (place: Place) => {
     navigation.navigate('PlaceDetail', {place: place});

@@ -21,7 +21,7 @@ import ImageViewer from 'react-native-image-zoom-viewer';
 
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
-import {HomeParamList, Place, User} from '../types';
+import {Booking, BookingTab, HomeParamList, Place, User} from '../types';
 import Header from '../components/Header';
 import Button from '../components/Button';
 import {mapStyle} from '../utils/mapStyle';
@@ -34,9 +34,11 @@ import TitleWithDescription from '../components/TitleWithDescription';
 import FeatureList from '../components/FeatureList';
 import {getSimilarPlaces} from '../api/places';
 import PlaceCard from '../components/PlaceCard';
-import {addFavorite, getUser, removeFavorite} from '../api/customer';
+import {addFavorite, removeFavorite} from '../api/customer';
 import i18n from 'i18n-js';
 import EmptyBloc from '../components/EmptyBloc';
+import UserStore from '../store/UserStore';
+import {getBookingByPlaceAndUser, getBookingsByPlace} from '../api/bookings';
 
 type PlaceScreenNavigationProp = RouteProp<HomeParamList, 'PlaceDetail'>;
 
@@ -47,14 +49,11 @@ const PlaceDetailScreen = () => {
   const [seeMore, setSeeMore] = useState<boolean>(false);
   const [imagePreview, setImagePreview] = useState<boolean>(false);
   const item = useRoute<PlaceScreenNavigationProp>().params.place;
-  const [isBooked, setIsBooked] = useState<boolean>(false);
-  const [user, setUser] = useState<User>();
   const [similarPlaces, setSimilarPlaces] = useState<Place[]>([]);
+  const [userBooking, setUserBooking] = useState<Booking[]>([]);
 
   const init = useCallback(async () => {
-    const userFetched = await getUser();
-    setIsBooked(Boolean(userFetched.bookings.find((u) => u._id === item._id)));
-    setUser(userFetched);
+    setUserBooking(await getBookingByPlaceAndUser(item._id));
     setSimilarPlaces(await getSimilarPlaces(item._id));
   }, [item._id]);
 
@@ -68,25 +67,25 @@ const PlaceDetailScreen = () => {
   };
 
   const handleFavoritePress = async (p: Place) => {
-    const isFavorite = Boolean(
-      user && user.favorites.find((foundPlace) => foundPlace._id === p._id),
-    );
-    isFavorite ? removeFavorite(p) : addFavorite(p);
+    p.isFavorite ? removeFavorite(p) : addFavorite(p);
     await init();
   };
 
-  const renderItem = ({item, index}: {item: Place; index: number}) => {
-    const isFavorite = Boolean(
-      user && user.favorites.find((foundPlace) => foundPlace._id === item._id),
-    );
+  const renderItem = ({
+    item: placeItem,
+    index,
+  }: {
+    item: Place;
+    index: number;
+  }) => {
     return (
       <View key={index}>
         <PlaceCard
           key={index}
-          place={item}
-          onPress={() => handlePlacePress(item)}
+          place={placeItem}
+          onPress={() => handlePlacePress(placeItem)}
           onFavoritePress={handleFavoritePress}
-          isFavorite={isFavorite}
+          isFavorite={placeItem.isFavorite}
         />
       </View>
     );
@@ -98,11 +97,15 @@ const PlaceDetailScreen = () => {
     });
   };
 
-  const handleSeeBookingsPress = () => {
+  const handleSeeOwnerBookingsPress = () => {
     navigation.navigate('UserBookings', {
       placeId: item._id,
-      ownerId: item.ownerId,
-      isBooked: isBooked,
+    });
+  };
+
+  const handleSeeBookingPress = () => {
+    navigation.navigate('UserBookings', {
+      userBooking,
     });
   };
 
@@ -136,7 +139,9 @@ const PlaceDetailScreen = () => {
         <View style={styles.container}>
           <Header type="back" />
           <View style={[styles.content, styles.paddingTop]}>
-            <Text style={styles.title}>{item.title}</Text>
+            <Text style={styles.title} numberOfLines={1}>
+              {item.title}
+            </Text>
             <Text style={styles.subtitle}>
               {item.location.city}, {item.location.postalCode}{' '}
               {item.location.country}
@@ -325,30 +330,38 @@ const PlaceDetailScreen = () => {
       </ScrollView>
       <View style={styles.chooseBanner}>
         <Text style={styles.chooseBannerText}>
-          {user?._id === item.ownerId
+          {UserStore.user._id === item.ownerId
             ? i18n.t('place_detail_active_bookings')
+            : userBooking.length > 0 &&
+              userBooking.find((booking) => !booking.isPast)
+            ? ''
             : i18n.t('place_detail_per_day')}
         </Text>
         <Text style={styles.chooseBannerPrice}>
-          {user?._id === item.ownerId
+          {UserStore.user._id === item.ownerId
             ? `${item.bookings.length}`
+            : userBooking.length > 0 &&
+              userBooking.find((booking) => !booking.isPast)
+            ? userBooking.find((booking) => !booking.isPast)?.startDate
             : `${item.price}€`}
         </Text>
         <Button
           backgroundColor={Colors.white}
           textColor={Colors.primary}
           value={
-            user?._id === item.ownerId
+            UserStore.user._id === item.ownerId
               ? i18n.t('place_detail_see_bookings')
-              : isBooked
+              : userBooking.length > 0 &&
+                Boolean(!userBooking.find((booking) => booking.isPast))
               ? 'Ma réservation'
               : i18n.t('place_detail_book')
           }
           onPress={
-            user?._id === item.ownerId
-              ? handleSeeBookingsPress
-              : isBooked
-              ? handleSeeBookingsPress
+            UserStore.user._id === item.ownerId
+              ? handleSeeOwnerBookingsPress
+              : userBooking.length > 0 &&
+                Boolean(!userBooking.find((booking) => booking.isPast))
+              ? handleSeeBookingPress
               : handleBookPress
           }
         />
@@ -400,7 +413,6 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: 'oswald',
     fontSize: 30,
-    width: 250,
     color: Colors.white,
   },
   subtitle: {

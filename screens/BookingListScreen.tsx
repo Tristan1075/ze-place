@@ -5,134 +5,64 @@ import {
   StyleSheet,
   TouchableOpacity,
   ImageBackground,
-  Image,
+  FlatList,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {FlatGrid} from 'react-native-super-grid';
-import {getUser} from '../api/customer';
 import EmptyBloc from '../components/EmptyBloc';
 
 import Header from '../components/Header';
+import PlaceCardSquare from '../components/PlaceCardSquare';
+import TitleWithDescription from '../components/TitleWithDescription';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
+import UserStore from '../store/UserStore';
 import {Place, User} from '../types';
 
 const BookingListScreen = (props: Props) => {
   const {navigation} = props;
-  const [user, setUser] = useState<User>();
-
-  const init = useCallback(async () => {
-    setUser(await getUser());
-  }, []);
-
-  useEffect(() => {
-    navigation.addListener('focus', init);
-  }, [init, navigation]);
+  const [user] = useState<User>(UserStore.user);
 
   const handlePlacePress = (place: Place) => {
-    navigation.navigate('UserBookings', {
-      placeId: place._id,
-      ownerId: place.ownerId,
-      isBooked: true,
+    navigation.navigate('PlaceDetail', {
+      place: place,
     });
-    // navigation.navigate('PlaceDetail', {place: place, showUserBooking: true});
+  };
+
+  const renderItem = ({item, index}: {item: Place; index: number}) => {
+    return (
+      <PlaceCardSquare key={index} item={item} onPress={handlePlacePress} />
+    );
   };
 
   return (
-    <SafeAreaView>
-      <Header type="menu" />
-      <View>
-        {user && user.bookings.length > 0 ? (
-          <FlatGrid
-            data={user.bookings}
-            showsVerticalScrollIndicator={false}
-            spacing={20}
-            renderItem={({item}) => (
-              <TouchableOpacity
-                style={styles.itemContainer}
-                onPress={() => handlePlacePress(item)}>
-                <ImageBackground
-                  source={{
-                    uri:
-                      'https://www.leden-spa-aqua-forme.fr/wp-content/uploads/2018/05/jk-placeholder-image.jpg',
-                  }}
-                  style={styles.cover}>
-                  <View style={styles.badgeContainer}>
-                    <Text style={styles.badge}>4</Text>
-                  </View>
-                  <View style={styles.flex} />
-                  <Text style={styles.title}>{item.title}</Text>
-                  {item.location && (
-                    <Text style={styles.text}>{item.location.city}</Text>
-                  )}
-                </ImageBackground>
-              </TouchableOpacity>
-            )}
-          />
-        ) : (
-          <EmptyBloc
-            title="Sorry, you don't have any new reservations..."
-            image={require('../assets/images/broke.png')}
-            size={100}
-          />
-        )}
+    <SafeAreaView style={styles.container}>
+      <Header type="menu" showProfil={true} />
+      <View style={styles.content}>
+        <TitleWithDescription
+          title="Bookings"
+          subtitle={true}
+          description="Find nearby you the available places to rent"
+        />
+        <FlatList
+          data={user.bookings}
+          renderItem={renderItem}
+          keyExtractor={(item) => item._id}
+          showsVerticalScrollIndicator={false}
+        />
       </View>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  flex: {
+  container: {
     flex: 1,
+    backgroundColor: Colors.background,
   },
-  itemContainer: {
+  content: {
+    paddingHorizontal: Layout.padding,
     flex: 1,
-    height: 150,
-    backgroundColor: Colors.white,
-    ...Layout.shadow,
-  },
-  title: {
-    fontFamily: 'oswald-bold',
-    color: Colors.white,
-  },
-  cover: {
-    flex: 1,
-    borderRadius: 5,
-    overflow: 'hidden',
-    padding: 10,
-  },
-  badgeContainer: {
-    color: Colors.white,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: Colors.white,
-    borderRadius: 30,
-    width: 25,
-    height: 25,
-    alignSelf: 'flex-end',
-  },
-  badge: {
-    fontFamily: 'oswald',
-    color: Colors.dark,
-    fontSize: 12,
-  },
-  text: {
-    fontFamily: 'oswald',
-    color: Colors.white,
-  },
-  emptyContainer: {
-    alignItems: 'center',
-  },
-  empty: {
-    marginTop: 40,
-    width: 250,
-    height: 250,
-  },
-  titleEmpty: {
-    paddingTop: 40,
-    fontFamily: 'oswald',
-    color: Colors.dark,
-    fontSize: 24,
   },
 });
 
