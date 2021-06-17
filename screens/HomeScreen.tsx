@@ -130,6 +130,7 @@ const HomeScreen = (props: Props) => {
           style={styles.input}
           placeholder="Search"
           suffix={<Ionicons name="search" size={20} color={Colors.gray} />}
+          onPress={showFilterModal}
         />
       </View>
       <TitleWithDescription
