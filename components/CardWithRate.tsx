@@ -80,7 +80,6 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: 'oswald',
     fontSize: 24,
-    width: 250,
     color: Colors.white,
   },
   subtitle: {

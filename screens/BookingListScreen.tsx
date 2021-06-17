@@ -21,18 +21,18 @@ import {Place, User} from '../types';
 
 const BookingListScreen = (props: Props) => {
   const {navigation} = props;
-  const [user, setUser] = useState<User>(UserStore.user);
+  const [user] = useState<User>(UserStore.user);
 
   const handlePlacePress = (place: Place) => {
-    navigation.navigate('UserBookings', {
-      placeId: place._id,
-      ownerId: place.ownerId,
-      isBooked: true,
+    navigation.navigate('PlaceDetail', {
+      place: place,
     });
   };
 
   const renderItem = ({item, index}: {item: Place; index: number}) => {
-    return <PlaceCardSquare key={index} item={item} />;
+    return (
+      <PlaceCardSquare key={index} item={item} onPress={handlePlacePress} />
+    );
   };
 
   return (

@@ -9,7 +9,13 @@ import {
   ScrollView,
 } from 'react-native';
 
-import {REACT_APP_BUCKET_NAME,REACT_APP_REGION,REACT_APP_ACCESS_ID,REACT_APP_ACCESS_KEY} from '../env';
+import {
+  REACT_APP_BUCKET_NAME,
+  REACT_APP_REGION,
+  REACT_APP_ACCESS_ID,
+  REACT_APP_ACCESS_KEY,
+} from '../env';
+
 import {StackNavigationProp} from '@react-navigation/stack';
 import {CommonActions} from '@react-navigation/routers';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
@@ -19,7 +25,7 @@ import * as ImagePicker from 'expo-image-picker';
 import * as SecureStore from 'expo-secure-store';
 import moment from 'moment';
 import isEmail from 'validator/lib/isEmail';
-import { RNS3 } from 'react-native-aws3';
+import {RNS3} from 'react-native-aws3';
 import {RootStackParamList, SignupForm} from '../types';
 import Button from '../components/Button';
 import Colors from '../constants/Colors';
@@ -96,26 +102,25 @@ const SignupScreen = (props: Props) => {
   };
 
   const uploadToS3 = async () => {
-  
     const file = {
       // `uri` can also be a file system path (i.e. file://)
       uri: form.avatar,
       name: `${form.email}${form.lastname}.png`,
-      type: "image/png"
-    }
-     
+      type: 'image/png',
+    };
+
     const options = {
       bucket: REACT_APP_BUCKET_NAME,
       region: REACT_APP_REGION,
       accessKey: REACT_APP_ACCESS_ID,
       secretKey: REACT_APP_ACCESS_KEY,
-      successActionStatus: 201
-    }
-    console.log(options);    
-     
-    RNS3.put(file, options).then(response => {
+      successActionStatus: 201,
+    };
+    console.log(options);
+
+    RNS3.put(file, options).then((response) => {
       if (response.status !== 201)
-        throw new Error("Failed to upload image to S3");
+        throw new Error('Failed to upload image to S3');
       console.log(response.body.postResponse.location);
       form.avatar = response.body.postResponse.location;
   });
@@ -127,12 +132,12 @@ function sleep(ms) {
     const isFormValid = verifyForm();
     if (isFormValid) {
       try {
-
          await  uploadToS3();
          await  sleep(2000);
+
         const token = await register(form);
         console.log(token);
-        
+
         await SecureStore.setItemAsync('userId', token.userId);
         await SecureStore.setItemAsync('access-token', token.access_token);
         navigation.dispatch(
@@ -155,7 +160,7 @@ function sleep(ms) {
       quality: 1,
     });
     console.log(result);
-    
+
     if (!result.cancelled) {
       setForm({...form, avatar: result.uri});
       setErrors({...errors, avatar: ''});

@@ -25,7 +25,8 @@ const styles = StyleSheet.create({
     marginVertical: 20,
   },
   title: {
-    fontFamily: 'oswald',
+    paddingTop: 20,
+    fontFamily: 'oswald-light',
     fontSize: 18,
   },
 });

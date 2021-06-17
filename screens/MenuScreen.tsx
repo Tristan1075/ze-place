@@ -1,5 +1,12 @@
 import React, {useState} from 'react';
-import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import i18n from 'i18n-js';
 import * as SecureStore from 'expo-secure-store';
@@ -63,24 +70,24 @@ const MenuScreen = (props: Props) => {
         <Header type="back" />
       </View>
       <View style={styles.contentContainer}>
-        <TouchableOpacity
-          style={styles.profilBloc}
-          onPress={() => navigation.navigate('Profil')}>
-          <Image
-            source={user && {uri: user.avatar}}
-            style={styles.profilImage}
-          />
-          <Text style={styles.title}>
-            {user && user.first_name} {user && user.last_name}
-          </Text>
-          <Text style={styles.description}>{user && user.address}</Text>
-        </TouchableOpacity>
+        <TouchableWithoutFeedback onPress={() => navigation.navigate('Profil')}>
+          <View style={styles.profilBloc}>
+            <Image
+              source={user && {uri: user.avatar}}
+              style={styles.profilImage}
+            />
+            <Text style={styles.title}>
+              {user && user.first_name} {user && user.last_name}
+            </Text>
+            <Text style={styles.description}>{user && user.address}</Text>
+          </View>
+        </TouchableWithoutFeedback>
         {menu.map((item, index) => (
           <View key={index}>
-            {index === menu.length - 1 && <View style={styles.screen} />}
+            {index === 3 && <View style={styles.screen} />}
             <TouchableOpacity style={[styles.item]} onPress={item.onPress}>
               <Text style={styles.itemValue}>{item.title}</Text>
-              {index !== menu.length - 1 ? (
+              {index !== 3 ? (
                 <Entypo name="chevron-thin-right" size={16} />
               ) : (
                 <MaterialCommunityIcons name="location-exit" size={20} />

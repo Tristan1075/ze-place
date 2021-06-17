@@ -139,7 +139,9 @@ const PlaceDetailScreen = () => {
         <View style={styles.container}>
           <Header type="back" />
           <View style={[styles.content, styles.paddingTop]}>
-            <Text style={styles.title}>{item.title}</Text>
+            <Text style={styles.title} numberOfLines={1}>
+              {item.title}
+            </Text>
             <Text style={styles.subtitle}>
               {item.location.city}, {item.location.postalCode}{' '}
               {item.location.country}
@@ -330,13 +332,17 @@ const PlaceDetailScreen = () => {
         <Text style={styles.chooseBannerText}>
           {UserStore.user._id === item.ownerId
             ? i18n.t('place_detail_active_bookings')
+            : userBooking.length > 0 &&
+              userBooking.find((booking) => !booking.isPast)
+            ? ''
             : i18n.t('place_detail_per_day')}
         </Text>
         <Text style={styles.chooseBannerPrice}>
           {UserStore.user._id === item.ownerId
             ? `${item.bookings.length}`
-            : userBooking.length > 0
-            ? ''
+            : userBooking.length > 0 &&
+              userBooking.find((booking) => !booking.isPast)
+            ? userBooking.find((booking) => !booking.isPast)?.startDate
             : `${item.price}€`}
         </Text>
         <Button
@@ -345,14 +351,16 @@ const PlaceDetailScreen = () => {
           value={
             UserStore.user._id === item.ownerId
               ? i18n.t('place_detail_see_bookings')
-              : userBooking.length > 0
+              : userBooking.length > 0 &&
+                Boolean(!userBooking.find((booking) => booking.isPast))
               ? 'Ma réservation'
               : i18n.t('place_detail_book')
           }
           onPress={
             UserStore.user._id === item.ownerId
               ? handleSeeOwnerBookingsPress
-              : userBooking.length > 0
+              : userBooking.length > 0 &&
+                Boolean(!userBooking.find((booking) => booking.isPast))
               ? handleSeeBookingPress
               : handleBookPress
           }
@@ -405,7 +413,6 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: 'oswald',
     fontSize: 30,
-    width: 250,
     color: Colors.white,
   },
   subtitle: {

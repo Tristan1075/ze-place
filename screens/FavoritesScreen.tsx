@@ -18,6 +18,7 @@ import PlaceCard from '../components/PlaceCard';
 import {addFavorite, getUser, removeFavorite} from '../api/customer';
 import UserStore from '../store/UserStore';
 import TitleWithDescription from '../components/TitleWithDescription';
+import EmptyBloc from '../components/EmptyBloc';
 
 type MessagesScreenNavigationProp = StackNavigationProp<
   MessagesParamList,
@@ -70,12 +71,20 @@ const FavoritesScreen = (props: Props) => {
           subtitle={true}
           description="Find nearby you the available places to rent"
         />
-        <FlatList
-          data={user.favorites}
-          renderItem={renderItem}
-          keyExtractor={(item) => item._id}
-          showsVerticalScrollIndicator={false}
-        />
+        {user.favorites.length > 0 ? (
+          <FlatList
+            data={user.favorites}
+            renderItem={renderItem}
+            keyExtractor={(item) => item._id}
+            showsVerticalScrollIndicator={false}
+          />
+        ) : (
+          <EmptyBloc
+            size={80}
+            image={require('../assets/images/sad.png')}
+            title="You don't have favorites for the moment..."
+          />
+        )}
       </View>
     </SafeAreaView>
   );

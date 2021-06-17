@@ -9,11 +9,14 @@ import {
   Image,
   Text,
 } from 'react-native';
+import Modal, {ModalContent} from 'react-native-modals';
 import {Rating} from 'react-native-ratings';
 import {denyBooking, acceptBooking, getBookingsByPlace} from '../api/bookings';
 import {getUserById} from '../api/customer';
 import BookingCard from '../components/BookingCard';
+import Button from '../components/Button';
 import Header from '../components/Header';
+import Popin from '../components/Popin';
 import TitleWithDescription from '../components/TitleWithDescription';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
@@ -29,8 +32,11 @@ const UserBookingsScreen = () => {
   const params = useRoute<UserBookingsScreenNavigationProp>().params;
   const userBooking = params.userBooking && params.userBooking[0];
   const [activeBooking, setActiveBooking] = useState<Booking>(userBooking);
+  const [confirmation, setConfirmation] = useState<boolean>(false);
+  const [deny, setDeny] = useState<boolean>(false);
   const [owner, setOwner] = useState<User>();
   const [bookings, setBookings] = useState<Booking[]>([]);
+  const [selectedBooking, setSelectedBooking] = useState<string>('');
 
   const init = useCallback(async () => {
     if (activeBooking) {
@@ -47,6 +53,7 @@ const UserBookingsScreen = () => {
   const handleAcceptPress = async (bookingId: string) => {
     await acceptBooking(bookingId);
     setBookings(await getBookingsByPlace(params.placeId));
+    setConfirmation(false);
   };
 
   const handleDenyPress = async (bookingId: string) => {
@@ -55,14 +62,21 @@ const UserBookingsScreen = () => {
       setActiveBooking(booking);
     }
     setBookings(await getBookingsByPlace(params.placeId));
+    setDeny(false);
   };
 
   const renderItems = ({item}: {item: Booking}) => {
     return (
       <BookingCard
         item={item}
-        onDenyPress={handleDenyPress}
-        onAcceptPress={handleAcceptPress}
+        onDenyPress={(bookingId) => {
+          setDeny(true);
+          setSelectedBooking(bookingId);
+        }}
+        onAcceptPress={(bookingId) => {
+          setConfirmation(true);
+          setSelectedBooking(bookingId);
+        }}
         isUser={item.userId === UserStore.user._id}
       />
     );
@@ -98,8 +112,14 @@ const UserBookingsScreen = () => {
         {activeBooking && (
           <BookingCard
             item={activeBooking}
-            onDenyPress={handleDenyPress}
-            onAcceptPress={handleAcceptPress}
+            onDenyPress={(bookingId) => {
+              setDeny(true);
+              setSelectedBooking(bookingId);
+            }}
+            onAcceptPress={(bookingId) => {
+              setConfirmation(true);
+              setSelectedBooking(bookingId);
+            }}
             isUser={activeBooking.userId === UserStore.user._id}
           />
         )}
@@ -122,6 +142,20 @@ const UserBookingsScreen = () => {
           </>
         )}
       </View>
+      <Popin
+        isVisible={confirmation}
+        onConfirmPress={() => handleAcceptPress(selectedBooking)}
+        onCancelPress={() => setConfirmation(false)}
+        title="Confirm your action ?"
+        description="This action is irreversible, you will not be able to go back !"
+      />
+      <Popin
+        isVisible={deny}
+        onConfirmPress={() => handleDenyPress(selectedBooking)}
+        onCancelPress={() => setDeny(false)}
+        title="Confirm your action ?"
+        description="This action is irreversible, you will not be able to go back !"
+      />
     </ScrollView>
   );
 };

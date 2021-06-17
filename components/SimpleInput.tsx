@@ -59,6 +59,7 @@ const SimpleInput = (props: Props) => {
           style={multiline ? styles.textArea : styles.input}
           placeholder={placeholder}
           autoCapitalize="none"
+          autoCompleteType="off"
           placeholderTextColor={Colors.gray}
           value={value}
           secureTextEntry={secureTextEntry}
