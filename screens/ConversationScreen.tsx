@@ -31,7 +31,6 @@ type Props = {
 const ConversationScreen = (props: Props) => {
   const {navigation} = props;
   const route = useRoute<ConversationScreenNavigationProp>();
-  const sender = route.params.sender;
   const [messages, setMessages] = useState<Array<Message>>([]);
   const [input, setInput] = useState<string>('');
   const _flatList = useRef<FlatList>(null);

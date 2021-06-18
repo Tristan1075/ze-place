@@ -47,10 +47,6 @@ const MenuScreen = (props: Props) => {
       onPress: () => navigation.navigate('Promo'),
     },
     {
-      title: 'My places',
-      onPress: () => navigation.navigate('MyPlace'),
-    },
-    {
       title: 'Report a bug',
       onPress: () => navigation.navigate('BugTicket'),
     },

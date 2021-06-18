@@ -8,11 +8,13 @@ import {
   ScrollView,
   Modal,
   FlatList,
+  TouchableOpacity,
 } from 'react-native';
 import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
 import {Rating} from 'react-native-ratings';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import {
+  AntDesign,
   FontAwesome5,
   Ionicons,
   MaterialCommunityIcons,
@@ -149,6 +151,10 @@ const PlaceDetailScreen = () => {
               {place?.location.country}
             </Text>
             <View style={styles.descriptionBloc}>
+              <TouchableOpacity style={[styles.row, styles.padding]} onPress={() => navigation.navigate('Conversation')}>
+                <AntDesign name='message1' style={styles.message} size={20} />
+                <Text style={styles.description}>Send a message to owner</Text>
+              </TouchableOpacity>
               <View style={styles.padding}>
                 <Rating
                   startingValue={place?.rate}
@@ -265,8 +271,8 @@ const PlaceDetailScreen = () => {
               subtitle={true}
             />
             <MapView
-              onTouchStart={handleMapPress}
               provider={PROVIDER_GOOGLE}
+              onPress={handleMapPress}
               customMapStyle={mapStyle}
               scrollEnabled={false}
               style={styles.map}
@@ -450,7 +456,7 @@ const styles = StyleSheet.create({
     height: 55,
   },
   padding: {
-    paddingBottom: 10,
+    paddingBottom: 20,
   },
   reviewers: {
     width: 30,
@@ -551,6 +557,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
+  message: {
+    paddingRight: 10,
+  }
 });
 
 export default PlaceDetailScreen;

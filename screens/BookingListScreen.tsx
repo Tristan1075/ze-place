@@ -2,6 +2,7 @@ import React, {useState, useEffect, useCallback} from 'react';
 import {View, StyleSheet, FlatList, Text} from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {useNavigation} from '@react-navigation/native';
 import {getBookingByUser} from '../api/bookings';
 import EmptyBloc from '../components/EmptyBloc';
 
@@ -13,7 +14,7 @@ import Layout from '../constants/Layout';
 import {Booking, Place, User} from '../types';
 
 const BookingListScreen = (props: Props) => {
-  const {navigation} = props;
+  const navigation = useNavigation();
   const [bookings, setBookings] = useState<Booking[]>([]);
 
   const init = useCallback(async () => {
@@ -37,11 +38,10 @@ const BookingListScreen = (props: Props) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Header type="menu" showProfil={true} />
+    <View style={styles.container}>
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
         <TitleWithDescription
-          title="Bookings"
+          title="Active bookings"
           subtitle={true}
           description="Find nearby you the available places to rent"
         />
@@ -60,11 +60,12 @@ const BookingListScreen = (props: Props) => {
             title="You don't have bookings for the moment..."
           />
         )}
+        {bookings.filter((booking) => booking.isPast === true).length > 0 &&
         <TitleWithDescription
           title="History"
           subtitle={true}
           description="Find the old announnces booked"
-        />
+        />}
         <FlatList
           data={bookings.filter((booking) => booking.isPast === true)}
           renderItem={renderItem}
@@ -72,7 +73,7 @@ const BookingListScreen = (props: Props) => {
           showsVerticalScrollIndicator={false}
         />
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 

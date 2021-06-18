@@ -18,6 +18,8 @@ import CreatePlaceScreen from '../screens/PlaceCreation/CreatePlaceScreen';
 import PlaceList from '../screens/PlaceListScreen';
 import UserBookingsScreen from '../screens/UserBookingsScreen';
 import BookingListScreen from '../screens/BookingListScreen';
+import ConversationScreen from '../screens/ConversationScreen';
+import BookingAndPlacesScreen from '../screens/BookingAndPlacesScreen';
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
@@ -34,7 +36,7 @@ export default function BottomTabNavigator() {
         }}
       />
       <BottomTab.Screen
-        name="Booking"
+        name="Booking and Places"
         component={BookingNavigator}
         options={{
           tabBarIcon: ({color}) => (
@@ -69,6 +71,7 @@ const HomeNavigator = () => {
       <HomeStack.Screen name="CreatePlace" component={CreatePlaceScreen} />
       <HomeStack.Screen name="PlaceList" component={PlaceList} />
       <HomeStack.Screen name="UserBookings" component={UserBookingsScreen} />
+      <HomeStack.Screen name="Conversation" component={ConversationScreen} />
     </HomeStack.Navigator>
   );
 };
@@ -78,7 +81,7 @@ const BookingStack = createStackNavigator<BookingTab>();
 const BookingNavigator = () => {
   return (
     <BookingStack.Navigator screenOptions={{headerShown: false}}>
-      <BookingStack.Screen name="BookingList" component={BookingListScreen} />
+      <BookingStack.Screen name="BookingAndPlaces" component={BookingAndPlacesScreen} />
       <BookingStack.Screen name="PlaceDetail" component={PlaceDetailScreen} />
       <BookingStack.Screen name="UserBookings" component={UserBookingsScreen} />
     </BookingStack.Navigator>
