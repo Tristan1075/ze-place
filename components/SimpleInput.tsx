@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   error: {
-    paddingBottom: 10,
+    paddingTop: 10,
     color: Colors.error,
     fontFamily: 'poppins',
   },

@@ -29,7 +29,6 @@ import {CreatePlaceForm} from '../../types';
 import Layout from '../../constants/Layout';
 import {createPlace} from '../../api/places';
 import * as SecureStore from 'expo-secure-store';
-import {element} from 'prop-types';
 
 type Props = {
   prevStep: () => void;
@@ -62,7 +61,6 @@ const Customization = (props: Props) => {
     }
   };
   const uploadToS3 = async () => {
-    const images = [];
     const id = await SecureStore.getItemAsync('access-token');
     let cpt = 0;
     let cpt2 = 0;
@@ -94,7 +92,7 @@ const Customization = (props: Props) => {
       cpt++;
     }
   };
-  function sleep(ms) {
+  function sleep(ms: number) {
     return new Promise((resolve) => setTimeout(resolve, ms));
   }
   const handleSubmitForm = async () => {
@@ -121,8 +119,8 @@ const Customization = (props: Props) => {
         style={styles.scrollView}
         horizontal={true}
         showsHorizontalScrollIndicator={false}>
-        {createPlaceForm.images.map((image) => (
-          <Image source={{uri: image.url}} style={styles.image} />
+        {createPlaceForm.images.map((image, index) => (
+          <Image key={index}  source={{uri: image.url}} style={styles.image} />
         ))}
         <TouchableOpacity
           style={styles.buttonImage}
@@ -212,7 +210,6 @@ const styles = StyleSheet.create({
     height: 120,
     marginRight: 10,
     borderRadius: 10,
-    ...Layout.shadow,
   },
   buttonImage: {
     width: 120,

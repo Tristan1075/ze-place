@@ -50,6 +50,10 @@ const MenuScreen = (props: Props) => {
       title: 'Report a bug',
       onPress: () => navigation.navigate('BugTicket'),
     },
+    {
+      title: 'Payment method',
+      onPress: () => navigation.navigate('PaymentMethodForm'),
+    },
   ];
 
   return (

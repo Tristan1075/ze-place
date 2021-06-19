@@ -15,7 +15,7 @@ import Button from '../components/Button';
 import SimpleInput from '../components/SimpleInput';
 import TitleWithDescription from '../components/TitleWithDescription';
 import Colors from '../constants/Colors';
-import {initPaymentIntent} from '../api/payment';
+import {addPaymentMethod, initPaymentIntent} from '../api/payment';
 import {Booking, Place} from '../types';
 import {getBookingPriceWithDuration} from '../utils';
 import {ModalContext} from '../providers/modalContext';
@@ -35,14 +35,14 @@ const ConfirmationBookingScreen = ({place, booking}: Props) => {
   const [promotionalCode, showPromotionalCode] = useState<boolean>(false);
   const {handleModal} = useContext(ModalContext);
 
-  const getClientSecret = async () => {
+  const getPaymentIntent = async () => {
     const {paymentIntent, ephemeralKey, customer} = await initPaymentIntent(
-      place.price * 100 * booking.duration,
+      place.price * 100 * booking.duration, place.ownerId,
     );
     const {error} = await initPaymentSheet({
       customerId: customer,
       customerEphemeralKeySecret: ephemeralKey,
-      paymentIntentClientSecret: paymentIntent,
+      paymentIntentClientSecret: paymentIntent.client_secret,
       merchantDisplayName: 'Example Inc.',
     });
     if (!error) {
@@ -52,14 +52,15 @@ const ConfirmationBookingScreen = ({place, booking}: Props) => {
   };
 
   const onBookPress = async () => {
-    const clientSecret = await getClientSecret();
+    const paymentIntent = await getPaymentIntent();
     const {error} = await presentPaymentSheet({
-      clientSecret,
+      clientSecret: paymentIntent.clientSecret,
       confirmPayment: true,
     });
     if (!error) {
-      bookPlace(place, booking);
-      handleModal();
+      addPaymentMethod(paymentIntent.clientSecret);
+      // bookPlace(place, booking);
+      // handleModal();
     }
     setPaymentSheetEnabled(false);
   };

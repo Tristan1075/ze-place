@@ -131,6 +131,7 @@ export type SigninForm = {
 };
 
 export type SignupForm = {
+  gender: string;
   avatar: string;
   firstname: string;
   lastname: string;
@@ -140,6 +141,9 @@ export type SignupForm = {
   password: string;
   confirmPassword: string;
   description: string;
+  IDRecto: string;
+  IDVerso: string;
+  location?: Location;
 };
 
 export type FeatureType = {

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -14,24 +14,28 @@ import {
   REACT_APP_REGION,
   REACT_APP_ACCESS_ID,
   REACT_APP_ACCESS_KEY,
+  environnment,
 } from '../env';
 
 import {StackNavigationProp} from '@react-navigation/stack';
 import {CommonActions} from '@react-navigation/routers';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import {Entypo} from '@expo/vector-icons';
+import {Entypo, Ionicons} from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import * as SecureStore from 'expo-secure-store';
 import moment from 'moment';
 import isEmail from 'validator/lib/isEmail';
 import {RNS3} from 'react-native-aws3';
-import {RootStackParamList, SignupForm} from '../types';
+import {RootStackParamList, SignupForm, Location} from '../types';
 import Button from '../components/Button';
 import Colors from '../constants/Colors';
 import Header from '../components/Header';
 import SimpleInput from '../components/SimpleInput';
-import {register} from '../api/auth';
+import {register, uploadID} from '../api/auth';
+import TitleWithDescription from '../components/TitleWithDescription';
+import {ModalContent, BottomModal} from 'react-native-modals';
+import SelectableItem from '../components/SelectableItem';
 
 type RootScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -42,8 +46,11 @@ type Props = {
   navigation: RootScreenNavigationProp;
 };
 
-const avatar = require('../assets/images/man.png');
+import avatar from '../assets/images/man.png';
+import { ModalContext } from '../providers/modalContext';
+import SearchPlaceScreen from './SearchPlaceScreen';
 const input: SignupForm = {
+  gender: '',
   avatar: '',
   firstname: '',
   birthdate: undefined,
@@ -53,6 +60,9 @@ const input: SignupForm = {
   password: '',
   confirmPassword: '',
   description: '',
+  IDRecto: '',
+  IDVerso: '',
+  location: undefined,
 };
 
 const SignupScreen = (props: Props) => {
@@ -60,11 +70,17 @@ const SignupScreen = (props: Props) => {
   const [errors, setErrors] = useState<SignupForm>(input);
   const [form, setForm] = useState<SignupForm>(input);
   const [showDateTimePicker, setShowDateTimePicker] = useState<boolean>(false);
+  const [genderVisible, setGenderVisible] = useState<boolean>(false);
+  const {handleModal} = useContext(ModalContext);
 
   const verifyForm = (): boolean => {
     let isValid = true;
     let e: any = {};
 
+    if (form.gender.length === 0) {
+      e.gender = 'The gender is required';
+      isValid = false;
+    }
     if (form.avatar.length === 0) {
       e.avatar = 'The avatar is required';
       isValid = false;
@@ -77,6 +93,12 @@ const SignupScreen = (props: Props) => {
       e.lastname = 'The field is required';
       isValid = false;
     }
+
+    if (form.location?.address?.length === 0) {
+      e.location = 'The field is required';
+      isValid = false;
+    }
+
     if (!form.birthdate) {
       e.birthdate = 'The field is required';
       isValid = false;
@@ -97,6 +119,10 @@ const SignupScreen = (props: Props) => {
       e.confirmPassword = 'The password is not the same';
       isValid = false;
     }
+    if ((form.IDRecto.length === 0 || form.IDVerso.length === 0) && environnment === 'production') {
+      e.IDRecto = 'The image ID is required';
+      isValid = false;
+    }
     setErrors(e);
     return isValid;
   };
@@ -107,7 +133,6 @@ const SignupScreen = (props: Props) => {
       name: `${form.email}${form.lastname}.png`,
       type: 'image/png',
     };
-
     const options = {
       bucket: REACT_APP_BUCKET_NAME,
       region: REACT_APP_REGION,
@@ -115,36 +140,29 @@ const SignupScreen = (props: Props) => {
       secretKey: REACT_APP_ACCESS_KEY,
       successActionStatus: 201,
     };
-    console.log(options);
-
     RNS3.put(file, options).then((response) => {
-      if (response.status !== 201)
+      if (response.status !== 201){
         throw new Error('Failed to upload image to S3');
-      console.log(response.body.postResponse.location);
-      form.avatar = response.body.postResponse.location;
+      }
   });
 };
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
+  const sleep = (ms) => {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+  
   const handleSigninPress = async () => {
     const isFormValid = verifyForm();
     if (isFormValid) {
-      try {
-         await  uploadToS3();
-         await  sleep(2000);
-
-        const token = await register(form);
-        await SecureStore.setItemAsync('access-token', token.access_token);
-        navigation.dispatch(
+        await uploadToS3();
+        uploadID(form.IDRecto, form.IDVerso).then(async (res) => {
+          const token = await register(form, res);
+          await SecureStore.setItemAsync('access-token', token.access_token);
+          navigation.dispatch(
           CommonActions.reset({
             index: 0,
             routes: [{name: 'Tab'}],
-          }),
-        );
-      } catch (err) {
-        console.log(err);
-      }
+          }));
+      });
     }
   };
 
@@ -155,8 +173,6 @@ function sleep(ms) {
       aspect: [4, 3],
       quality: 1,
     });
-    console.log(result);
-
     if (!result.cancelled) {
       setForm({...form, avatar: result.uri});
       setErrors({...errors, avatar: ''});
@@ -169,7 +185,50 @@ function sleep(ms) {
     setShowDateTimePicker(false);
   };
 
+  const handleTakPicturePress = async (type: string) => {
+    const permission = await ImagePicker.requestCameraPermissionsAsync();
+    if(permission.granted) {
+      if(environnment === 'production') {
+        const result = await ImagePicker.launchCameraAsync();
+        if (!result.cancelled) {
+          if(type === 'recto'){
+            setForm({...form, IDRecto: result.uri });
+          } else {
+            setForm({...form, IDVerso: result.uri });
+          }
+          setErrors({...errors, IDRecto: ''});
+        }
+      } else {
+        const result = await ImagePicker.launchImageLibraryAsync({
+          mediaTypes: ImagePicker.MediaTypeOptions.All,
+          allowsEditing: true,
+          aspect: [4, 3],
+          quality: 1,
+        });
+        if (!result.cancelled) {
+          if(type === 'recto'){
+            setForm({...form, IDRecto: result.uri });
+          } else {
+            setForm({...form, IDVerso: result.uri });
+          }
+        }
+      }
+    }
+  }
+
+  const handleSearchPress = () => {
+    handleModal({
+      child: <SearchPlaceScreen onLocationPress={handleLocationPress} />,
+    });
+  };
+
+  const handleLocationPress = (location: Location) => {
+    setForm({...form, location: location});
+    handleModal();
+  };
+
   return (
+    <>
     <SafeAreaView style={styles.flex}>
       <ScrollView>
         <Header type="back" />
@@ -191,6 +250,15 @@ function sleep(ms) {
             <Text style={styles.error}>{errors.avatar}</Text>
           ) : null}
           <SimpleInput
+            style={styles.input}
+            value={form.gender}
+            placeholder="Gender"
+            isEditable={false}
+            onPress={() => setGenderVisible(true)}
+            suffix={<Ionicons name="chevron-down" size={20} color={Colors.dark} />}
+            error={errors.gender}
+          />
+          <SimpleInput
             onChange={() => setErrors({...errors, firstname: ''})}
             onChangeText={(v) => setForm({...form, firstname: v})}
             placeholder="First name"
@@ -205,11 +273,21 @@ function sleep(ms) {
             style={styles.input}
           />
           <SimpleInput
+            style={styles.input}
+            value={form.location?.address}
+            placeholder="Adress"
+            isEditable={false}
+            onPress={handleSearchPress}
+            suffix={<Ionicons name="chevron-down" size={20} color={Colors.dark} />}
+            error={errors.location}
+          />
+          <SimpleInput
             onPress={() => setShowDateTimePicker(true)}
             isEditable={false}
             onChange={() => setErrors({...errors, lastname: ''})}
             onChangeText={(v) => setForm({...form, lastname: v})}
             placeholder="Birthdate"
+            suffix={<Ionicons name="chevron-down" size={20} color={Colors.dark} />}
             value={form.birthdate ? moment(form.birthdate).format('ll') : ''}
             error={errors.birthdate ? 'The field is required' : ''}
             style={styles.input}
@@ -250,8 +328,52 @@ function sleep(ms) {
             error={errors.description}
             multiline={true}
             numberOfLines={1}
-            style={styles.input}
           />
+        <TitleWithDescription title="Carte d'identité" subtitle={true} />
+        <View style={styles.row}>
+        {form.IDRecto ? (
+          <View>
+            <Image source={{uri: form.IDRecto}} style={styles.image} /> 
+            <TouchableOpacity style={styles.closeIconRecto} onPress={() => setForm({...form, IDRecto: ''})}>
+              <Ionicons size={20} name="close" color={Colors.primary} />
+            </TouchableOpacity>
+          </View>
+
+         ) : (
+          <TouchableOpacity
+            style={styles.buttonImage}
+            onPress={() => handleTakPicturePress('recto')}>
+              <Ionicons
+                name="add-circle-outline"
+                size={36}
+                color={Colors.primary}
+              />
+              <Text style={styles.text}>Recto</Text>
+          </TouchableOpacity>
+          )}
+          {form.IDVerso ? (
+          <View>
+            <Image source={{uri: form.IDVerso}} style={styles.image} /> 
+            <TouchableOpacity style={styles.closeIconRecto} onPress={() => setForm({...form, IDVerso: ''})}>
+              <Ionicons size={20} name="close" color={Colors.primary} />
+            </TouchableOpacity>
+          </View>
+         ) : (
+          <TouchableOpacity
+            style={styles.buttonImage}
+            onPress={() => handleTakPicturePress('versp')}>
+              <Ionicons
+                name="add-circle-outline"
+                size={36}
+                color={Colors.primary}
+              />
+              <Text style={styles.text}>Verso</Text>
+          </TouchableOpacity>
+          )}
+          </View>
+          {errors.IDRecto ? (
+            <Text style={styles.error}>{errors.IDRecto}</Text>
+          ) : null}
           <Button
             value="Sign up"
             onPress={handleSigninPress}
@@ -283,7 +405,35 @@ function sleep(ms) {
           </TouchableOpacity>
         )}
       />
+      <BottomModal
+        visible={genderVisible}
+        onTouchOutside={() => setGenderVisible(false)}
+        width={1}
+        onSwipeOut={() => setGenderVisible(false)}>
+        <ModalContent style={styles.bottomModal}>
+          <SelectableItem
+            value="Male"
+            icon={'male'}
+            onPress={() => {
+              setForm({...form, gender: 'male'});
+              setGenderVisible(false);
+            }}
+          />
+          <SelectableItem
+            value="Female"
+            icon={'female'}
+            onPress={() => {
+              setForm({...form, gender: 'female'});
+              setGenderVisible(false);
+            }}
+          />
+        </ModalContent>
+      </BottomModal>
     </SafeAreaView>
+    <View style={styles.overlay}>
+      <Text style={styles.titleOverlay}>Preparing the registration...</Text>
+    </View>
+    </>
   );
 };
 
@@ -304,7 +454,6 @@ const styles = StyleSheet.create({
   },
   row: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
   },
   text: {
     fontFamily: 'poppins',
@@ -321,12 +470,12 @@ const styles = StyleSheet.create({
     position: 'relative',
     maxWidth: 70,
     height: 70,
-    marginVertical: 10,
     paddingVertical: 20,
     backgroundColor: Colors.primary,
     borderRadius: 20,
     justifyContent: 'center',
     alignItems: 'center',
+    marginBottom: 20,
   },
   avatar: {
     width: 50,
@@ -373,12 +522,54 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   error: {
-    paddingBottom: 10,
+    paddingTop: 10,
     color: Colors.error,
     fontFamily: 'poppins',
   },
   input: {
-    marginBottom: 10,
+    marginBottom: 20,
+  },
+  bottomModal: {
+    paddingBottom: 40,
+  },
+  buttonImage: {
+    width: 120,
+    height: 120,
+    padding: 15,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderStyle: 'dashed',
+    borderColor: Colors.primary,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 20,
+  },
+  image: {
+    width: 120,
+    height: 120,
+    marginRight: 10,
+    borderRadius: 10,
+  },
+  closeIconRecto: {
+    position: 'absolute',
+    backgroundColor: Colors.white,
+    borderRadius: 50,
+    left: 100,
+    top: -10,
+    padding: 5,
+  },
+  overlay: {
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+  },
+  titleOverlay: {
+    fontSize: 24,
+    color: Colors.white,
+    fontFamily: 'oswald',
   },
 });
 

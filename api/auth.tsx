@@ -12,7 +12,7 @@ type Credentials = {
   password: string;
 };
 
-export const login = async (credentials: Credentials) => {
+export const login = async (credentials: Credentials): Promise<AxiosResponse> => {
   return await axios
     .post(
       `${API_URL}/auth/login`,
@@ -24,7 +24,7 @@ export const login = async (credentials: Credentials) => {
         headers: headers,
       },
     )
-    .then((response: AxiosResponse<any>) => {
+    .then((response: AxiosResponse) => {
       return response.data;
     })
     .catch((err) => {
@@ -32,14 +32,13 @@ export const login = async (credentials: Credentials) => {
     });
 };
 
-export const register = async (form: SignupForm) => {
+export const register = async (form: SignupForm, IDFiles): Promise<AxiosResponse> => {
   const pushToken = await registerForPushNotificationsAsync();
-  console.log(form);
-  
   return await axios
     .post(
       `${API_URL}/auth/register`,
       {
+        gender: form.gender,
         avatar: form.avatar,
         first_name: form.firstname,
         last_name: form.lastname,
@@ -48,17 +47,49 @@ export const register = async (form: SignupForm) => {
         email: form.email,
         password: form.password,
         description: form.description,
+        IDRecto: IDFiles[0],
+        IDVerso: IDFiles[1],
+        location: form.location,
         pushToken: pushToken,
       },
       {
         headers: headers,
       },
     )
-    .then((response: AxiosResponse<any>) => {
+    .then((response: AxiosResponse) => {
       return response.data;
     })
     .catch((err) => {
-      console.log(err.response.data);
       return Promise.reject(err);
     });
 };
+
+
+export const uploadID = async (IDRecto: string, IDVerso: string) => {
+  const formData = new FormData();
+  formData.append('Files', JSON.parse(JSON.stringify({
+      uri: IDRecto,
+      type: 'image/jpeg', 
+      name: "IDRecto.jpg",
+    }))
+ );
+  formData.append('Files', JSON.parse(JSON.stringify({
+      uri: IDVerso,
+      type: 'image/jpeg', 
+      name: "IDVerso.jpg",
+    }))
+  );
+  return await axios({
+    url: `${API_URL}/auth/uploadID`,
+    method: 'POST',
+    data: formData,
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'multipart/form-data',
+    }})
+    .then((response) => {
+      return response.data;
+    }).catch((error) => {
+      console.log("error from image :", error);
+    });
+}
