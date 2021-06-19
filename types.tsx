@@ -49,6 +49,12 @@ export type PlacesParamList = {
 export type User = {
   _id: string;
   avatar: string;
+  gender: string;
+  location: Location;
+  IDRecto: string;
+  IDVerso: string;
+  stripeAccount: string;
+  customerId: string;
   first_name: string;
   last_name: string;
   email: string;
@@ -59,8 +65,8 @@ export type User = {
   description: string;
   created_at: {type: Date; default: Date};
   favorites: Place[];
-  promoCode: String[];
-  historyCode: String[];
+  promoCode: string[];
+  historyCode: string[];
   ownedPlaces: Place[];
   bookings: Place[];
 };

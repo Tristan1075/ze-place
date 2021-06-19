@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -19,6 +19,8 @@ import {Entypo, MaterialCommunityIcons} from '@expo/vector-icons';
 import {User} from '../types';
 import {CommonActions} from '@react-navigation/native';
 import UserStore from '../store/UserStore';
+import {ModalContext} from '../providers/modalContext';
+import BankAccountScreen from './BankAccountScreen';
 
 type RootScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Menu'>;
 
@@ -29,6 +31,7 @@ type Props = {
 const MenuScreen = (props: Props) => {
   const {navigation} = props;
   const [user] = useState<User>(UserStore.user);
+  const {handleModal} = useContext(ModalContext);
 
   const handleDisconnectPress = async () => {
     await SecureStore.deleteItemAsync('access-token');
@@ -51,8 +54,11 @@ const MenuScreen = (props: Props) => {
       onPress: () => navigation.navigate('BugTicket'),
     },
     {
-      title: 'Payment method',
-      onPress: () => navigation.navigate('PaymentMethodForm'),
+      title: 'Bank account',
+      onPress: () =>
+        handleModal({
+          child: <BankAccountScreen />,
+        }),
     },
   ];
 
@@ -78,7 +84,7 @@ const MenuScreen = (props: Props) => {
           <View key={index}>
             <TouchableOpacity style={[styles.item]} onPress={item.onPress}>
               <Text style={styles.itemValue}>{item.title}</Text>
-                <Entypo name="chevron-thin-right" size={16} />
+              <Entypo name="chevron-thin-right" size={16} />
             </TouchableOpacity>
           </View>
         ))}
