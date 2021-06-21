@@ -82,6 +82,7 @@ const MenuScreen = (props: Props) => {
         </TouchableWithoutFeedback>
         {menu.map((item, index) => (
           <View key={index}>
+
             <TouchableOpacity style={[styles.item]} onPress={item.onPress}>
               <Text style={styles.itemValue}>{item.title}</Text>
               <Entypo name="chevron-thin-right" size={16} />

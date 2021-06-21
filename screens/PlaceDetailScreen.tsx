@@ -40,7 +40,9 @@ import {addFavorite, removeFavorite} from '../api/customer';
 import i18n from 'i18n-js';
 import EmptyBloc from '../components/EmptyBloc';
 import UserStore from '../store/UserStore';
-import {getBookingByPlaceAndUser} from '../api/bookings';
+import {getBookingByPlaceAndUser, getBookingsByPlace} from '../api/bookings';
+import PlaceReviewScreen from './PlaceReviewScreen';
+
 
 type PlaceScreenNavigationProp = RouteProp<HomeParamList, 'PlaceDetail'>;
 
@@ -56,6 +58,7 @@ const PlaceDetailScreen = () => {
   const [place, setPlace] = useState<Place>();
 
   const init = useCallback(async () => {
+
     setPlace(await getPlaceById(item));
     setUserBooking(await getBookingByPlaceAndUser(item));
     setSimilarPlaces(await getSimilarPlaces(item));
@@ -69,6 +72,11 @@ const PlaceDetailScreen = () => {
     // @ts-ignore
     navigation.push('PlaceDetail', {place: p});
   };
+  const handleReviewPress = async () =>{
+    handleModal({
+      child: <PlaceReviewScreen placeId={place?._id} />,
+    });
+  }
 
   const handleFavoritePress = async (p: Place) => {
     p.isFavorite ? removeFavorite(p) : addFavorite(p);
@@ -150,6 +158,7 @@ const PlaceDetailScreen = () => {
               {place?.location.city}, {place?.location.postalCode}{' '}
               {place?.location.country}
             </Text>
+            {place?.reviews.length > 0 ?
             <View style={styles.descriptionBloc}>
               <TouchableOpacity style={[styles.row, styles.padding]} onPress={() => navigation.navigate('Conversation')}>
                 <AntDesign name='message1' style={styles.message} size={20} />
@@ -159,25 +168,25 @@ const PlaceDetailScreen = () => {
                 <Rating
                   startingValue={place?.rate}
                   imageSize={20}
+                  value={place?.rate}
+                  precision={0.1}
+                  readonly
                   tintColor={Colors.background}
                 />
               </View>
-              <View style={styles.row}>
-                {place?.reviews.map((review, index) => (
-                  <Image
-                    key={index}
-                    source={{uri: place?.images[0].url}}
-                    style={styles.reviewers}
-                  />
-                ))}
+              <View style={styles.row} >
                 <View style={styles.reviewersNumber}>
-                  <Text style={styles.subtitle}>{place?.reviews.length}+</Text>
+                  <Text onPress={() => handleReviewPress()} style={styles.subtitle} >{place?.reviews.length}+</Text>
+
                 </View>
-                <Text style={styles.reviewersText}>
+                <Text onPress={() => handleReviewPress()} style={styles.reviewersText}>
                   {i18n.t('place_detail_people_review_this')}
                 </Text>
               </View>
             </View>
+          :<View>
+            <Text style={styles.noReview}>No reviews written</Text>
+          </View> }
             <TitleWithDescription
               title={i18n.t('place_detail_features')}
               subtitle={true}
@@ -481,6 +490,13 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: Colors.primary,
     textAlign: 'center',
+  },
+  noReview:{
+    fontFamily: 'poppins',
+    fontSize: 15,
+    color: Colors.primary,
+    textAlign: 'center',
+    padding:60,
   },
   facilities: {
     backgroundColor: 'rgb(228, 236, 249)',

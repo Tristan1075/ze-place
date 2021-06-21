@@ -12,6 +12,7 @@ type Credentials = {
   password: string;
 };
 
+
 export const login = async (
   credentials: Credentials,
 ): Promise<AxiosResponse> => {

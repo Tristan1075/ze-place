@@ -28,11 +28,13 @@ const BugTicketScreen = (props: Props) => {
   const [form, setForm] = useState<BugForm>(input);
   const {user} = UserStore;
 
-  const handleBugPress = async () => {
-    setForm({...form, senderId: user._id});
-    await createBug(form);
-  }
-
+      const handleBugPress = async () => {
+        console.log(user._id);
+        form.senderId = user._id;
+        console.log(form);
+        await createBug(form);
+        
+      }
   return (
     <View style={styles.screen}>
       <View style={styles.headerBloc}>
