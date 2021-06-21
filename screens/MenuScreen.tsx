@@ -84,10 +84,10 @@ const MenuScreen = (props: Props) => {
         </TouchableWithoutFeedback>
         {menu.map((item, index) => (
           <View key={index}>
-            {index === 3 && <View style={styles.screen} />}
+            {index === 4 && <View style={styles.screen} />}
             <TouchableOpacity style={[styles.item]} onPress={item.onPress}>
               <Text style={styles.itemValue}>{item.title}</Text>
-              {index !== 3 ? (
+              {index !== 4 ? (
                 <Entypo name="chevron-thin-right" size={16} />
               ) : (
                 <MaterialCommunityIcons name="location-exit" size={20} />

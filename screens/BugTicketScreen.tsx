@@ -40,7 +40,7 @@ const BugTicketScreen = (props: Props) => {
 
       const handleBugPress = async () => {
         console.log(user._id);
-        setForm({...form, senderId: user._id});
+        form.senderId = user._id;
         console.log(form);
         await createBug(form);
         

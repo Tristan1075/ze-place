@@ -89,9 +89,11 @@ export type Place = {
 };
 
 export type Review = {
-  from: User;
-  text: string;
-  rate: Number;
+ 
+  name: string;
+  description:string;
+  writerId:string;
+  rate: number;
   created_at: {type: Date; default: Date};
 };
 

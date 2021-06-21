@@ -10,7 +10,7 @@ export const createBug = async (form: BugForm) => {
     const token = await SecureStore.getItemAsync('access-token');    
     return await axios
       .post(
-        `http://localhost:3000/bug-ticket`,
+        `${API_URL}/bug-ticket`,
         {
           name:form.name,
           description:form.description,
@@ -26,7 +26,6 @@ export const createBug = async (form: BugForm) => {
         return response.data;
       })
       .catch((err) => {
-        console.log(err.response.data);
         return Promise.reject(err);
       });
   };

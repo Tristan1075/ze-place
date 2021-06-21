@@ -13,6 +13,8 @@ type Credentials = {
 };
 
 export const login = async (credentials: Credentials) => {
+  console.log(API_URL);
+  
   return await axios
     .post(
       `${API_URL}/auth/login`,
