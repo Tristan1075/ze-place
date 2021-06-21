@@ -37,6 +37,7 @@ const SigninScreen = (props: Props) => {
     try {
       const token = await login(credentials);
       await SecureStore.setItemAsync('access-token', token.access_token);
+      UserStore.updateUser(token.user);
       navigation.dispatch(
         CommonActions.reset({
           index: 0,

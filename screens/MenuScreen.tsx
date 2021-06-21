@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -19,6 +19,8 @@ import {Entypo, MaterialCommunityIcons} from '@expo/vector-icons';
 import {User} from '../types';
 import {CommonActions} from '@react-navigation/native';
 import UserStore from '../store/UserStore';
+import {ModalContext} from '../providers/modalContext';
+import BankAccountScreen from './BankAccountScreen';
 
 type RootScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Menu'>;
 
@@ -29,6 +31,7 @@ type Props = {
 const MenuScreen = (props: Props) => {
   const {navigation} = props;
   const [user] = useState<User>(UserStore.user);
+  const {handleModal} = useContext(ModalContext);
 
   const handleDisconnectPress = async () => {
     await SecureStore.deleteItemAsync('access-token');
@@ -43,24 +46,19 @@ const MenuScreen = (props: Props) => {
 
   const menu = [
     {
-      title: 'Payment methods',
-      onPress: () => navigation.navigate('PaymentMethods'),
-    },
-    {
-      title: 'Promo Codes',
+      title: 'Promotional codes',
       onPress: () => navigation.navigate('Promo'),
     },
     {
-      title: 'My places',
-      onPress: () => navigation.navigate('MyPlace'),
-    },
-    {
-      title: 'Report Bug',
+      title: 'Report a bug',
       onPress: () => navigation.navigate('BugTicket'),
     },
     {
-      title: 'Logout',
-      onPress: () => handleDisconnectPress(),
+      title: 'Bank account',
+      onPress: () =>
+        handleModal({
+          child: <BankAccountScreen />,
+        }),
     },
   ];
 
@@ -84,17 +82,18 @@ const MenuScreen = (props: Props) => {
         </TouchableWithoutFeedback>
         {menu.map((item, index) => (
           <View key={index}>
-            {index === 4 && <View style={styles.screen} />}
+
             <TouchableOpacity style={[styles.item]} onPress={item.onPress}>
               <Text style={styles.itemValue}>{item.title}</Text>
-              {index !== 4 ? (
-                <Entypo name="chevron-thin-right" size={16} />
-              ) : (
-                <MaterialCommunityIcons name="location-exit" size={20} />
-              )}
+              <Entypo name="chevron-thin-right" size={16} />
             </TouchableOpacity>
           </View>
         ))}
+        <View style={styles.screen} />
+        <TouchableOpacity style={[styles.item]} onPress={handleDisconnectPress}>
+          <Text style={styles.itemValue}>Logout</Text>
+          <MaterialCommunityIcons name="location-exit" size={20} />
+        </TouchableOpacity>
       </View>
     </View>
   );

@@ -187,18 +187,13 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: Colors.dark,
-    paddingTop: 130,
+    paddingTop: 100,
   },
   center: {
     alignItems: 'center',
   },
   scrollView: {
     flex: 1,
-    backgroundColor: Colors.background,
-    borderTopLeftRadius: 40,
-    borderTopRightRadius: 40,
-    paddingTop: 40,
   },
   paddingHorizontal: {
     paddingHorizontal: 20,

@@ -6,6 +6,7 @@ import {
   ViewStyle,
   View,
 } from 'react-native';
+import {Flow} from 'react-native-animated-spinkit';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
 
@@ -15,15 +16,27 @@ type Props = {
   textColor: string;
   style?: ViewStyle;
   value: string;
+  isFetching?: boolean;
 };
 
 const Button = (props: Props) => {
-  const {onPress, backgroundColor, textColor, style, value} = props;
+  const {
+    onPress,
+    backgroundColor,
+    textColor,
+    style,
+    value,
+    isFetching = false,
+  } = props;
   return (
     <TouchableOpacity
       style={[styles.container, {backgroundColor}, style]}
       onPress={onPress}>
-      <Text style={[styles.text, {color: textColor}]}>{value}</Text>
+      {isFetching ? (
+        <Flow size={20} color={textColor} />
+      ) : (
+        <Text style={[styles.text, {color: textColor}]}>{value}</Text>
+      )}
     </TouchableOpacity>
   );
 };

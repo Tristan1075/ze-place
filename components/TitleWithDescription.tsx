@@ -54,8 +54,8 @@ const styles = StyleSheet.create({
   },
   title: {
     color: Colors.dark,
-    fontFamily: 'oswald-bold',
-    fontSize: 24,
+    fontFamily: 'oswald-light',
+    fontSize: 20,
     flex: 1,
   },
   row: {

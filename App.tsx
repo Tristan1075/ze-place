@@ -47,8 +47,10 @@ const App = () => {
 
   useEffect(() => {
     registerForPushNotificationsAsync().then((token) => {
+      console.log(token);
       if (token) {
         setExpoPushToken(token);
+        console.log(token);
       }
     });
     // This listener is fired whenever a notification is received while the app is foregrounded

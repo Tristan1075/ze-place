@@ -19,7 +19,7 @@ export type BottomTabParamList = {
 
 export type HomeParamList = {
   Home: undefined;
-  PlaceDetail: {place: Place};
+  PlaceDetail: {place: string};
   PlaceList: {filter: FilterForm};
   CreatePlace: undefined;
   MapModal: undefined;
@@ -49,6 +49,12 @@ export type PlacesParamList = {
 export type User = {
   _id: string;
   avatar: string;
+  gender: string;
+  location: Location;
+  IDRecto: string;
+  IDVerso: string;
+  stripeAccount: string;
+  customerId: string;
   first_name: string;
   last_name: string;
   email: string;
@@ -59,8 +65,8 @@ export type User = {
   description: string;
   created_at: {type: Date; default: Date};
   favorites: Place[];
-  promoCode: String[];
-  historyCode: String[];
+  promoCode: string[];
+  historyCode: string[];
   ownedPlaces: Place[];
   bookings: Place[];
 };
@@ -133,6 +139,7 @@ export type SigninForm = {
 };
 
 export type SignupForm = {
+  gender: string;
   avatar: string;
   firstname: string;
   lastname: string;
@@ -142,6 +149,9 @@ export type SignupForm = {
   password: string;
   confirmPassword: string;
   description: string;
+  IDRecto: string;
+  IDVerso: string;
+  location?: Location;
 };
 
 export type FeatureType = {
@@ -181,8 +191,8 @@ export type Location = {
   postalCode?: string;
   city?: string;
   country?: string;
-  longitude: number;
-  latitude: number;
+  longitude: string;
+  latitude: string;
 };
 
 export type CreatePlaceForm = {
@@ -262,6 +272,8 @@ export type PaymentMethod = {
 export type Booking = {
   _id?: string;
   placeId?: string;
+  placeCover?: string;
+  placeTitle?: string;
   ownerId?: string;
   userId?: string;
   firstname?: string;

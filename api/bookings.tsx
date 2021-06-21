@@ -29,6 +29,22 @@ export const bookPlace = async (place: Place, booking: Booking) => {
     });
 };
 
+export const getBookingByUser = async (): Promise<Booking[]> => {
+  const token = await SecureStore.getItemAsync('access-token');
+  return await axios
+    .get(`${API_URL}/bookings/user`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .then((response: AxiosResponse<any>) => {
+      return response.data.bookings;
+    })
+    .catch((err) => {
+      return Promise.reject(err);
+    });
+};
+
 export const getBookingByPlaceAndUser = async (
   placeId: string,
 ): Promise<Booking[]> => {
@@ -80,7 +96,6 @@ export const acceptBooking = async (bookingId: string) => {
       return Promise.reject(err.response.data);
     });
 };
-
 
 export const denyBooking = async (bookingId: string) => {
   const token = await SecureStore.getItemAsync('access-token');
