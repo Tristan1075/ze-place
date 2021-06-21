@@ -74,7 +74,7 @@ const PlaceDetailScreen = () => {
   };
   const handleReviewPress = async () =>{
     handleModal({
-      child: <PlaceReviewScreen placeId={item._id} />,
+      child: <PlaceReviewScreen placeId={place?._id} />,
     });
   }
 
@@ -158,7 +158,7 @@ const PlaceDetailScreen = () => {
               {place?.location.city}, {place?.location.postalCode}{' '}
               {place?.location.country}
             </Text>
-            {item.reviews.length > 0 ? <View style={styles.descriptionBloc}>
+            {place?.reviews.length > 0 ?
             <View style={styles.descriptionBloc}>
               <TouchableOpacity style={[styles.row, styles.padding]} onPress={() => navigation.navigate('Conversation')}>
                 <AntDesign name='message1' style={styles.message} size={20} />
@@ -168,7 +168,7 @@ const PlaceDetailScreen = () => {
                 <Rating
                   startingValue={place?.rate}
                   imageSize={20}
-                  value={item.rate}
+                  value={place?.rate}
                   precision={0.1}
                   readonly
                   tintColor={Colors.background}
@@ -176,7 +176,7 @@ const PlaceDetailScreen = () => {
               </View>
               <View style={styles.row} >
                 <View style={styles.reviewersNumber}>
-                  <Text onPress={() => handleReviewPress()} style={styles.subtitle} >{item.reviews.length}+</Text>
+                  <Text onPress={() => handleReviewPress()} style={styles.subtitle} >{place?.reviews.length}+</Text>
 
                 </View>
                 <Text onPress={() => handleReviewPress()} style={styles.reviewersText}>
