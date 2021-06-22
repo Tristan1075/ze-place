@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import {
   ImageBackground,
   TouchableOpacity,
@@ -7,27 +7,45 @@ import {
   StyleSheet,
 } from 'react-native';
 import Colors from '../constants/Colors';
-import {Booking} from '../types';
+import {Booking, Place} from '../types';
+import { getPlaceById } from '../api/places';
 
 type Props = {
   item: Booking;
   onPress: (placeId?: string) => void;
 };
 
+
+
 const PlaceCardSquare = ({item, onPress}: Props) => {
+
+  const [place, setPlace] = useState<Place>();
+
+ 
+
+  const init = useCallback(async () => {
+    
+  }, []);
+
+  useEffect( () => {
+    const getPlace = async () => setPlace(await getPlaceById(item.placeId));
+
+    getPlace()
+  }, []);
+  
   return (
     <TouchableOpacity
       style={styles.itemContainer}
-      onPress={() => onPress(item.placeId)}>
+      onPress={() => onPress(place._id)}>
       <ImageBackground
         source={{
-          uri: item.placeCover
-            ? item.placeCover
+          uri: place?.images[0].url
+            ? place.images[0].url
             : 'https://www.leden-spa-aqua-forme.fr/wp-content/uploads/2018/05/jk-placeholder-image.jpg',
         }}
         style={styles.cover}>
         <View style={styles.flex} />
-        <Text style={styles.title}>{item.placeTitle}</Text>
+        <Text style={styles.title}>{place?.title}</Text>
       </ImageBackground>
     </TouchableOpacity>
   );
