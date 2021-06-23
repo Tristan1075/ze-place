@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState, useEffect, useContext } from 'react';
 import {
   ImageBackground,
   TouchableOpacity,
@@ -7,28 +7,67 @@ import {
   StyleSheet,
 } from 'react-native';
 import Colors from '../constants/Colors';
-import {Booking} from '../types';
+import {Booking, Place, Review} from '../types';
+import { getPlaceById } from '../api/places';
+import WriteReviewScreen from '../screens/WriteReviewScreen';
+import { ModalContext } from '../providers/modalContext';
+import UserStore from '../store/UserStore';
+import { getPlaceReviewByUser } from '../api/reviews';
 
 type Props = {
   item: Booking;
   onPress: (placeId?: string) => void;
 };
 
+
+
 const PlaceCardSquare = ({item, onPress}: Props) => {
+
+  const [place, setPlace] = useState<Place>();
+  const {handleModal} = useContext(ModalContext);
+  const [reviews, setReviews] = useState<Review[]>([]);
+  var today = new Date();
+  var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+  var dateTime = date;
+  const {user} = UserStore;
+
+  const getUserPlace = async (item) => {
+    setReviews(await getPlaceReviewByUser(item.placeId,user._id))
+  }
+
+  useEffect( () => {
+    const getPlace = async () => setPlace(await getPlaceById(item.placeId));
+    getUserPlace(item)
+    getPlace()
+  }, []);
+
+  const handleReviewPress  = async (placeId:string)=>{
+    
+    handleModal({
+      child: <WriteReviewScreen userId={user._id} placeId={placeId} />
+    });
+  };
+  
   return (
     <TouchableOpacity
       style={styles.itemContainer}
-      onPress={() => onPress(item.placeId)}>
+      onPress={() => onPress(place?._id)}>
       <ImageBackground
         source={{
-          uri: item.placeCover
-            ? item.placeCover
+          uri: place?.images[0].url
+            ? place.images[0].url
             : 'https://www.leden-spa-aqua-forme.fr/wp-content/uploads/2018/05/jk-placeholder-image.jpg',
         }}
         style={styles.cover}>
         <View style={styles.flex} />
-        <Text style={styles.title}>{item.placeTitle}</Text>
+        <Text style={styles.title}>{place?.title}</Text>
       </ImageBackground>
+       
+      {(item.endDate.slice(0,10)< dateTime) && reviews.length == 0 && 
+        <Text onPress={() => handleReviewPress(item.placeId)} style={styles.reviewersText}>
+        Ecrire une review
+      </Text>
+      }
     </TouchableOpacity>
   );
 };
@@ -42,6 +81,12 @@ const styles = StyleSheet.create({
     height: 150,
     backgroundColor: Colors.white,
     marginBottom: 10,
+  }, 
+  reviewersText: {
+    fontFamily: 'poppins',
+    fontSize: 15,
+    color: Colors.primary,
+    textAlign: 'center',
   },
   title: {
     fontFamily: 'oswald-bold',

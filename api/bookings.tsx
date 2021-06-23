@@ -37,7 +37,8 @@ export const getBookingByUser = async (): Promise<Booking[]> => {
         Authorization: `Bearer ${token}`,
       },
     })
-    .then((response: AxiosResponse<any>) => {
+    .then((response: AxiosResponse<any>) => {     
+       
       return response.data.bookings;
     })
     .catch((err) => {
