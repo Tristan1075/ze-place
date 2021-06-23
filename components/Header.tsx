@@ -57,7 +57,7 @@ const Header = (props: Props) => {
         <TouchableOpacity style={styles.shadow} onPress={handleMenuPress}>
           <Image
             source={{
-              uri: UserStore.user.avatar,
+              uri: UserStore.user && UserStore.user.avatar,
             }}
             style={styles.profil}
           />

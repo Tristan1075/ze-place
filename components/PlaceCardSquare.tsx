@@ -8,7 +8,6 @@ import {
 } from 'react-native';
 import Colors from '../constants/Colors';
 import {Booking, Place, Review} from '../types';
-import {getPlaceById} from '../api/places';
 import WriteReviewScreen from '../screens/WriteReviewScreen';
 import {ModalContext} from '../providers/modalContext';
 import UserStore from '../store/UserStore';
@@ -21,18 +20,12 @@ type Props = {
   showReview?: boolean;
 };
 
-const PlaceCardSquare = ({item, onPress, showReview}: Props) => {
-  const [place, setPlace] = useState<Place>();
+const PlaceCardSquare = ({item, onPress}: Props) => {
   const {handleModal} = useContext(ModalContext);
   const [reviews, setReviews] = useState<Review[]>([]);
-  const today = new Date();
-  const date =
-    today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
-  const dateTime = date;
   const {user} = UserStore;
 
   const getUserPlace = async () => {
-    console.log(await getPlaceReviewByUser(item.placeId, user._id));
     setReviews(await getPlaceReviewByUser(item.placeId, user._id));
   };
 
@@ -46,16 +39,21 @@ const PlaceCardSquare = ({item, onPress, showReview}: Props) => {
         <WriteReviewScreen
           userId={user._id}
           placeId={placeId}
-          onPublish={() => handleModal()}
+          onPublish={publishReview}
         />
       ),
     });
   };
-  console.log(reviews);
+
+  const publishReview = () => {
+    getUserPlace();
+    handleModal();
+  };
+
   return (
     <TouchableOpacity
       style={styles.itemContainer}
-      onPress={() => onPress && onPress(place?._id)}>
+      onPress={() => onPress && onPress(item?.placeId)}>
       <ImageBackground
         source={{
           uri: item.placeCover,

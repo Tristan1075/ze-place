@@ -2,6 +2,7 @@ import axios, {AxiosResponse} from 'axios';
 import {SignupForm} from '../types';
 import {registerForPushNotificationsAsync} from './notifications';
 import {API_URL} from '../env';
+import {Token} from '../screens/SignupScreen';
 
 const headers = {
   'Content-Type': 'application/json',
@@ -11,7 +12,6 @@ type Credentials = {
   email: string;
   password: string;
 };
-
 
 export const login = async (
   credentials: Credentials,
@@ -35,10 +35,7 @@ export const login = async (
     });
 };
 
-export const register = async (
-  form: SignupForm,
-  IDFiles,
-): Promise<AxiosResponse> => {
+export const register = async (form: SignupForm, IDFiles): Promise<Token> => {
   const pushToken = await registerForPushNotificationsAsync();
   return await axios
     .post(

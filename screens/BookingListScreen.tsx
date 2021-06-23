@@ -44,7 +44,7 @@ const BookingListScreen = (props: Props) => {
   };
 
   const renderHistory = ({item, index}: {item: Booking; index: number}) => {
-    return <PlaceCardSquare key={index} item={item} showReview={true} />;
+    return <PlaceCardSquare key={index} item={item} />;
   };
 
   return (

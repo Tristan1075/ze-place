@@ -131,11 +131,7 @@ const HomeScreen = (props: Props) => {
       />
       <View style={styles.overlay} />
       <View style={styles.container}>
-        <Header
-          type="menu"
-          showProfil={true}
-          profilPicture={UserStore.user.avatar}
-        />
+        <Header type="menu" showProfil={true} />
         <Text style={styles.title}>{i18n.t('discover')}</Text>
         <SimpleInput
           isEditable={false}

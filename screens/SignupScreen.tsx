@@ -28,7 +28,7 @@ import * as SecureStore from 'expo-secure-store';
 import moment from 'moment';
 import isEmail from 'validator/lib/isEmail';
 import {RNS3} from 'react-native-aws3';
-import {RootStackParamList, SignupForm, Location} from '../types';
+import {RootStackParamList, SignupForm, Location, User} from '../types';
 import Button from '../components/Button';
 import Colors from '../constants/Colors';
 import Header from '../components/Header';
@@ -45,6 +45,11 @@ type RootScreenNavigationProp = StackNavigationProp<
 
 type Props = {
   navigation: RootScreenNavigationProp;
+};
+
+export type Token = {
+  user: User;
+  access_token: string;
 };
 
 import avatar from '../assets/images/man.png';
@@ -68,6 +73,7 @@ const input: SignupForm = {
 };
 
 const SignupScreen = (props: Props) => {
+  const today = new Date();
   const {navigation} = props;
   const [errors, setErrors] = useState<SignupForm>(input);
   const [form, setForm] = useState<SignupForm>(input);
@@ -123,6 +129,10 @@ const SignupScreen = (props: Props) => {
       e.confirmPassword = 'The password is not the same';
       isValid = false;
     }
+    if (!form.location) {
+      e.location = 'The location is required';
+      isValid = false;
+    }
     if (
       (form.IDRecto.length === 0 || form.IDVerso.length === 0) &&
       environnment === 'production'
@@ -162,22 +172,25 @@ const SignupScreen = (props: Props) => {
     const isFormValid = verifyForm();
     if (isFormValid) {
       setOverlayVisible(true);
-      await uploadToS3();
+      try {
+        await uploadToS3();
+      } catch (err) {
+        setOverlayVisible(false);
+      }
       setOverlayText('Verification of your documents');
       uploadID(form.IDRecto, form.IDVerso)
         .then(async (res) => {
           try {
             const token = await register(form, res);
             await SecureStore.setItemAsync('access-token', token.access_token);
-            const user = await UserStore.updateUser(token.user);
-            if (user) {
-              navigation.dispatch(
-                CommonActions.reset({
-                  index: 0,
-                  routes: [{name: 'Tab'}],
-                }),
-              );
-            }
+            await UserStore.updateUser(token.user);
+            setOverlayVisible(false);
+            navigation.dispatch(
+              CommonActions.reset({
+                index: 0,
+                routes: [{name: 'Tab'}],
+              }),
+            );
           } catch (err) {
             setOverlayVisible(false);
           }
@@ -327,6 +340,7 @@ const SignupScreen = (props: Props) => {
               placeholder="Phone number"
               error={errors.phoneNumber}
               style={styles.input}
+              maxLength={10}
             />
             <SimpleInput
               onChange={() => setErrors({...errors, email: ''})}
@@ -424,6 +438,13 @@ const SignupScreen = (props: Props) => {
           isVisible={showDateTimePicker}
           date={form.birthdate ? form.birthdate : new Date()}
           mode="date"
+          maximumDate={
+            new Date(
+              today.getFullYear() - 18,
+              today.getMonth(),
+              today.getDate(),
+            )
+          }
           onConfirm={handleConfirmDatePress}
           onCancel={() => setShowDateTimePicker(false)}
           customConfirmButtonIOS={({onPress}) => (
