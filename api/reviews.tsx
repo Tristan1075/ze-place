@@ -31,32 +31,32 @@ export const getPlaceReview = async (placeId:string): Promise<Review[]> => {
     });
 };
 
-// export const getPlaceReviewByUser = async (placeId:string,writerId:string): Promise<Review[]> => {
-//   const token = await SecureStore.getItemAsync('access-token');
-//   console.log(`${API_URL}/review-place/getByUser`);
+export const getPlaceReviewByUser = async (placeId:string,writerId:string): Promise<Review[]> => {
+  const token = await SecureStore.getItemAsync('access-token');
+  console.log(`${API_URL}/review-place/getByUser`);
   
-//   return await axios
-//   .post(
-//     `${API_URL}/review-place/getByUser`,
-//     {
-//       placeId:placeId,
-//       writerId:writerId
-//     },
-//     {
-//       headers: {
-//         Authorization: `Bearer ${token}`,
-//       },
-//     },
-//   )
-//     .then((response: AxiosResponse<any>) => {   
-//       console.log('Bonjour',response.data.data);
+  return await axios
+  .post(
+    `${API_URL}/review-place/getByUser`,
+    {
+      placeId:placeId,
+      writerId:writerId
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  )
+    .then((response: AxiosResponse<any>) => {   
+      console.log('Bonjour',response.data.data);
            
-//       return response.data.data;
-//     })
-//     .catch((err) => {
-//       return Promise.reject(err);
-//     });
-// };
+      return response.data.data;
+    })
+    .catch((err) => {
+      return Promise.reject(err);
+    });
+};
 
 export const createReview = async (
   form: ReviewForm,

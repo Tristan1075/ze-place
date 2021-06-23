@@ -20,14 +20,9 @@ import { getPlaceReviewByUser } from '../api/reviews';
 const BookingListScreen = (props: Props) => {
   const navigation = useNavigation();
   const [bookings, setBookings] = useState<Booking[]>([]);
-  const [reviews, setReviews] = useState<Review[]>([]);
   var review;
-  const {handleModal} = useContext(ModalContext);
   const {user} = UserStore;
 
-  var today = new Date();
-var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-var dateTime = date;
 
   const init = useCallback(async () => {
     setBookings(await getBookingByUser());
@@ -42,25 +37,11 @@ var dateTime = date;
       place: placeId,
     });
   };
-  const handleReviewPress = (placeId:string)=>{
-    handleModal({
-      child: <WriteReviewScreen userId={user._id} placeId={placeId} />
-    });
-  };
-
-
-
-  const renderItem =  ({item, index}: {item: Booking; index: number}) => {
-
+  
+  const renderItem = ({item, index}: {item: Booking; index: number}) => {
     return (
       <View>
       <PlaceCardSquare key={index} item={item} onPress={handlePlacePress} />
-      
-      {(item.endDate.slice(0,10)< dateTime) && 
-        <Text onPress={() => handleReviewPress(item.placeId)} style={styles.reviewersText}>
-        Ecrire une review
-      </Text>
-      }
       </View>
     );
   };
@@ -119,12 +100,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: Layout.padding,
     flex: 1,
   },
-  reviewersText: {
-    fontFamily: 'poppins',
-    fontSize: 15,
-    color: Colors.primary,
-    textAlign: 'center',
-  },
+ 
   headerBloc: {
     backgroundColor: Colors.dark,
     paddingTop: 50,
