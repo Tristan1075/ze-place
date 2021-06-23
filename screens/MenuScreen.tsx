@@ -54,6 +54,10 @@ const MenuScreen = (props: Props) => {
       onPress: () => navigation.navigate('BugTicket'),
     },
     {
+      title: 'Booking',
+      onPress: () => navigation.navigate('Booking'),
+    },
+    {
       title: 'Bank account',
       onPress: () =>
         handleModal({
@@ -82,6 +86,7 @@ const MenuScreen = (props: Props) => {
         </TouchableWithoutFeedback>
         {menu.map((item, index) => (
           <View key={index}>
+
             <TouchableOpacity style={[styles.item]} onPress={item.onPress}>
               <Text style={styles.itemValue}>{item.title}</Text>
               <Entypo name="chevron-thin-right" size={16} />

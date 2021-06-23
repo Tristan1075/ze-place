@@ -101,9 +101,11 @@ export type Availability = {
 };
 
 export type Review = {
-  from: User;
-  text: string;
-  rate: Number;
+ 
+  name: string;
+  description:string;
+  writerId:string;
+  rate: number;
   created_at: {type: Date; default: Date};
 };
 
@@ -228,6 +230,13 @@ export type Coords = {
   longitude: number;
   latitude: number;
 };
+export type ReviewForm = {
+  name: string;
+  description: string;
+  writerId:string;
+  placeId:string;
+  rate:number;
+};
 
 export type CreditCardInformations = {
   cardNumber?: string;
@@ -275,7 +284,7 @@ export type PaymentMethod = {
 
 export type Booking = {
   _id?: string;
-  placeId?: string;
+  placeId: string;
   placeCover?: string;
   placeTitle?: string;
   ownerId?: string;

@@ -23,6 +23,8 @@ export const getAllPlaces = async () => {
 
 export const getPlaceById = async (id: string) => {
   console.log('ID', id);
+  console.log(`${API_URL}/places/${id}`);
+  
   const token = await SecureStore.getItemAsync('access-token');
   return await axios
     .get(`${API_URL}/places/${id}`, {
@@ -31,6 +33,8 @@ export const getPlaceById = async (id: string) => {
       },
     })
     .then((response: AxiosResponse<any>) => {
+      console.log(response.data);
+      
       return response.data;
     })
     .catch((err) => {
