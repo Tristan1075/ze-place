@@ -68,7 +68,7 @@ const PlaceDetailScreen = () => {
 
   const handlePlacePress = (p: Place) => {
     // @ts-ignore
-    navigation.push('PlaceDetail', {place: p});
+    navigation.push('PlaceDetail', {place: p._id});
   };
   const handleReviewPress = async () => {
     handleModal({
@@ -103,7 +103,7 @@ const PlaceDetailScreen = () => {
 
   const handleBookPress = () => {
     handleModal({
-      child: <BookingScreen place={place} />,
+      child: <BookingScreen place={place} navigation={navigation} />,
     });
   };
 
@@ -126,6 +126,10 @@ const PlaceDetailScreen = () => {
           initialCoords={{
             longitude: parseFloat(place?.location.longitude) || 0,
             latitude: parseFloat(place?.location.latitude) || 0,
+          }}
+          onItemPress={(place) => {
+            handleModal();
+            handlePlacePress(place);
           }}
         />
       ),

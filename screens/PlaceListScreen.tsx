@@ -40,12 +40,11 @@ const PlaceList = () => {
 
   const handleSeeAnnouncesPress = async (newFilter: FilterForm) => {
     setPlaces(await searchPlaces(newFilter));
-    console.log(newFilter);
     handleModal();
   };
 
   const handleItemPress = (place: Place) => {
-    navigation.navigate('PlaceDetail', {place: place});
+    navigation.navigate('PlaceDetail', {place: place._id});
   };
 
   const handleFavoritePress = async (p: Place) => {

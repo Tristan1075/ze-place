@@ -13,6 +13,7 @@ import ConfirmationBookingScreen from './ConfirmationBookingScreen';
 
 type Props = {
   place: Place;
+  navigation?: any;
 };
 
 type Error = {
@@ -20,7 +21,7 @@ type Error = {
   date: string;
 };
 
-const BookingScreen = ({place}: Props) => {
+const BookingScreen = ({place, navigation}: Props) => {
   const [confirmationBooking, showConfirmationBooking] = useState(false);
   const [minDate, setMinDate] = useState<string>(Date());
   const [booking, setBooking] = useState<Booking>({
@@ -37,7 +38,7 @@ const BookingScreen = ({place}: Props) => {
   });
 
   const verifyForm = () => {
-    let formErrors = {
+    const formErrors = {
       features: '',
       date: '',
     };
@@ -115,7 +116,13 @@ const BookingScreen = ({place}: Props) => {
       </ScrollView>
       <Modal
         visible={confirmationBooking}
-        child={<ConfirmationBookingScreen place={place} booking={booking} />}
+        child={
+          <ConfirmationBookingScreen
+            place={place}
+            booking={booking}
+            navigation={navigation}
+          />
+        }
         handleModal={() => showConfirmationBooking(false)}
       />
     </>

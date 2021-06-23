@@ -20,15 +20,17 @@ import {Booking, Place} from '../types';
 import {getBookingPriceWithDuration} from '../utils';
 import {ModalContext} from '../providers/modalContext';
 import {bookPlace} from '../api/bookings';
+import { navigate } from '../App';
 
 type Props = {
   place: Place;
   booking: Booking;
+  navigation: any;
 };
 
 const creditCard = require('../assets/images/card.png');
 
-const ConfirmationBookingScreen = ({place, booking}: Props) => {
+const ConfirmationBookingScreen = ({place, booking, navigation}: Props) => {
   const [paymentSheetEnabled, setPaymentSheetEnabled] = useState(false);
   const {presentPaymentSheet, initPaymentSheet} = useStripe();
   const [activePaymentMethod, setActivePaymentMethod] = useState(0);
@@ -55,11 +57,11 @@ const ConfirmationBookingScreen = ({place, booking}: Props) => {
     const paymentIntent = await getPaymentIntent();
     const {error} = await presentPaymentSheet({
       clientSecret: paymentIntent.clientSecret,
-      confirmPayment: true,
     });
     if (!error) {
-      bookPlace(place, booking, paymentIntent.id);
+      await bookPlace(place, booking, paymentIntent.id);
       handleModal();
+      navigation.navigate('BookingAndPlaces');
     }
     setPaymentSheetEnabled(false);
   };

@@ -15,6 +15,7 @@ import {denyBooking, acceptBooking, getBookingsByPlace} from '../api/bookings';
 import {getUserById} from '../api/customer';
 import BookingCard from '../components/BookingCard';
 import Button from '../components/Button';
+import EmptyBloc from '../components/EmptyBloc';
 import Header from '../components/Header';
 import Popin from '../components/Popin';
 import TitleWithDescription from '../components/TitleWithDescription';
@@ -123,7 +124,7 @@ const UserBookingsScreen = () => {
             isUser={activeBooking.userId === UserStore.user._id}
           />
         )}
-        {bookings.length > 0 && (
+        {bookings.length > 0 ? (
           <>
             <TitleWithDescription
               title="Reservations"
@@ -140,7 +141,13 @@ const UserBookingsScreen = () => {
               />
             </View>
           </>
-        )}
+        ) : !activeBooking ? (
+          <EmptyBloc
+            size={80}
+            image={require('../assets/images/sad.png')}
+            title="You don't have reservations for the moment..."
+          />
+        ) : null}
       </View>
       <Popin
         isVisible={confirmation}

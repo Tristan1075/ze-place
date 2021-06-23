@@ -1,7 +1,6 @@
-import React, {useState, useEffect, useCallback, useContext} from 'react';
-import {View, StyleSheet, FlatList, Text} from 'react-native';
+import React, {useState, useEffect, useCallback} from 'react';
+import {View, StyleSheet, FlatList} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import {useNavigation} from '@react-navigation/native';
 import {getBookingByUser} from '../api/bookings';
 import EmptyBloc from '../components/EmptyBloc';
@@ -11,17 +10,12 @@ import PlaceCardSquare from '../components/PlaceCardSquare';
 import TitleWithDescription from '../components/TitleWithDescription';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
-import {Booking, Place, User, Review} from '../types';
-import {ModalContext} from '../providers/modalContext';
-import WriteReviewScreen from './WriteReviewScreen';
+import {Booking} from '../types';
 import UserStore from '../store/UserStore';
-import {getPlaceReviewByUser} from '../api/reviews';
 
 const BookingListScreen = (props: Props) => {
   const navigation = useNavigation();
   const [bookings, setBookings] = useState<Booking[]>([]);
-  let review;
-  const {user} = UserStore;
 
   const init = useCallback(async () => {
     setBookings(await getBookingByUser());

@@ -32,9 +32,10 @@ const CustomMarker = ({isActive}) => {
 
 type Props = {
   initialCoords: Coords;
+  onItemPress: (place: Place) => void;
 };
 
-const MapScreen = ({initialCoords}: Props) => {
+const MapScreen = ({initialCoords, onItemPress}: Props) => {
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const [places, setPlaces] = useState<Array<Place>>([]);
   const [coords, setCoords] = useState<Coords>(initialCoords);
@@ -49,13 +50,8 @@ const MapScreen = ({initialCoords}: Props) => {
     init();
   }, [coords]);
 
-  const onCardPlacePress = (p: Place) => {
-    setSelectedPlace(p);
-    showPlaceModal(true);
-  };
-
   const renderCarouselItem = ({item}: {item: Place}) => {
-    return <PlaceCard place={item} onPress={() => onCardPlacePress(item)} />;
+    return <PlaceCard place={item} onPress={() => onItemPress(item)} />;
   };
 
   const onRegionChange = (c: Coords) => {
@@ -112,11 +108,6 @@ const MapScreen = ({initialCoords}: Props) => {
           onSnapToItem={onItemSlide}
         />
       </View>
-      <Modal
-        visible={placeModal}
-        child={<PlaceDetailScreen place={selectedPlace} />}
-        handleModal={() => showPlaceModal(false)}
-      />
     </View>
   );
 };

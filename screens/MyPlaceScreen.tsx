@@ -1,16 +1,7 @@
-import React, {useEffect, useState} from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  FlatList,
-  View,
-  Text,
-  TextInput,
-} from 'react-native';
+import React, {useCallback, useEffect, useState} from 'react';
+import {SafeAreaView, StyleSheet, FlatList, View} from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import i18n from 'i18n-js';
 
-import Header from '../components/Header';
 import {MessagesParamList, Place, User} from '../types';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
@@ -19,6 +10,7 @@ import {getUser} from '../api/customer';
 import UserStore from '../store/UserStore';
 import TitleWithDescription from '../components/TitleWithDescription';
 import EmptyBloc from '../components/EmptyBloc';
+import {useNavigation} from '@react-navigation/native';
 
 type MessagesScreenNavigationProp = StackNavigationProp<
   MessagesParamList,
@@ -30,12 +22,20 @@ type Props = {
 };
 
 const MyPlaceScreen = (props: Props) => {
-  const {navigation} = props;
+  const navigation = useNavigation();
   const [user, setUser] = useState<User>(UserStore.user);
   const places = user?.ownedPlaces;
 
+  const init = useCallback(async () => {
+    setUser(await getUser());
+  }, []);
+
+  useEffect(() => {
+    navigation.addListener('focus', init);
+  }, [init, navigation]);
+
   const handleItemPress = (place: Place) => {
-    navigation.navigate('PlaceDetail', {place: place});
+    navigation.navigate('PlaceDetail', {place: place._id});
   };
 
   const renderItem = ({item, index}: {item: Place; index: number}) => (

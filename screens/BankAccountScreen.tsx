@@ -1,8 +1,9 @@
 import {AntDesign} from '@expo/vector-icons';
 import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity, TouchableWithoutFeedback, Keyboard} from 'react-native';
 import {Flow} from 'react-native-animated-spinkit';
 import {ScrollView} from 'react-native-gesture-handler';
+import KeyboardSpacer from 'react-native-keyboard-spacer';
 import {
   addBankAccount,
   getConnectedAccount,
@@ -76,95 +77,98 @@ const BankAccountScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
-      {account?.external_accounts.data.length > 0 && (
-        <Text style={styles.title}>Banks accounts</Text>
-      )}
-      <ScrollView>
-        {account && account?.external_accounts.data.length > 0 ? (
-          account?.external_accounts.data.map((external) => {
-            return (
-              <TouchableOpacity
-                style={styles.cardAccount}
-                onPress={() => handleUpdateDefaultPress(external.id)}>
-                <View style={styles.row}>
-                  <Text style={styles.bankName}>{external.bank_name}</Text>
-                  {!actionFetching ? (
-                    external.default_for_currency ? (
-                      <View style={styles.default}>
-                        <AntDesign
-                          name="check"
-                          size={14}
-                          color={Colors.white}
-                        />
-                      </View>
-                    ) : (
-                      <TouchableOpacity
-                        style={styles.remove}
-                        onPress={() => handleRemovePress(external.id)}>
-                        <AntDesign
-                          name="close"
-                          size={14}
-                          color={Colors.white}
-                        />
-                      </TouchableOpacity>
-                    )
-                  ) : (
-                    <Flow size={20} color={Colors.gray} />
-                  )}
-                </View>
-                <Text style={styles.holderName}>
-                  {external.account_holder_name}
-                </Text>
-                <Text style={styles.accountNumber}>
-                  **** **** **** **** {external.last4}
-                </Text>
-              </TouchableOpacity>
-            );
-          })
-        ) : (
-          <EmptyBloc
-            title="You must specify a bank account in order to start booking your places !"
-            size={150}
-            image={require('../assets/images/bank.png')}
-          />
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+      <View style={styles.container}>
+        {account?.external_accounts.data.length > 0 && (
+          <Text style={styles.title}>Banks accounts</Text>
         )}
-      </ScrollView>
-      <View style={styles.border} />
-      <TouchableOpacity
-        style={styles.row}
-        onPress={() => setShowForm(!showForm)}>
-        <Text style={styles.addAcount}>Ajouter un compte</Text>
-        <AntDesign name={showForm ? 'up' : 'down'} size={18} />
-      </TouchableOpacity>
-      {showForm && (
-        <>
-          <Text style={styles.title}>Titulaire du compte</Text>
-          <SimpleInput
-            placeholder="John Doe"
-            onChangeText={(v) => setForm({...form, holderName: v})}
-          />
-          <Text style={styles.title}>Nom de la banque</Text>
-          <SimpleInput
-            placeholder="Caisse d'épargne"
-            onChangeText={(v) => setForm({...form, bankName: v})}
-          />
-          <Text style={styles.title}>Numéro IBAN</Text>
-          <SimpleInput
-            placeholder="**** **** **** **** ****"
-            onChangeText={(v) => setForm({...form, iban: v})}
-          />
-          <Button
-            value="Add an account"
-            backgroundColor={Colors.dark}
-            textColor={Colors.white}
-            style={styles.button}
-            onPress={handleAddBankPress}
-            isFetching={isFetching}
-          />
-        </>
-      )}
-    </View>
+        <ScrollView>
+          {account && account?.external_accounts.data.length > 0 ? (
+            account?.external_accounts.data.map((external) => {
+              return (
+                <TouchableOpacity
+                  style={styles.cardAccount}
+                  onPress={() => handleUpdateDefaultPress(external.id)}>
+                  <View style={styles.row}>
+                    <Text style={styles.bankName}>{external.bank_name}</Text>
+                    {!actionFetching ? (
+                      external.default_for_currency ? (
+                        <View style={styles.default}>
+                          <AntDesign
+                            name="check"
+                            size={14}
+                            color={Colors.white}
+                          />
+                        </View>
+                      ) : (
+                        <TouchableOpacity
+                          style={styles.remove}
+                          onPress={() => handleRemovePress(external.id)}>
+                          <AntDesign
+                            name="close"
+                            size={14}
+                            color={Colors.white}
+                          />
+                        </TouchableOpacity>
+                      )
+                    ) : (
+                      <Flow size={20} color={Colors.gray} />
+                    )}
+                  </View>
+                  <Text style={styles.holderName}>
+                    {external.account_holder_name}
+                  </Text>
+                  <Text style={styles.accountNumber}>
+                    **** **** **** **** {external.last4}
+                  </Text>
+                </TouchableOpacity>
+              );
+            })
+          ) : (
+            <EmptyBloc
+              title="You must specify a bank account in order to start booking your places !"
+              size={150}
+              image={require('../assets/images/bank.png')}
+            />
+          )}
+        </ScrollView>
+        <View style={styles.border} />
+        <TouchableOpacity
+          style={styles.row}
+          onPress={() => setShowForm(!showForm)}>
+          <Text style={styles.addAcount}>Ajouter un compte</Text>
+          <AntDesign name={showForm ? 'up' : 'down'} size={18} />
+        </TouchableOpacity>
+        {showForm && (
+          <>
+            <Text style={styles.title}>Titulaire du compte</Text>
+            <SimpleInput
+              placeholder="John Doe"
+              onChangeText={(v) => setForm({...form, holderName: v})}
+            />
+            <Text style={styles.title}>Nom de la banque</Text>
+            <SimpleInput
+              placeholder="Caisse d'épargne"
+              onChangeText={(v) => setForm({...form, bankName: v})}
+            />
+            <Text style={styles.title}>Numéro IBAN</Text>
+            <SimpleInput
+              placeholder="**** **** **** **** ****"
+              onChangeText={(v) => setForm({...form, iban: v})}
+            />
+            <Button
+              value="Add an account"
+              backgroundColor={Colors.dark}
+              textColor={Colors.white}
+              style={styles.button}
+              onPress={handleAddBankPress}
+              isFetching={isFetching}
+            />
+            <KeyboardSpacer topSpacing={-20} />
+          </>
+        )}
+      </View>
+    </TouchableWithoutFeedback>
   );
 };
 

@@ -8,10 +8,9 @@ import {Rating} from 'react-native-ratings';
 import Layout from '../constants/Layout';
 
 type Props = {
-  onFavoritePress: (place: Place) => void;
+  onFavoritePress?: (place: Place) => void;
   onPress: () => void;
   place: Place;
-  onFavoritePress: (place: Place) => void;
   isFavorite: boolean;
 };
 
@@ -24,14 +23,16 @@ const PlaceCard = (props: Props) => {
       <View style={styles.informations}>
         <View style={styles.row}>
           <Text style={styles.title}>{place.title}</Text>
-          <TouchableOpacity onPress={() => onFavoritePress(place)}>
-            <Ionicons
-              size={28}
-              name="heart-circle"
-              color={isFavorite ? Colors.primary : Colors.gray}
-              style={styles.locationIcon}
-            />
-          </TouchableOpacity>
+          {onFavoritePress && (
+            <TouchableOpacity onPress={() => onFavoritePress(place)}>
+              <Ionicons
+                size={28}
+                name="heart-circle"
+                color={isFavorite ? Colors.primary : Colors.gray}
+                style={styles.locationIcon}
+              />
+            </TouchableOpacity>
+          )}
         </View>
         <View style={styles.row}>
           <Ionicons

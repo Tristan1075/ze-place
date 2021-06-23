@@ -42,7 +42,7 @@ const FavoritesScreen = (props: Props) => {
   }, [init, navigation]);
 
   const handleItemPress = (place: Place) => {
-    navigation.navigate('PlaceDetail', {place: place});
+    navigation.navigate('PlaceDetail', {place: place._id});
   };
 
   const handleFavoritePress = async (p: Place) => {
