@@ -287,7 +287,7 @@ const PlaceDetailScreen = () => {
               title={i18n.t('place_detail_availavilities')}
               subtitle={true}
             />
-            <CalendarPicker />
+            <CalendarPicker availabilities={place?.availabilities} />
             <View style={styles.paddingCardView}>
               <TitleWithDescription
                 title={i18n.t('place_detail_similar_places')}

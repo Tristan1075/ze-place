@@ -91,7 +91,13 @@ export type Place = {
   ownerId: string;
   bookings: Booking[];
   isFavorite: boolean;
+  availabilities: Availability[];
   created_at: {type: Date; default: Date};
+};
+
+export type Availability = {
+  date: string;
+  disabled: boolean;
 };
 
 export type Review = {

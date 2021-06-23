@@ -73,6 +73,22 @@ export const addPaymentMethod = async (cardToken: string) => {
     });
 };
 
+export const hasBankAccount = async (accountId: string) => {
+  const token = await SecureStore.getItemAsync('access-token');
+  return await axios
+    .get(`${API_URL}/payment/bankAccount/${accountId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .then((response: AxiosResponse<any>) => {
+      return response.data.external_accounts.data.length > 0;
+    })
+    .catch((err) => {
+      return Promise.reject(err);
+    });
+};
+
 export const getConnectedAccount = async (accountId: string) => {
   const token = await SecureStore.getItemAsync('access-token');
   return await axios

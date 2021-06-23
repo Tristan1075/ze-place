@@ -1,13 +1,15 @@
 import * as Location from 'expo-location';
+import Colors from '../constants/Colors';
+import {Availability} from '../types';
 import Constants from './Constants';
 
-export const isEmailValid = (email: String) => {
+export const isEmailValid = (email: string) => {
   const re = /^(([^<>()[]\\.,;:s@"]+(.[^<>()[]\\.,;:s@"]+)*)|(".+"))@(([[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}])|(([a-zA-Z-0-9]+.)+[a-zA-Z]{2,}))$/;
   return re.test(String(email).toLowerCase());
 };
 
 export const getUserLocation = async () => {
-  let {status} = await Location.requestPermissionsAsync();
+  const {status} = await Location.requestPermissionsAsync();
   if (status !== 'granted') {
     return;
   }
@@ -33,7 +35,7 @@ export const getBookingPriceWithDuration = (
 
 export const getCardType = (cardNum: string) => {
   let payCardType = '';
-  let regexMap = [
+  const regexMap = [
     {regEx: /^4[0-9]{0,15}$/, cardType: 'visa'},
     {regEx: /^5$|^5[1-5][0-9]{0,14}$/, cardType: 'mastercard'},
     {regEx: /^3$|^3[47][0-9]{0,13}$/, cardType: 'amex'},
@@ -59,3 +61,64 @@ export const isCreditCard = (number: string) => {
 };
 
 export default {getCardType, isCreditCard};
+
+export const dateToAvailabilities = (
+  start: string,
+  startDate: Date,
+  end: string,
+  endDate: Date,
+) => {
+  let dates = {};
+  let currentDate: Date = startDate,
+    addDays = function (days) {
+      const date = new Date(this.valueOf());
+      date.setDate(date.getDate() + days);
+      return date;
+    };
+  while (currentDate <= endDate) {
+    const month = `${currentDate.getMonth() < 10 ? '0' : ''}${
+      currentDate.getMonth() + 1
+    }`;
+    const day = `${
+      currentDate.getDate() < 10 ? '0' : ''
+    }${currentDate.getDate()}`;
+    const formatDate = `${currentDate.getFullYear()}-${month}-${day}`;
+    dates = {
+      ...dates,
+      [formatDate]: {color: Colors.primary, textColor: Colors.white},
+    };
+    currentDate = addDays.call(currentDate, 1);
+  }
+  delete dates[start];
+  delete dates[end];
+  return dates;
+};
+
+export const isRangeAvailable = (
+  startDate: Date,
+  endDate: Date,
+  availabilities: Availability[],
+) => {
+  let currentDate: Date = startDate,
+    addDays = function (days) {
+      const date = new Date(this.valueOf());
+      date.setDate(date.getDate() + days);
+      return date;
+    };
+  while (currentDate <= endDate) {
+    const month = `${currentDate.getMonth() < 10 ? '0' : ''}${
+      currentDate.getMonth() + 1
+    }`;
+    const day = `${
+      currentDate.getDate() < 10 ? '0' : ''
+    }${currentDate.getDate()}`;
+    const formatDate = `${currentDate.getFullYear()}-${month}-${day}`;
+    if (
+      availabilities.find((availability) => availability.date === formatDate)
+    ) {
+      return false;
+    }
+    currentDate = addDays.call(currentDate, 1);
+  }
+  return true;
+};

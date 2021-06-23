@@ -28,6 +28,7 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     fontFamily: 'oswald-light',
     fontSize: 18,
+    textAlign: 'center',
   },
 });
 

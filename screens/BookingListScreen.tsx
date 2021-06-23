@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useCallback} from 'react';
 import {View, StyleSheet, FlatList, Text} from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
+import {ScrollView} from 'react-native-gesture-handler';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useNavigation} from '@react-navigation/native';
 import {getBookingByUser} from '../api/bookings';
@@ -37,6 +37,10 @@ const BookingListScreen = (props: Props) => {
     );
   };
 
+  const renderHistory = ({item, index}: {item: Booking; index: number}) => {
+    return <PlaceCardSquare key={index} item={item} />;
+  };
+
   return (
     <View style={styles.container}>
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
@@ -60,15 +64,16 @@ const BookingListScreen = (props: Props) => {
             title="You don't have bookings for the moment..."
           />
         )}
-        {bookings.filter((booking) => booking.isPast === true).length > 0 &&
-        <TitleWithDescription
-          title="History"
-          subtitle={true}
-          description="Find the old announnces booked"
-        />}
+        {bookings.filter((booking) => booking.isPast === true).length > 0 && (
+          <TitleWithDescription
+            title="History"
+            subtitle={true}
+            description="Find the old announnces booked"
+          />
+        )}
         <FlatList
           data={bookings.filter((booking) => booking.isPast === true)}
-          renderItem={renderItem}
+          renderItem={renderHistory}
           keyExtractor={(item) => item._id}
           showsVerticalScrollIndicator={false}
         />

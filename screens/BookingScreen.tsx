@@ -80,7 +80,7 @@ const BookingScreen = ({place}: Props) => {
           <TitleWithDescription title="Booking date" subtitle={true} />
           <CalendarPicker
             showDates={true}
-            minDate={minDate}
+            availabilities={place.availabilities}
             onChange={(startDate, endDate, duration) => {
               startDate && setMinDate(startDate);
               if (duration) {

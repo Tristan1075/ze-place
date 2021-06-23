@@ -18,6 +18,7 @@ import PlaceCard from '../components/PlaceCard';
 import {getUser} from '../api/customer';
 import UserStore from '../store/UserStore';
 import TitleWithDescription from '../components/TitleWithDescription';
+import EmptyBloc from '../components/EmptyBloc';
 
 type MessagesScreenNavigationProp = StackNavigationProp<
   MessagesParamList,
@@ -49,12 +50,18 @@ const MyPlaceScreen = (props: Props) => {
           subtitle={true}
           description="Find nearby you the available places to rent"
         />
-        <FlatList
-          data={places}
-          renderItem={renderItem}
-          keyExtractor={(item) => item._id}
-          showsVerticalScrollIndicator={false}
-        />
+        {places.length > 0 ? (
+          <FlatList
+            data={places}
+            renderItem={renderItem}
+            keyExtractor={(item) => item._id}
+            showsVerticalScrollIndicator={false}
+          />
+        ) : (
+          <View>
+            <EmptyBloc title="You don't have announces for the moment" />
+          </View>
+        )}
       </View>
     </SafeAreaView>
   );

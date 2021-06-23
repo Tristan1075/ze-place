@@ -11,14 +11,15 @@ import {Booking} from '../types';
 
 type Props = {
   item: Booking;
-  onPress: (placeId?: string) => void;
+  onPress?: (placeId?: string) => void;
 };
 
 const PlaceCardSquare = ({item, onPress}: Props) => {
+  console.log(item);
   return (
     <TouchableOpacity
       style={styles.itemContainer}
-      onPress={() => onPress(item.placeId)}>
+      onPress={() => onPress && onPress(item.placeId)}>
       <ImageBackground
         source={{
           uri: item.placeCover
@@ -26,8 +27,13 @@ const PlaceCardSquare = ({item, onPress}: Props) => {
             : 'https://www.leden-spa-aqua-forme.fr/wp-content/uploads/2018/05/jk-placeholder-image.jpg',
         }}
         style={styles.cover}>
-        <View style={styles.flex} />
         <Text style={styles.title}>{item.placeTitle}</Text>
+        <View style={styles.flex} />
+        <Text style={styles.duration}>{item.startDate}</Text>
+        <View style={styles.row}>
+          <Text style={styles.duration}>{item.duration} days</Text>
+          <Text style={styles.duration}>{item.price}€</Text>
+        </View>
       </ImageBackground>
     </TouchableOpacity>
   );
@@ -44,7 +50,12 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   title: {
-    fontFamily: 'oswald-bold',
+    fontFamily: 'oswald',
+    color: Colors.white,
+    fontSize: 16,
+  },
+  duration: {
+    fontFamily: 'oswald-light',
     color: Colors.white,
   },
   cover: {
@@ -71,6 +82,10 @@ const styles = StyleSheet.create({
   text: {
     fontFamily: 'oswald',
     color: Colors.white,
+  },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
 });
 

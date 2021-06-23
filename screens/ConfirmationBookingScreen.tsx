@@ -58,9 +58,8 @@ const ConfirmationBookingScreen = ({place, booking}: Props) => {
       confirmPayment: true,
     });
     if (!error) {
-      addPaymentMethod(paymentIntent.clientSecret);
-      // bookPlace(place, booking);
-      // handleModal();
+      bookPlace(place, booking, paymentIntent.id);
+      handleModal();
     }
     setPaymentSheetEnabled(false);
   };

@@ -28,6 +28,8 @@ import SearchFilterScreen from './SearchFilterScreen';
 import MapScreen from './MapScreen';
 import {getUserLocation} from '../utils';
 import UserStore from '../store/UserStore';
+import {hasBankAccount} from '../api/payment';
+import BankAccountScreen from './BankAccountScreen';
 
 type RootScreenNavigationProp = StackNavigationProp<HomeParamList, 'Home'>;
 
@@ -111,6 +113,16 @@ const HomeScreen = (props: Props) => {
     );
   };
 
+  const handleCreatePlacePress = async () => {
+    if (await hasBankAccount(UserStore.user.stripeAccount)) {
+      navigation.navigate('CreatePlace');
+    } else {
+      handleModal({
+        child: <BankAccountScreen />,
+      });
+    }
+  };
+
   return (
     <ScrollView showsVerticalScrollIndicator={false} style={styles.scrollView}>
       <Image
@@ -151,7 +163,7 @@ const HomeScreen = (props: Props) => {
         activeSlideAlignment="start"
         itemWidth={220}
       />
-      <DescriptionBloc onPress={() => navigation.navigate('CreatePlace')} />
+      <DescriptionBloc onPress={handleCreatePlacePress} />
       <TitleWithDescription
         title="Announces"
         description="Find nearby you the available places to rent"

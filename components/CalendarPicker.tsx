@@ -4,7 +4,8 @@ import {View, StyleSheet, Text} from 'react-native';
 import {Calendar, DateObject} from 'react-native-calendars';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
-import {Booking} from '../types';
+import {Availability, Booking} from '../types';
+import {dateToAvailabilities, isRangeAvailable} from '../utils';
 
 type Props = {
   startDate?: string;
@@ -13,6 +14,7 @@ type Props = {
   showDates?: boolean;
   onChange?: (startDate: string, endDate: string, duration?: number) => void;
   bookings?: Booking[];
+  availabilities?: Availability[];
 };
 
 const getPeriodDuration = (startDate: string, endDate: string) => {
@@ -29,8 +31,18 @@ const getPeriodDuration = (startDate: string, endDate: string) => {
   return endMoment.diff(startMoment, 'days');
 };
 
-const CalendarPicker = ({startDate, endDate, showDates, onChange, minDate, bookings}: Props) => {
+const CalendarPicker = ({
+  startDate,
+  endDate,
+  showDates,
+  onChange,
+  minDate,
+  bookings,
+  availabilities,
+}: Props) => {
   const [markerDates, setMarkedDates] = useState<any>({});
+  const [start, setStart] = useState<string>('');
+  const [end, setEnd] = useState<string>('');
 
   useEffect(() => {
     if (startDate || endDate) {
@@ -48,34 +60,36 @@ const CalendarPicker = ({startDate, endDate, showDates, onChange, minDate, booki
         },
       });
     }
-    // let busyDates = {};
-    // bookings &&
-    //   bookings?.length > 0 &&
-    //   bookings.forEach((booking) => {
-    //     busyDates = {
-    //       ...busyDates,
-    //       [booking.startDate]: {
-    //         startingDay: true,
-    //         color: Colors.primary,
-    //         textColor: Colors.white,
-    //       },
-    //       [booking.endDate]: {
-    //         endingDay: true,
-    //         color: Colors.primary,
-    //         textColor: Colors.white,
-    //       },
-    //     };
-    //   });
-    // setMarkedDates(busyDates);
   }, [bookings, endDate, startDate]);
+
+  useEffect(() => {
+    setMarkedDates(getAvailabilities());
+  }, [availabilities]);
+
+  const getAvailabilities = () => {
+    let dates = {};
+    if (availabilities) {
+      availabilities.forEach((availability) => {
+        dates = {
+          ...dates,
+          [availability.date]: {disabled: true, dot: true},
+        };
+      });
+      return dates;
+    }
+  };
 
   const handleDayPress = (day: DateObject) => {
     if (onChange) {
-      if (Object.keys(markerDates.length === 2)) {
-        setMarkedDates({});
-        onChange('', '', undefined);
+      if (
+        availabilities &&
+        availabilities.find(
+          (availability) => availability.date === day.dateString,
+        )
+      ) {
+        return;
       }
-      if (Object.keys(markerDates).length === 0) {
+      if (!start) {
         setMarkedDates({
           ...markerDates,
           [day.dateString]: {
@@ -84,22 +98,47 @@ const CalendarPicker = ({startDate, endDate, showDates, onChange, minDate, booki
             textColor: Colors.white,
           },
         });
+        setStart(day.dateString);
         onChange(day.dateString, '', undefined);
       }
-      if (Object.keys(markerDates).length === 1) {
+      if (start && !end) {
+        if (
+          availabilities &&
+          !isRangeAvailable(
+            new Date(start),
+            new Date(day.dateString),
+            availabilities,
+          )
+        ) {
+          return;
+        }
+        const dates = dateToAvailabilities(
+          start,
+          new Date(start),
+          end,
+          new Date(day.dateString),
+        );
         setMarkedDates({
           ...markerDates,
+          ...dates,
           [day.dateString]: {
             endingDay: true,
             color: Colors.primary,
             textColor: Colors.white,
           },
         });
+        setEnd(day.dateString);
         onChange(
-          Object.keys(markerDates)[0],
+          start,
           day.dateString,
-          getPeriodDuration(Object.keys(markerDates)[0], day.dateString),
+          getPeriodDuration(start, day.dateString),
         );
+      }
+      if (start && end) {
+        setMarkedDates(getAvailabilities());
+        setStart('');
+        setEnd('');
+        onChange('', '', undefined);
       }
     }
   };
@@ -126,11 +165,11 @@ const CalendarPicker = ({startDate, endDate, showDates, onChange, minDate, booki
         <View style={styles.row}>
           <View style={styles.from}>
             <Text style={styles.text}>From :</Text>
-            <Text style={styles.textDate}>{Object.keys(markerDates)[0]}</Text>
+            <Text style={styles.textDate}>{start}</Text>
           </View>
           <View style={styles.to}>
             <Text style={styles.text}>To :</Text>
-            <Text style={styles.textDate}>{Object.keys(markerDates)[1]}</Text>
+            <Text style={styles.textDate}>{end}</Text>
           </View>
         </View>
       )}

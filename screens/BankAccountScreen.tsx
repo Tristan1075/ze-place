@@ -124,8 +124,7 @@ const BankAccountScreen = () => {
           })
         ) : (
           <EmptyBloc
-            title="You don't have any bank account"
-            $
+            title="You must specify a bank account in order to start booking your places !"
             size={150}
             image={require('../assets/images/bank.png')}
           />

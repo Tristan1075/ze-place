@@ -1,6 +1,12 @@
 import * as React from 'react';
-import { SafeAreaView, StyleSheet, useWindowDimensions, Text, View } from 'react-native';
-import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
+import {
+  SafeAreaView,
+  StyleSheet,
+  useWindowDimensions,
+  Text,
+  View,
+} from 'react-native';
+import {TabView, SceneMap, TabBar} from 'react-native-tab-view';
 import Header from '../components/Header';
 import Colors from '../constants/Colors';
 
@@ -12,8 +18,8 @@ const BookingAndPlacesScreen = () => {
 
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
-    { key: 'first', title: 'Booking' },
-    { key: 'second', title: 'Places' },
+    {key: 'first', title: 'Booking'},
+    {key: 'second', title: 'Places'},
   ]);
 
   const renderScene = SceneMap({
@@ -21,13 +27,19 @@ const BookingAndPlacesScreen = () => {
     second: MyPlaceScreen,
   });
 
-  const renderTabBar = props => (
+  const renderTabBar = (props) => (
     <TabBar
       {...props}
-      indicatorStyle={{ backgroundColor: Colors.primary }}
-      style={{ backgroundColor: Colors.background }}
-      renderLabel={({ route, focused, color }) => (
-        <Text style={{ color: Colors.dark, margin: 0, fontFamily: 'oswald', fontSize: 22 }}>
+      indicatorStyle={{backgroundColor: Colors.primary}}
+      style={{backgroundColor: Colors.background}}
+      renderLabel={({route, focused, color}) => (
+        <Text
+          style={{
+            color: Colors.dark,
+            margin: 0,
+            fontFamily: 'oswald',
+            fontSize: 22,
+          }}>
           {route.title}
         </Text>
       )}
@@ -39,15 +51,15 @@ const BookingAndPlacesScreen = () => {
       <View style={styles.overlay} />
       <Header type="menu" showProfil={true} />
       <TabView
-        navigationState={{ index, routes }}
+        navigationState={{index, routes}}
         renderScene={renderScene}
         onIndexChange={setIndex}
         renderTabBar={renderTabBar}
-        initialLayout={{ width: layout.width }}
+        initialLayout={{width: layout.width}}
       />
     </SafeAreaView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -59,7 +71,7 @@ const styles = StyleSheet.create({
   },
   tabBar: {
     backgroundColor: Colors.background,
-  }
+  },
 });
 
 export default BookingAndPlacesScreen;

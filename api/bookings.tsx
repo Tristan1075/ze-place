@@ -3,13 +3,18 @@ import {API_URL} from '../env';
 import {Booking, BookingTab, Place} from '../types';
 import * as SecureStore from 'expo-secure-store';
 
-export const bookPlace = async (place: Place, booking: Booking) => {
+export const bookPlace = async (
+  place: Place,
+  booking: Booking,
+  paymentId: string,
+) => {
   const token = await SecureStore.getItemAsync('access-token');
   return await axios
     .post(
       `${API_URL}/bookings/create`,
       {
         booking: {
+          paymentId: paymentId,
           placeId: place._id,
           ownerId: place.ownerId,
           ...booking,
