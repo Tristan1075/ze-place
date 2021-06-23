@@ -1,118 +1,115 @@
-import React, {useState, useEffect, useContext, useCallback} from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  ScrollView,
-  FlatList,
-  Image,
-} from 'react-native';
-import Carousel from 'react-native-snap-carousel';
+import React, {useState, useEffect} from 'react';
+import {StyleSheet, Text, View, ScrollView} from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import i18n from 'i18n-js';
 
 import Header from '../components/Header';
+import {FilterForm, HomeParamList, Place, Review} from '../types';
+import TitleWithDescription from '../components/TitleWithDescription';
+import {getPlaceReview} from '../api/reviews';
+import {Rating} from 'react-native-ratings';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
-import CardWithRate from '../components/CardWithRate';
-import {FilterForm, HomeParamList, Place, Review} from '../types';
-import {getAllPlaces} from '../api/places';
-import DescriptionBloc from '../components/DescriptionBloc';
-import SimpleInput from '../components/SimpleInput';
-import TitleWithDescription from '../components/TitleWithDescription';
-import PlaceCard from '../components/PlaceCard';
-import {addFavorite, removeFavorite} from '../api/customer';
-import {Ionicons} from '@expo/vector-icons';
-import {ModalContext} from '../providers/modalContext';
-import SearchFilterScreen from './SearchFilterScreen';
-import MapScreen from './MapScreen';
-import {getUserLocation} from '../utils';
-import UserStore from '../store/UserStore';
-import { getPlaceReview } from '../api/reviews';
-import { Rating } from 'react-native-ratings';
 
 type RootScreenNavigationProp = StackNavigationProp<HomeParamList, 'Home'>;
 
 type Props = {
-  placeId:string
+  placeId: string;
 };
 
 const PlaceReviewScreen = (props: Props) => {
-    const [placeID, setPlaceID] = useState<string>(props.placeId);
-    const [reviews,setReviews] = useState<Review[]>()
-    useEffect(() => {
-        const init = async () => setReviews(await getPlaceReview(placeID));
-      
-        init();       
-        
-      
-        }, [ ]);
+  const [placeID, setPlaceID] = useState<string>(props.placeId);
+  const [reviews, setReviews] = useState<Review[]>();
 
-    return (
-        <View style={styles.container}>
-        <ScrollView 
+  useEffect(() => {
+    const init = async () => setReviews(await getPlaceReview(placeID));
+    init();
+  }, []);
+
+  return (
+    <View style={styles.container}>
+      <ScrollView
         style={styles.scrollView}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.contentScrollView}>
         <Text style={styles.mainTitle}>Reviews</Text>
-        { reviews && reviews.map(e =>  
-        <View style={styles.review}>
-            <TitleWithDescription style={styles.title} title={e.name} subtitle={true} description={e.description} />
-            <Rating
-              startingValue={e.rate}
-              imageSize={20}
-              value={e.rate}
-              precision={0.1}
-              readonly
-              ratingColor = {Colors.dark}
-            />  
-        </View>)}
-        </ScrollView>
-        </View>
-    );
-
+        {reviews &&
+          reviews.map((e) => (
+            <View style={styles.review}>
+              <View style={styles.align}>
+                <Text style={styles.title}>{e.name}</Text>
+                <Text style={styles.description}>{e.description}</Text>
+                <Rating
+                  startingValue={e.rate}
+                  imageSize={16}
+                  value={e.rate}
+                  precision={0.1}
+                  readonly
+                  tintColor={Colors.white}
+                  ratingColor={Colors.dark}
+                />
+              </View>
+              <View>
+                <Text style={styles.name}>Tristan</Text>
+              </View>
+            </View>
+          ))}
+      </ScrollView>
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
-
-    container: {
-        flex: 1,
-        backgroundColor: Colors.dark,
-        paddingTop: 130,
-      },
-      scrollView: {
-        flex: 1,
-        backgroundColor: Colors.background,
-        borderTopLeftRadius: 40,
-        borderTopRightRadius: 40,
-        paddingTop: 40,
-        paddingLeft: 20,
-        paddingRight: 20,
-      },
-      contentScrollView: {
-        paddingBottom: 80,
-      },
-      padding: {
-        paddingBottom: 10,
-      },
-      review:{
-        flexDirection: 'row',
-        paddingBottom: 20,
-
-      },
-      title: {
-        fontFamily: 'poppins-light',
-        fontSize: 14,
-        color: Colors.dark,
-        flex: 1,
-      },
-      mainTitle:{
-        fontFamily: 'poppins-light',
-        fontSize: 24,
-        textAlign: 'center',
-        color: Colors.dark,
-      }
-
-})
+  container: {
+    flex: 1,
+    backgroundColor: Colors.dark,
+    paddingTop: 130,
+  },
+  scrollView: {
+    flex: 1,
+    backgroundColor: Colors.background,
+    borderTopLeftRadius: 40,
+    borderTopRightRadius: 40,
+    paddingTop: 40,
+    paddingLeft: 20,
+    paddingRight: 20,
+  },
+  contentScrollView: {
+    paddingBottom: 80,
+  },
+  padding: {
+    paddingBottom: 10,
+  },
+  review: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    backgroundColor: Colors.white,
+    ...Layout.shadow,
+    padding: 10,
+    borderRadius: 5,
+    marginBottom: 10,
+  },
+  align: {
+    alignItems: 'flex-start',
+  },
+  title: {
+    fontFamily: 'oswald-light',
+    fontSize: 18,
+    color: Colors.dark,
+  },
+  description: {
+    fontFamily: 'poppins',
+    paddingBottom: 5,
+  },
+  mainTitle: {
+    fontFamily: 'oswald',
+    fontSize: 24,
+    color: Colors.dark,
+    marginBottom: 20,
+  },
+  name: {
+    fontFamily: 'poppins',
+    paddingBottom: 5,
+  },
+});
 
 export default PlaceReviewScreen;

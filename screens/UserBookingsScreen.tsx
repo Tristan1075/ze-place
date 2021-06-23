@@ -189,6 +189,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     padding: 20,
     ...Layout.shadow,
+    marginBottom: 10,
   },
   avatar: {
     borderRadius: 20,

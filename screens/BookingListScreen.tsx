@@ -12,17 +12,16 @@ import TitleWithDescription from '../components/TitleWithDescription';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
 import {Booking, Place, User, Review} from '../types';
-import { ModalContext } from '../providers/modalContext';
+import {ModalContext} from '../providers/modalContext';
 import WriteReviewScreen from './WriteReviewScreen';
 import UserStore from '../store/UserStore';
-import { getPlaceReviewByUser } from '../api/reviews';
+import {getPlaceReviewByUser} from '../api/reviews';
 
 const BookingListScreen = (props: Props) => {
   const navigation = useNavigation();
   const [bookings, setBookings] = useState<Booking[]>([]);
-  var review;
+  let review;
   const {user} = UserStore;
-
 
   const init = useCallback(async () => {
     setBookings(await getBookingByUser());
@@ -37,27 +36,20 @@ const BookingListScreen = (props: Props) => {
       place: placeId,
     });
   };
-  
+
   const renderItem = ({item, index}: {item: Booking; index: number}) => {
     return (
-      <View>
       <PlaceCardSquare key={index} item={item} onPress={handlePlacePress} />
-      </View>
     );
   };
 
   const renderHistory = ({item, index}: {item: Booking; index: number}) => {
-    return <PlaceCardSquare key={index} item={item} />;
+    return <PlaceCardSquare key={index} item={item} showReview={true} />;
   };
 
   return (
-
     <View style={styles.container}>
-    <View style={styles.headerBloc}>
-        <Header type="back" />
-      </View>
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-      
         <TitleWithDescription
           title="Active bookings"
           subtitle={true}
@@ -105,7 +97,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: Layout.padding,
     flex: 1,
   },
- 
+
   headerBloc: {
     backgroundColor: Colors.dark,
     paddingTop: 50,

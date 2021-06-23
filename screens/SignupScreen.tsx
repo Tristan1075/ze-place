@@ -169,13 +169,15 @@ const SignupScreen = (props: Props) => {
           try {
             const token = await register(form, res);
             await SecureStore.setItemAsync('access-token', token.access_token);
-            UserStore.updateUser(token.user);
-            navigation.dispatch(
-              CommonActions.reset({
-                index: 0,
-                routes: [{name: 'Tab'}],
-              }),
-            );
+            const user = await UserStore.updateUser(token.user);
+            if (user) {
+              navigation.dispatch(
+                CommonActions.reset({
+                  index: 0,
+                  routes: [{name: 'Tab'}],
+                }),
+              );
+            }
           } catch (err) {
             setOverlayVisible(false);
           }
@@ -391,7 +393,7 @@ const SignupScreen = (props: Props) => {
               ) : (
                 <TouchableOpacity
                   style={styles.buttonImage}
-                  onPress={() => handleTakPicturePress('versp')}>
+                  onPress={() => handleTakPicturePress('verso')}>
                   <Ionicons
                     name="add-circle-outline"
                     size={36}

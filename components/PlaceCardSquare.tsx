@@ -13,13 +13,15 @@ import WriteReviewScreen from '../screens/WriteReviewScreen';
 import {ModalContext} from '../providers/modalContext';
 import UserStore from '../store/UserStore';
 import {getPlaceReviewByUser} from '../api/reviews';
+import Layout from '../constants/Layout';
 
 type Props = {
   item: Booking;
   onPress?: (placeId?: string) => void;
+  showReview?: boolean;
 };
 
-const PlaceCardSquare = ({item, onPress}: Props) => {
+const PlaceCardSquare = ({item, onPress, showReview}: Props) => {
   const [place, setPlace] = useState<Place>();
   const {handleModal} = useContext(ModalContext);
   const [reviews, setReviews] = useState<Review[]>([]);
@@ -29,31 +31,34 @@ const PlaceCardSquare = ({item, onPress}: Props) => {
   const dateTime = date;
   const {user} = UserStore;
 
-  const getUserPlace = async (item) => {
+  const getUserPlace = async () => {
+    console.log(await getPlaceReviewByUser(item.placeId, user._id));
     setReviews(await getPlaceReviewByUser(item.placeId, user._id));
   };
 
   useEffect(() => {
-    const getPlace = async () => setPlace(await getPlaceById(item.placeId));
-    getUserPlace(item);
-    getPlace();
+    getUserPlace();
   }, []);
 
   const handleReviewPress = async (placeId: string) => {
     handleModal({
-      child: <WriteReviewScreen userId={user._id} placeId={placeId} />,
+      child: (
+        <WriteReviewScreen
+          userId={user._id}
+          placeId={placeId}
+          onPublish={() => handleModal()}
+        />
+      ),
     });
   };
-
+  console.log(reviews);
   return (
     <TouchableOpacity
       style={styles.itemContainer}
       onPress={() => onPress && onPress(place?._id)}>
       <ImageBackground
         source={{
-          uri: place?.images[0].url
-            ? place.images[0].url
-            : 'https://www.leden-spa-aqua-forme.fr/wp-content/uploads/2018/05/jk-placeholder-image.jpg',
+          uri: item.placeCover,
         }}
         style={styles.cover}>
         <Text style={styles.title}>{item.placeTitle}</Text>
@@ -64,7 +69,7 @@ const PlaceCardSquare = ({item, onPress}: Props) => {
           <Text style={styles.duration}>{item.price}€</Text>
         </View>
       </ImageBackground>
-      {item.endDate.slice(0, 10) < dateTime && reviews.length == 0 && (
+      {item.isAccepted && item.isPast && reviews.length === 0 && (
         <Text
           onPress={() => handleReviewPress(item.placeId)}
           style={styles.reviewersText}>
@@ -81,15 +86,19 @@ const styles = StyleSheet.create({
   },
   itemContainer: {
     flex: 1,
-    height: 150,
+    height: 170,
     backgroundColor: Colors.white,
-    marginBottom: 10,
+    marginBottom: 20,
+    borderBottomLeftRadius: 5,
+    borderBottomRightRadius: 5,
+    ...Layout.shadow,
   },
   reviewersText: {
-    fontFamily: 'poppins',
-    fontSize: 15,
+    fontFamily: 'poppins-light',
+    fontSize: 14,
     color: Colors.primary,
     textAlign: 'center',
+    paddingVertical: 10,
   },
   title: {
     fontFamily: 'oswald',
@@ -102,7 +111,8 @@ const styles = StyleSheet.create({
   },
   cover: {
     flex: 1,
-    borderRadius: 5,
+    borderTopLeftRadius: 5,
+    borderTopRightRadius: 5,
     overflow: 'hidden',
     padding: 10,
   },

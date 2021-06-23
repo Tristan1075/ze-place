@@ -1,5 +1,5 @@
 
-export const environnment = 'production';
+export const environnment = 'dev';
 
 export const API_URL =
   environnment === 'production'

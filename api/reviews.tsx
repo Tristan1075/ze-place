@@ -7,23 +7,21 @@ import UserStore from '../store/UserStore';
 const headers = {
   'Content-Type': 'application/json',
 };
-export const getPlaceReview = async (placeId:string): Promise<Review[]> => {
+export const getPlaceReview = async (placeId: string): Promise<Review[]> => {
   const token = await SecureStore.getItemAsync('access-token');
-  console.log(`${API_URL}/review-place/get`);
-  
   return await axios
-  .post(
-    `${API_URL}/review-place/get`,
-    {
-      placeId:placeId
-    },
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
+    .post(
+      `${API_URL}/review-place/get`,
+      {
+        placeId: placeId,
       },
-    },
-  )
-    .then((response: AxiosResponse<any>) => {              
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    )
+    .then((response: AxiosResponse<any>) => {
       return response.data.data;
     })
     .catch((err) => {
@@ -31,26 +29,27 @@ export const getPlaceReview = async (placeId:string): Promise<Review[]> => {
     });
 };
 
-export const getPlaceReviewByUser = async (placeId:string,writerId:string): Promise<Review[]> => {
+export const getPlaceReviewByUser = async (
+  placeId: string,
+  writerId: string,
+): Promise<Review[]> => {
   const token = await SecureStore.getItemAsync('access-token');
-  console.log(`${API_URL}/review-place/getByUser`);
-  
   return await axios
-  .post(
-    `${API_URL}/review-place/getByUser`,
-    {
-      placeId:placeId,
-      writerId:writerId
-    },
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
+    .post(
+      `${API_URL}/review-place/getByUser`,
+      {
+        placeId: placeId,
+        writerId: writerId,
       },
-    },
-  )
-    .then((response: AxiosResponse<any>) => {   
-      console.log('Bonjour',response.data.data);
-           
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    )
+    .then((response: AxiosResponse<any>) => {
+      console.log('Bonjour', response.data.data);
+
       return response.data.data;
     })
     .catch((err) => {
@@ -61,17 +60,15 @@ export const getPlaceReviewByUser = async (placeId:string,writerId:string): Prom
 export const createReview = async (
   form: ReviewForm,
 ): Promise<AxiosResponse> => {
-  console.log(`${API_URL}/review-placer`);
-  
   return await axios
     .post(
       `${API_URL}/review-place`,
       {
-       name:form.name,
-       description:form.description,
-       writerId:form.writerId,
-       placeId:form.placeId,
-       rate:form.rate,
+        name: form.name,
+        description: form.description,
+        writerId: form.writerId,
+        placeId: form.placeId,
+        rate: form.rate,
       },
       {
         headers: headers,
