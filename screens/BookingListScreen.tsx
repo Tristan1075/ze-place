@@ -1,6 +1,7 @@
-import React, {useState, useEffect, useCallback} from 'react';
-import {View, StyleSheet, FlatList} from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
+import React, {useState, useEffect, useCallback, useContext} from 'react';
+import {View, StyleSheet, FlatList, Text} from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import {useNavigation} from '@react-navigation/native';
 import {getBookingByUser} from '../api/bookings';
 import EmptyBloc from '../components/EmptyBloc';
@@ -10,12 +11,18 @@ import PlaceCardSquare from '../components/PlaceCardSquare';
 import TitleWithDescription from '../components/TitleWithDescription';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
-import {Booking} from '../types';
+import {Booking, Place, User, Review} from '../types';
+import { ModalContext } from '../providers/modalContext';
+import WriteReviewScreen from './WriteReviewScreen';
 import UserStore from '../store/UserStore';
+import { getPlaceReviewByUser } from '../api/reviews';
 
 const BookingListScreen = (props: Props) => {
   const navigation = useNavigation();
   const [bookings, setBookings] = useState<Booking[]>([]);
+  var review;
+  const {user} = UserStore;
+
 
   const init = useCallback(async () => {
     setBookings(await getBookingByUser());
@@ -30,20 +37,23 @@ const BookingListScreen = (props: Props) => {
       place: placeId,
     });
   };
-
+  
   const renderItem = ({item, index}: {item: Booking; index: number}) => {
     return (
+      <View>
       <PlaceCardSquare key={index} item={item} onPress={handlePlacePress} />
+      </View>
     );
   };
 
-  const renderHistory = ({item, index}: {item: Booking; index: number}) => {
-    return <PlaceCardSquare key={index} item={item} />;
-  };
-
   return (
+
     <View style={styles.container}>
+    <View style={styles.headerBloc}>
+        <Header type="back" />
+      </View>
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+      
         <TitleWithDescription
           title="Active bookings"
           subtitle={true}
@@ -64,16 +74,15 @@ const BookingListScreen = (props: Props) => {
             title="You don't have bookings for the moment..."
           />
         )}
-        {bookings.filter((booking) => booking.isPast === true).length > 0 && (
-          <TitleWithDescription
-            title="History"
-            subtitle={true}
-            description="Find the old announnces booked"
-          />
-        )}
+        {bookings.filter((booking) => booking.isPast === true).length > 0 &&
+        <TitleWithDescription
+          title="History"
+          subtitle={true}
+          description="Find the old announnces booked"
+        />}
         <FlatList
           data={bookings.filter((booking) => booking.isPast === true)}
-          renderItem={renderHistory}
+          renderItem={renderItem}
           keyExtractor={(item) => item._id}
           showsVerticalScrollIndicator={false}
         />
@@ -91,7 +100,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: Layout.padding,
     flex: 1,
   },
-
+ 
   headerBloc: {
     backgroundColor: Colors.dark,
     paddingTop: 50,

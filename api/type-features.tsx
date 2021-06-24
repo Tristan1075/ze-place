@@ -8,7 +8,7 @@ import {Coords, CreatePlaceForm, FilterForm} from '../types';
 export const getPlaceTypes = async () => {
   const token = await SecureStore.getItemAsync('access-token');
   return await axios
-    .get(`http://localhost:3000/place-type`, {
+    .get(`${API_URL}/place-type`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -28,7 +28,7 @@ export const getPlaceTypes = async () => {
 export const getPlaceFeatures = async () => {
     const token = await SecureStore.getItemAsync('access-token');
     return await axios
-      .get(`http://localhost:3000/place-type/features`, {
+      .get(`${API_URL}/place-type/features`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

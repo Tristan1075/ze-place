@@ -1,4 +1,4 @@
-import React, {useCallback, useState, useEffect, useContext} from 'react';
+import React, { useCallback, useState, useEffect, useContext } from 'react';
 import {
   ImageBackground,
   TouchableOpacity,
@@ -8,72 +8,66 @@ import {
 } from 'react-native';
 import Colors from '../constants/Colors';
 import {Booking, Place, Review} from '../types';
+import { getPlaceById } from '../api/places';
 import WriteReviewScreen from '../screens/WriteReviewScreen';
-import {ModalContext} from '../providers/modalContext';
+import { ModalContext } from '../providers/modalContext';
 import UserStore from '../store/UserStore';
-import {getPlaceReviewByUser} from '../api/reviews';
-import Layout from '../constants/Layout';
+import { getPlaceReviewByUser } from '../api/reviews';
 
 type Props = {
   item: Booking;
-  onPress?: (placeId?: string) => void;
-  showReview?: boolean;
+  onPress: (placeId?: string) => void;
 };
 
+
+
 const PlaceCardSquare = ({item, onPress}: Props) => {
+
+  const [place, setPlace] = useState<Place>();
   const {handleModal} = useContext(ModalContext);
   const [reviews, setReviews] = useState<Review[]>([]);
+  var today = new Date();
+  var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+  var dateTime = date;
   const {user} = UserStore;
 
-  const getUserPlace = async () => {
-    setReviews(await getPlaceReviewByUser(item.placeId, user._id));
-  };
+  const getUserPlace = async (item) => {
+    setReviews(await getPlaceReviewByUser(item.placeId,user._id))
+  }
 
-  useEffect(() => {
-    getUserPlace();
+  useEffect( () => {
+    const getPlace = async () => setPlace(await getPlaceById(item.placeId));
+    getUserPlace(item)
+    getPlace()
   }, []);
 
-  const handleReviewPress = async (placeId: string) => {
+  const handleReviewPress  = async (placeId:string)=>{
+    
     handleModal({
-      child: (
-        <WriteReviewScreen
-          userId={user._id}
-          placeId={placeId}
-          onPublish={publishReview}
-        />
-      ),
+      child: <WriteReviewScreen userId={user._id} placeId={placeId} />
     });
   };
-
-  const publishReview = () => {
-    getUserPlace();
-    handleModal();
-  };
-
+  
   return (
     <TouchableOpacity
       style={styles.itemContainer}
-      onPress={() => onPress && onPress(item?.placeId)}>
+      onPress={() => onPress(place?._id)}>
       <ImageBackground
         source={{
-          uri: item.placeCover,
+          uri: place?.images[0].url
+            ? place.images[0].url
+            : 'https://www.leden-spa-aqua-forme.fr/wp-content/uploads/2018/05/jk-placeholder-image.jpg',
         }}
         style={styles.cover}>
-        <Text style={styles.title}>{item.placeTitle}</Text>
         <View style={styles.flex} />
-        <Text style={styles.duration}>{item.startDate}</Text>
-        <View style={styles.row}>
-          <Text style={styles.duration}>{item.duration} days</Text>
-          <Text style={styles.duration}>{item.price}€</Text>
-        </View>
+        <Text style={styles.title}>{place?.title}</Text>
       </ImageBackground>
-      {item.isAccepted && item.isPast && reviews.length === 0 && (
-        <Text
-          onPress={() => handleReviewPress(item.placeId)}
-          style={styles.reviewersText}>
-          Ecrire une review
-        </Text>
-      )}
+       
+      {(item.endDate.slice(0,10)< dateTime) && reviews.length == 0 && 
+        <Text onPress={() => handleReviewPress(item.placeId)} style={styles.reviewersText}>
+        Ecrire une review
+      </Text>
+      }
     </TouchableOpacity>
   );
 };
@@ -84,33 +78,23 @@ const styles = StyleSheet.create({
   },
   itemContainer: {
     flex: 1,
-    height: 170,
+    height: 150,
     backgroundColor: Colors.white,
-    marginBottom: 20,
-    borderBottomLeftRadius: 5,
-    borderBottomRightRadius: 5,
-    ...Layout.shadow,
-  },
+    marginBottom: 10,
+  }, 
   reviewersText: {
-    fontFamily: 'poppins-light',
-    fontSize: 14,
+    fontFamily: 'poppins',
+    fontSize: 15,
     color: Colors.primary,
     textAlign: 'center',
-    paddingVertical: 10,
   },
   title: {
-    fontFamily: 'oswald',
-    color: Colors.white,
-    fontSize: 16,
-  },
-  duration: {
-    fontFamily: 'oswald-light',
+    fontFamily: 'oswald-bold',
     color: Colors.white,
   },
   cover: {
     flex: 1,
-    borderTopLeftRadius: 5,
-    borderTopRightRadius: 5,
+    borderRadius: 5,
     overflow: 'hidden',
     padding: 10,
   },
@@ -132,10 +116,6 @@ const styles = StyleSheet.create({
   text: {
     fontFamily: 'oswald',
     color: Colors.white,
-  },
-  row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
   },
 });
 
