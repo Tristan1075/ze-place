@@ -1,4 +1,4 @@
-import React, {Dispatch, SetStateAction, useContext, useState} from 'react';
+import React, {Dispatch, SetStateAction, useContext, useState, useEffect} from 'react';
 import {
   StyleSheet,
   Text,
@@ -17,7 +17,6 @@ import Colors from '../../constants/Colors';
 import Layout from '../../constants/Layout';
 import {Ionicons} from '@expo/vector-icons';
 import CalendarPicker from '../../components/CalendarPicker';
-import {features} from '../../mocks';
 import Feature from '../../components/Feature';
 import {ModalContext} from '../../providers/modalContext';
 import SelectPlaceTypeScreen from '../SelectPlaceTypeScreen';
@@ -25,6 +24,7 @@ import SelectableItem from '../../components/SelectableItem';
 import {CreatePlaceForm, FeatureType, PlaceType} from '../../types';
 import Constants from '../../utils/Constants';
 import FeatureList from '../../components/FeatureList';
+import { getPlaceFeatures } from '../../api/type-features';
 
 type Props = {
   prevStep: () => void;
@@ -37,13 +37,18 @@ const PlaceInformations = (props: Props) => {
   const {prevStep, nextStep, createPlaceForm, setCreatePlaceForm} = props;
   const {handleModal} = useContext(ModalContext);
   const [minDate, setMinDate] = useState<string>();
+  const [features, setFeatures] = useState<FeatureType[]>([]);
 
   const handleSelectPlaceType = () => {
     handleModal({
       child: <SelectPlaceTypeScreen onPlaceTypePress={handlePlaceTypePress} />,
     });
   };
-
+  useEffect(()=> {
+    const getCardType = async () => setFeatures(await getPlaceFeatures());
+    getCardType()
+  }, []);
+  
   const handlePlaceTypePress = (type: PlaceType) => {
     setCreatePlaceForm({...createPlaceForm, placeType: type});
     handleModal();

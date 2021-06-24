@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import {
   Modal,
   Animated,
@@ -14,6 +14,8 @@ import SimpleInput from '../components/SimpleInput';
 import Layout from '../constants/Layout';
 import {Ionicons} from '@expo/vector-icons';
 import {PlaceType} from '../types';
+import { getPlaceTypes } from '../api/type-features';
+import { getCardType } from '../utils';
 
 type Props = {
   onPlaceTypePress: (type: PlaceType) => void;
@@ -21,18 +23,17 @@ type Props = {
 
 const SelectPlaceTypeScreen = (props: Props) => {
   const {onPlaceTypePress} = props;
-  const [items, setItems] = React.useState<Array<PlaceType>>([
-    {name: 'Garden', id: 0},
-    {name: 'Office', id: 1},
-    {name: 'Parking', id: 2},
-    {name: 'Cave', id: 3},
-    {name: 'Warehouse', id: 4},
-    {name: 'GREEN SEA', id: 5},
-    {name: 'GREEN SEA', id: 6},
-    {name: 'GREEN SEA', id: 7},
-    {name: 'GREEN SEA', id: 8},
-    {name: 'GREEN SEA', id: 9},
-  ]);
+  const [items, setItems] = React.useState<Array<PlaceType>>([]);
+
+
+  const init = useCallback(async () => {
+   
+  }, []);
+
+  useEffect(()=> {
+    const getCardType = async () => setItems(await getPlaceTypes());
+    getCardType()
+  }, []);
 
   return (
     <View style={styles.container}>
