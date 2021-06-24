@@ -1,6 +1,6 @@
 import {Ionicons} from '@expo/vector-icons';
 import {StackNavigationProp} from '@react-navigation/stack';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
 // @ts-ignore
 import Slider from 'react-native-slider';
@@ -25,6 +25,7 @@ import {
 
 import SearchPlaceScreen from './SearchPlaceScreen';
 import SelectPlaceTypeScreen from './SelectPlaceTypeScreen';
+import { getPlaceFeatures } from '../api/type-features';
 
 type HomeScreenNavigationProp = StackNavigationProp<HomeParamList, 'PlaceList'>;
 
@@ -43,6 +44,11 @@ const SearchFilterScreen = ({onSearchPress}: Props) => {
     placeType: undefined,
     location: undefined,
   });
+  const [features, setFeatures] = useState<FeatureType[]>([]);
+  useEffect(()=> {
+    const getCardType = async () => setFeatures(await getPlaceFeatures());
+    getCardType()
+  }, []);
 
   const handlePlaceTypePress = (type: PlaceType) => {
     setFilterForm({...filterForm, placeType: type});
@@ -128,7 +134,7 @@ const SearchFilterScreen = ({onSearchPress}: Props) => {
           horizontal={true}
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={styles.featureList}>
-          {features.map((feature, index) => (
+          {features && features.map((feature, index) => (
             <Feature
               feature={feature}
               key={index}

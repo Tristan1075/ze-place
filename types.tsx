@@ -156,10 +156,7 @@ export type SignupForm = {
 
 export type FeatureType = {
   name: string;
-  icon: {
-    name: string;
-    url: ImageProps;
-  };
+  image:string;
 };
 
 export type PlaceType = {
