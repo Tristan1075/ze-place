@@ -9,7 +9,7 @@
     "icon": "./assets/images/app_icon.png",
     "splash": {
       "image": "./assets/images/splash.png",
-      "resizeMode": "contain",
+      "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },
     "updates": {
@@ -20,16 +20,13 @@
     ],
     "ios": {
       "supportsTablet": false,
-      "bundleIdentifier": "com.zp.zeplace "
+      "bundleIdentifier": "com.zp.zeplace"
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/images/app_icon.png",
         "backgroundColor": "#FFFFFF"
       }
     },
-    "web": {
-      "favicon": "./assets/images/favicon.png"
-    }
   }
 }
