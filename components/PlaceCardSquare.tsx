@@ -31,7 +31,6 @@ const PlaceCardSquare = ({item, onPress}: Props) => {
   const {user} = UserStore;
 
   const getUserPlace = async () => {
-    console.log(await getPlaceReviewByUser(item.placeId, user._id));
     setReviews(await getPlaceReviewByUser(item.placeId, user._id));
   };
 

@@ -181,3 +181,25 @@ export const removeBankAccount = async (
       return Promise.reject(err);
     });
 };
+
+export const getBalance = async (accountId: string) => {
+  const token = await SecureStore.getItemAsync('access-token');
+  return await axios
+    .post(
+      `${API_URL}/payment/balance`,
+      {
+        accountId,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    )
+    .then((response: AxiosResponse<any>) => {
+      return response.data;
+    })
+    .catch((err) => {
+      return Promise.reject(err);
+    });
+};

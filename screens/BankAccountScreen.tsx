@@ -6,6 +6,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import {
   addBankAccount,
+  getBalance,
   getConnectedAccount,
   removeBankAccount,
   updateDefaultBankAccount,
@@ -19,6 +20,7 @@ import UserStore from '../store/UserStore';
 
 const BankAccountScreen = () => {
   const [account, setAccount] = useState();
+  const [balance, setBalance] = useState();
   const [showForm, setShowForm] = useState<boolean>(false);
   const [isFetching, setIsFetching] = useState<boolean>(false);
   const [actionFetching, setActionFetching] = useState<boolean>(false);
@@ -29,8 +31,12 @@ const BankAccountScreen = () => {
   });
 
   useEffect(() => {
+    getBalance(UserStore.user.stripeAccount).then((balance) => {
+      setBalance(balance.available);
+    });
     getConnectedAccount(UserStore.user.stripeAccount).then((account) => {
       setAccount(account);
+      console.log(account);
     });
   }, []);
 
@@ -84,9 +90,10 @@ const BankAccountScreen = () => {
         )}
         <ScrollView>
           {account && account?.external_accounts.data.length > 0 ? (
-            account?.external_accounts.data.map((external) => {
+            account?.external_accounts.data.map((external, index) => {
               return (
                 <TouchableOpacity
+                  key={index}
                   style={styles.cardAccount}
                   onPress={() => handleUpdateDefaultPress(external.id)}>
                   <View style={styles.row}>
