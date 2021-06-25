@@ -70,63 +70,61 @@ export const getPlacesNearbyCoordinates = async (
 
 export const createPlace = async (form: CreatePlaceForm) => {
   const token = await SecureStore.getItemAsync('access-token');
-  console.log(form);
-  
-//   return await axios
-//     .post(
-//       `${API_URL}/places/create`,
-//       {
-//         title: form.title,
-//         location: form.location,
-//         surface: form.surface && parseInt(form.surface, 10),
-//         placeType: form.placeType,
-//         price: form.price && parseInt(form.price, 10),
-//         description: form.description,
-//         features: form.features,
-//         startDate: form.startDate,
-//         endDate: form.endDate,
-//         images: form.images,
-//         authorizeAnimals: form.authorizeAnimals,
-//         authorizeMusic: form.authorizeMusic,
-//         authorizeSmoking: form.authorizeSmoking,
-//         authorizeFire: form.authorizeFire,
-//         authorizeFoodAndDrink: form.authorizeFoodAndDrink,
-//         ownerId: UserStore.user._id,
-//       },
-//       {
-//         headers: {
-//           Authorization: `Bearer ${token}`,
-//         },
-//       },
-//     )
-//     .then((response: AxiosResponse<any>) => {
-//       return response.data.place;
-//     })
-//     .catch((err) => {
-//       return Promise.reject(err.response.data);
-//     });
-// };
+  return await axios
+    .post(
+      `${API_URL}/places/create`,
+      {
+        title: form.title,
+        location: form.location,
+        surface: form.surface && parseInt(form.surface, 10),
+        placeType: form.placeType,
+        price: form.price && parseInt(form.price, 10),
+        description: form.description,
+        features: form.features,
+        startDate: form.startDate,
+        endDate: form.endDate,
+        images: form.images,
+        authorizeAnimals: form.authorizeAnimals,
+        authorizeMusic: form.authorizeMusic,
+        authorizeSmoking: form.authorizeSmoking,
+        authorizeFire: form.authorizeFire,
+        authorizeFoodAndDrink: form.authorizeFoodAndDrink,
+        ownerId: UserStore.user._id,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    )
+    .then((response: AxiosResponse<any>) => {
+      return response.data.place;
+    })
+    .catch((err) => {
+      return Promise.reject(err.response.data);
+    });
+};
 
-// export const getSimilarPlaces = async (placeID: String) => {
-//   const token = await SecureStore.getItemAsync('access-token');
-//   return await axios
-//     .post(
-//       `${API_URL}/places/similarPlaces`,
-//       {
-//         placeID: placeID,
-//       },
-//       {
-//         headers: {
-//           Authorization: `Bearer ${token}`,
-//         },
-//       },
-//     )
-//     .then((response: AxiosResponse<any>) => {
-//       return response.data.places;
-//     })
-//     .catch((err) => {
-//       return Promise.reject(err.response.data);
-//     });
+export const getSimilarPlaces = async (placeID: String) => {
+  const token = await SecureStore.getItemAsync('access-token');
+  return await axios
+    .post(
+      `${API_URL}/places/similarPlaces`,
+      {
+        placeID: placeID,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    )
+    .then((response: AxiosResponse<any>) => {
+      return response.data.places;
+    })
+    .catch((err) => {
+      return Promise.reject(err.response.data);
+    });
 };
 
 export const searchPlaces = async (filterForm: FilterForm) => {
