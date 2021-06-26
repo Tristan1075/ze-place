@@ -20,6 +20,7 @@ import UserBookingsScreen from '../screens/UserBookingsScreen';
 import BookingListScreen from '../screens/BookingListScreen';
 import ConversationScreen from '../screens/ConversationScreen';
 import BookingAndPlacesScreen from '../screens/BookingAndPlacesScreen';
+import MessagesScreen from '../screens/MessagesScreen';
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
@@ -72,6 +73,7 @@ const HomeNavigator = () => {
       <HomeStack.Screen name="PlaceList" component={PlaceList} />
       <HomeStack.Screen name="UserBookings" component={UserBookingsScreen} />
       <HomeStack.Screen name="Conversation" component={ConversationScreen} />
+      <HomeStack.Screen name="Messages" component={MessagesScreen} />
     </HomeStack.Navigator>
   );
 };

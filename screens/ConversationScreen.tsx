@@ -11,13 +11,14 @@ import {RouteProp, useRoute} from '@react-navigation/native';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import {Ionicons} from '@expo/vector-icons';
 
-import {Message, MessagesParamList} from '../types';
+import {Message, MessagesParamList, Place} from '../types';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
-import {getConversationById} from '../api/conversations';
+import {createConversation, getConversationById} from '../api/conversations';
 
 import Header from '../components/Header';
 import ConversationItem from '../components/ConversationItem';
+import UserStore from '../store/UserStore';
 
 type ConversationScreenNavigationProp = RouteProp<
   MessagesParamList,
@@ -31,34 +32,48 @@ type Props = {
 const ConversationScreen = (props: Props) => {
   const {navigation} = props;
   const route = useRoute<ConversationScreenNavigationProp>();
+  const place: Place = route.params.place;
   const [messages, setMessages] = useState<Array<Message>>([]);
   const [input, setInput] = useState<string>('');
   const _flatList = useRef<FlatList>(null);
 
   useEffect(() => {
-    getConversationById(sender.conversationId)
-      .then((res) => {
-        console.log(res);
-        setMessages(res.messages);
-      })
-      .catch((err) => {
-        console.log(err);
-        setMessages(err.messages);
-      });
-  }, [sender.conversationId]);
+    console.log(route);
+    // getConversationById(sender.conversationId)
+    //   .then((res) => {
+    //     console.log(res);
+    //     setMessages(res.messages);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //     setMessages(err.messages);
+    //   });
+  }, []);
 
   const renderItem = ({item}: {item: Message}) => (
     <ConversationItem message={item} />
   );
 
-  const sendMessage = () => {
+  const sendMessage = async () => {
     const newMessage = {
       value: input,
       from: '1',
     };
-    setMessages((prev) => [...prev, newMessage]);
-    setInput('');
-    scrollToBottom();
+    if (messages.length === 0) {
+      const conversation = await createConversation(
+        place._id,
+        UserStore.user._id,
+        place.ownerId,
+      );
+      if (conversation) {
+
+      }
+      console.log(conversation);
+    } else {
+      setMessages((prev) => [...prev, newMessage]);
+      setInput('');
+      scrollToBottom();
+    }
   };
 
   const scrollToBottom = () => {
@@ -69,12 +84,12 @@ const ConversationScreen = (props: Props) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header
+      {/* <Header
         type="back"
         showProfil={true}
         title={sender.from}
         profilPicture={sender.picture}
-      />
+      /> */}
       <View style={styles.content}>
         <FlatList
           ref={_flatList}

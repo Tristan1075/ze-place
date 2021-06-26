@@ -163,7 +163,11 @@ const PlaceDetailScreen = () => {
             <View style={styles.descriptionBloc}>
               <TouchableOpacity
                 style={[styles.row, styles.padding]}
-                onPress={() => navigation.navigate('Conversation')}>
+                onPress={() =>
+                  UserStore.user._id === place?.ownerId
+                    ? navigation.navigate('Messages')
+                    : navigation.navigate('Conversation', {place})
+                }>
                 <AntDesign name="message1" style={styles.message} size={20} />
                 <Text style={styles.description}>Send a message to owner</Text>
               </TouchableOpacity>

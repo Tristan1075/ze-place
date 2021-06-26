@@ -43,13 +43,8 @@ const MessagesScreen = (props: Props) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header type="menu" showProfil={true} />
+      <Header type="back" showProfil={true} />
       <View style={styles.content}>
-        <TextInput
-          style={styles.input}
-          placeholder="Search a user"
-          placeholderTextColor={Colors.gray}
-        />
         <FlatList
           data={senders}
           renderItem={renderItem}
