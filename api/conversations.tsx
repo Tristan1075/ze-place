@@ -92,6 +92,7 @@ export const getConversationByPlace = async (placeId: string) => {
 export const sendMessageApi = async (
   conversationId: string,
   senderId: string,
+  receiverId: string,
   text: string,
 ) => {
   const token = await SecureStore.getItemAsync('access-token');
@@ -101,6 +102,7 @@ export const sendMessageApi = async (
       {
         conversationId,
         senderId,
+        receiverId,
         text,
       },
       {

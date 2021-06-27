@@ -9,7 +9,7 @@ import {
 import {StackNavigationProp} from '@react-navigation/stack';
 
 import Header from '../components/Header';
-import {Sender, MessagesParamList, Conversation, Place} from '../types';
+import {MessagesParamList, Conversation, Place} from '../types';
 import {senders} from '../mocks';
 import MessageItem from '../components/MessageItem';
 import Colors from '../constants/Colors';

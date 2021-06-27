@@ -30,19 +30,24 @@ import {getUserLocation} from '../utils';
 import UserStore from '../store/UserStore';
 import {hasBankAccount} from '../api/payment';
 import BankAccountScreen from './BankAccountScreen';
+import { withSocketContext } from '../components/SocketProvider';
 
 type RootScreenNavigationProp = StackNavigationProp<HomeParamList, 'Home'>;
 
 type Props = {
   navigation: RootScreenNavigationProp;
+  socket: any;
 };
 
 const HomeScreen = (props: Props) => {
   const {navigation} = props;
+  const {socket} = props.socket;
+
   const [places, setPlaces] = useState<Array<Place>>([]);
   const {handleModal} = useContext(ModalContext);
 
   const init = useCallback(async () => {
+    socket.emit('init_conversations', {userId: UserStore.user._id});
     setPlaces(await getAllPlaces());
   }, []);
 
@@ -238,4 +243,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HomeScreen;
+export default withSocketContext(HomeScreen);

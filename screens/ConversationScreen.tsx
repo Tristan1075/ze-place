@@ -83,7 +83,14 @@ const ConversationScreen = (props: Props) => {
         value: input,
         from: '1',
       };
-      sendMessageApi(conversation?._id, UserStore.user._id, input);
+      sendMessageApi(
+        conversation?._id,
+        UserStore.user._id,
+        UserStore.user._id === conversationParams.userId
+          ? conversationParams.ownerId
+          : conversationParams.userId,
+        input,
+      );
       setMessages((prev) => [...prev, newMessage]);
       setInput('');
       scrollToBottom();
