@@ -54,10 +54,6 @@ const MenuScreen = (props: Props) => {
       onPress: () => navigation.navigate('BugTicket'),
     },
     {
-      title: 'Booking',
-      onPress: () => navigation.navigate('Booking'),
-    },
-    {
       title: 'Bank account',
       onPress: () =>
         handleModal({

@@ -1,6 +1,6 @@
 import React, {Dispatch, SetStateAction, useContext} from 'react';
-import {StyleSheet, View, TouchableWithoutFeedback, Image} from 'react-native';
-
+import {StyleSheet, View, TouchableWithoutFeedback, Image, TouchableOpacity} from 'react-native';
+import { Platform } from 'react-native';
 import TitleWithDescription from '../../components/TitleWithDescription';
 import SimpleInput from '../../components/SimpleInput';
 import Button from '../../components/Button';
@@ -54,12 +54,26 @@ const GeneralInformations = (props: Props) => {
         subtitle={true}
         style={styles.paddingVertical}
       />
-      <SimpleInput
-        placeholder="Search"
-        isEditable={false}
-        onPress={handleMapPress}
-        suffix={<Ionicons name="chevron-down" size={20} color={Colors.dark} />}
-      />
+
+            {
+              Platform.OS === 'ios' ?
+              <SimpleInput
+                placeholder="Search"
+                isEditable={false}
+                onPress={handleMapPress}
+                suffix={<Ionicons name="chevron-down" size={20} color={Colors.dark} />}
+              />
+              :
+                <TouchableOpacity onPress={handleMapPress}>
+                  <SimpleInput
+                    placeholder="Search"
+                    isEditable={false}
+                    
+                    suffix={<Ionicons name="chevron-down" size={20} color={Colors.dark} />}
+                  />
+                </TouchableOpacity>
+            }
+     
       {createPlaceForm.location && (
         <SearchCard
           title={createPlaceForm.location?.address}
