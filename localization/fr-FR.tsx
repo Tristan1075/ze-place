@@ -24,6 +24,82 @@ export default {
   innactif: 'Promo Innactive',
   places_title: 'Mes annonces !',
 
+  //root
+  root_title: 'Les meilleurs espaces près de chez vous !',
+  root_sign_in: 'Se connecter',
+  root_create_an_account: 'Créer un compte',
+
+  //sign_up
+  sign_up_gender_required: 'Le genre est requis',
+  sign_up_avatar_required: `L'avatar est requis`,
+  sign_up_field_required: 'Ce champ est requis',
+  sign_up_invalid_format: `Ce format n'est pas valide`,
+  sign_up_password_size:
+    'Le mot de passe doit contenir entre 8 et 64 caractères',
+  sign_up_password_different: 'Le mot de passe est différent',
+  sign_up_location_required: `L'adresse est requise`,
+  sign_up_imageID_required: `L'image est requise`,
+  sign_up_gender_placeholder: 'Genre',
+  sign_up_firstname_placeholder: 'Prénom',
+  sign_up_lastname_placeholder: 'Nom',
+  sign_up_address_placeholder: 'Adresse',
+  sign_up_birthdate_placeholder: 'Date de naissance',
+  sign_up_phone_placeholder: 'Numéro de téléphone',
+  sign_up_email_placeholder: 'Email',
+  sign_up_password_placeholder: 'Mot de passe',
+  sign_up_confirm_password_placeholder: 'Confirmez le mot de passe',
+  sign_up_about_me_placeholder: 'Description',
+  sign_up_id_card_placeholder: `Carte d'identité`,
+  sign_up_signup_button: 'Créer',
+  sign_up_account_exist: 'Vous avez déjà un compte ?',
+  sign_up_sign_in: 'Se connecter',
+  sign_up_confirm: 'Confirmer',
+  sign_up_cancel: 'Annuler',
+  sign_up_gender_male: 'Homme',
+  sign_up_gender_female: 'Femme',
+  sign_up_title: 'Bonjour ! Créer un compte pour commencer',
+
+  //Sign_in
+  sign_in_email: 'Email',
+  sign_in_password: 'Mot de passe',
+  sign_in_no_match: 'Votre email et/ou mot de passe ne correspondent pas !',
+  sign_in_signIn: 'Se connecter',
+  sign_in_forgot_password: 'Mot de passe oublié ?',
+  sign_in_signUp: 'Créer un compte',
+  sign_in_title: 'Bonjour ! Connectez vous pour commencer',
+
+  //Home
+  home_discover: 'Venez découvrir le monde !',
+  home_search: 'Rechercher',
+  home_near_you: 'Proche de vous',
+  home_find_nearby: 'Trouver les espaces à louer proche de vous',
+  home_see_map: 'Voir la carte',
+  home_announces: 'Annonces',
+  home_see_more: 'En voir plus',
+
+  //Description_bloc
+  description_bloc_rent_space: 'Louez votre espace',
+  description_bloc_rent_description:
+    'Vous pouvez louer votre m2, venez découvrir cette fonctionalitée',
+  description_bloc_see_more: 'En voir plus',
+
+  //Search_filter
+  search_filter_type: 'Type',
+  search_filter_choose_type: `Définir le type d'espace`,
+  search_filter_price: 'Prix',
+  search_filter_maximum_price: 'Définir le prix maximum',
+  search_filter_surface: 'Surface',
+  search_filter_minimum_surface: 'Définir la taille minimum',
+  search_filter_enter_surface: 'Entrer la taille',
+  search_filter_select_feature: 'fonctionnalités',
+  search_filter_location: 'Adresse',
+  search_filter_search: 'Rechercher',
+
+  //Search_place_location
+  search_place_location_title: 'Trouvez votre espace !',
+  search_place_location_enter_address_placeholder: `Saisissez l'adresse...`,
+  search_place_location_results: 'Résultats',
+
   //Place_detail
   place_detail_about: 'A propos de',
   place_detail_people_review_this: 'Avis des utilisateurs',

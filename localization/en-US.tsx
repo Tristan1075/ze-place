@@ -24,6 +24,82 @@ export default {
   innactif: 'Innactive promo',
   places_title: 'Your places !',
 
+  //root
+  root_title: 'The best places close to you !',
+  root_sign_in: 'Sign in',
+  root_create_an_account: 'Create an account',
+
+  //sign_up
+  sign_up_gender_required: 'The gender is required',
+  sign_up_avatar_required: 'The avatar is required',
+  sign_up_field_required: 'This field is required',
+  sign_up_invalid_format: 'This format is not valid',
+  sign_up_password_size:
+    'The password must contain between 8 and 64 characters',
+  sign_up_password_different: 'The password is not the same',
+  sign_up_location_required: 'The location is required',
+  sign_up_imageID_required: 'The image ID is required',
+  sign_up_gender_placeholder: 'Gender',
+  sign_up_firstname_placeholder: 'Firstname',
+  sign_up_lastname_placeholder: 'Lastname',
+  sign_up_address_placeholder: 'Address',
+  sign_up_birthdate_placeholder: 'Birthdate',
+  sign_up_phone_placeholder: 'Phone number',
+  sign_up_email_placeholder: 'Email',
+  sign_up_password_placeholder: 'Password',
+  sign_up_confirm_password_placeholder: 'Confirm password',
+  sign_up_about_me_placeholder: 'About me',
+  sign_up_id_card_placeholder: 'ID Card',
+  sign_up_signup_button: 'Sign up',
+  sign_up_account_exist: 'Already have an account ?',
+  sign_up_sign_in: 'Sign in',
+  sign_up_confirm: 'Confirm',
+  sign_up_cancel: 'Cancel',
+  sign_up_gender_male: 'Male',
+  sign_up_gender_female: 'Female',
+  sign_up_title: 'Hello ! Signup to get started !',
+
+  //Sign_in
+  sign_in_email: 'Email',
+  sign_in_password: 'Password',
+  sign_in_no_match: 'Your email and/or password do not match !',
+  sign_in_signIn: 'Sign in',
+  sign_in_forgot_password: 'Forgot your password ?',
+  sign_in_signUp: 'Sign up',
+  sign_in_title: 'Hello ! Signin to get started !',
+
+  //Home
+  home_discover: 'Discover world with us !',
+  home_search: 'Search',
+  home_near_you: 'Near you',
+  home_find_nearby: 'Find nearby you the available places to rent',
+  home_see_map: 'See map',
+  home_announces: 'Announces',
+  home_see_more: 'See more',
+
+  //Description_bloc
+  description_bloc_rent_space: 'Rent your space',
+  description_bloc_rent_description:
+    'You can rent your m2, just come and discover this feature',
+  description_bloc_see_more: 'See more',
+
+  //Search_filter
+  search_filter_type: 'Type',
+  search_filter_choose_type: 'Choose a place type',
+  search_filter_price: 'Price',
+  search_filter_maximum_price: 'Set the maximum price',
+  search_filter_surface: 'Surface',
+  search_filter_minimum_surface: 'Set the minimum size',
+  search_filter_enter_surface: 'Enter the size',
+  search_filter_select_feature: 'Select features',
+  search_filter_location: 'Location',
+  search_filter_search: 'Search',
+
+  //Search_place_location
+  search_place_location_title: 'Find your place !',
+  search_place_location_enter_address_placeholder: 'Enter the adress...',
+  search_place_location_results: 'Results',
+
   //Place_detail
   place_detail_about: 'About',
   place_detail_people_review_this: 'People review this',

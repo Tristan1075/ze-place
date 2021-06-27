@@ -132,21 +132,21 @@ const HomeScreen = (props: Props) => {
       <View style={styles.overlay} />
       <View style={styles.container}>
         <Header type="menu" showProfil={true} />
-        <Text style={styles.title}>{i18n.t('discover')}</Text>
+        <Text style={styles.title}>{i18n.t('home_discover')}</Text>
         <SimpleInput
           isEditable={false}
           style={styles.input}
-          placeholder="Search"
+          placeholder={i18n.t('home_search')}
           suffix={<Ionicons name="search" size={20} color={Colors.gray} />}
           onPress={showFilterModal}
         />
       </View>
       <TitleWithDescription
-        title="Near you"
+        title={i18n.t('home_near_you')}
         subtitle={true}
-        description="Find nearby you the available places to rent"
+        description={i18n.t('home_find_nearby')}
         style={styles.padding}
-        actionText="See map"
+        actionText={i18n.t('home_see_map')}
         actionIcon="map"
         onActionPress={showMapModal}
       />
@@ -161,10 +161,10 @@ const HomeScreen = (props: Props) => {
       />
       <DescriptionBloc onPress={handleCreatePlacePress} />
       <TitleWithDescription
-        title="Announces"
-        description="Find nearby you the available places to rent"
+        title={i18n.t('home_announces')}
+        description={i18n.t('home_find_nearby')}
         style={styles.padding}
-        actionText="See more"
+        actionText={i18n.t('home_see_more')}
         actionIcon="list"
         subtitle={true}
         onActionPress={showFilterModal}

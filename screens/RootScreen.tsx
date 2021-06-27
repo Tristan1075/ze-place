@@ -3,7 +3,7 @@ import {StyleSheet, Text, ImageBackground} from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {CommonActions} from '@react-navigation/routers';
 import * as SecureStore from 'expo-secure-store';
-
+import i18n from 'i18n-js';
 import Button from '../components/Button';
 import Colors from '../constants/Colors';
 import {RootStackParamList} from '../types';
@@ -51,15 +51,16 @@ const RootScreen = (props: Props) => {
           'https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500',
       }}
       style={styles.container}>
-      <Text style={styles.title}>The best tour packages in world !</Text>
+      <Text style={styles.title}>{i18n.t('root_title')}</Text>
+
       <Button
-        value="Sign in"
+        value={i18n.t('root_sign_in')}
         onPress={handleSigninPress}
         backgroundColor={Colors.white}
         textColor={Colors.primary}
       />
       <Text style={styles.text} onPress={handleSignupPress}>
-        Create an account
+        {i18n.t('root_create_an_account')}
       </Text>
     </ImageBackground>
   );

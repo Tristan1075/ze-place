@@ -3,13 +3,13 @@ import {StyleSheet, Text, View, SafeAreaView, TextInput} from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {CommonActions} from '@react-navigation/routers';
 import * as SecureStore from 'expo-secure-store';
-
+import i18n from 'i18n-js';
 import {RootStackParamList, SigninForm} from '../types';
 import Button from '../components/Button';
 import Colors from '../constants/Colors';
 import Header from '../components/Header';
 import {login, test} from '../api/auth';
-import { getUser } from '../api/customer';
+import {getUser} from '../api/customer';
 import UserStore from '../store/UserStore';
 
 type RootScreenNavigationProp = StackNavigationProp<
@@ -54,14 +54,14 @@ const SigninScreen = (props: Props) => {
     <SafeAreaView style={styles.flex}>
       <Header type="back" />
       <View style={styles.container}>
-        <Text style={styles.title}>Hello ! Signin to get started !</Text>
+        <Text style={styles.title}>{i18n.t('sign_in_title')}</Text>
         <TextInput
           onChange={() => setError(false)}
           onChangeText={(v) =>
             setCredentials({...credentials, email: v.toLowerCase()})
           }
           style={styles.input}
-          placeholder="Email"
+          placeholder={i18n.t('sign_in_email')}
           autoCapitalize="none"
           placeholderTextColor={Colors.gray}
         />
@@ -69,26 +69,28 @@ const SigninScreen = (props: Props) => {
           onChange={() => setError(false)}
           onChangeText={(v) => setCredentials({...credentials, password: v})}
           style={styles.input}
-          placeholder="Password"
+          placeholder={i18n.t('sign_in_password')}
           autoCapitalize="none"
           secureTextEntry={true}
           placeholderTextColor={Colors.gray}
         />
         {error && (
-          <Text style={styles.error}>
-            Your email and/or password do not match !
-          </Text>
+          <Text style={styles.error}>{i18n.t('sign_in_no_match')}</Text>
         )}
         <Button
-          value="Sign in"
+          value={i18n.t('sign_in_signIn')}
           onPress={handleSigninPress}
           backgroundColor={Colors.primary}
           textColor={Colors.white}
           style={styles.button}
         />
         <View style={styles.row}>
-          <Text style={styles.text}>Forgot your password ?</Text>
-          <Text style={[styles.text, styles.underline]} onPress={handleSignupPress}>Sign up</Text>
+          <Text style={styles.text}>{i18n.t('sign_in_forgot_password')}</Text>
+          <Text
+            style={[styles.text, styles.underline]}
+            onPress={handleSignupPress}>
+            {i18n.t('sign_in_signUp')}
+          </Text>
         </View>
       </View>
     </SafeAreaView>

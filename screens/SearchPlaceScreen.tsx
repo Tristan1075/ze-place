@@ -1,5 +1,11 @@
 import React, {useState, useEffect, SetStateAction, Dispatch} from 'react';
-import {Text, StyleSheet, ScrollView, TouchableWithoutFeedback, Keyboard} from 'react-native';
+import {
+  Text,
+  StyleSheet,
+  ScrollView,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from 'react-native';
 
 import Colors from '../constants/Colors';
 import SimpleInput from '../components/SimpleInput';
@@ -9,6 +15,7 @@ import {searchPlace} from '../api/mapbox';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import SearchCard from '../components/SearchCard';
 import {Location, MapboxSearch} from '../types';
+import i18n from 'i18n-js';
 
 type Props = {
   onLocationPress: (location: Location) => void;
@@ -31,16 +38,20 @@ const SearchPlaceScreen = ({onLocationPress}: Props) => {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
       <SafeAreaView style={styles.container}>
         <TitleWithDescription
-          title="Find your place !"
+          title={i18n.t('search_place_location_title')}
           subtitle={true}
           style={styles.title}
         />
         <SimpleInput
-          placeholder="Enter the adress..."
+          placeholder={i18n.t(
+            'search_place_location_enter_address_placeholder',
+          )}
           onChangeText={(q) => setQuery(q)}
           suffix={<Ionicons name="search" size={20} color={Colors.gray} />}
         />
-        <Text style={styles.results}>Results ({places.length})</Text>
+        <Text style={styles.results}>
+          {i18n.t('search_place_location_results')}({places.length})
+        </Text>
         <ScrollView>
           {places.map((place) => {
             const address = `${place.address ? place.address : ''}${
@@ -52,12 +63,14 @@ const SearchPlaceScreen = ({onLocationPress}: Props) => {
                 ?.text;
             const postalCode =
               place.context &&
-              place.context.find((c) => c.id && c.id.split('.')[0] === 'postcode')
-                ?.text;
+              place.context.find(
+                (c) => c.id && c.id.split('.')[0] === 'postcode',
+              )?.text;
             const country =
               place.context &&
-              place.context.find((c) => c.id && c.id.split('.')[0] === 'country')
-                ?.text;
+              place.context.find(
+                (c) => c.id && c.id.split('.')[0] === 'country',
+              )?.text;
             const region =
               place.context &&
               place.context.find((c) => c.id && c.id.split('.')[0] === 'region')

@@ -26,6 +26,7 @@ import {Entypo, Ionicons} from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import * as SecureStore from 'expo-secure-store';
 import moment from 'moment';
+import i18n from 'i18n-js';
 import isEmail from 'validator/lib/isEmail';
 import {RNS3} from 'react-native-aws3';
 import {RootStackParamList, SignupForm, Location, User} from '../types';
@@ -88,56 +89,56 @@ const SignupScreen = (props: Props) => {
     const e: any = {};
 
     if (form.gender.length === 0) {
-      e.gender = 'The gender is required';
+      e.gender = i18n.t('sign_up_gender_required');
       isValid = false;
     }
     if (form.avatar.length === 0) {
-      e.avatar = 'The avatar is required';
+      e.avatar = i18n.t('sign_up_avatar_required');
       isValid = false;
     }
     if (form.firstname.length === 0) {
-      e.firstname = 'The field is required';
+      e.firstname = i18n.t('sign_up_field_required');
       isValid = false;
     }
     if (form.lastname.length === 0) {
-      e.lastname = 'The field is required';
+      e.lastname = i18n.t('sign_up_field_required');
       isValid = false;
     }
 
     if (form.location?.address?.length === 0) {
-      e.location = 'The field is required';
+      e.location = i18n.t('sign_up_field_required');
       isValid = false;
     }
 
     if (!form.birthdate) {
-      e.birthdate = 'The field is required';
+      e.birthdate = i18n.t('sign_up_field_required');
       isValid = false;
     }
     if (form.phoneNumber.length !== 10) {
-      e.phoneNumber = 'The format is not valid';
+      e.phoneNumber = i18n.t('sign_up_invalid_format');
       isValid = false;
     }
     if (!isEmail(form.email)) {
-      e.email = 'The format is not valid';
+      e.email = i18n.t('sign_up_invalid_format');
       isValid = false;
     }
-    if (form.password.length < 8) {
-      e.password = 'The password must contain at leat 8 characters';
+    if (form.password.length < 8 || form.password.length > 64) {
+      e.password = i18n.t('sign_up_password_size');
       isValid = false;
     }
     if (form.confirmPassword !== form.password) {
-      e.confirmPassword = 'The password is not the same';
+      e.confirmPassword = i18n.t('sign_up_password_different');
       isValid = false;
     }
     if (!form.location) {
-      e.location = 'The location is required';
+      e.location = i18n.t('sign_up_location_required');
       isValid = false;
     }
     if (
       (form.IDRecto.length === 0 || form.IDVerso.length === 0) &&
       environnment === 'production'
     ) {
-      e.IDRecto = 'The image ID is required';
+      e.IDRecto = i18n.t('sign_up_imageID_required');
       isValid = false;
     }
     setErrors(e);
@@ -266,7 +267,7 @@ const SignupScreen = (props: Props) => {
         <ScrollView>
           <Header type="back" />
           <View style={styles.container}>
-            <Text style={styles.title}>Hello ! Signup to get started !</Text>
+            <Text style={styles.title}>{i18n.t('sign_up_title')}</Text>
             <TouchableOpacity
               style={styles.avatarContainer}
               onPress={handleSelectAvatarPress}>
@@ -288,7 +289,7 @@ const SignupScreen = (props: Props) => {
             <SimpleInput
               style={styles.input}
               value={form.gender}
-              placeholder="Gender"
+              placeholder={i18n.t('sign_up_gender_placeholder')}
               isEditable={false}
               onPress={() => setGenderVisible(true)}
               suffix={
@@ -299,21 +300,21 @@ const SignupScreen = (props: Props) => {
             <SimpleInput
               onChange={() => setErrors({...errors, firstname: ''})}
               onChangeText={(v) => setForm({...form, firstname: v})}
-              placeholder="First name"
+              placeholder={i18n.t('sign_up_firstname_placeholder')}
               error={errors.firstname}
               style={styles.input}
             />
             <SimpleInput
               onChange={() => setErrors({...errors, lastname: ''})}
               onChangeText={(v) => setForm({...form, lastname: v})}
-              placeholder="Last name"
+              placeholder={i18n.t('sign_up_lastname_placeholder')}
               error={errors.lastname}
               style={styles.input}
             />
             <SimpleInput
               style={styles.input}
               value={form.location?.address}
-              placeholder="Adress"
+              placeholder={i18n.t('sign_up_address_placeholder')}
               isEditable={false}
               onPress={handleSearchPress}
               suffix={
@@ -326,18 +327,18 @@ const SignupScreen = (props: Props) => {
               isEditable={false}
               onChange={() => setErrors({...errors, lastname: ''})}
               onChangeText={(v) => setForm({...form, lastname: v})}
-              placeholder="Birthdate"
+              placeholder={i18n.t('sign_up_birthdate_placeholder')}
               suffix={
                 <Ionicons name="chevron-down" size={20} color={Colors.dark} />
               }
               value={form.birthdate ? moment(form.birthdate).format('ll') : ''}
-              error={errors.birthdate ? 'The field is required' : ''}
+              error={errors.birthdate ? i18n.t('sign_up_field_required') : ''}
               style={styles.input}
             />
             <SimpleInput
               onChange={() => setErrors({...errors, phoneNumber: ''})}
               onChangeText={(v) => setForm({...form, phoneNumber: v})}
-              placeholder="Phone number"
+              placeholder={i18n.t('sign_up_phone_placeholder')}
               error={errors.phoneNumber}
               style={styles.input}
               maxLength={10}
@@ -345,14 +346,14 @@ const SignupScreen = (props: Props) => {
             <SimpleInput
               onChange={() => setErrors({...errors, email: ''})}
               onChangeText={(v) => setForm({...form, email: v.toLowerCase()})}
-              placeholder="Email"
+              placeholder={i18n.t('sign_up_email_placeholder')}
               error={errors.email}
               style={styles.input}
             />
             <SimpleInput
               onChange={() => setErrors({...errors, password: ''})}
               onChangeText={(v) => setForm({...form, password: v})}
-              placeholder="Password"
+              placeholder={i18n.t('sign_up_password_placeholder')}
               secureTextEntry={true}
               error={errors.password}
               style={styles.input}
@@ -360,19 +361,22 @@ const SignupScreen = (props: Props) => {
             <SimpleInput
               onChange={() => setErrors({...errors, confirmPassword: ''})}
               onChangeText={(v) => setForm({...form, confirmPassword: v})}
-              placeholder="Confirmation password"
+              placeholder={i18n.t('sign_up_confirm_password_placeholder')}
               secureTextEntry={true}
               error={errors.confirmPassword}
               style={styles.input}
             />
             <SimpleInput
               onChangeText={(v) => setForm({...form, description: v})}
-              placeholder="About me"
+              placeholder={i18n.t('sign_up_about_me_placeholder')}
               error={errors.description}
               multiline={true}
               numberOfLines={1}
             />
-            <TitleWithDescription title="Carte d'identité" subtitle={true} />
+            <TitleWithDescription
+              title={i18n.t('sign_up_id_card_placeholder')}
+              subtitle={true}
+            />
             <View style={styles.row}>
               {form.IDRecto ? (
                 <View>
@@ -421,15 +425,17 @@ const SignupScreen = (props: Props) => {
               <Text style={styles.error}>{errors.IDRecto}</Text>
             ) : null}
             <Button
-              value="Sign up"
+              value={i18n.t('sign_up_signup_button')}
               onPress={handleSigninPress}
               backgroundColor={Colors.primary}
               textColor={Colors.white}
               style={styles.button}
             />
             <View style={styles.row}>
-              <Text style={styles.text}>Already have an account ?</Text>
-              <Text style={[styles.text, styles.underline]}>Sign in</Text>
+              <Text style={styles.text}>{i18n.t('sign_up_account_exist')}</Text>
+              <Text style={[styles.text, styles.underline]}>
+                {i18n.t('sign_up_sign_in')}
+              </Text>
             </View>
           </View>
         </ScrollView>
@@ -449,12 +455,16 @@ const SignupScreen = (props: Props) => {
           onCancel={() => setShowDateTimePicker(false)}
           customConfirmButtonIOS={({onPress}) => (
             <TouchableOpacity onPress={onPress}>
-              <Text style={styles.customConfirmButton}>Confirmer</Text>
+              <Text style={styles.customConfirmButton}>
+                {i18n.t('sign_up_confirm')}
+              </Text>
             </TouchableOpacity>
           )}
           customCancelButtonIOS={({onPress}) => (
             <TouchableOpacity onPress={onPress}>
-              <Text style={styles.customCancelButton}>Annuler</Text>
+              <Text style={styles.customCancelButton}>
+                {i18n.t('sign_up_cancel')}
+              </Text>
             </TouchableOpacity>
           )}
         />
@@ -465,7 +475,7 @@ const SignupScreen = (props: Props) => {
           onSwipeOut={() => setGenderVisible(false)}>
           <ModalContent style={styles.bottomModal}>
             <SelectableItem
-              value="Male"
+              value={i18n.t('sign_up_gender_male')}
               icon={'male'}
               onPress={() => {
                 setForm({...form, gender: 'male'});
@@ -473,7 +483,7 @@ const SignupScreen = (props: Props) => {
               }}
             />
             <SelectableItem
-              value="Female"
+              value={i18n.t('sign_up_gender_female')}
               icon={'female'}
               onPress={() => {
                 setForm({...form, gender: 'female'});

@@ -4,6 +4,7 @@ import React, {useState, useEffect} from 'react';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
 // @ts-ignore
 import Slider from 'react-native-slider';
+import i18n from 'i18n-js';
 
 import {searchPlaces} from '../api/places';
 import Button from '../components/Button';
@@ -25,7 +26,7 @@ import {
 
 import SearchPlaceScreen from './SearchPlaceScreen';
 import SelectPlaceTypeScreen from './SelectPlaceTypeScreen';
-import { getPlaceFeatures } from '../api/type-features';
+import {getPlaceFeatures} from '../api/type-features';
 
 type HomeScreenNavigationProp = StackNavigationProp<HomeParamList, 'PlaceList'>;
 
@@ -45,9 +46,9 @@ const SearchFilterScreen = ({onSearchPress}: Props) => {
     location: undefined,
   });
   const [features, setFeatures] = useState<FeatureType[]>([]);
-  useEffect(()=> {
+  useEffect(() => {
     const getCardType = async () => setFeatures(await getPlaceFeatures());
-    getCardType()
+    getCardType();
   }, []);
 
   const handlePlaceTypePress = (type: PlaceType) => {
@@ -85,10 +86,13 @@ const SearchFilterScreen = ({onSearchPress}: Props) => {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.contentScrollView}>
         <View style={styles.paddingHorizontal}>
-          <TitleWithDescription title="Type" subtitle={true} />
+          <TitleWithDescription
+            title={i18n.t('search_filter_type')}
+            subtitle={true}
+          />
           <SimpleInput
             style={styles.input}
-            placeholder="Choose a place type"
+            placeholder={i18n.t('search_filter_choose_type')}
             value={filterForm.placeType?.name}
             isEditable={false}
             onPress={() => setShowPlaceType(true)}
@@ -97,9 +101,9 @@ const SearchFilterScreen = ({onSearchPress}: Props) => {
             }
           />
           <TitleWithDescription
-            title="Price"
+            title={i18n.t('search_filter_price')}
             subtitle={true}
-            description="Set the maximum price"
+            description={i18n.t('search_filter_maximum_price')}
           />
           <Slider
             minimumValue={0}
@@ -115,12 +119,12 @@ const SearchFilterScreen = ({onSearchPress}: Props) => {
             {filterForm.price && filterForm.price.toFixed(0).toString()}€
           </Text>
           <TitleWithDescription
-            title="Surface"
+            title={i18n.t('search_filter_surface')}
             subtitle={true}
-            description="Set the minimum size"
+            description={i18n.t('search_filter_minimum_surface')}
           />
           <SimpleInput
-            placeholder="Enter the size"
+            placeholder={i18n.t('search_filter_enter_surface')}
             style={styles.input}
             suffix={<Text>m²</Text>}
             type="number-pad"
@@ -128,26 +132,33 @@ const SearchFilterScreen = ({onSearchPress}: Props) => {
               setFilterForm({...filterForm, surface: parseInt(value, 10)})
             }
           />
-          <TitleWithDescription title="Select a feature" subtitle={true} />
+          <TitleWithDescription
+            title={i18n.t('search_filter_select_feature')}
+            subtitle={true}
+          />
         </View>
         <ScrollView
           horizontal={true}
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={styles.featureList}>
-          {features && features.map((feature, index) => (
-            <Feature
-              feature={feature}
-              key={index}
-              isActive={filterForm.features.includes(feature)}
-              onPress={() => handleFeaturePress(feature)}
-            />
-          ))}
+          {features &&
+            features.map((feature, index) => (
+              <Feature
+                feature={feature}
+                key={index}
+                isActive={filterForm.features.includes(feature)}
+                onPress={() => handleFeaturePress(feature)}
+              />
+            ))}
         </ScrollView>
         <View style={styles.paddingHorizontal}>
-          <TitleWithDescription title="Location" subtitle={true} />
+          <TitleWithDescription
+            title={i18n.t('search_filter_location')}
+            subtitle={true}
+          />
           <View style={styles.input}>
             <SimpleInput
-              placeholder="Search"
+              placeholder={i18n.t('search_filter_search')}
               isEditable={false}
               onPress={() => setShowSearchLocation(true)}
               suffix={
@@ -163,7 +174,7 @@ const SearchFilterScreen = ({onSearchPress}: Props) => {
             />
           )}
           <Button
-            value="Search"
+            value={i18n.t('search_filter_search')}
             backgroundColor={Colors.primary}
             textColor={Colors.white}
             onPress={() => onSearchPress(filterForm)}
