@@ -10,9 +10,16 @@ type Props = {
   onAcceptPress: (bookingId: string) => void;
   onDenyPress: (bookingId: string) => void;
   isUser: boolean;
+  onSendMessagePress: () => void;
 };
 
-const BookingCard = ({item, onAcceptPress, onDenyPress, isUser}: Props) => {
+const BookingCard = ({
+  item,
+  onAcceptPress,
+  onDenyPress,
+  isUser,
+  onSendMessagePress,
+}: Props) => {
   return (
     <View style={styles.card}>
       <View style={styles.row}>
@@ -30,6 +37,10 @@ const BookingCard = ({item, onAcceptPress, onDenyPress, isUser}: Props) => {
       {item.description ? (
         <Text style={styles.description}>{item.description}</Text>
       ) : null}
+      <TouchableOpacity onPress={onSendMessagePress}>
+        <AntDesign name="message1" size={20} />
+        <Text style={styles.description}>Send a message to owner</Text>
+      </TouchableOpacity>
       <View style={styles.border} />
       <View style={styles.actions}>
         {!item.isDenied && (

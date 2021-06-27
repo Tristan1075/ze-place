@@ -130,8 +130,11 @@ export type Sender = {
 };
 
 export type Conversation = {
-  id: string;
-  messages: Array<Message>;
+  _id: string;
+  placeId: string;
+  senderId: string;
+  ownerId: string;
+  created_at: Date;
 };
 
 export type Message = {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -9,11 +9,15 @@ import {
 import {StackNavigationProp} from '@react-navigation/stack';
 
 import Header from '../components/Header';
-import {Sender, MessagesParamList} from '../types';
+import {Sender, MessagesParamList, Conversation, Place} from '../types';
 import {senders} from '../mocks';
 import MessageItem from '../components/MessageItem';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
+import {getConversationByPlace} from '../api/conversations';
+import {useState} from 'react';
+import {useRoute} from '@react-navigation/native';
+import UserStore from '../store/UserStore';
 
 type MessagesScreenNavigationProp = StackNavigationProp<
   MessagesParamList,
@@ -26,12 +30,33 @@ type Props = {
 
 const MessagesScreen = (props: Props) => {
   const {navigation} = props;
+  const route = useRoute<ConversationScreenNavigationProp>();
+  const place: Place = route.params.place;
 
-  const handleMessagePress = (sender: Sender) => {
-    navigation.navigate('Conversation', {sender});
+  const [conversations, setConversations] = useState<Conversation[]>();
+
+  const init = useCallback(async () => {
+    const conversation = await getConversationByPlace(place._id);
+    if (conversation) {
+      setConversations(conversation);
+    }
+  }, []);
+
+  useEffect(() => {
+    navigation.addListener('focus', init);
+  }, [init, navigation]);
+
+  const handleMessagePress = (item: Conversation) => {
+    navigation.navigate('Conversation', {
+      conversation: {
+        placeId: place._id,
+        ownerId: UserStore.user._id,
+        userId: item.senderId,
+      },
+    });
   };
 
-  const renderItem = ({item, index}: {item: Sender; index: number}) => (
+  const renderItem = ({item, index}: {item: Conversation; index: number}) => (
     <View>
       <MessageItem
         message={item}
@@ -46,7 +71,7 @@ const MessagesScreen = (props: Props) => {
       <Header type="back" showProfil={true} />
       <View style={styles.content}>
         <FlatList
-          data={senders}
+          data={conversations}
           renderItem={renderItem}
           keyExtractor={(item) => item.id}
         />

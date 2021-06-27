@@ -165,8 +165,14 @@ const PlaceDetailScreen = () => {
                 style={[styles.row, styles.padding]}
                 onPress={() =>
                   UserStore.user._id === place?.ownerId
-                    ? navigation.navigate('Messages')
-                    : navigation.navigate('Conversation', {place})
+                    ? navigation.navigate('Messages', {place})
+                    : navigation.navigate('Conversation', {
+                        conversation: {
+                          placeId: place?._id,
+                          userId: UserStore.user._id,
+                          ownerId: place?.ownerId,
+                        },
+                      })
                 }>
                 <AntDesign name="message1" style={styles.message} size={20} />
                 <Text style={styles.description}>Send a message to owner</Text>

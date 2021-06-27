@@ -29,7 +29,7 @@ type UserBookingsScreenNavigationProp = RouteProp<
   'UserBookings'
 >;
 
-const UserBookingsScreen = () => {
+const UserBookingsScreen = ({navigation}) => {
   const params = useRoute<UserBookingsScreenNavigationProp>().params;
   const userBooking = params.userBooking && params.userBooking[0];
   const [activeBooking, setActiveBooking] = useState<Booking>(userBooking);
@@ -78,6 +78,15 @@ const UserBookingsScreen = () => {
           setConfirmation(true);
           setSelectedBooking(bookingId);
         }}
+        onSendMessagePress={() =>
+          navigation.navigate('Conversation', {
+            conversation: {
+              placeId: item.placeId,
+              userId: item.userId,
+              ownerId: UserStore.user._id,
+            },
+          })
+        }
         isUser={item.userId === UserStore.user._id}
       />
     );
