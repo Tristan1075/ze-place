@@ -16,7 +16,6 @@ import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
 import {
   createConversation,
-  getConversationById,
   getConversationByPlaceAndUser,
   getMessageByConversation,
   sendMessageApi,
@@ -38,7 +37,6 @@ type Props = {
 const ConversationScreen = (props: Props) => {
   const {navigation} = props;
   const route = useRoute<ConversationScreenNavigationProp>();
-  const place: Place = route.params.place;
   const conversationParams = route.params.conversation;
   const [messages, setMessages] = useState<Array<Message>>([]);
   const [conversation, setConversation] = useState<Conversation>();
@@ -46,29 +44,29 @@ const ConversationScreen = (props: Props) => {
   const _flatList = useRef<FlatList>(null);
 
   const init = useCallback(async () => {
-    let conversationResult;
-    conversationResult = await getConversationByPlaceAndUser(
+    getConversationByPlaceAndUser(
       conversationParams.placeId,
       conversationParams.userId,
       conversationParams.ownerId,
-    );
-    if (!conversationResult) {
-      conversationResult = await createConversation(
-        conversationParams.placeId,
-        conversationParams.userId,
-        conversationParams.ownerId,
-      );
-    }
-    if (conversationResult) {
-      getMessageByConversation(conversationResult?._id).then((m) => {
-        const messagesMap = m.map((message) => ({
-          value: message.text,
-          from: UserStore.user._id === message.senderId ? '1' : '0',
-        }));
-        setMessages(messagesMap);
-      });
-    }
-    setConversation(conversationResult);
+    ).then(async (conversationResult) => {
+      if (!conversationResult) {
+        conversationResult = await createConversation(
+          conversationParams.placeId,
+          conversationParams.userId,
+          conversationParams.ownerId,
+        );
+      }
+      if (conversationResult) {
+        getMessageByConversation(conversationResult?._id).then((m) => {
+          const messagesMap = m.map((message) => ({
+            value: message.text,
+            from: UserStore.user._id === message.senderId ? '1' : '0',
+          }));
+          setMessages(messagesMap);
+        });
+      }
+      setConversation(conversationResult);
+    });
   }, []);
 
   useEffect(() => {
@@ -80,7 +78,6 @@ const ConversationScreen = (props: Props) => {
   );
 
   const sendMessage = async () => {
-    console.log('Send message');
     if (conversation) {
       const newMessage = {
         value: input,
@@ -91,19 +88,6 @@ const ConversationScreen = (props: Props) => {
       setInput('');
       scrollToBottom();
     }
-
-    // if (messages.length === 0) {
-    //   const conversation = await createConversation(
-    //     place._id,
-    //     UserStore.user._id,
-    //     place.ownerId,
-    //   );
-    //   if (conversation) {
-    //     sendMessageApi(conversation, input);
-    //   }
-    // } else {
-    //   setMessages((prev) => [...prev, newMessage]);
-    // }
   };
 
   const scrollToBottom = () => {
@@ -114,12 +98,7 @@ const ConversationScreen = (props: Props) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* <Header
-        type="back"
-        showProfil={true}
-        title={sender.from}
-        profilPicture={sender.picture}
-      /> */}
+      <Header type="back" showProfil={true} />
       <View style={styles.content}>
         <FlatList
           ref={_flatList}

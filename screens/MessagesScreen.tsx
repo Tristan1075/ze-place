@@ -51,7 +51,7 @@ const MessagesScreen = (props: Props) => {
       conversation: {
         placeId: place._id,
         ownerId: UserStore.user._id,
-        userId: item.senderId,
+        userId: item.userId,
       },
     });
   };

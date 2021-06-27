@@ -7,7 +7,7 @@ import {
   BookingTab,
   BottomTabParamList,
   HomeParamList,
-  MessagesParamList,
+  FavoritesTab,
 } from '../types';
 import Colors from '../constants/Colors';
 
@@ -17,7 +17,6 @@ import FavoritesScreen from '../screens/FavoritesScreen';
 import CreatePlaceScreen from '../screens/PlaceCreation/CreatePlaceScreen';
 import PlaceList from '../screens/PlaceListScreen';
 import UserBookingsScreen from '../screens/UserBookingsScreen';
-import BookingListScreen from '../screens/BookingListScreen';
 import ConversationScreen from '../screens/ConversationScreen';
 import BookingAndPlacesScreen from '../screens/BookingAndPlacesScreen';
 import MessagesScreen from '../screens/MessagesScreen';
@@ -83,20 +82,28 @@ const BookingStack = createStackNavigator<BookingTab>();
 const BookingNavigator = () => {
   return (
     <BookingStack.Navigator screenOptions={{headerShown: false}}>
-      <BookingStack.Screen name="BookingAndPlaces" component={BookingAndPlacesScreen} />
+      <BookingStack.Screen
+        name="BookingAndPlaces"
+        component={BookingAndPlacesScreen}
+      />
       <BookingStack.Screen name="PlaceDetail" component={PlaceDetailScreen} />
       <BookingStack.Screen name="UserBookings" component={UserBookingsScreen} />
     </BookingStack.Navigator>
   );
 };
 
-const FavoritesStack = createStackNavigator<MessagesParamList>();
+const FavoritesStack = createStackNavigator<FavoritesTab>();
 
 const FavoritesNavigator = () => {
   return (
     <FavoritesStack.Navigator screenOptions={{headerShown: false}}>
-      <FavoritesStack.Screen name="Messages" component={FavoritesScreen} />
-      <HomeStack.Screen name="PlaceDetail" component={PlaceDetailScreen} />
+      <FavoritesStack.Screen name="Favorites" component={FavoritesScreen} />
+      <FavoritesStack.Screen name="PlaceDetail" component={PlaceDetailScreen} />
+      <FavoritesStack.Screen
+        name="Conversation"
+        component={ConversationScreen}
+      />
+      <FavoritesStack.Screen name="Messages" component={MessagesScreen} />
     </FavoritesStack.Navigator>
   );
 };

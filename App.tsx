@@ -45,36 +45,36 @@ const App = () => {
   const notificationListener = useRef<Subscription>();
   const responseListener = useRef<Subscription>();
 
-  // useEffect(() => {
-  //   registerForPushNotificationsAsync().then((token) => {
-  //     console.log(token);
-  //     if (token) {
-  //       setExpoPushToken(token);
-  //       console.log(token);
-  //     }
-  //   });
-  //   // This listener is fired whenever a notification is received while the app is foregrounded
-  //   notificationListener.current = Notifications.addNotificationReceivedListener(
-  //     (notif) => {
-  //       setNotification(notif);
-  //     },
-  //   );
-  //   // This listener is fired whenever a user taps on or interacts with a notification (works when app is foregrounded, backgrounded, or killed)
-  //   responseListener.current = Notifications.addNotificationResponseReceivedListener(
-  //     (response) => {
-  //       navigate('Menu', {});
-  //     },
-  //   );
+  useEffect(() => {
+    registerForPushNotificationsAsync().then((token) => {
+      console.log(token);
+      if (token) {
+        setExpoPushToken(token);
+        console.log(token);
+      }
+    });
+    // This listener is fired whenever a notification is received while the app is foregrounded
+    notificationListener.current = Notifications.addNotificationReceivedListener(
+      (notif) => {
+        setNotification(notif);
+      },
+    );
+    // This listener is fired whenever a user taps on or interacts with a notification (works when app is foregrounded, backgrounded, or killed)
+    responseListener.current = Notifications.addNotificationResponseReceivedListener(
+      (response) => {
+        navigate('Menu', {});
+      },
+    );
 
-  //   return () => {
-  //     if (notificationListener.current && responseListener.current) {
-  //       Notifications.removeNotificationSubscription(
-  //         notificationListener.current,
-  //       );
-  //       Notifications.removeNotificationSubscription(responseListener.current);
-  //     }
-  //   };
-  // }, []);
+    return () => {
+      if (notificationListener.current && responseListener.current) {
+        Notifications.removeNotificationSubscription(
+          notificationListener.current,
+        );
+        Notifications.removeNotificationSubscription(responseListener.current);
+      }
+    };
+  }, []);
 
   i18n.translations = {
     en: enUS,
