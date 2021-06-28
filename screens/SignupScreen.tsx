@@ -38,7 +38,6 @@ import {register, uploadID} from '../api/auth';
 import TitleWithDescription from '../components/TitleWithDescription';
 import {ModalContent, BottomModal} from 'react-native-modals';
 import SelectableItem from '../components/SelectableItem';
-import { Platform } from 'react-native';
 
 type RootScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -292,8 +291,7 @@ const SignupScreen = (props: Props) => {
               <Text style={styles.error}>{errors.avatar}</Text>
             ) : null}
 
-            {
-              Platform.OS === 'ios' ?
+           
               <SimpleInput
               style={styles.input}
               value={form.gender}
@@ -305,21 +303,6 @@ const SignupScreen = (props: Props) => {
               }
               error={errors.gender}
             />
-              :
-                <TouchableWithoutFeedback onPress={() => setGenderVisible(true)}>
-                  <SimpleInput
-                  style={styles.input}
-                  value={form.gender}
-                  placeholder={i18n.t('sign_up_gender_placeholder')}
-                  isEditable={false}
-                  suffix={
-                    <Ionicons name="chevron-down" size={20} color={Colors.dark} />
-                  }
-                  error={errors.gender}
-                   />
-
-                </TouchableWithoutFeedback>
-            }
            
             <SimpleInput
               onChange={() => setErrors({...errors, firstname: ''})}
@@ -336,8 +319,7 @@ const SignupScreen = (props: Props) => {
               style={styles.input}
             />
 
-            {
-              Platform.OS === 'ios' ?
+            
               <SimpleInput
               style={styles.input}
               value={form.location?.address}
@@ -349,23 +331,8 @@ const SignupScreen = (props: Props) => {
               }
               error={errors.location}
             />
-              :
-                <TouchableWithoutFeedback onPress={handleSearchPress}>
-                 <SimpleInput
-              style={styles.input}
-              value={form.location?.address}
-              placeholder={i18n.t('sign_up_address_placeholder')}
-              isEditable={false}
-              suffix={
-                <Ionicons name="chevron-down" size={20} color={Colors.dark} />
-              }
-              error={errors.location}
-            />
-
-                </TouchableWithoutFeedback>
-            }
-            {
-              Platform.OS === 'ios' ?
+              
+           
               <SimpleInput
               onPress={() => setShowDateTimePicker(true)}
               isEditable={false}
@@ -379,23 +346,7 @@ const SignupScreen = (props: Props) => {
               error={errors.birthdate ? i18n.t('sign_up_field_required') : ''}
               style={styles.input}
             />
-              :
-                <TouchableWithoutFeedback onPress={() => setShowDateTimePicker(true)}>
-                 <SimpleInput
-              isEditable={false}
-              onChange={() => setErrors({...errors, lastname: ''})}
-              onChangeText={(v) => setForm({...form, lastname: v})}
-              placeholder={i18n.t('sign_up_birthdate_placeholder')}
-              suffix={
-                <Ionicons name="chevron-down" size={20} color={Colors.dark} />
-              }
-              value={form.birthdate ? moment(form.birthdate).format('ll') : ''}
-              error={errors.birthdate ? i18n.t('sign_up_field_required') : ''}
-              style={styles.input}
-            />
-
-                </TouchableWithoutFeedback>
-            }
+          
             
             <SimpleInput
               onChange={() => setErrors({...errors, phoneNumber: ''})}

@@ -55,24 +55,14 @@ const GeneralInformations = (props: Props) => {
         style={styles.paddingVertical}
       />
 
-            {
-              Platform.OS === 'ios' ?
+           
               <SimpleInput
                 placeholder="Search"
                 isEditable={false}
                 onPress={handleMapPress}
                 suffix={<Ionicons name="chevron-down" size={20} color={Colors.dark} />}
               />
-              :
-                <TouchableOpacity onPress={handleMapPress}>
-                  <SimpleInput
-                    placeholder="Search"
-                    isEditable={false}
-                    
-                    suffix={<Ionicons name="chevron-down" size={20} color={Colors.dark} />}
-                  />
-                </TouchableOpacity>
-            }
+            
      
       {createPlaceForm.location && (
         <SearchCard

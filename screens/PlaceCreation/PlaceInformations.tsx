@@ -63,8 +63,7 @@ const PlaceInformations = (props: Props) => {
         subtitle={true}
         style={styles.paddingVertical}
       />
-      {
-              Platform.OS === 'ios' ?
+      
               <SimpleInput
                 placeholder="Choose a place type"
                 value={createPlaceForm.placeType?.name}
@@ -72,17 +71,7 @@ const PlaceInformations = (props: Props) => {
                 onPress={handleSelectPlaceType}
                 suffix={<Ionicons name="chevron-down" size={20} color={Colors.dark} />}
               />
-              :
-                <TouchableOpacity onPress={handleSelectPlaceType}>
-                 <SimpleInput
-                  placeholder="Choose a place type"
-                  value={createPlaceForm.placeType?.name}
-                  isEditable={false}
-                  
-                  suffix={<Ionicons name="chevron-down" size={20} color={Colors.dark} />}
-                />
-                </TouchableOpacity>
-            }
+             
       
       <TitleWithDescription
         title="Surface"
