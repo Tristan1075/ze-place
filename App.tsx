@@ -3,8 +3,9 @@ import React, {useRef, useState, useEffect} from 'react';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {StripeProvider} from '@stripe/stripe-react-native';
 import {Subscription} from '@unimodules/core';
-import {PUBLIC_KEY_STRIPE} from './env';
+import {API_URL, PUBLIC_KEY_STRIPE} from './env';
 import * as Notifications from 'expo-notifications';
+import io from 'socket.io-client';
 
 // @ts-ignore
 import {ModalPortal} from 'react-native-modals';
@@ -21,6 +22,8 @@ import {ModalProvider} from './providers/modalContext';
 // import {SocketProvider} from './components/SocketProvider';
 import {NavigationContainerRef} from '@react-navigation/core';
 import {registerForPushNotificationsAsync} from './api/notifications';
+import { SocketProvider } from './components/SocketProvider';
+import UserStore from './store/UserStore';
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -37,6 +40,7 @@ export function navigate(name: string, params: any) {
 }
 
 const App = () => {
+  const [socket, setSocket] = React.useState({});
   const [expoPushToken, setExpoPushToken] = useState<string>();
   const [
     notification,
@@ -45,36 +49,45 @@ const App = () => {
   const notificationListener = useRef<Subscription>();
   const responseListener = useRef<Subscription>();
 
-  // useEffect(() => {
-  //   registerForPushNotificationsAsync().then((token) => {
-  //     console.log(token);
-  //     if (token) {
-  //       setExpoPushToken(token);
-  //       console.log(token);
-  //     }
-  //   });
-  //   // This listener is fired whenever a notification is received while the app is foregrounded
-  //   notificationListener.current = Notifications.addNotificationReceivedListener(
-  //     (notif) => {
-  //       setNotification(notif);
-  //     },
-  //   );
-  //   // This listener is fired whenever a user taps on or interacts with a notification (works when app is foregrounded, backgrounded, or killed)
-  //   responseListener.current = Notifications.addNotificationResponseReceivedListener(
-  //     (response) => {
-  //       navigate('Menu', {});
-  //     },
-  //   );
+  useEffect(() => {
+    const initSocket = {
+      socket: io.connect(API_URL, {
+        transports: ['websocket'],
+        reconnectionAttempts: 10,
+        reconnection: true,
+        reconnectionDelay: 15000,
+      }),
+    };
+    setSocket(initSocket);
+    registerForPushNotificationsAsync().then((token) => {
+      console.log(token);
+      if (token) {
+        setExpoPushToken(token);
+        console.log(token);
+      }
+    });
+    // This listener is fired whenever a notification is received while the app is foregrounded
+    notificationListener.current = Notifications.addNotificationReceivedListener(
+      (notif) => {
+        setNotification(notif);
+      },
+    );
+    // This listener is fired whenever a user taps on or interacts with a notification (works when app is foregrounded, backgrounded, or killed)
+    responseListener.current = Notifications.addNotificationResponseReceivedListener(
+      (response) => {
+        navigate('Menu', {});
+      },
+    );
 
-  //   return () => {
-  //     if (notificationListener.current && responseListener.current) {
-  //       Notifications.removeNotificationSubscription(
-  //         notificationListener.current,
-  //       );
-  //       Notifications.removeNotificationSubscription(responseListener.current);
-  //     }
-  //   };
-  // }, []);
+    return () => {
+      if (notificationListener.current && responseListener.current) {
+        Notifications.removeNotificationSubscription(
+          notificationListener.current,
+        );
+        Notifications.removeNotificationSubscription(responseListener.current);
+      }
+    };
+  }, []);
 
   i18n.translations = {
     en: enUS,
@@ -87,17 +100,17 @@ const App = () => {
     return null;
   } else {
     return (
-      // <SocketProvider socket={socket}>
-      <SafeAreaProvider>
-        <StripeProvider publishableKey={PUBLIC_KEY_STRIPE}>
-          <ModalProvider>
-            <Navigation />
-            <StatusBar />
-            <ModalPortal />
-          </ModalProvider>
-        </StripeProvider>
-      </SafeAreaProvider>
-      // </SocketProvider>
+      <SocketProvider socket={socket}>
+        <SafeAreaProvider>
+          <StripeProvider publishableKey={PUBLIC_KEY_STRIPE}>
+            <ModalProvider>
+              <Navigation />
+              <StatusBar />
+              <ModalPortal />
+            </ModalProvider>
+          </StripeProvider>
+        </SafeAreaProvider>
+      </SocketProvider>
     );
   }
 };

@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef} from 'react';
+import React, {useEffect, useState, useRef, useCallback} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -11,10 +11,15 @@ import {RouteProp, useRoute} from '@react-navigation/native';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import {Ionicons} from '@expo/vector-icons';
 
-import {Message, MessagesParamList, Place} from '../types';
+import {Conversation, Message, MessagesParamList, Place} from '../types';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
-import {createConversation, getConversationById} from '../api/conversations';
+import {
+  createConversation,
+  getConversationByPlaceAndUser,
+  getMessageByConversation,
+  sendMessageApi,
+} from '../api/conversations';
 
 import Header from '../components/Header';
 import ConversationItem from '../components/ConversationItem';
@@ -32,44 +37,60 @@ type Props = {
 const ConversationScreen = (props: Props) => {
   const {navigation} = props;
   const route = useRoute<ConversationScreenNavigationProp>();
-  const place: Place = route.params.place;
+  const conversationParams = route.params.conversation;
   const [messages, setMessages] = useState<Array<Message>>([]);
+  const [conversation, setConversation] = useState<Conversation>();
   const [input, setInput] = useState<string>('');
   const _flatList = useRef<FlatList>(null);
 
-  useEffect(() => {
-    console.log(route);
-    // getConversationById(sender.conversationId)
-    //   .then((res) => {
-    //     console.log(res);
-    //     setMessages(res.messages);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //     setMessages(err.messages);
-    //   });
+  const init = useCallback(async () => {
+    getConversationByPlaceAndUser(
+      conversationParams.placeId,
+      conversationParams.userId,
+      conversationParams.ownerId,
+    ).then(async (conversationResult) => {
+      if (!conversationResult) {
+        conversationResult = await createConversation(
+          conversationParams.placeId,
+          conversationParams.userId,
+          conversationParams.ownerId,
+        );
+      }
+      if (conversationResult) {
+        getMessageByConversation(conversationResult?._id).then((m) => {
+          const messagesMap = m.map((message) => ({
+            value: message.text,
+            from: UserStore.user._id === message.senderId ? '1' : '0',
+          }));
+          setMessages(messagesMap);
+        });
+      }
+      setConversation(conversationResult);
+    });
   }, []);
+
+  useEffect(() => {
+    navigation.addListener('focus', init);
+  }, [init, navigation]);
 
   const renderItem = ({item}: {item: Message}) => (
     <ConversationItem message={item} />
   );
 
   const sendMessage = async () => {
-    const newMessage = {
-      value: input,
-      from: '1',
-    };
-    if (messages.length === 0) {
-      const conversation = await createConversation(
-        place._id,
+    if (conversation) {
+      const newMessage = {
+        value: input,
+        from: '1',
+      };
+      sendMessageApi(
+        conversation?._id,
         UserStore.user._id,
-        place.ownerId,
+        UserStore.user._id === conversationParams.userId
+          ? conversationParams.ownerId
+          : conversationParams.userId,
+        input,
       );
-      if (conversation) {
-
-      }
-      console.log(conversation);
-    } else {
       setMessages((prev) => [...prev, newMessage]);
       setInput('');
       scrollToBottom();
@@ -84,12 +105,7 @@ const ConversationScreen = (props: Props) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* <Header
-        type="back"
-        showProfil={true}
-        title={sender.from}
-        profilPicture={sender.picture}
-      /> */}
+      <Header type="back" showProfil={true} />
       <View style={styles.content}>
         <FlatList
           ref={_flatList}

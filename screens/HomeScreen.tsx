@@ -32,19 +32,24 @@ import UserStore from '../store/UserStore';
 import {hasBankAccount} from '../api/payment';
 import BankAccountScreen from './BankAccountScreen';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { withSocketContext } from '../components/SocketProvider';
 
 type RootScreenNavigationProp = StackNavigationProp<HomeParamList, 'Home'>;
 
 type Props = {
   navigation: RootScreenNavigationProp;
+  socket: any;
 };
 
 const HomeScreen = (props: Props) => {
   const {navigation} = props;
+  const {socket} = props.socket;
+
   const [places, setPlaces] = useState<Array<Place>>([]);
   const {handleModal} = useContext(ModalContext);
 
   const init = useCallback(async () => {
+    socket.emit('init_conversations', {userId: UserStore.user._id});
     setPlaces(await getAllPlaces());
   }, []);
 
@@ -206,7 +211,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    paddingBottom: 60,
+    paddingBottom: 20,
     marginTop: 50,
     zIndex: 5,
   },
@@ -255,4 +260,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HomeScreen;
+export default withSocketContext(HomeScreen);

@@ -3,6 +3,7 @@ import {Text, StyleSheet} from 'react-native';
 import Modal, {ModalContent} from 'react-native-modals';
 import Colors from '../constants/Colors';
 import Button from './Button';
+import i18n from 'i18n-js';
 
 type Props = {
   isVisible: boolean;
@@ -30,12 +31,12 @@ const Popin = ({
         <Text style={styles.modalDescription}>{description}</Text>
         <Button
           backgroundColor={Colors.primary}
-          value="Confirm"
+          value={i18n.t('component_popin_confirm')}
           textColor={Colors.white}
           onPress={onConfirmPress}
         />
         <Text onPress={onCancelPress} style={styles.cancel}>
-          Cancel
+          {i18n.t('component_popin_cancel')}
         </Text>
       </ModalContent>
     </Modal>

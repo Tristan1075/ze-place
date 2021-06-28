@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  ViewStyle,
-  View,
-} from 'react-native';
+import {Text, StyleSheet, TouchableOpacity, ViewStyle} from 'react-native';
 import {Flow} from 'react-native-animated-spinkit';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';

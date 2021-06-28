@@ -2,7 +2,7 @@ import {AntDesign} from '@expo/vector-icons';
 import React from 'react';
 import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import Colors from '../constants/Colors';
-import Layout from '../constants/Layout';
+import i18n from 'i18n-js';
 import {Booking} from '../types';
 
 type Props = {
@@ -10,9 +10,16 @@ type Props = {
   onAcceptPress: (bookingId: string) => void;
   onDenyPress: (bookingId: string) => void;
   isUser: boolean;
+  onSendMessagePress: () => void;
 };
 
-const BookingCard = ({item, onAcceptPress, onDenyPress, isUser}: Props) => {
+const BookingCard = ({
+  item,
+  onAcceptPress,
+  onDenyPress,
+  isUser,
+  onSendMessagePress,
+}: Props) => {
   return (
     <View style={styles.card}>
       <View style={styles.row}>
@@ -20,9 +27,15 @@ const BookingCard = ({item, onAcceptPress, onDenyPress, isUser}: Props) => {
           <Text style={styles.name}>
             {item.firstname} {item.lastname}
           </Text>
-          <Text style={styles.date}>From: {item.startDate}</Text>
-          <Text style={styles.date}>To: {item.endDate}</Text>
-          <Text style={styles.date}>{item.duration} days</Text>
+          <Text style={styles.date}>
+            {i18n.t('component_booking_card_from')} {item.startDate}
+          </Text>
+          <Text style={styles.date}>
+            {i18n.t('component_booking_card_to')} {item.endDate}
+          </Text>
+          <Text style={styles.date}>
+            {item.duration} {i18n.t('component_booking_card_days')}
+          </Text>
           <Text style={styles.date}>{item.price}€</Text>
         </View>
         <Image source={{uri: item.avatar}} style={styles.cover} />
@@ -30,6 +43,12 @@ const BookingCard = ({item, onAcceptPress, onDenyPress, isUser}: Props) => {
       {item.description ? (
         <Text style={styles.description}>{item.description}</Text>
       ) : null}
+      <TouchableOpacity onPress={onSendMessagePress}>
+        <AntDesign name="message1" size={20} />
+        <Text style={styles.description}>
+          {i18n.t('component_booking_card_send_message')}
+        </Text>
+      </TouchableOpacity>
       <View style={styles.border} />
       <View style={styles.actions}>
         {!item.isDenied && (
@@ -42,7 +61,11 @@ const BookingCard = ({item, onAcceptPress, onDenyPress, isUser}: Props) => {
             styles.status,
             !item.isDenied && item.isAccepted && styles.success,
           ]}>
-          {item.isDenied ? 'DENIED' : item.isAccepted ? 'ACCEPTED' : 'WAITING'}
+          {item.isDenied
+            ? i18n.t('component_booking_card_denied')
+            : item.isAccepted
+            ? i18n.t('component_booking_card_accepted')
+            : i18n.t('component_booking_card_pending')}
         </Text>
         {!item.isDenied && !item.isAccepted && !isUser && (
           <TouchableOpacity onPress={() => item._id && onAcceptPress(item._id)}>

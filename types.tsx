@@ -37,9 +37,17 @@ export type HeaderParamList = {
   PlaceDetail: {place: PlaceType};
 };
 
-export type MessagesParamList = {
+export type FavoritesTab = {
+  Favorites: undefined;
+  PlaceDetail: {place: string};
   Messages: undefined;
-  Conversation: {sender: Sender};
+  Conversation: {
+    conversation: {
+      placeId: string;
+      userId: string;
+      ownerId: string;
+    };
+  };
 };
 
 export type PlacesParamList = {
@@ -101,10 +109,9 @@ export type Availability = {
 };
 
 export type Review = {
- 
   name: string;
-  description:string;
-  writerId:string;
+  description: string;
+  writerId: string;
   rate: number;
   created_at: {type: Date; default: Date};
 };
@@ -113,7 +120,7 @@ export type Promo = {
   name: string;
   end_date: string;
   start_date: string;
-  user_limit: Number;
+  user_limit: number;
   value: number;
   created_at: {type: Date; default: Date};
 };
@@ -130,8 +137,11 @@ export type Sender = {
 };
 
 export type Conversation = {
-  id: string;
-  messages: Array<Message>;
+  _id: string;
+  placeId: string;
+  userId: string;
+  ownerId: string;
+  created_at: Date;
 };
 
 export type Message = {
@@ -162,7 +172,7 @@ export type SignupForm = {
 
 export type FeatureType = {
   name: string;
-  image:string;
+  image: string;
 };
 
 export type PlaceType = {
@@ -184,9 +194,9 @@ export type MapboxSearch = {
 };
 
 export type BugForm = {
-  name:string,
-  description:string,
-  senderId:string
+  name: string;
+  description: string;
+  senderId: string;
 };
 
 export type Location = {
@@ -230,9 +240,9 @@ export type Coords = {
 export type ReviewForm = {
   name: string;
   description: string;
-  writerId:string;
-  placeId:string;
-  rate:number;
+  writerId: string;
+  placeId: string;
+  rate: number;
 };
 
 export type CreditCardInformations = {
@@ -264,7 +274,7 @@ export type PaymentMethod = {
     funding: string;
     last4: string;
     networks: {
-      available: String[];
+      available: string[];
     };
     three_d_secure_usage: {
       supported: boolean;

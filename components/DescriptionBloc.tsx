@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  TouchableOpacity,
   Text,
   StyleSheet,
   Image,
@@ -9,7 +8,6 @@ import {
 } from 'react-native';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
-import Button from './Button';
 import i18n from 'i18n-js';
 
 type Props = {
@@ -21,12 +19,14 @@ const DescriptionBloc = (props: Props) => {
     <TouchableWithoutFeedback onPress={props.onPress}>
       <View style={styles.container} onPress={props.onPress}>
         <Text style={styles.title}>
-          {i18n.t('description_bloc_rent_space')}
+          {i18n.t('component_description_bloc_rent_space')}
         </Text>
         <Text style={styles.description}>
-          {i18n.t('description_bloc_rent_description')}
+          {i18n.t('component_description_bloc_rent_description')}
         </Text>
-        <Text style={styles.button}>{i18n.t('description_bloc_see_more')}</Text>
+        <Text style={styles.button}>
+          {i18n.t('component_description_bloc_see_more')}
+        </Text>
         <Image
           source={require('../assets/images/home_cover.jpeg')}
           style={styles.image}

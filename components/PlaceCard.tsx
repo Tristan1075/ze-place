@@ -6,6 +6,7 @@ import Colors from '../constants/Colors';
 import {Place} from '../types';
 import {Rating} from 'react-native-ratings';
 import Layout from '../constants/Layout';
+import i18n from 'i18n-js';
 
 type Props = {
   onFavoritePress?: (place: Place) => void;
@@ -54,7 +55,9 @@ const PlaceCard = (props: Props) => {
         </View>
         <View style={styles.footer}>
           <Text style={styles.price}>{place.price}€</Text>
-          <Text style={styles.durationType}>/day</Text>
+          <Text style={styles.durationType}>
+            {i18n.t('component_place_card_day')}
+          </Text>
           {/* <Text style={styles.badge}>Place available</Text> */}
         </View>
       </View>
