@@ -91,8 +91,7 @@ const SearchFilterScreen = ({onSearchPress}: Props) => {
             title={i18n.t('search_filter_type')}
             subtitle={true}
           />
-          {
-              Platform.OS === 'ios' ?
+          
               <SimpleInput
                 style={styles.input}
                 placeholder={i18n.t('search_filter_choose_type')}
@@ -103,21 +102,7 @@ const SearchFilterScreen = ({onSearchPress}: Props) => {
                   <Ionicons name="chevron-down" size={20} color={Colors.dark} />
                 }
               />
-              :
-                <TouchableOpacity onPress={() => setShowPlaceType(true)}>
-                <SimpleInput
-                  style={styles.input}
-                  placeholder={i18n.t('search_filter_choose_type')}
-                  value={filterForm.placeType?.name}
-                  isEditable={false}
-                  
-                  suffix={
-                    <Ionicons name="chevron-down" size={20} color={Colors.dark} />
-                  }
-                />
-
-                </TouchableOpacity>
-            }
+              
           
           <TitleWithDescription
             title={i18n.t('search_filter_price')}
@@ -176,8 +161,7 @@ const SearchFilterScreen = ({onSearchPress}: Props) => {
             subtitle={true}
           />
           <View style={styles.input}>
-          {
-              Platform.OS === 'ios' ?
+          
               <SimpleInput
                 placeholder={i18n.t('search_filter_search')}
                 isEditable={false}
@@ -186,19 +170,7 @@ const SearchFilterScreen = ({onSearchPress}: Props) => {
                   <Ionicons name="chevron-down" size={20} color={Colors.dark} />
                 }
               />
-              :
-              <TouchableOpacity  onPress={() => setShowSearchLocation(true)}>
-                <SimpleInput
-                  placeholder={i18n.t('search_filter_search')}
-                  isEditable={false}
-                 
-                  suffix={
-                    <Ionicons name="chevron-down" size={20} color={Colors.dark} />
-                  }
-                />
-
-              </TouchableOpacity>
-            }
+             
             
           </View>
           {filterForm.location && (

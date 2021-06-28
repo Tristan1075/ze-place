@@ -140,8 +140,7 @@ const HomeScreen = (props: Props) => {
       <View style={styles.container}>
         <Header type="menu" showProfil={true} />
         <Text style={styles.title}>{i18n.t('home_discover')}</Text>
-        {
-              Platform.OS === 'ios' ?
+       
               <SimpleInput
                 isEditable={false}
                 style={styles.input}
@@ -149,18 +148,6 @@ const HomeScreen = (props: Props) => {
                 suffix={<Ionicons name="search" size={20} color={Colors.gray} />}
                 onPress={showFilterModal}
               />
-              :
-                <TouchableOpacity onPress={showFilterModal}>
-                 <SimpleInput
-                  isEditable={false}
-                  style={styles.input}
-                  placeholder={i18n.t('home_search')}
-                  suffix={<Ionicons name="search" size={20} color={Colors.gray} />}
-                  onPress={showFilterModal}
-                />
-
-                </TouchableOpacity>
-            }
         
       </View>
       <TitleWithDescription

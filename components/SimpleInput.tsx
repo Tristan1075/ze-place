@@ -6,6 +6,7 @@ import {
   StyleSheet,
   ViewStyle,
   KeyboardType,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import { Platform } from 'react-native';
 
@@ -52,6 +53,7 @@ const SimpleInput = (props: Props) => {
     
     <View style={style}>
     
+      <TouchableWithoutFeedback onPress={onPress} >
       <View style={styles.inputContainer}>
         <TextInput
           keyboardType={type}
@@ -71,7 +73,8 @@ const SimpleInput = (props: Props) => {
           multiline={multiline}
         />
         {suffix}
-      </View>
+        </View>
+      </TouchableWithoutFeedback>
       {error ? <Text style={styles.error}>{error}</Text> : null}
     </View>
   );
