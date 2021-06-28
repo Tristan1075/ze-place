@@ -11,6 +11,7 @@ import {
 } from '@expo/vector-icons';
 import {CreatePlaceForm} from '../../types';
 import ToggleWithTitle from '../../components/ToggleWithTitle';
+import i18n from 'i18n-js';
 
 type Props = {
   prevStep: () => void;
@@ -25,13 +26,13 @@ const PlaceAuthorization = (props: Props) => {
   return (
     <View style={styles.container}>
       <TitleWithDescription
-        title="Authorization"
-        description="Choose images to describe your place"
+        title={i18n.t('place_authorization_title')}
+        description={i18n.t('place_authorization_title_description')}
         subtitle={true}
         style={styles.paddingVertical}
       />
       <ToggleWithTitle
-        title="Authorize animals"
+        title={i18n.t('place_authorization_animals')}
         icon={
           <FontAwesome5
             name="dog"
@@ -47,7 +48,7 @@ const PlaceAuthorization = (props: Props) => {
         }
       />
       <ToggleWithTitle
-        title="Authorize music"
+        title={i18n.t('place_authorization_music')}
         icon={
           <Ionicons
             name="musical-note"
@@ -63,7 +64,7 @@ const PlaceAuthorization = (props: Props) => {
         }
       />
       <ToggleWithTitle
-        title="Authorize smoking"
+        title={i18n.t('place_authorization_smoking')}
         icon={
           <MaterialCommunityIcons
             name="smoking"
@@ -79,7 +80,7 @@ const PlaceAuthorization = (props: Props) => {
         }
       />
       <ToggleWithTitle
-        title="Authorize fire"
+        title={i18n.t('place_authorization_fire')}
         icon={
           <MaterialCommunityIcons
             name="fire"
@@ -95,7 +96,7 @@ const PlaceAuthorization = (props: Props) => {
         }
       />
       <ToggleWithTitle
-        title="Authorize food and drink"
+        title={i18n.t('place_authorization_food_and_drink')}
         icon={
           <MaterialCommunityIcons
             name="food-fork-drink"
@@ -114,14 +115,14 @@ const PlaceAuthorization = (props: Props) => {
       />
       <View style={styles.row}>
         <Button
-          value="Back"
+          value={i18n.t('place_authorization_back')}
           backgroundColor={Colors.white}
           textColor={Colors.dark}
           onPress={prevStep}
           style={{marginRight: 10, flex: 1}}
         />
         <Button
-          value="Continue"
+          value={i18n.t('place_authorization_continue')}
           backgroundColor={Colors.dark}
           textColor={Colors.white}
           onPress={nextStep}

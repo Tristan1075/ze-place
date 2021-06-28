@@ -1,4 +1,10 @@
-import React, {Dispatch, SetStateAction, useContext, useState, useEffect} from 'react';
+import React, {
+  Dispatch,
+  SetStateAction,
+  useContext,
+  useState,
+  useEffect,
+} from 'react';
 import {
   StyleSheet,
   Text,
@@ -6,7 +12,7 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
-import { Platform } from 'react-native';
+import {Platform} from 'react-native';
 
 //@ts-ignore
 import {ModalContent, BottomModal} from 'react-native-modals';
@@ -25,7 +31,8 @@ import SelectableItem from '../../components/SelectableItem';
 import {CreatePlaceForm, FeatureType, PlaceType} from '../../types';
 import Constants from '../../utils/Constants';
 import FeatureList from '../../components/FeatureList';
-import { getPlaceFeatures } from '../../api/type-features';
+import {getPlaceFeatures} from '../../api/type-features';
+import i18n from 'i18n-js';
 
 type Props = {
   prevStep: () => void;
@@ -45,11 +52,11 @@ const PlaceInformations = (props: Props) => {
       child: <SelectPlaceTypeScreen onPlaceTypePress={handlePlaceTypePress} />,
     });
   };
-  useEffect(()=> {
+  useEffect(() => {
     const getCardType = async () => setFeatures(await getPlaceFeatures());
-    getCardType()
+    getCardType();
   }, []);
-  
+
   const handlePlaceTypePress = (type: PlaceType) => {
     setCreatePlaceForm({...createPlaceForm, placeType: type});
     handleModal();
@@ -58,30 +65,29 @@ const PlaceInformations = (props: Props) => {
   return (
     <View style={styles.container}>
       <TitleWithDescription
-        title="Place type"
-        description="What is the type of your place?"
+        title={i18n.t('place_information_place_type_title')}
+        description={i18n.t('place_information_place_type_description')}
         subtitle={true}
         style={styles.paddingVertical}
       />
-      
-              <SimpleInput
-                placeholder="Choose a place type"
-                value={createPlaceForm.placeType?.name}
-                isEditable={false}
-                onPress={handleSelectPlaceType}
-                suffix={<Ionicons name="chevron-down" size={20} color={Colors.dark} />}
-              />
-             
-      
+
+      <SimpleInput
+        placeholder={i18n.t('place_information_place_type_placeholder')}
+        value={createPlaceForm.placeType?.name}
+        isEditable={false}
+        onPress={handleSelectPlaceType}
+        suffix={<Ionicons name="chevron-down" size={20} color={Colors.dark} />}
+      />
+
       <TitleWithDescription
-        title="Surface"
-        description="How many square meters is your place ?"
+        title={i18n.t('place_information_surface_title')}
+        description={i18n.t('place_information_surface_description')}
         subtitle={true}
         style={styles.paddingVertical}
       />
       <SimpleInput
         value={createPlaceForm.surface}
-        placeholder="Please enter the size"
+        placeholder={i18n.t('place_information_surface_placeholder')}
         type="number-pad"
         suffix={<Text style={styles.descriptionText}>m²</Text>}
         onChangeText={(value) =>
@@ -89,14 +95,14 @@ const PlaceInformations = (props: Props) => {
         }
       />
       <TitleWithDescription
-        title="Price"
-        description="How much do you want to rent your place ?"
+        title={i18n.t('place_information_price_title')}
+        description={i18n.t('place_information_price_description')}
         subtitle={true}
         style={styles.paddingVertical}
       />
       <SimpleInput
         value={createPlaceForm.price}
-        placeholder="Type your price"
+        placeholder={i18n.t('place_information_price_placeholder')}
         style={styles.flex}
         suffix={<Text style={styles.descriptionText}>€</Text>}
         type="number-pad"
@@ -105,13 +111,13 @@ const PlaceInformations = (props: Props) => {
         }
       />
       <TitleWithDescription
-        title="Description"
-        description="Description of your !"
+        title={i18n.t('place_information_description_title')}
+        description={i18n.t('place_information_description_description')}
         subtitle={true}
         style={styles.paddingVertical}
       />
       <SimpleInput
-        placeholder="Choose"
+        placeholder={i18n.t('place_information_description_placeholder')}
         multiline={true}
         numberOfLines={1}
         value={createPlaceForm.description}
@@ -120,8 +126,8 @@ const PlaceInformations = (props: Props) => {
         }
       />
       <TitleWithDescription
-        title="Features"
-        description="Select  the type that fit your place !"
+        title={i18n.t('place_information_feature_title')}
+        description={i18n.t('place_information_feature_description')}
         subtitle={true}
         style={styles.paddingVertical}
       />
@@ -132,8 +138,8 @@ const PlaceInformations = (props: Props) => {
         onlyOne={false}
       />
       <TitleWithDescription
-        title="Availability"
-        description="Select  the type that fit your place !"
+        title={i18n.t('place_information_availability_title')}
+        description={i18n.t('place_information_availability_description')}
         subtitle={true}
         style={styles.paddingVertical}
       />
@@ -155,14 +161,14 @@ const PlaceInformations = (props: Props) => {
       />
       <View style={styles.row}>
         <Button
-          value="Back"
+          value={i18n.t('place_information_back')}
           backgroundColor={Colors.white}
           textColor={Colors.dark}
           onPress={prevStep}
           style={{marginRight: 10, flex: 1}}
         />
         <Button
-          value="Continue"
+          value={i18n.t('place_information_continue')}
           backgroundColor={Colors.dark}
           textColor={Colors.white}
           onPress={nextStep}

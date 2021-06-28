@@ -115,6 +115,72 @@ export default {
   promo_code_active: 'Promo actives',
   promo_code_innactive: 'Promo innactives',
 
+  //create_place
+  create_place_general: 'Général',
+  create_place_detail: 'Détail',
+  create_place_authorization: 'Autorisation',
+  create_place_customization: 'Customisation',
+  create_place_quit_message: 'Êtes vous sûr de vouloir quitter ?',
+  create_place_quit_description: `Vous perdrez ce que vous avez déjà accompli et vous ne pourrez pas continuer`,
+  create_place_confirm: 'Confirmer',
+  create_place_cancel: 'Annuler',
+
+  //customization
+  customization_image_title: 'Images',
+  customization_image_description:
+    'Choisissez les images qui décrivent votre espace',
+  customization_back: 'Retour',
+  customization_submit: 'Soumettre',
+  customization_take_picture: 'Prendre une photo',
+  customization_browse: 'Parcourir',
+  customization_confirm_form: 'Confirmer le formulaire',
+  customization_confirm: 'Confirmer',
+  customization_cancel: 'Annuler',
+
+  //general_information
+  general_information_title: 'Titre',
+  general_information_title_description: 'Choisissez un nom attrayant !',
+  general_information_place_title: `Titre du lieu`,
+  general_information_location: 'Adresse',
+  general_information_location_description: 'Où est situé votre lieu  ?',
+  general_information_search: 'Rechercher',
+  general_information_continue: 'Continuer',
+
+  //place_authorization
+  place_authorization_title: 'Autorisations',
+  place_authorization_title_description:
+    'Choisissez des images pour décrire votre lieu',
+  place_authorization_animals: 'Autoriser les animaux',
+  place_authorization_music: 'Autoriser la musique',
+  place_authorization_smoking: 'Autoriser le tabac',
+  place_authorization_fire: 'Autoriser les feux de camps',
+  place_authorization_food_and_drink: 'Autoriser la nourriture et boisson',
+  place_authorization_back: 'Retour',
+  place_authorization_continue: 'Continuer',
+
+  //place_information
+  place_information_place_type_title: `Type d'espace`,
+  place_information_place_type_description: 'Quel est le type de votre lieu ?',
+  place_information_place_type_placeholder: 'Choisissez votre type de de lieu',
+  place_information_surface_title: 'Surface',
+  place_information_surface_description:
+    'Quelle est la superficie de votre espace ?',
+  place_information_surface_placeholder: 'Saisissez la taille',
+  place_information_price_title: 'Prix',
+  place_information_price_description: 'Combien voulez-vous louer votre lieu ?',
+  place_information_price_placeholder: 'Saisissez votre prix',
+  place_information_description: 'Description',
+  place_information_description_description: 'Choisissez une description !',
+  place_information_description_placeholder: 'Choisissez',
+  place_information_feature_title: 'Fonctionnalités',
+  place_information_feature_description:
+    'Sélectionnez les fonctionnalités qui correspondent à votre espace',
+  place_information_availability_title: 'Disponibilité',
+  place_information_availability_description:
+    'Sélectionnez votre disponibilité',
+  place_information_back: 'Retour',
+  place_information_continue: 'Continuer',
+
   //COMPONENT
 
   //component_booking_card

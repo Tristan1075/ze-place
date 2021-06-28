@@ -7,7 +7,6 @@ import {useNavigation} from '@react-navigation/native';
 import {ProgressSteps, ProgressStep} from 'react-native-progress-steps';
 import Button from '../../components/Button';
 
-
 import Header from '../../components/Header';
 import Colors from '../../constants/Colors';
 import {CreatePlaceForm} from '../../types';
@@ -15,6 +14,7 @@ import GeneralInformations from './GeneralInformations';
 import PlaceInformations from './PlaceInformations';
 import PlaceAuthorization from './PlaceAuthorization';
 import Customization from './Customization';
+import i18n from 'i18n-js';
 
 const CreatePlaceScreen = () => {
   const navigation = useNavigation();
@@ -59,7 +59,7 @@ const CreatePlaceScreen = () => {
           completedProgressBarColor={Colors.primary}
           progressBarColor={Colors.primary}>
           <ProgressStep
-            label="General"
+            label={i18n.t('create_place_general')}
             removeBtnRow={true}
             scrollViewProps={{showsVerticalScrollIndicator: false}}>
             <View>
@@ -71,7 +71,7 @@ const CreatePlaceScreen = () => {
             </View>
           </ProgressStep>
           <ProgressStep
-            label="Detail"
+            label={i18n.t('create_place_detail')}
             removeBtnRow={true}
             scrollViewProps={{showsVerticalScrollIndicator: false}}>
             <View>
@@ -84,7 +84,7 @@ const CreatePlaceScreen = () => {
             </View>
           </ProgressStep>
           <ProgressStep
-            label="Authorization"
+            label={i18n.t('create_place_authorization')}
             removeBtnRow={true}
             scrollViewProps={{showsVerticalScrollIndicator: false}}>
             <View>
@@ -97,7 +97,7 @@ const CreatePlaceScreen = () => {
             </View>
           </ProgressStep>
           <ProgressStep
-            label="Customization"
+            label={i18n.t('create_place_customization')}
             removeBtnRow={true}
             scrollViewProps={{showsVerticalScrollIndicator: false}}>
             <View>
@@ -118,18 +118,20 @@ const CreatePlaceScreen = () => {
           setExitModal(false);
         }}>
         <ModalContent style={styles.modal}>
-          <Text style={styles.modalTitle}>Are you sure you want to quit ?</Text>
+          <Text style={styles.modalTitle}>
+            {i18n.t('create_place_quit_message')}
+          </Text>
           <Text style={styles.modalDescription}>
-            You will lose what you've done and you will not be able to continue
+            {i18n.t('create_place_quit_description')}
           </Text>
           <Button
             backgroundColor={Colors.primary}
-            value="Confirm"
+            value={i18n.t('create_place_confirm')}
             textColor={Colors.white}
             onPress={handleBackPress}
           />
           <Text onPress={() => setExitModal(false)} style={styles.cancel}>
-            Cancel
+            {i18n.t('create_place_cancel')}
           </Text>
         </ModalContent>
       </Modal>

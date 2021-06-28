@@ -1,6 +1,12 @@
 import React, {Dispatch, SetStateAction, useContext} from 'react';
-import {StyleSheet, View, TouchableWithoutFeedback, Image, TouchableOpacity} from 'react-native';
-import { Platform } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  TouchableWithoutFeedback,
+  Image,
+  TouchableOpacity,
+} from 'react-native';
+import {Platform} from 'react-native';
 import TitleWithDescription from '../../components/TitleWithDescription';
 import SimpleInput from '../../components/SimpleInput';
 import Button from '../../components/Button';
@@ -11,6 +17,7 @@ import {ModalContext} from '../../providers/modalContext';
 import SearchPlaceScreen from '../SearchPlaceScreen';
 import SearchCard from '../../components/SearchCard';
 import {Ionicons} from '@expo/vector-icons';
+import i18n from 'i18n-js';
 
 type Props = {
   nextStep: () => void;
@@ -36,34 +43,32 @@ const GeneralInformations = (props: Props) => {
   return (
     <View style={styles.container}>
       <TitleWithDescription
-        title="Title"
-        description="Choose an attractive name !"
+        title={i18n.t('general_information_title')}
+        description={i18n.t('general_information_title_description')}
         subtitle={true}
         style={styles.paddingVertical}
       />
       <SimpleInput
         value={createPlaceForm.title}
-        placeholder="Place's title"
+        placeholder={i18n.t('general_information_place_title')}
         onChangeText={(value) => {
           setCreatePlaceForm({...createPlaceForm, title: value});
         }}
       />
       <TitleWithDescription
-        title="Location"
-        description="Where is located your place ?"
+        title={i18n.t('general_information_location')}
+        description={i18n.t('general_information_location_description')}
         subtitle={true}
         style={styles.paddingVertical}
       />
 
-           
-              <SimpleInput
-                placeholder="Search"
-                isEditable={false}
-                onPress={handleMapPress}
-                suffix={<Ionicons name="chevron-down" size={20} color={Colors.dark} />}
-              />
-            
-     
+      <SimpleInput
+        placeholder={i18n.t('general_information_search')}
+        isEditable={false}
+        onPress={handleMapPress}
+        suffix={<Ionicons name="chevron-down" size={20} color={Colors.dark} />}
+      />
+
       {createPlaceForm.location && (
         <SearchCard
           title={createPlaceForm.location?.address}
@@ -72,7 +77,7 @@ const GeneralInformations = (props: Props) => {
         />
       )}
       <Button
-        value="Continuer"
+        value={i18n.t('general_information_continue')}
         backgroundColor={Colors.dark}
         textColor={Colors.white}
         onPress={nextStep}

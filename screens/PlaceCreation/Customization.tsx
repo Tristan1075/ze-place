@@ -26,9 +26,9 @@ import Colors from '../../constants/Colors';
 import {Ionicons} from '@expo/vector-icons';
 import SelectableItem from '../../components/SelectableItem';
 import {CreatePlaceForm} from '../../types';
-import Layout from '../../constants/Layout';
 import {createPlace} from '../../api/places';
 import * as SecureStore from 'expo-secure-store';
+import i18n from 'i18n-js';
 
 type Props = {
   prevStep: () => void;
@@ -83,15 +83,13 @@ const Customization = (props: Props) => {
       RNS3.put(file, options).then((response) => {
         if (response.status !== 201)
           throw new Error('Failed to upload image to S3');
-        
-       
       });
 
       cpt++;
     }
-    createPlaceForm.images.forEach(e => {
-      e.url = `https://ze-place.s3.eu-west-3.amazonaws.com/${createPlaceForm.title}${id}index${cpt2}.png`
-    cpt2++;
+    createPlaceForm.images.forEach((e) => {
+      e.url = `https://ze-place.s3.eu-west-3.amazonaws.com/${createPlaceForm.title}${id}index${cpt2}.png`;
+      cpt2++;
     });
   };
   function sleep(ms: number) {
@@ -100,7 +98,7 @@ const Customization = (props: Props) => {
   const handleSubmitForm = async () => {
     try {
       await uploadToS3();
-     console.log(createPlaceForm);
+      console.log(createPlaceForm);
       await createPlace(createPlaceForm);
       setSubmitModal(false);
       navigation.dispatch(StackActions.popToTop());
@@ -112,8 +110,8 @@ const Customization = (props: Props) => {
   return (
     <View style={styles.container}>
       <TitleWithDescription
-        title="Images"
-        description="Choose images to describe your place"
+        title={i18n.t('customization_image_title')}
+        description={i18n.t('customization_image_description')}
         subtitle={true}
         style={styles.paddingVertical}
       />
@@ -122,7 +120,7 @@ const Customization = (props: Props) => {
         horizontal={true}
         showsHorizontalScrollIndicator={false}>
         {createPlaceForm.images.map((image, index) => (
-          <Image key={index}  source={{uri: image.url}} style={styles.image} />
+          <Image key={index} source={{uri: image.url}} style={styles.image} />
         ))}
         <TouchableOpacity
           style={styles.buttonImage}
@@ -136,14 +134,14 @@ const Customization = (props: Props) => {
       </ScrollView>
       <View style={styles.row}>
         <Button
-          value="Back"
+          value={i18n.t('customization_back')}
           backgroundColor={Colors.white}
           textColor={Colors.dark}
           onPress={prevStep}
           style={{marginRight: 10, flex: 1}}
         />
         <Button
-          value="Submit"
+          value={i18n.t('customization_submit')}
           backgroundColor={Colors.primary}
           textColor={Colors.white}
           onPress={() => setSubmitModal(true)}
@@ -157,14 +155,14 @@ const Customization = (props: Props) => {
         onSwipeOut={() => setModalVisible(false)}>
         <ModalContent style={styles.bottomModal}>
           <SelectableItem
-            value="Take a picture"
+            value={i18n.t('customization_take_picture')}
             icon={'camera-outline'}
             onPress={() => {
               setModalVisible(false);
             }}
           />
           <SelectableItem
-            value="Browse"
+            value={i18n.t('customization_browse')}
             icon={'folder'}
             onPress={handleChooseImagePress}
           />
@@ -178,18 +176,20 @@ const Customization = (props: Props) => {
           setSubmitModal(false);
         }}>
         <ModalContent style={styles.modal}>
-          <Text style={styles.modalTitle}>Confirm the form</Text>
+          <Text style={styles.modalTitle}>
+            {i18n.t('customization_confirm_form')}
+          </Text>
           <Text style={styles.modalDescription}>
-            Your announce will be available as soon as possible
+            {i18n.t('customization_waiting_description')}
           </Text>
           <Button
             backgroundColor={Colors.primary}
-            value="Confirm"
+            value={i18n.t('customization_confirm')}
             textColor={Colors.white}
             onPress={handleSubmitForm}
           />
           <Text onPress={() => setSubmitModal(false)} style={styles.cancel}>
-            Cancel
+            {i18n.t('customization_cancel')}
           </Text>
         </ModalContent>
       </Modal>

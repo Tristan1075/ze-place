@@ -115,6 +115,72 @@ export default {
   promo_code_active: 'Active promo',
   promo_code_innactive: 'Innactive promo',
 
+  //create_place
+  create_place_general: 'General',
+  create_place_detail: 'Detail',
+  create_place_authorization: 'Authorization',
+  create_place_customization: 'Customization',
+  create_place_quit_message: 'Are you sure you want to quit ?',
+  create_place_quit_description: `You will lose what you've done and you will not be able to continue`,
+  create_place_confirm: 'Confirm',
+  create_place_cancel: 'Cancel',
+
+  //customization
+  customization_image_title: 'Images',
+  customization_image_description: 'Choose images to describe your place',
+  customization_back: 'Back',
+  customization_submit: 'Submit',
+  customization_take_picture: 'Take a picture',
+  customization_browse: 'Browse',
+  customization_confirm_form: 'Confirm the form',
+  customization_waiting_description:
+    'Your announce will be available as soon as possible',
+  customization_confirm: 'Confirm',
+  customization_cancel: 'Cancel',
+
+  //general_information
+  general_information_title: 'Title',
+  general_information_title_description: 'Choose an attractive name !',
+  general_information_place_title: `Place's title`,
+  general_information_location: 'Location',
+  general_information_location_description: 'Where is located your place ?',
+  general_information_search: 'Search',
+  general_information_continue: 'Continue',
+
+  //place_authorization
+  place_authorization_title: 'Authorizations',
+  place_authorization_title_description: 'Choose images to describe your place',
+  place_authorization_animals: 'Authorize animals',
+  place_authorization_music: 'Authorize music',
+  place_authorization_smoking: 'Authorize smoking',
+  place_authorization_fire: 'Authorize fire',
+  place_authorization_food_and_drink: 'Authorize food and drink',
+  place_authorization_back: 'Back',
+  place_authorization_continue: 'Continue',
+
+  //place_information
+  place_information_place_type_title: 'Place type',
+  place_information_place_type_description: 'What is the type of your place ?',
+  place_information_place_type_placeholder: 'Choose a place type',
+  place_information_surface_title: 'Surface',
+  place_information_surface_description:
+    'How many square meters is your place ?',
+  place_information_surface_placeholder: 'Enter the size',
+  place_information_price_title: 'Price',
+  place_information_price_description:
+    'How much do you want to rent your place ?',
+  place_information_price_placeholder: 'Type your price',
+  place_information_description_title: 'Description',
+  place_information_description_description: 'Description of your !',
+  place_information_description_placeholder: 'Choose',
+  place_information_feature_title: 'Features',
+  place_information_feature_description:
+    'Select the type that fit your place !',
+  place_information_availability_title: 'Availability',
+  place_information_availability_description: 'Select your availability',
+  place_information_back: 'Back',
+  place_information_continue: 'Continue',
+
   //COMPONENT
 
   //component_booking_card
