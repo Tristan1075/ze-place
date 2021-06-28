@@ -124,6 +124,8 @@ export const getFavorites = async () => {
 export const getActivePromos = async () => {
   const token = await SecureStore.getItemAsync('access-token');
   const promoId = UserStore.user.promoCode;
+  console.log(promoId);
+  
   const url = `${API_URL}/promo/getSevralCode`;
 
   return await axios
@@ -141,6 +143,8 @@ export const getActivePromos = async () => {
       },
     )
     .then((response: AxiosResponse<any>) => {
+      console.log(response.data);
+      
       return response.data;
     })
     .catch((err) => {

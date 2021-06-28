@@ -7,6 +7,7 @@ import {
   ViewStyle,
   KeyboardType,
 } from 'react-native';
+import { Platform } from 'react-native';
 
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
@@ -47,7 +48,10 @@ const SimpleInput = (props: Props) => {
   } = props;
 
   return (
+
+    
     <View style={style}>
+    
       <View style={styles.inputContainer}>
         <TextInput
           keyboardType={type}
