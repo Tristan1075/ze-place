@@ -1,10 +1,9 @@
 import React, {useState} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
-import CryptoJS from 'crypto-js';
 
 import Colors from '../constants/Colors';
 import {CreditCardInformations} from '../types';
-
+import i18n from 'i18n-js';
 import Button from './Button';
 import SimpleInput from './SimpleInput';
 
@@ -102,7 +101,7 @@ const CreditCard = (props: Props) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>Numéro de carte</Text>
+      <Text style={styles.label}>{i18n.t('component_credit_card_number')}</Text>
       <View>
         <SimpleInput
           onChangeText={creditCardNumberManager}
@@ -113,7 +112,9 @@ const CreditCard = (props: Props) => {
       </View>
       <View style={styles.row}>
         <View style={[styles.embedInput, styles.marginRight]}>
-          <Text style={styles.label}>Expire le</Text>
+          <Text style={styles.label}>
+            {i18n.t('component_credit_card_expire')}
+          </Text>
           <SimpleInput
             onChangeText={expirationDateManager}
             value={expDate}
@@ -122,7 +123,9 @@ const CreditCard = (props: Props) => {
           />
         </View>
         <View style={styles.embedInput}>
-          <Text style={styles.label}>Code CVC</Text>
+          <Text style={styles.label}>
+            {i18n.t('component_credit_card_cvc')}
+          </Text>
           <SimpleInput
             onChangeText={cvcManager}
             value={cvc}
@@ -133,7 +136,7 @@ const CreditCard = (props: Props) => {
       </View>
       <Button
         backgroundColor={Colors.primary}
-        value={'Save card'}
+        value={i18n.t('component_credit_card_save_card')}
         textColor={Colors.white}
         onPress={handleSubmitCreditCardPress}
       />

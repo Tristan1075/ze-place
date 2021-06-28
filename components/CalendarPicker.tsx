@@ -6,6 +6,7 @@ import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
 import {Availability, Booking} from '../types';
 import {dateToAvailabilities, isRangeAvailable} from '../utils';
+import i18n from 'i18n-js';
 
 type Props = {
   startDate?: string;
@@ -164,11 +165,15 @@ const CalendarPicker = ({
       {showDates && (
         <View style={styles.row}>
           <View style={styles.from}>
-            <Text style={styles.text}>From :</Text>
+            <Text style={styles.text}>
+              {i18n.t('component_calendar_picker_from')}
+            </Text>
             <Text style={styles.textDate}>{start}</Text>
           </View>
           <View style={styles.to}>
-            <Text style={styles.text}>To :</Text>
+            <Text style={styles.text}>
+              {i18n.t('component_calendar_picker_to')}
+            </Text>
             <Text style={styles.textDate}>{end}</Text>
           </View>
         </View>

@@ -10,7 +10,6 @@ import {Ionicons} from '@expo/vector-icons';
 
 import Colors from '../constants/Colors';
 import {Place} from '../types';
-import Layout from '../constants/Layout';
 
 type Props = {
   onPress: () => void;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import {
   Text,
   StyleSheet,
@@ -9,65 +9,12 @@ import {
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
 import {FeatureType} from '../types';
-import { getPlaceFeatures } from '../api/type-features';
 
 type Props = {
   feature: FeatureType;
   onPress?: () => void;
   isActive?: boolean;
 };
-
-
-// export const features = [
-//   {
-//     name: 'Lunch',
-//     icon: {
-//       url: require('../assets/icons/lunch.png'),
-//     },
-//   },
-//   {
-//     name: 'Storage',
-//     icon: {
-//       url: require('../assets/icons/storage.png'),
-//     },
-//   },
-//   {
-//     name: 'Gardening',
-//     icon: {
-//       url: require('../assets/icons/garden.png'),
-//     },
-//   },
-//   {
-//     name: 'Party',
-//     icon: {
-//       url: require('../assets/icons/party.png'),
-//     },
-//   },
-//   {
-//     name: 'Parking',
-//     icon: {
-//       url: require('../assets/icons/parking.png'),
-//     },
-//   },
-//   {
-//     name: 'Work place',
-//     icon: {
-//       url: require('../assets/icons/workplace.png'),
-//     },
-//   },
-//   {
-//     name: 'Camping',
-//     icon: {
-//       url: require('../assets/icons/camping.png'),
-//     },
-//   },
-//   {
-//     name: 'Spectacle',
-//     icon: {
-//       url: require('../assets/icons/spectacle.png'),
-//     },
-//   },
-// ];
 
 const Feature = (props: Props) => {
   const {feature, onPress, isActive} = props;
@@ -76,17 +23,10 @@ const Feature = (props: Props) => {
     onPress && onPress();
   };
 
- 
-
-  const getImageRessource = (item: FeatureType) => {
-    const featureRessource = features.find((f) => f.name === item.name);
-    return featureRessource?.icon.url;
-  };
-
   return (
     <TouchableWithoutFeedback onPress={handleFeaturePress}>
       <View style={[styles.feature, isActive && styles.featureActive]}>
-        <Image source={{uri:feature.image}} style={styles.featureIcon} />
+        <Image source={{uri: feature.image}} style={styles.featureIcon} />
         <Text
           style={[styles.featureTitle, isActive && styles.featureTitleActive]}>
           {feature.name}

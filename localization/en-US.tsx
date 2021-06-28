@@ -15,13 +15,9 @@ export default {
   mail: 'Email',
   password: 'Password',
   modify: 'Modify',
-  validate: 'Validate',
   personalInfo: 'Personal information',
   connexionInfo: 'Connexion information',
   promo: 'Promotional code',
-  addCode: 'Add a new code',
-  actif: 'Active promo',
-  innactif: 'Innactive promo',
   places_title: 'Your places !',
 
   //root
@@ -59,7 +55,7 @@ export default {
   sign_up_gender_female: 'Female',
   sign_up_title: 'Hello ! Signup to get started !',
 
-  //Sign_in
+  //sign_in
   sign_in_email: 'Email',
   sign_in_password: 'Password',
   sign_in_no_match: 'Your email and/or password do not match !',
@@ -68,7 +64,7 @@ export default {
   sign_in_signUp: 'Sign up',
   sign_in_title: 'Hello ! Signin to get started !',
 
-  //Home
+  //home
   home_discover: 'Discover world with us !',
   home_search: 'Search',
   home_near_you: 'Near you',
@@ -77,13 +73,7 @@ export default {
   home_announces: 'Announces',
   home_see_more: 'See more',
 
-  //Description_bloc
-  description_bloc_rent_space: 'Rent your space',
-  description_bloc_rent_description:
-    'You can rent your m2, just come and discover this feature',
-  description_bloc_see_more: 'See more',
-
-  //Search_filter
+  //search_filter
   search_filter_type: 'Type',
   search_filter_choose_type: 'Choose a place type',
   search_filter_price: 'Price',
@@ -95,12 +85,12 @@ export default {
   search_filter_location: 'Location',
   search_filter_search: 'Search',
 
-  //Search_place_location
+  //search_place_location
   search_place_location_title: 'Find your place !',
   search_place_location_enter_address_placeholder: 'Enter the adress...',
   search_place_location_results: 'Results',
 
-  //Place_detail
+  //place_detail
   place_detail_about: 'About',
   place_detail_people_review_this: 'People review this',
   place_detail_see_more: 'See more',
@@ -118,4 +108,48 @@ export default {
   place_detail_per_day: 'Per day',
   place_detail_see_bookings: 'See bookings',
   place_detail_book: 'Book',
+
+  //promo_code
+  promo_code_validate: 'Validate',
+  promo_code_addCode: 'Add a new code',
+  promo_code_active: 'Active promo',
+  promo_code_innactive: 'Innactive promo',
+
+  //COMPONENT
+
+  //component_booking_card
+  component_booking_card_from: 'From :',
+  component_booking_card_to: 'To :',
+  component_booking_card_days: 'days',
+  component_booking_card_send_message: 'Send a message to owner',
+  component_booking_card_denied: 'DENIED',
+  component_booking_card_accepted: 'ACCEPTED',
+  component_booking_card_pending: 'PENDING',
+
+  //component_calendar_picker
+  component_calendar_picker_from: 'From :',
+  component_calendar_picker_to: 'To :',
+
+  //component_credit_card
+  component_credit_card_number: 'Card number',
+  component_credit_card_expire: 'Expire in',
+  component_credit_card_cvc: 'CVC Code',
+  component_credit_card_save_card: 'Save card',
+
+  //component_description_bloc
+  component_description_bloc_rent_space: 'Rent your space',
+  component_description_bloc_rent_description:
+    'You can rent your m2, just come and discover this feature',
+  component_description_bloc_see_more: 'See more',
+
+  //component_place_card
+  component_place_card_day: '/day',
+
+  //component_place_card_square
+  component_place_card_square_days: 'days',
+  component_place_card_square_send_review: 'Send a review',
+
+  //component_popin
+  component_popin_confirm: 'Confirm',
+  component_popin_cancel: 'Cancel',
 } as LocalizationType;

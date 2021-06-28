@@ -1,4 +1,4 @@
-import React, {useCallback, useState, useEffect, useContext} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {
   ImageBackground,
   TouchableOpacity,
@@ -8,12 +8,12 @@ import {
 } from 'react-native';
 import Colors from '../constants/Colors';
 import {Booking, Place, Review} from '../types';
-import {getPlaceById} from '../api/places';
 import WriteReviewScreen from '../screens/WriteReviewScreen';
 import {ModalContext} from '../providers/modalContext';
 import UserStore from '../store/UserStore';
 import {getPlaceReviewByUser} from '../api/reviews';
 import Layout from '../constants/Layout';
+import i18n from 'i18n-js';
 
 type Props = {
   item: Booking;
@@ -66,7 +66,9 @@ const PlaceCardSquare = ({item, onPress}: Props) => {
         <View style={styles.flex} />
         <Text style={styles.duration}>{item.startDate}</Text>
         <View style={styles.row}>
-          <Text style={styles.duration}>{item.duration} days</Text>
+          <Text style={styles.duration}>
+            {item.duration} {i18n.t('component_place_card_square_days')}
+          </Text>
           <Text style={styles.duration}>{item.price}€</Text>
         </View>
       </ImageBackground>
@@ -74,7 +76,7 @@ const PlaceCardSquare = ({item, onPress}: Props) => {
         <Text
           onPress={() => handleReviewPress(item.placeId)}
           style={styles.reviewersText}>
-          Ecrire une review
+          {i18n.t('component_place_card_square_send_review')}
         </Text>
       )}
     </TouchableOpacity>

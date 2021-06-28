@@ -1,5 +1,4 @@
 import {Ionicons} from '@expo/vector-icons';
-import { IconProps } from '@expo/vector-icons/build/createIconSet';
 import React from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import Colors from '../constants/Colors';
@@ -15,7 +14,14 @@ const SelectableItem = ({value, isActive, onPress, icon}: Props) => {
   return (
     <TouchableOpacity onPress={onPress}>
       <View style={styles.container}>
-        {icon && <Ionicons name={icon} size={24} color={Colors.dark} style={styles.icon} />}
+        {icon && (
+          <Ionicons
+            name={icon}
+            size={24}
+            color={Colors.dark}
+            style={styles.icon}
+          />
+        )}
         <Text style={[styles.text, isActive && isActive && styles.active]}>
           {value}
         </Text>

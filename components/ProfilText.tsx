@@ -2,8 +2,8 @@ import React from 'react';
 import {Text, StyleSheet, View} from 'react-native';
 import Colors from '../constants/Colors';
 type Props = {
-  message: String;
-  value: String;
+  message: string;
+  value: string;
 };
 
 const ProfilText = (props: Props) => {

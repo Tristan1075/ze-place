@@ -18,10 +18,6 @@ export default {
   validate: 'Valider',
   personalInfo: 'Information personelle',
   connexionInfo: 'Information de connexion',
-  promo: 'Code Promotionel',
-  addCode: 'Ajouter un nouveau code',
-  actif: 'Promo active',
-  innactif: 'Promo Innactive',
   places_title: 'Mes annonces !',
 
   //root
@@ -59,7 +55,7 @@ export default {
   sign_up_gender_female: 'Femme',
   sign_up_title: 'Bonjour ! Créer un compte pour commencer',
 
-  //Sign_in
+  //sign_in
   sign_in_email: 'Email',
   sign_in_password: 'Mot de passe',
   sign_in_no_match: 'Votre email et/ou mot de passe ne correspondent pas !',
@@ -68,7 +64,7 @@ export default {
   sign_in_signUp: 'Créer un compte',
   sign_in_title: 'Bonjour ! Connectez vous pour commencer',
 
-  //Home
+  //home
   home_discover: 'Venez découvrir le monde !',
   home_search: 'Rechercher',
   home_near_you: 'Proche de vous',
@@ -77,13 +73,7 @@ export default {
   home_announces: 'Annonces',
   home_see_more: 'En voir plus',
 
-  //Description_bloc
-  description_bloc_rent_space: 'Louez votre espace',
-  description_bloc_rent_description:
-    'Vous pouvez louer votre m2, venez découvrir cette fonctionalitée',
-  description_bloc_see_more: 'En voir plus',
-
-  //Search_filter
+  //search_filter
   search_filter_type: 'Type',
   search_filter_choose_type: `Définir le type d'espace`,
   search_filter_price: 'Prix',
@@ -95,12 +85,12 @@ export default {
   search_filter_location: 'Adresse',
   search_filter_search: 'Rechercher',
 
-  //Search_place_location
+  //search_place_location
   search_place_location_title: 'Trouvez votre espace !',
   search_place_location_enter_address_placeholder: `Saisissez l'adresse...`,
   search_place_location_results: 'Résultats',
 
-  //Place_detail
+  //place_detail
   place_detail_about: 'A propos de',
   place_detail_people_review_this: 'Avis des utilisateurs',
   place_detail_see_more: 'En voir plus',
@@ -118,4 +108,48 @@ export default {
   place_detail_per_day: 'Par jour',
   place_detail_see_bookings: 'Voir les réservation',
   place_detail_book: 'Réserver',
+
+  //promo_code
+  promo_code_validate: 'Valider',
+  promo_code_addCode: 'Ajouter un nouveau code',
+  promo_code_active: 'Promo actives',
+  promo_code_innactive: 'Promo innactives',
+
+  //COMPONENT
+
+  //component_booking_card
+  component_booking_card_from: 'Du :',
+  component_booking_card_to: 'Au :',
+  component_booking_card_days: 'jours',
+  component_booking_card_send_message: 'Contacter le propriétaire',
+  component_booking_card_denied: 'REFUSÉ',
+  component_booking_card_accepted: 'ACCEPTÉ',
+  component_booking_card_pending: 'EN ATTENTE',
+
+  //component_calendar_picker
+  component_calendar_picker_from: 'Du :',
+  component_calendar_picker_to: 'Au :',
+
+  //calendar_picker
+  component_credit_card_number: 'Numéro de carte',
+  component_credit_card_expire: 'Expire le',
+  component_credit_card_cvc: 'Code CVC',
+  component_credit_card_save_card: 'Enregistrer la carte',
+
+  //component_description_bloc
+  component_description_bloc_rent_space: 'Louez votre espace',
+  component_description_bloc_rent_description:
+    'Vous pouvez louer votre m2, venez découvrir cette fonctionalitée',
+  component_description_bloc_see_more: 'En voir plus',
+
+  //component_place_card
+  component_place_card_day: '/jour',
+
+  //component_place_card_square
+  component_place_card_square_days: 'jours',
+  component_place_card_square_send_review: 'Envoyer un avis',
+
+  //component_popin
+  component_popin_confirm: 'Confirmer',
+  component_popin_cancel: 'Annuler',
 } as LocalizationType;
