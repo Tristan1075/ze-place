@@ -6,6 +6,7 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
+import { Platform } from 'react-native';
 
 //@ts-ignore
 import {ModalContent, BottomModal} from 'react-native-modals';
@@ -62,13 +63,27 @@ const PlaceInformations = (props: Props) => {
         subtitle={true}
         style={styles.paddingVertical}
       />
-      <SimpleInput
-        placeholder="Choose a place type"
-        value={createPlaceForm.placeType?.name}
-        isEditable={false}
-        onPress={handleSelectPlaceType}
-        suffix={<Ionicons name="chevron-down" size={20} color={Colors.dark} />}
-      />
+      {
+              Platform.OS === 'ios' ?
+              <SimpleInput
+                placeholder="Choose a place type"
+                value={createPlaceForm.placeType?.name}
+                isEditable={false}
+                onPress={handleSelectPlaceType}
+                suffix={<Ionicons name="chevron-down" size={20} color={Colors.dark} />}
+              />
+              :
+                <TouchableOpacity onPress={handleSelectPlaceType}>
+                 <SimpleInput
+                  placeholder="Choose a place type"
+                  value={createPlaceForm.placeType?.name}
+                  isEditable={false}
+                  
+                  suffix={<Ionicons name="chevron-down" size={20} color={Colors.dark} />}
+                />
+                </TouchableOpacity>
+            }
+      
       <TitleWithDescription
         title="Surface"
         description="How many square meters is your place ?"

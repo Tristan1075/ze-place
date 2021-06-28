@@ -12,15 +12,13 @@ import i18n from 'i18n-js';
 import TitleWithDescription from '../components/TitleWithDescription';
 import Header from '../components/Header';
 import Colors from '../constants/Colors';
-import {RootStackParamList, Promo, User} from '../types';
-import {
-  getInnactivePromos,
-  getActivePromos,
-  addPromoCode,
-} from '../api/customer';
+import {  RootStackParamList, Promo,User} from '../types';
+import {getInnactivePromos,getActivePromos,addPromoCode, getUser} from '../api/customer';
+
 import Button from '../components/Button';
 import {ScrollView} from 'react-native-gesture-handler';
 import SimpleInput from '../components/SimpleInput';
+import UserStore from '../store/UserStore';
 
 type RootScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -52,8 +50,12 @@ const PromoScreen = (props: Props) => {
   }, []);
 
   const addPromo = async () => {
+
     if (code) {
       await addPromoCode(code);
+      await addPromoCode(code);
+    const token = await getUser();
+    await UserStore.updateUser(token)
     }
     setActivePromo(await getActivePromos());
   };

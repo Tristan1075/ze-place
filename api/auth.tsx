@@ -42,7 +42,7 @@ export const register = async (form: SignupForm, IDFiles): Promise<Token> => {
       `${API_URL}/auth/register`,
       {
         gender: form.gender,
-        avatar: form.avatar,
+        avatar: `https://ze-place.s3.eu-west-3.amazonaws.com/${form.email}${form.lastname}.png`,
         first_name: form.firstname,
         last_name: form.lastname,
         birthdate: form.birthdate,

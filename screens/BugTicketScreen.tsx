@@ -32,8 +32,11 @@ const BugTicketScreen = (props: Props) => {
         console.log(user._id);
         form.senderId = user._id;
         console.log(form);
-        await createBug(form);
-        
+        if(form.name.length === 0 || form.description.length === 0){
+         
+        }else{
+          await createBug(form);
+        }
       }
   return (
     <View style={styles.screen}>

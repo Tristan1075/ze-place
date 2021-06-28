@@ -6,6 +6,7 @@ import {
   StyleSheet,
   ViewStyle,
   TouchableOpacity,
+  Platform
 } from 'react-native';
 import Colors from '../constants/Colors';
 
@@ -34,10 +35,19 @@ const TitleWithDescription = (props: Props) => {
   return (
     <View style={[styles.container, style]}>
       <View style={styles.row}>
+      {
+        Platform.OS == 'android' ? 
+        <Text
+        style={styles.title}>
+        {title}
+      </Text>
+        :
         <Text
           style={[subtitle ? styles.subtitle : styles.title, {color: color}]}>
           {title}
         </Text>
+      }
+       
         <TouchableOpacity onPress={onActionPress} style={styles.row}>
           <Text style={styles.actionText}>{actionText}</Text>
           <Ionicons name={actionIcon} size={16} color={Colors.primary} />

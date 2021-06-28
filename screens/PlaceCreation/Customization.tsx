@@ -83,14 +83,16 @@ const Customization = (props: Props) => {
       RNS3.put(file, options).then((response) => {
         if (response.status !== 201)
           throw new Error('Failed to upload image to S3');
-        createPlaceForm.images[cpt2].url = response.body.postResponse.location;
-        console.log('cpt', createPlaceForm.images[cpt2].url);
-
-        cpt2++;
+        
+       
       });
 
       cpt++;
     }
+    createPlaceForm.images.forEach(e => {
+      e.url = `https://ze-place.s3.eu-west-3.amazonaws.com/${createPlaceForm.title}${id}index${cpt2}.png`
+    cpt2++;
+    });
   };
   function sleep(ms: number) {
     return new Promise((resolve) => setTimeout(resolve, ms));
@@ -98,7 +100,7 @@ const Customization = (props: Props) => {
   const handleSubmitForm = async () => {
     try {
       await uploadToS3();
-      await sleep(2000);
+     console.log(createPlaceForm);
       await createPlace(createPlaceForm);
       setSubmitModal(false);
       navigation.dispatch(StackActions.popToTop());
