@@ -20,13 +20,21 @@
     ],
     "ios": {
       "supportsTablet": false,
-      "bundleIdentifier": "com.zp.zeplace"
+      "bundleIdentifier": "com.zp.zeplace",
+      "config": {
+        "googleMapsApiKey": "AIzaSyD9sY4DmosQzXrW07ngYwBwhTaYjYYKUg8"
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/app_icon.png",
         "backgroundColor": "#FFFFFF"
+      },
+      "config": {
+        "googleMaps": {
+            "apiKey": "AIzaSyDscu5Ottp2PXXPH3jpGO3bPR823G7G-ms"
+        }
       }
-    },
+    }
   }
 }
