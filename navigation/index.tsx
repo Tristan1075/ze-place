@@ -15,7 +15,6 @@ import PaymentMethodForm from '../screens/PaymentMethodForm';
 import MenuScreen from '../screens/MenuScreen';
 import MyPlaceScreen from '../screens/MyPlaceScreen';
 
-import {navigationRef} from '../App';
 import BugTicketScreen from '../screens/BugTicketScreen';
 import BookingListScreen from '../screens/BookingListScreen';
 import WriteReviewScreen from '../screens/WriteReviewScreen';
@@ -37,16 +36,13 @@ const RootNavigator = (props) => {
       <Stack.Screen name="MyPlace" component={MyPlaceScreen} />
       <Stack.Screen name="BugTicket" component={BugTicketScreen} />
       <Stack.Screen name="Booking" component={BookingListScreen} />
-
-
-
     </Stack.Navigator>
   );
 };
 
 const Navigation = () => {
   return (
-    <NavigationContainer ref={navigationRef} linking={LinkingConfiguration}>
+    <NavigationContainer linking={LinkingConfiguration}>
       <RootNavigator />
     </NavigationContainer>
   );

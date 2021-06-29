@@ -6,6 +6,7 @@ import {Subscription} from '@unimodules/core';
 import {API_URL, PUBLIC_KEY_STRIPE} from './env';
 import * as Notifications from 'expo-notifications';
 import io from 'socket.io-client';
+import Navigation from './navigation';
 
 // @ts-ignore
 import {ModalPortal} from 'react-native-modals';
@@ -17,12 +18,9 @@ import frFR from './localization/fr-FR';
 import enUS from './localization/en-US';
 
 import useCachedResources from './hooks/useCachedResources';
-import Navigation from './navigation';
 import {ModalProvider} from './providers/modalContext';
-// import {SocketProvider} from './components/SocketProvider';
-import {NavigationContainerRef} from '@react-navigation/core';
 import {registerForPushNotificationsAsync} from './api/notifications';
-import { SocketProvider } from './components/SocketProvider';
+import {SocketProvider} from './components/SocketProvider';
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -32,21 +30,8 @@ Notifications.setNotificationHandler({
   }),
 });
 
-export const navigationRef = React.createRef<NavigationContainerRef>();
-
-export function navigate(name: string, params: any) {
-  navigationRef.current?.navigate(name, params);
-}
-
 const App = () => {
   const [socket, setSocket] = React.useState({});
-  const [expoPushToken, setExpoPushToken] = useState<string>();
-  const [
-    notification,
-    setNotification,
-  ] = useState<Notifications.Notification>();
-  const notificationListener = useRef<Subscription>();
-  const responseListener = useRef<Subscription>();
 
   useEffect(() => {
     const initSocket = {
@@ -58,11 +43,7 @@ const App = () => {
       }),
     };
     setSocket(initSocket);
-    registerForPushNotificationsAsync().then((token) => {
-      if (token) {
-        setExpoPushToken(token);
-      }
-    });
+    registerForPushNotificationsAsync();
   }, []);
 
   i18n.translations = {
