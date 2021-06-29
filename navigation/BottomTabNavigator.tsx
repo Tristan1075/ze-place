@@ -88,6 +88,8 @@ const BookingNavigator = () => {
       />
       <BookingStack.Screen name="PlaceDetail" component={PlaceDetailScreen} />
       <BookingStack.Screen name="UserBookings" component={UserBookingsScreen} />
+      <BookingStack.Screen name="Conversation" component={ConversationScreen} />
+      <BookingStack.Screen name="Messages" component={MessagesScreen} />
     </BookingStack.Navigator>
   );
 };

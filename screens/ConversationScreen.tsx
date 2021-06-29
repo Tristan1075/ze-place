@@ -7,11 +7,13 @@ import {
   TextInput,
 } from 'react-native';
 import {RouteProp, useRoute} from '@react-navigation/native';
+import {Subscription} from '@unimodules/core';
+import * as Notifications from 'expo-notifications';
 // @ts-ignore
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import {Ionicons} from '@expo/vector-icons';
 
-import {Conversation, Message, MessagesParamList, Place} from '../types';
+import {Conversation, Message, MessagesParamList} from '../types';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
 import {
@@ -42,6 +44,8 @@ const ConversationScreen = (props: Props) => {
   const [conversation, setConversation] = useState<Conversation>();
   const [input, setInput] = useState<string>('');
   const _flatList = useRef<FlatList>(null);
+  const notificationListener = useRef<Subscription>();
+  const responseListener = useRef<Subscription>();
 
   const init = useCallback(async () => {
     getConversationByPlaceAndUser(
@@ -66,8 +70,38 @@ const ConversationScreen = (props: Props) => {
         });
       }
       setConversation(conversationResult);
+      initNotifications(conversationResult);
     });
   }, []);
+
+  const initNotifications = (conversationResult: Conversation) => {
+    notificationListener.current = Notifications.addNotificationReceivedListener(
+      (notif: any) => {
+        if (
+          notif.request.content.data.conversation.id.toString() ===
+          conversationResult?._id.toString()
+        ) {
+          const messageNotif = notif.request.content.data.conversation?.message;
+          if (messageNotif) {
+            const newMessage = {
+              value: messageNotif,
+              from: '0',
+            };
+            setMessages((prev) => [...prev, newMessage]);
+            scrollToBottom();
+          }
+        }
+      },
+    );
+    return () => {
+      if (notificationListener.current && responseListener.current) {
+        Notifications.removeNotificationSubscription(
+          notificationListener.current,
+        );
+        Notifications.removeNotificationSubscription(responseListener.current);
+      }
+    };
+  };
 
   useEffect(() => {
     navigation.addListener('focus', init);

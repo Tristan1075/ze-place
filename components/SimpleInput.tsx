@@ -8,7 +8,7 @@ import {
   KeyboardType,
   TouchableWithoutFeedback,
 } from 'react-native';
-import { Platform } from 'react-native';
+import {Platform} from 'react-native';
 
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
@@ -49,30 +49,27 @@ const SimpleInput = (props: Props) => {
   } = props;
 
   return (
-
-    
     <View style={style}>
-    
-      <TouchableWithoutFeedback onPress={onPress} >
-      <View style={styles.inputContainer}>
-        <TextInput
-          keyboardType={type}
-          onTouchStart={onPress}
-          maxLength={maxLength}
-          editable={isEditable}
-          onChange={onChange}
-          onChangeText={onChangeText}
-          style={multiline ? styles.textArea : styles.input}
-          placeholder={placeholder}
-          autoCapitalize="none"
-          autoCompleteType="off"
-          placeholderTextColor={Colors.gray}
-          value={value}
-          secureTextEntry={secureTextEntry}
-          numberOfLines={numberOfLines}
-          multiline={multiline}
-        />
-        {suffix}
+      <TouchableWithoutFeedback onPress={onPress}>
+        <View style={styles.inputContainer}>
+          <TextInput
+            keyboardType={type}
+            onTouchStart={onPress}
+            maxLength={maxLength}
+            editable={isEditable}
+            onChange={onChange}
+            onChangeText={onChangeText}
+            style={multiline ? styles.textArea : styles.input}
+            placeholder={placeholder}
+            autoCapitalize="none"
+            autoCompleteType="off"
+            placeholderTextColor={Colors.gray}
+            value={value}
+            secureTextEntry={secureTextEntry}
+            numberOfLines={numberOfLines}
+            multiline={multiline}
+          />
+          {suffix}
         </View>
       </TouchableWithoutFeedback>
       {error ? <Text style={styles.error}>{error}</Text> : null}

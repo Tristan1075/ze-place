@@ -53,7 +53,7 @@ const SearchPlaceScreen = ({onLocationPress}: Props) => {
           {i18n.t('search_place_location_results')}({places.length})
         </Text>
         <ScrollView>
-          {places.map((place) => {
+          {places.map((place, index) => {
             const address = `${place.address ? place.address : ''}${
               place.address ? ' ' : ''
             }${place.text}`;
@@ -79,6 +79,7 @@ const SearchPlaceScreen = ({onLocationPress}: Props) => {
             const latitude = place.center[1];
             return (
               <SearchCard
+                key={index}
                 title={place.text}
                 description={`${address}, ${postalCode} ${city}`}
                 subdescription={country ? country : region}

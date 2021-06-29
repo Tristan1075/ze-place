@@ -184,7 +184,6 @@ const SignupScreen = (props: Props) => {
       uploadID(form.IDRecto, form.IDVerso)
         .then(async (res) => {
           try {
-            console.log(form);
             setForm({...form, avatar: `${form.email}${form.lastname}.png`})
             const token = await register(form, res);
             await SecureStore.setItemAsync('access-token', token.access_token);

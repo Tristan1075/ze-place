@@ -15,7 +15,6 @@ export const bookPlace = async (
       {
         booking: {
           paymentId: paymentId,
-          placeId: place._id,
           ownerId: place.ownerId,
           ...booking,
         },
@@ -42,8 +41,7 @@ export const getBookingByUser = async (): Promise<Booking[]> => {
         Authorization: `Bearer ${token}`,
       },
     })
-    .then((response: AxiosResponse<any>) => {     
-       
+    .then((response: AxiosResponse<any>) => {
       return response.data.bookings;
     })
     .catch((err) => {

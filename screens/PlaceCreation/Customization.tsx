@@ -98,7 +98,6 @@ const Customization = (props: Props) => {
   const handleSubmitForm = async () => {
     try {
       await uploadToS3();
-      console.log(createPlaceForm);
       await createPlace(createPlaceForm);
       setSubmitModal(false);
       navigation.dispatch(StackActions.popToTop());

@@ -52,7 +52,6 @@ const PlaceCardSquare = ({item, onPress}: Props) => {
       ),
     });
   };
-  console.log(reviews);
   return (
     <TouchableOpacity
       style={styles.itemContainer}

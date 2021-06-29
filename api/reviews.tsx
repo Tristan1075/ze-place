@@ -48,8 +48,6 @@ export const getPlaceReviewByUser = async (
       },
     )
     .then((response: AxiosResponse<any>) => {
-      console.log('Bonjour', response.data.data);
-
       return response.data.data;
     })
     .catch((err) => {

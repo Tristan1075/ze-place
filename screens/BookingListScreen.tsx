@@ -24,7 +24,6 @@ const BookingListScreen = (props: Props) => {
   }, [init, navigation]);
 
   const handlePlacePress = (placeId?: string) => {
-    console.log(placeId);
     navigation.navigate('PlaceDetail', {
       place: placeId,
     });
