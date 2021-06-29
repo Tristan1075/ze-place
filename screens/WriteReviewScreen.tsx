@@ -8,6 +8,7 @@ import SimpleInput from '../components/SimpleInput';
 import TitleWithDescription from '../components/TitleWithDescription';
 import {createReview} from '../api/reviews';
 import Button from '../components/Button';
+import UserStore from '../store/UserStore';
 
 type RootScreenNavigationProp = StackNavigationProp<HomeParamList, 'Home'>;
 
@@ -31,7 +32,7 @@ const WriteReviewScreen = (props: Props) => {
   const [reviewsForm, setReviewsForm] = useState<ReviewForm>(input);
 
   const handleReviewPress = () => {
-    createReview(reviewsForm);
+    createReview(reviewsForm,UserStore.user.first_name);
     props.onPublish();
   };
 

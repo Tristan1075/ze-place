@@ -49,7 +49,7 @@ const PlaceReviewScreen = (props: Props) => {
                 />
               </View>
               <View>
-                <Text style={styles.name}>Tristan</Text>
+                <Text style={styles.name}>{e.writerName}</Text>
               </View>
             </View>
           ))}

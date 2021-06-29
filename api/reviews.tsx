@@ -57,6 +57,7 @@ export const getPlaceReviewByUser = async (
 
 export const createReview = async (
   form: ReviewForm,
+  writerName:string
 ): Promise<AxiosResponse> => {
   return await axios
     .post(
@@ -65,6 +66,7 @@ export const createReview = async (
         name: form.name,
         description: form.description,
         writerId: form.writerId,
+        writerName:writerName,
         placeId: form.placeId,
         rate: form.rate,
       },
