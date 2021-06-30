@@ -2,14 +2,15 @@ import React, {useState} from 'react';
 import {Image, StyleSheet, View} from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import Button from '../components/Button';
+import i18n from 'i18n-js';
 
 import Header from '../components/Header';
 import Colors from '../constants/Colors';
-import {RootStackParamList,BugForm} from '../types';
+import {RootStackParamList, BugForm} from '../types';
 import UserStore from '../store/UserStore';
 import TitleWithDescription from '../components/TitleWithDescription';
 import SimpleInput from '../components/SimpleInput';
-import { createBug } from '../api/ticket';
+import {createBug} from '../api/ticket';
 
 type RootScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Menu'>;
 
@@ -18,9 +19,9 @@ type Props = {
 };
 
 const input: BugForm = {
- name:'',
- description:'',
- senderId : ''
+  name: '',
+  description: '',
+  senderId: '',
 };
 
 const BugTicketScreen = (props: Props) => {
@@ -28,44 +29,38 @@ const BugTicketScreen = (props: Props) => {
   const [form, setForm] = useState<BugForm>(input);
   const {user} = UserStore;
 
-      const handleBugPress = async () => {
-        console.log(user._id);
-        form.senderId = user._id;
-        console.log(form);
-        if(form.name.length === 0 || form.description.length === 0){
-         
-        }else{
-          await createBug(form);
-        }
-      }
+  const handleBugPress = async () => {
+    form.senderId = user._id;
+    if (form.name.length === 0 || form.description.length === 0) {
+    } else {
+      await createBug(form);
+    }
+  };
   return (
     <View style={styles.screen}>
       <View style={styles.headerBloc}>
         <Header type="back" />
       </View>
       <View style={styles.paddingHorizontal}>
-        <Image source={require('../assets/images/check.png')} style={styles.image} />
-        <TitleWithDescription
-          title="Name"
+        <Image
+          source={require('../assets/images/check.png')}
+          style={styles.image}
         />
+        <TitleWithDescription title={i18n.t('bug_ticket_title')} />
         <SimpleInput
-          placeholder="Enter the name of your bug"
+          placeholder={i18n.t('bug_ticket_title_input')}
           type="default"
-          onChangeText={(value) =>
-            setForm({...form, name: value})
-          }
+          onChangeText={(value) => setForm({...form, name: value})}
         />
-        <TitleWithDescription
-          title="Description"
-        />
+        <TitleWithDescription title={i18n.t('bug_ticket_description')} />
         <SimpleInput
           onChangeText={(v) => setForm({...form, description: v})}
-          placeholder="Describe your bug"
+          placeholder={i18n.t('bug_ticket_description_input')}
           multiline={true}
           numberOfLines={1}
         />
         <Button
-          value="Validate value"
+          value={i18n.t('bug_ticket_submit')}
           onPress={handleBugPress}
           backgroundColor={Colors.primary}
           textColor={Colors.white}

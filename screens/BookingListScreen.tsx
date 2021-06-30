@@ -4,6 +4,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {useNavigation} from '@react-navigation/native';
 import {getBookingByUser} from '../api/bookings';
 import EmptyBloc from '../components/EmptyBloc';
+import i18n from 'i18n-js';
 
 import PlaceCardSquare from '../components/PlaceCardSquare';
 import TitleWithDescription from '../components/TitleWithDescription';
@@ -43,9 +44,9 @@ const BookingListScreen = (props: Props) => {
     <View style={styles.container}>
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
         <TitleWithDescription
-          title="Active bookings"
+          title={i18n.t('booking_list_title')}
           subtitle={true}
-          description="Find nearby you the available places to rent"
+          description={i18n.t('booking_list_active_description')}
         />
         {bookings &&
         bookings.filter((booking) => booking.isPast !== true).length > 0 ? (
@@ -59,14 +60,14 @@ const BookingListScreen = (props: Props) => {
           <EmptyBloc
             size={80}
             image={require('../assets/images/sad.png')}
-            title="You don't have bookings for the moment..."
+            title={i18n.t('booking_list_empty')}
           />
         )}
         {bookings.filter((booking) => booking.isPast === true).length > 0 && (
           <TitleWithDescription
-            title="History"
+            title={i18n.t('booking_list_history_title')}
             subtitle={true}
-            description="Find the old announnces booked"
+            description={i18n.t('booking_list_history_description')}
           />
         )}
         <FlatList

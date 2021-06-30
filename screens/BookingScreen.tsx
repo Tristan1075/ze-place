@@ -10,6 +10,7 @@ import {Booking, Place} from '../types';
 import FeatureList from '../components/FeatureList';
 import Modal from '../components/Modal';
 import ConfirmationBookingScreen from './ConfirmationBookingScreen';
+import i18n from 'i18n-js';
 
 type Props = {
   place: Place;
@@ -25,6 +26,7 @@ const BookingScreen = ({place, navigation}: Props) => {
   const [confirmationBooking, showConfirmationBooking] = useState(false);
   const [minDate, setMinDate] = useState<string>(Date());
   const [booking, setBooking] = useState<Booking>({
+    placeId: '',
     features: [],
     startDate: '',
     endDate: '',
@@ -44,11 +46,11 @@ const BookingScreen = ({place, navigation}: Props) => {
     };
     let isValid = true;
     if (booking.features.length === 0) {
-      formErrors.features = 'You have to choose a feature';
+      formErrors.features = i18n.t('booking_feature_error');
       isValid = false;
     }
     if (booking.startDate?.length === 0 || booking.endDate?.length === 0) {
-      formErrors.date = 'You have to choose a period';
+      formErrors.date = i18n.t('booking_date_error');
       isValid = false;
     }
     setErrors(formErrors);
@@ -68,7 +70,10 @@ const BookingScreen = ({place, navigation}: Props) => {
         contentContainerStyle={styles.scrollView}
         showsVerticalScrollIndicator={false}>
         <View style={styles.bloc}>
-          <TitleWithDescription title="Feature" subtitle={true} />
+          <TitleWithDescription
+            title={i18n.t('booking_feature_title')}
+            subtitle={true}
+          />
           <FeatureList
             features={place.features}
             list={booking}
@@ -78,7 +83,10 @@ const BookingScreen = ({place, navigation}: Props) => {
           {errors.features ? (
             <Text style={styles.error}>{errors.features}</Text>
           ) : null}
-          <TitleWithDescription title="Booking date" subtitle={true} />
+          <TitleWithDescription
+            title={i18n.t('booking_date')}
+            subtitle={true}
+          />
           <CalendarPicker
             showDates={true}
             availabilities={place.availabilities}
@@ -96,12 +104,15 @@ const BookingScreen = ({place, navigation}: Props) => {
             }}
           />
           {errors.date ? <Text style={styles.error}>{errors.date}</Text> : null}
-          <TitleWithDescription title="Information" subtitle={true} />
+          <TitleWithDescription
+            title={i18n.t('booking_information_title')}
+            subtitle={true}
+          />
           <SimpleInput
             style={styles.input}
             multiline={true}
             numberOfLines={5}
-            placeholder="Precise something"
+            placeholder={i18n.t('booking_ask_to_owner')}
             onChangeText={(value) =>
               setBooking({...booking, description: value})
             }

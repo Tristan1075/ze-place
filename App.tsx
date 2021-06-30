@@ -35,7 +35,6 @@ Sentry.init({
   dsn:
     'https://38094f88326945489d9e31cb91035ed4@o894694.ingest.sentry.io/5840497',
   enableInExpoDevelopment: true,
-  debug: true, // Sentry will try to print out useful debugging information if something goes wrong with sending an event. Set this to `false` in production.
 });
 
 const App = () => {

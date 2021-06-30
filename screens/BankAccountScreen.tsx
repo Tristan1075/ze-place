@@ -4,6 +4,7 @@ import {View, Text, StyleSheet, TouchableOpacity, TouchableWithoutFeedback, Keyb
 import {Flow} from 'react-native-animated-spinkit';
 import {ScrollView} from 'react-native-gesture-handler';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
+import i18n from 'i18n-js';
 import {
   addBankAccount,
   getBalance,
@@ -133,7 +134,7 @@ const BankAccountScreen = () => {
             })
           ) : (
             <EmptyBloc
-              title="You must specify a bank account in order to start booking your places !"
+              title={i18n.t('bank_account_no_account')}
               size={150}
               image={require('../assets/images/bank.png')}
             />
@@ -164,7 +165,7 @@ const BankAccountScreen = () => {
               onChangeText={(v) => setForm({...form, iban: v})}
             />
             <Button
-              value="Add an account"
+              value={i18n.t('bank_account_add_an_account')}
               backgroundColor={Colors.dark}
               textColor={Colors.white}
               style={styles.button}

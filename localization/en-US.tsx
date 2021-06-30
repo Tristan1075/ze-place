@@ -181,6 +181,34 @@ export default {
   place_information_back: 'Back',
   place_information_continue: 'Continue',
 
+  //bank_account
+  bank_account_no_account:
+    'You must specify a bank account in order to start booking your places !',
+  bank_account_add_an_account: 'Add an account',
+
+  //booking_list
+  booking_list_title: 'Active bookings',
+  booking_list_description: 'Find here your active reservations',
+  booking_list_empty: "You don't have bookings for the moment...",
+  booking_list_history_title: 'History',
+  booking_list_history_description:
+    "You don't have any reservations in your history, let's book a place now !",
+
+  //booking
+  booking_feature_title: 'Features',
+  booking_date: 'Booking date',
+  booking_information_title: 'Information',
+  booking_ask_to_owner: 'Ask something to the owner...',
+  booking_feature_error: 'You have to choose a feature',
+  booking_date_error: 'You have to choose a period',
+
+  //bug_ticket
+  bug_ticket_title: 'Title',
+  bug_ticket_title_input: 'Please set a title',
+  bug_ticket_description: 'Description',
+  bug_ticket_description_input: 'Please describe your bug',
+  bug_ticket_submit: 'Submit',
+
   //COMPONENT
 
   //component_booking_card
