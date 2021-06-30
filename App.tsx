@@ -1,7 +1,6 @@
 import {StatusBar} from 'expo-status-bar';
 import React, {useRef, useState, useEffect} from 'react';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
-import {StripeProvider} from '@stripe/stripe-react-native';
 import {Subscription} from '@unimodules/core';
 import {API_URL, PUBLIC_KEY_STRIPE} from './env';
 import * as Notifications from 'expo-notifications';
@@ -66,13 +65,11 @@ const App = () => {
     return (
       <SocketProvider socket={socket}>
         <SafeAreaProvider>
-          <StripeProvider publishableKey={PUBLIC_KEY_STRIPE}>
-            <ModalProvider>
-              <Navigation />
-              <StatusBar />
-              <ModalPortal />
-            </ModalProvider>
-          </StripeProvider>
+          <ModalProvider>
+            <Navigation />
+            <StatusBar />
+            <ModalPortal />
+          </ModalProvider>
         </SafeAreaProvider>
       </SocketProvider>
     );

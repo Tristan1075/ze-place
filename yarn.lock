@@ -1339,7 +1339,7 @@
     xcode "^2.1.0"
     xml2js "^0.4.23"
 
-"@expo/config-plugins@1.0.33", "@expo/config-plugins@^1.0.18", "@expo/config-plugins@^1.0.24", "@expo/config-plugins@~1.0.13":
+"@expo/config-plugins@1.0.33", "@expo/config-plugins@^1.0.18", "@expo/config-plugins@~1.0.13":
   version "1.0.33"
   resolved "https://registry.yarnpkg.com/@expo/config-plugins/-/config-plugins-1.0.33.tgz#8ee78ea6f939f7e04606e9afa22b32139ea974a0"
   integrity sha512-YQJop0c69LKD/6ZJJto7klS7TDmzgs44TI0Z5RBqesOjYlDwNFcQk2Rl2BaA1wlAYkH+rRrhN2+WjjSyD9HiPg==
@@ -2634,13 +2634,6 @@
   integrity sha512-sruwd86RJHdsVf/AtBoijDmUqJp3B6hF/DGC23C+JaegnDHaZyewCjoVGTdg3J0uz3Zs7NnIT05OBOmML72lQw==
   dependencies:
     type-detect "4.0.8"
-
-"@stripe/stripe-react-native@^0.1.2":
-  version "0.1.2"
-  resolved "https://registry.yarnpkg.com/@stripe/stripe-react-native/-/stripe-react-native-0.1.2.tgz#4388552b2c668ec1bc9432b4cd7809e2e26ba4f4"
-  integrity sha512-vjHQ05gyDEDNSX39/WPC1X8Fgmr2dysOE458sqL8yC9xrBkGoH1ccd032o8stsgDtnPFomqLukWXFh88fclS9w==
-  dependencies:
-    "@expo/config-plugins" "^1.0.24"
 
 "@types/babel__core@^7.1.7":
   version "7.1.12"

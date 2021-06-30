@@ -9,7 +9,7 @@ import {
   TouchableWithoutFeedback,
   TouchableOpacity,
 } from 'react-native';
-import {useStripe} from '@stripe/stripe-react-native';
+// import {useStripe} from '@stripe/stripe-react-native';
 import i18n from 'i18n-js';
 
 import Button from '../components/Button';
@@ -31,39 +31,39 @@ const creditCard = require('../assets/images/card.png');
 
 const ConfirmationBookingScreen = ({place, booking, navigation}: Props) => {
   const [paymentSheetEnabled, setPaymentSheetEnabled] = useState(false);
-  const {presentPaymentSheet, initPaymentSheet} = useStripe();
+
   const [activePaymentMethod, setActivePaymentMethod] = useState(0);
   const [promotionalCode, showPromotionalCode] = useState<boolean>(false);
   const {handleModal} = useContext(ModalContext);
 
-  const getPaymentIntent = async () => {
-    const {paymentIntent, ephemeralKey, customer} = await initPaymentIntent(
-      place.price * 100 * booking.duration,
-      place.ownerId,
-    );
-    const {error} = await initPaymentSheet({
-      customerId: customer,
-      customerEphemeralKeySecret: ephemeralKey,
-      paymentIntentClientSecret: paymentIntent.client_secret,
-      merchantDisplayName: 'Example Inc.',
-    });
-    if (!error) {
-      setPaymentSheetEnabled(true);
-    }
-    return paymentIntent;
-  };
+  // const getPaymentIntent = async () => {
+  //   const {paymentIntent, ephemeralKey, customer} = await initPaymentIntent(
+  //     place.price * 100 * booking.duration,
+  //     place.ownerId,
+  //   );
+  //   const {error} = await initPaymentSheet({
+  //     customerId: customer,
+  //     customerEphemeralKeySecret: ephemeralKey,
+  //     paymentIntentClientSecret: paymentIntent.client_secret,
+  //     merchantDisplayName: 'Example Inc.',
+  //   });
+  //   if (!error) {
+  //     setPaymentSheetEnabled(true);
+  //   }
+  //   return paymentIntent;
+  // };
 
   const onBookPress = async () => {
-    const paymentIntent = await getPaymentIntent();
-    const {error} = await presentPaymentSheet({
-      clientSecret: paymentIntent.clientSecret,
-    });
-    if (!error) {
-      await bookPlace(place, booking, paymentIntent.id);
-      handleModal();
-      navigation.navigate('BookingAndPlaces');
-    }
-    setPaymentSheetEnabled(false);
+    // const paymentIntent = await getPaymentIntent();
+    // const {error} = await presentPaymentSheet({
+    //   clientSecret: paymentIntent.clientSecret,
+    // });
+    // if (!error) {
+    //   await bookPlace(place, booking, paymentIntent.id);
+    //   handleModal();
+    //   navigation.navigate('BookingAndPlaces');
+    // }
+    // setPaymentSheetEnabled(false);
   };
 
   return (
@@ -148,6 +148,7 @@ const ConfirmationBookingScreen = ({place, booking, navigation}: Props) => {
               backgroundColor={Colors.dark}
               textColor={Colors.white}
               style={styles.button}
+              onPress={() => {}}
             />
           </View>
         )}
