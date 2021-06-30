@@ -2,7 +2,7 @@
   "expo": {
     "name": "ze-place",
     "slug": "ze-place",
-    "version": "1.0.6",
+    "version": "1.0.7",
     "orientation": "portrait",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
@@ -22,7 +22,8 @@
       "supportsTablet": false,
       "bundleIdentifier": "com.zp.zeplace",
       "config": {
-        "googleMapsApiKey": "AIzaSyD9sY4DmosQzXrW07ngYwBwhTaYjYYKUg8"
+        "googleMapsApiKey": "AIzaSyD9sY4DmosQzXrW07ngYwBwhTaYjYYKUg8",
+        "usesNonExemptEncryption": false
       },
       "infoPlist": {
         "NSCameraUsageDescription": "This app uses the camera to take pictures",
@@ -51,7 +52,7 @@
         {
           "file": "sentry-expo/upload-sourcemaps",
           "config": {
-            "organization": "esgi",
+            "organization": "zeplace",
             "project": "zeplace",
             "authToken": "cc6d9137b439409d97800a9d00721ac83c95dcf6505443dd87d339ceae11fd86"
           }
