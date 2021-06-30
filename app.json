@@ -2,7 +2,7 @@
   "expo": {
     "name": "ze-place",
     "slug": "ze-place",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "orientation": "portrait",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
@@ -23,6 +23,13 @@
       "bundleIdentifier": "com.zp.zeplace",
       "config": {
         "googleMapsApiKey": "AIzaSyD9sY4DmosQzXrW07ngYwBwhTaYjYYKUg8"
+      },
+      "infoPlist": {
+        "NSCameraUsageDescription": "This app uses the camera to take pictures",
+        "NSLocationAlwaysUsageDescription": "This app uses the location to get places nearby your location",
+        "NSLocationUsageDescription": "This app uses the location to get places nearby your location",
+        "NSLocationWhenInUseUsageDescription": "This app uses the location to get places nearby your location",
+        "NSPhotoLibraryUsageDescription": "This app needs to get photos"
       }
     },
     "android": {
@@ -32,9 +39,24 @@
       },
       "config": {
         "googleMaps": {
-            "apiKey": "AIzaSyDscu5Ottp2PXXPH3jpGO3bPR823G7G-ms"
+          "apiKey": "AIzaSyDscu5Ottp2PXXPH3jpGO3bPR823G7G-ms"
         }
       }
+    },
+    "plugins": [
+      "sentry-expo"
+    ],
+    "hooks": {
+      "postPublish": [
+        {
+          "file": "sentry-expo/upload-sourcemaps",
+          "config": {
+            "organization": "ZP",
+            "project": "ZePlace",
+            "authToken": "cc6d9137b439409d97800a9d00721ac83c95dcf6505443dd87d339ceae11fd86"
+          }
+        }
+      ]
     }
   }
 }
