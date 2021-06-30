@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useCallback} from 'react';
+import React, {useState, useEffect, useCallback, useContext} from 'react';
 import {
   View,
   Text,
@@ -12,9 +12,17 @@ import {PaymentMethod} from '../types';
 import Colors from '../constants/Colors';
 import CreditCardBloc from '../components/CreditCardBloc';
 import Header from '../components/Header';
-import {Ionicons} from '@expo/vector-icons';
 import Layout from '../constants/Layout';
-import {confirmSetupIntent} from '@stripe/stripe-react-native';
+import {
+  getPaymentMethods,
+  removePaymentMethod,
+  updatePaymentMethod,
+} from '../api/payment';
+import UserStore from '../store/UserStore';
+import TitleWithDescription from '../components/TitleWithDescription';
+import i18n from 'i18n-js';
+import { ModalContext } from '../providers/modalContext';
+import PaymentMethodForm from './PaymentMethodForm';
 
 const PaymentMethods = () => {
   const navigation = useNavigation();
@@ -23,28 +31,55 @@ const PaymentMethods = () => {
     [],
   );
   const [isFetching, setIsFetching] = useState(true);
+  const {handleModal} = useContext(ModalContext);
 
   const handleStateChange = useCallback(async () => {
+    const methods = await getPaymentMethods(UserStore.user.customerId);
+    methods.data.push({
+      card: {
+        brand: 'add_card',
+      },
+    });
+    setPaymentMethods(methods.data);
   }, []);
 
   useEffect(() => {
     navigation.addListener('focus', handleStateChange);
   }, [handleStateChange, navigation]);
 
-  const renderItem = ({item, index}: {item: PaymentMethod; index: number}) => (
-    <CreditCardBloc
-      type={item.card.brand}
-      index={index}
-      name={'test'}
-      number={item.card.last4}
-      available={true}
-      isDefault={item.is_default}
-    />
-  );
+  const renderItem = ({item, index}: {item: PaymentMethod; index: number}) => {
+    return (
+      <CreditCardBloc
+        type={item.card?.brand}
+        index={index}
+        name={'test'}
+        number={`.... .... .... ${item.card?.last4}`}
+        available={true}
+        isDefault={item?.is_default}
+        onAddPress={
+          item.card?.brand === 'add_card' ? handleAddNewCardPress : undefined
+        }
+      />
+    );
+  };
 
   const handleAddNewCardPress = () => {
-    console.warn('test');
-    navigation.navigate('PaymentMethodForm');
+    handleModal({
+      child: <PaymentMethodForm closeModal={handleModal} />,
+    });
+  };
+
+  const handleUpdatePaymentMethodPress = () => {
+    updatePaymentMethod(
+      UserStore.user.customerId,
+      paymentMethods[cardIndex].id,
+    );
+    handleStateChange();
+  };
+
+  const handleRemovePaymentMethodPress = () => {
+    removePaymentMethod(paymentMethods[cardIndex].id);
+    handleStateChange();
   };
 
   return (
@@ -53,54 +88,39 @@ const PaymentMethods = () => {
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollView}>
-        <TouchableOpacity
-          style={[styles.plusIconContainer]}
-          onPress={handleAddNewCardPress}>
-          <Ionicons name="add" />
-        </TouchableOpacity>
         <View style={styles.contentContainer}>
+          <TitleWithDescription
+            title="Moyens de paiments"
+            style={styles.title}
+            description="Retrouvez l'ensemble de vos cartes, vous pouvez choisir votre carte par défaut"
+          />
           <Carousel
+            contentContainerCustomStyle={{paddingLeft: Layout.padding}}
             data={paymentMethods}
             renderItem={renderItem}
             sliderWidth={Layout.window.width}
-            itemWidth={180}
+            itemWidth={300}
             onSnapToItem={(index) => setCardIndex(index)}
             inactiveSlideOpacity={1}
+            activeSlideAlignment="start"
             removeClippedSubviews={false}
           />
-          <View style={styles.itemsBloc}>
-            {/*
-                {!paymentMethods[cardIndex].available && (
-                  <View style={styles.errorBloc}>
-                    <Image source={dangerRed} />
-                    <View style={styles.errorContent}>
-                      <Text style={styles.errorTitle}>{t('card_expired')}</Text>
-                      <Text style={styles.errorDescription}>
-                        {t('update_payment_method')}
-                      </Text>
-                    </View>
-                  </View>
-                )}*/}
-            {/* <Text style={styles.itemTitle}>{t('name')}</Text>
-                <Text style={styles.itemValue}>Carte de crédit</Text> */}
-            <Text style={styles.itemTitle}>Date d'expiration</Text>
-            <Text style={styles.itemValue}>05/ 21</Text>
-            {/* <Text style={styles.itemTitle}>{t('billing_address')}</Text>
-                <Text style={styles.itemValue}>14 rue Klock, 92110 Clichy</Text> */}
-          </View>
-          <View style={styles.actionButtons}>
-            {/* {!paymentMethods[cardIndex].is_default ? (
-                <TouchableOpacity>
-                  <Text style={styles.updateButton}>Update default card</Text>
+          {cardIndex !== paymentMethods.length - 1 && (
+            <View style={styles.actionButtons}>
+              {paymentMethods.length > 0 &&
+              !paymentMethods[cardIndex].is_default ? (
+                <TouchableOpacity onPress={handleUpdatePaymentMethodPress}>
+                <Text style={styles.updateButton}>Update default card</Text>
                 </TouchableOpacity>
               ) : (
                 <View style={styles.invisibleSpace} />
-              )} */}
-            <View style={styles.separator} />
-            <TouchableOpacity onPress={() => {}}>
-              <Text style={styles.removeButton}>Remove card</Text>
-            </TouchableOpacity>
-          </View>
+              )}
+              <View style={styles.separator} />
+              <TouchableOpacity onPress={handleRemovePaymentMethodPress}>
+                <Text style={styles.removeButton}>Remove card</Text>
+              </TouchableOpacity>
+            </View>
+          )}
         </View>
       </ScrollView>
     </View>
@@ -111,35 +131,17 @@ const styles = StyleSheet.create({
   flexContainer: {
     flex: 1,
     paddingTop: 50,
+    backgroundColor: Colors.background,
   },
   scrollView: {
     flexGrow: 1,
   },
   contentContainer: {
-    marginTop: -140,
-    marginBottom: 0,
     flex: 1,
   },
-  errorBloc: {
-    marginTop: 20,
-    backgroundColor: Colors.error,
-    padding: 15,
-    borderRadius: 10,
-    flexDirection: 'row',
-  },
-  errorContent: {
-    paddingHorizontal: 15,
-  },
-  errorTitle: {
-    color: Colors.error,
-    fontFamily: 'Metropolis-Bold',
-    fontSize: 16,
-    paddingBottom: 5,
-  },
-  errorDescription: {
-    color: Colors.error,
-    fontFamily: 'Metropolis-Medium',
-    fontSize: 16,
+  title: {
+    paddingHorizontal: 20,
+    paddingBottom: 20,
   },
   itemsBloc: {
     paddingHorizontal: 30,
@@ -147,51 +149,38 @@ const styles = StyleSheet.create({
   },
   itemTitle: {
     fontSize: 16,
-    fontFamily: 'Metropolis-Medium',
+    fontFamily: 'oswald',
     color: Colors.dark,
     paddingVertical: 5,
     marginTop: 20,
   },
   itemValue: {
     fontSize: 14,
-    fontFamily: 'Metropolis-Regular',
+    fontFamily: 'poppins',
     color: Colors.gray,
     paddingVertical: 5,
   },
-  plusIconContainer: {
-    zIndex: 999,
-    backgroundColor: Colors.white,
-    width: 35,
-    height: 35,
-    borderRadius: 60,
-    justifyContent: 'center',
-    alignItems: 'center',
-    shadowColor: 'rgba(0, 0, 0, 0.13)',
-    shadowOffset: {
-      width: 0,
-      height: 8,
-    },
-    shadowRadius: 14,
-    shadowOpacity: 1,
-  },
   actionButtons: {
     justifyContent: 'flex-end',
+    backgroundColor: Colors.white,
+    paddingBottom: 40,
+    ...Layout.shadow,
   },
   updateButton: {
     color: Colors.primary,
     textAlign: 'center',
-    fontFamily: 'Metropolis-Medium',
-    fontSize: 18,
-    paddingVertical: 20,
+    fontFamily: 'poppins',
+    fontSize: 16,
+    paddingVertical: 10,
     marginTop: 20,
     borderBottomWidth: 1,
   },
   removeButton: {
     color: Colors.error,
     textAlign: 'center',
-    fontFamily: 'Metropolis-Medium',
-    fontSize: 18,
-    paddingVertical: 20,
+    fontFamily: 'poppins',
+    fontSize: 16,
+    paddingVertical: 10,
   },
   separator: {
     height: 1,

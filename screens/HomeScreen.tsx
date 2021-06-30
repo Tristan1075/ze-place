@@ -11,7 +11,7 @@ import {
 import Carousel from 'react-native-snap-carousel';
 import {StackNavigationProp} from '@react-navigation/stack';
 import i18n from 'i18n-js';
-import { Platform } from 'react-native';
+import {Platform} from 'react-native';
 import Header from '../components/Header';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
@@ -31,8 +31,8 @@ import {getUserLocation} from '../utils';
 import UserStore from '../store/UserStore';
 import {hasBankAccount} from '../api/payment';
 import BankAccountScreen from './BankAccountScreen';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import { withSocketContext } from '../components/SocketProvider';
+import {TouchableOpacity} from 'react-native-gesture-handler';
+import {withSocketContext} from '../components/SocketProvider';
 
 type RootScreenNavigationProp = StackNavigationProp<HomeParamList, 'Home'>;
 
@@ -133,22 +133,22 @@ const HomeScreen = (props: Props) => {
   return (
     <ScrollView showsVerticalScrollIndicator={false} style={styles.scrollView}>
       <Image
-        source={{uri:'https://ze-place.s3.eu-west-3.amazonaws.com/background.jpeg'}}
+        source={{
+          uri: 'https://ze-place.s3.eu-west-3.amazonaws.com/background.jpeg',
+        }}
         style={styles.imageBanner}
       />
       <View style={styles.overlay} />
       <View style={styles.container}>
         <Header type="menu" showProfil={true} />
         <Text style={styles.title}>{i18n.t('home_discover')}</Text>
-       
-              <SimpleInput
-                isEditable={false}
-                style={styles.input}
-                placeholder={i18n.t('home_search')}
-                suffix={<Ionicons name="search" size={20} color={Colors.gray} />}
-                onPress={showFilterModal}
-              />
-        
+        <SimpleInput
+          isEditable={false}
+          style={styles.input}
+          placeholder={i18n.t('home_search')}
+          suffix={<Ionicons name="search" size={20} color={Colors.gray} />}
+          onPress={showFilterModal}
+        />
       </View>
       <TitleWithDescription
         title={i18n.t('home_near_you')}
@@ -214,6 +214,7 @@ const styles = StyleSheet.create({
     color: Colors.white,
     paddingBottom: 20,
     width: 200,
+    height: 160,
     paddingHorizontal: 20,
   },
   subtitle: {

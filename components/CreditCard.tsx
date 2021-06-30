@@ -135,10 +135,12 @@ const CreditCard = (props: Props) => {
         </View>
       </View>
       <Button
+        style={{marginTop: 20}}
         backgroundColor={Colors.primary}
         value={i18n.t('component_credit_card_save_card')}
         textColor={Colors.white}
         onPress={handleSubmitCreditCardPress}
+        isFetching={isFetching}
       />
     </View>
   );

@@ -8909,6 +8909,13 @@ react-native-snap-carousel@^3.9.1:
     prop-types "^15.6.1"
     react-addons-shallow-compare "15.6.2"
 
+react-native-stripe-client@^0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/react-native-stripe-client/-/react-native-stripe-client-0.0.3.tgz#620ebe554eea808853adaf943accdd71fa4b7af3"
+  integrity sha512-Wop2KToVbWirdraRpr3l2KIMnCjoRi2IcgxEBGHzQtmMrcIdrAqm2h+FrEqJ/DlTapt1lpIBx6ROb0E9KvBItQ==
+  dependencies:
+    form-urlencoded "^1.5.1"
+
 react-native-super-grid@^4.1.1:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/react-native-super-grid/-/react-native-super-grid-4.1.1.tgz#54da8fe6d716edf1c87d158c5cc61cd449c20ab7"

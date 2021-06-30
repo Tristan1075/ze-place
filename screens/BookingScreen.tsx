@@ -143,6 +143,7 @@ const BookingScreen = ({place, navigation}: Props) => {
 const styles = StyleSheet.create({
   screen: {
     paddingTop: 130,
+    backgroundColor: Colors.background,
   },
   scrollView: {
     paddingBottom: 200,

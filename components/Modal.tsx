@@ -6,21 +6,24 @@ import {Ionicons} from '@expo/vector-icons';
 import Colors from '../constants/Colors';
 
 type Props = {
+  type?: string;
   visible: boolean;
   child: any;
   handleModal: () => void;
 };
 
 const Modal = (props: Props) => {
-  const {visible, child, handleModal} = props;
+  const {visible, child, handleModal, type} = props;
 
   return (
-    <RNModal animationType="slide" visible={visible}>
-      <TouchableOpacity
-        style={[styles.headerContainer, styles.color]}
-        onPress={handleModal}>
-        <Ionicons size={30} name="close" color={Colors.white} />
-      </TouchableOpacity>
+    <RNModal animationType="slide" visible={visible} transparent={true}>
+      {type !== 'bottom' && (
+        <TouchableOpacity
+          style={[styles.headerContainer, styles.color]}
+          onPress={handleModal}>
+          <Ionicons size={30} name="close" color={Colors.white} />
+        </TouchableOpacity>
+      )}
       {child}
     </RNModal>
   );

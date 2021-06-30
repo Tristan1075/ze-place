@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import {View, StyleSheet, Alert} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
 
 import CreditCardBloc from '../components/CreditCardBloc';
 import CreditCard from '../components/CreditCard';
@@ -9,47 +8,53 @@ import {CreditCardInformations} from '../types';
 import {getCardType} from '../utils';
 import Header from '../components/Header';
 import {addPaymentMethod} from '../api/payment';
-import { PUBLIC_KEY_STRIPE } from '../env';
+import {PUBLIC_KEY_STRIPE} from '../env';
+import stripe from 'react-native-stripe-client';
+import UserStore from '../store/UserStore';
+import KeyboardSpacer from 'react-native-keyboard-spacer';
+import { ScrollView } from 'react-native-gesture-handler';
 
-const stripe = require('stripe-client')(PUBLIC_KEY_STRIPE);
+const stripeClient = stripe(PUBLIC_KEY_STRIPE);
 
-const PaymentMethodForm = () => {
+type Props = {
+  closeModal: () => void;
+  onSubmit: () => void;
+};
+
+const PaymentMethodForm = ({closeModal, onSubmit}: Props) => {
   const [creditCardNumber, setCreditCardNumber] = useState<string>('...XXXX');
   const [expDate, setExpdate] = useState<string>('MM/YY');
-  const navigation = useNavigation();
+  const [isFetching, setIsFetching] = useState<boolean>(false);
 
   const handleSubmitCreditCard = async (
     creditCardInformations: CreditCardInformations,
   ) => {
     const {cardNumber, cvcNumber, expMonth, expYear} = creditCardInformations;
     if (cardNumber && cvcNumber && expMonth && expYear) {
+      setIsFetching(true);
       try {
-        const card = await stripe.createToken({
-          card: {
-            number: cardNumber,
-            exp_month: expMonth,
-            exp_year: expYear,
-            cvc: cvcNumber,
-            name: 'Tristan',
-            address_city: 'Paris',
-            address_country: 'France',
-            address_line1: '6 rue gandon',
-            address_zip: '75013',
-            currency: 'eur',
-          }
+        const paymentMethod = await stripeClient.createPaymentMethod('card', {
+          number: cardNumber,
+          exp_month: expMonth,
+          exp_year: expYear,
+          cvc: cvcNumber,
         });
-        console.log(card);
-        addPaymentMethod(card.id);
+        const res = await addPaymentMethod(
+          UserStore.user.customerId,
+          paymentMethod.id,
+        );
+        setIsFetching(false);
+        if (res) {
+          onSubmit();
+        }
       } catch (err) {}
     }
   };
 
   return (
     <View style={styles.screen}>
-      <View style={styles.headerBloc}>
-        <Header type="back" />
-      </View>
-      <View style={styles.contentContainer}>
+      <View style={styles.headerBloc} />
+      <ScrollView style={styles.contentContainer}>
         <View style={styles.creditCardBloc}>
           <CreditCardBloc
             type={getCardType(creditCardNumber)}
@@ -64,9 +69,11 @@ const PaymentMethodForm = () => {
             onSubmitCreditCard={handleSubmitCreditCard}
             onChangeCreditCard={setCreditCardNumber}
             onChangeExpDate={setExpdate}
+            isFetching={isFetching}
           />
         </View>
-      </View>
+        <KeyboardSpacer topSpacing={20} />
+      </ScrollView>
     </View>
   );
 };
@@ -74,6 +81,8 @@ const PaymentMethodForm = () => {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
+    backgroundColor: Colors.background,
+    paddingBottom: 20,
   },
   headerBloc: {
     backgroundColor: Colors.dark,
@@ -90,7 +99,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 65,
   },
   validationCodeContainer: {
-    flex: 1,
     padding: 30,
     backgroundColor: Colors.background,
   },

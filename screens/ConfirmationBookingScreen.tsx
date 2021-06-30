@@ -9,17 +9,18 @@ import {
   TouchableWithoutFeedback,
   TouchableOpacity,
 } from 'react-native';
-// import {useStripe} from '@stripe/stripe-react-native';
 import i18n from 'i18n-js';
 
 import Button from '../components/Button';
 import SimpleInput from '../components/SimpleInput';
 import TitleWithDescription from '../components/TitleWithDescription';
 import Colors from '../constants/Colors';
-import {initPaymentIntent} from '../api/payment';
 import {Booking, Place} from '../types';
 import {ModalContext} from '../providers/modalContext';
 import {bookPlace} from '../api/bookings';
+import Modal from '../components/Modal';
+import Layout from '../constants/Layout';
+import PaymentModal from '../components/PaymentModal';
 
 type Props = {
   place: Place;
@@ -31,7 +32,6 @@ const creditCard = require('../assets/images/card.png');
 
 const ConfirmationBookingScreen = ({place, booking, navigation}: Props) => {
   const [paymentSheetEnabled, setPaymentSheetEnabled] = useState(false);
-
   const [activePaymentMethod, setActivePaymentMethod] = useState(0);
   const [promotionalCode, showPromotionalCode] = useState<boolean>(false);
   const {handleModal} = useContext(ModalContext);
@@ -67,140 +67,156 @@ const ConfirmationBookingScreen = ({place, booking, navigation}: Props) => {
   };
 
   return (
-    <ScrollView style={styles.screen} contentContainerStyle={styles.scrollView}>
-      <Image source={creditCard} style={styles.creditCard} />
-      <View style={styles.content}>
-        <TitleWithDescription
-          title={place.title}
-          subtitle={true}
-          description={`${place.location.city}, ${place.location.postalCode} ${place.location.country}`}
-        />
-        <Text style={styles.title}>
-          {i18n.t('confirmation_booking_arrival')}
-        </Text>
-        <Text style={styles.description}>{booking.startDate}</Text>
-        <Text style={styles.title}>
-          {i18n.t('confirmation_booking_departure')}
-        </Text>
-        <Text style={styles.description}>{booking.endDate}</Text>
-      </View>
-      <View style={styles.paymentBloc}>
-        <TitleWithDescription
-          title={i18n.t('confirmation_booking_payment_title')}
-          subtitle={true}
-        />
-        <View style={styles.row}>
-          <TouchableWithoutFeedback onPress={() => setActivePaymentMethod(0)}>
-            <View
-              style={[
-                styles.paymentMethodContainer,
-                activePaymentMethod === 0 && styles.isActive,
-              ]}>
-              <Image
-                source={require('../assets/icons/credit-card.png')}
-                style={styles.paymentMethodIcon}
-              />
-            </View>
-          </TouchableWithoutFeedback>
-          <TouchableWithoutFeedback onPress={() => setActivePaymentMethod(1)}>
-            <View
-              style={[
-                styles.paymentMethodContainer,
-                activePaymentMethod === 1 && styles.isActive,
-              ]}>
-              <AntDesign
-                name="apple1"
-                color={activePaymentMethod === 1 ? Colors.white : Colors.dark}
-                size={20}
-              />
-            </View>
-          </TouchableWithoutFeedback>
-          <TouchableWithoutFeedback onPress={() => setActivePaymentMethod(2)}>
-            <View
-              style={[
-                styles.paymentMethodContainer,
-                activePaymentMethod === 2 && styles.isActive,
-              ]}>
-              <Image
-                source={require('../assets/icons/google.png')}
-                style={styles.googleIcon}
-              />
-            </View>
-          </TouchableWithoutFeedback>
-          <View style={styles.flex} />
-          <TouchableOpacity
-            onPress={() => showPromotionalCode(!promotionalCode)}>
-            <Text style={styles.title}>
-              {i18n.t('confirmation_booking_promotionnal_code')}
-            </Text>
-          </TouchableOpacity>
+    <View style={styles.screen}>
+      <ScrollView contentContainerStyle={styles.scrollView}>
+        <Image source={creditCard} style={styles.creditCard} />
+        <View style={styles.content}>
+          <TitleWithDescription
+            title={place.title}
+            subtitle={true}
+            description={`${place.location.city}, ${place.location.postalCode} ${place.location.country}`}
+          />
+          <Text style={styles.title}>
+            {i18n.t('confirmation_booking_arrival')}
+          </Text>
+          <Text style={styles.description}>{booking.startDate}</Text>
+          <Text style={styles.title}>
+            {i18n.t('confirmation_booking_departure')}
+          </Text>
+          <Text style={styles.description}>{booking.endDate}</Text>
         </View>
-        {promotionalCode && (
+        <View style={styles.paymentBloc}>
+          <TitleWithDescription
+            title={i18n.t('confirmation_booking_payment_title')}
+            subtitle={true}
+          />
           <View style={styles.row}>
-            <SimpleInput
-              style={styles.input}
-              placeholder={i18n.t(
-                'confirmation_booking_promotionnal_code_input',
-              )}
-            />
-            <Button
-              value={i18n.t('confirmation_booking_promotionnal_code_submit')}
-              backgroundColor={Colors.dark}
-              textColor={Colors.white}
-              style={styles.button}
-              onPress={() => {}}
-            />
+            <TouchableWithoutFeedback onPress={() => setActivePaymentMethod(0)}>
+              <View
+                style={[
+                  styles.paymentMethodContainer,
+                  activePaymentMethod === 0 && styles.isActive,
+                ]}>
+                <Image
+                  source={require('../assets/icons/credit-card.png')}
+                  style={styles.paymentMethodIcon}
+                />
+              </View>
+            </TouchableWithoutFeedback>
+            {/* <TouchableWithoutFeedback onPress={() => setActivePaymentMethod(1)}>
+              <View
+                style={[
+                  styles.paymentMethodContainer,
+                  activePaymentMethod === 1 && styles.isActive,
+                ]}>
+                <AntDesign
+                  name="apple1"
+                  color={activePaymentMethod === 1 ? Colors.white : Colors.dark}
+                  size={20}
+                />
+              </View>
+            </TouchableWithoutFeedback>
+            <TouchableWithoutFeedback onPress={() => setActivePaymentMethod(2)}>
+              <View
+                style={[
+                  styles.paymentMethodContainer,
+                  activePaymentMethod === 2 && styles.isActive,
+                ]}>
+                <Image
+                  source={require('../assets/icons/google.png')}
+                  style={styles.googleIcon}
+                />
+              </View>
+            </TouchableWithoutFeedback>
+            <View style={styles.flex} />
+            <TouchableOpacity
+              onPress={() => showPromotionalCode(!promotionalCode)}>
+              <Text style={styles.title}>
+                {i18n.t('confirmation_booking_promotionnal_code')}
+              </Text>
+            </TouchableOpacity> */}
           </View>
-        )}
-        <View style={styles.paymentRow}>
-          <Text style={styles.keyBold}>
-            {booking.duration}{' '}
-            {booking.duration && booking.duration > 1
-              ? i18n.t('confirmation_booking_days')
-              : i18n.t('confirmation_booking_day')}
-          </Text>
-          {booking.duration && (
-            <Text style={styles.value}>{booking.duration * place.price}€</Text>
+          {promotionalCode && (
+            <View style={styles.row}>
+              <SimpleInput
+                style={styles.input}
+                placeholder={i18n.t(
+                  'confirmation_booking_promotionnal_code_input',
+                )}
+              />
+              <Button
+                value={i18n.t('confirmation_booking_promotionnal_code_submit')}
+                backgroundColor={Colors.dark}
+                textColor={Colors.white}
+                style={styles.button}
+                onPress={() => {}}
+              />
+            </View>
           )}
-        </View>
-        <View style={styles.border} />
-        <View style={styles.paymentRow}>
-          <Text style={styles.key}>
-            {i18n.t('confirmation_booking_servicing_charge')}
-          </Text>
-          {booking.duration && (
-            <Text style={styles.value}>
-              {place.price * booking.duration * 0.2}€
-            </Text>
-          )}
-        </View>
-        <View style={styles.paymentRow}>
-          <Text style={styles.key}> {i18n.t('confirmation_booking_tva')}</Text>
-          <Text style={styles.value}>{place.price * 0.2}€</Text>
-        </View>
-        <View style={styles.resume}>
-          <View style={styles.totalRow}>
-            <Text style={styles.total}>
-              {i18n.t('confirmation_booking_total')}
+          <View style={styles.paymentRow}>
+            <Text style={styles.keyBold}>
+              {booking.duration}{' '}
+              {booking.duration && booking.duration > 1
+                ? i18n.t('confirmation_booking_days')
+                : i18n.t('confirmation_booking_day')}
             </Text>
             {booking.duration && (
-              <Text style={styles.total}>
-                {place.price * 0.4 +
-                  place.price * 0.2 +
-                  booking.duration * place.price}
-                €
+              <Text style={styles.value}>
+                {booking.duration * place.price}€
               </Text>
             )}
           </View>
-          <Button
-            onPress={onBookPress}
-            value="Confirm booking"
-            backgroundColor={Colors.primary}
-            textColor={Colors.white}
-          />
+          <View style={styles.border} />
+          <View style={styles.paymentRow}>
+            <Text style={styles.key}>
+              {i18n.t('confirmation_booking_servicing_charge')}
+            </Text>
+            {booking.duration && (
+              <Text style={styles.value}>
+                {place.price * booking.duration * 0.2}€
+              </Text>
+            )}
+          </View>
+          <View style={styles.paymentRow}>
+            <Text style={styles.key}>
+              {' '}
+              {i18n.t('confirmation_booking_tva')}
+            </Text>
+            <Text style={styles.value}>{place.price * 0.2}€</Text>
+          </View>
+          <View style={styles.resume}>
+            <View style={styles.totalRow}>
+              <Text style={styles.total}>
+                {i18n.t('confirmation_booking_total')}{' '}
+              </Text>
+              {booking.duration && (
+                <Text style={styles.total}>
+                  {place.price * 0.4 +
+                    place.price * 0.2 +
+                    booking.duration * place.price}
+                  €
+                </Text>
+              )}
+            </View>
+            <Button
+              onPress={() => setPaymentSheetEnabled(true)}
+              value="Confirm booking"
+              backgroundColor={Colors.primary}
+              textColor={Colors.white}
+            />
+          </View>
         </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+      {paymentSheetEnabled && <View style={styles.overlay} />}
+      <Modal
+        type="bottom"
+        visible={paymentSheetEnabled}
+        child={
+          <PaymentModal onTouchOutside={() => setPaymentSheetEnabled(false)} />
+        }
+        handleModal={() => setPaymentSheetEnabled(false)}
+      />
+    </View>
   );
 };
 
@@ -210,6 +226,7 @@ const styles = StyleSheet.create({
   },
   screen: {
     position: 'relative',
+    backgroundColor: Colors.background,
     flex: 1,
   },
   scrollView: {
@@ -312,6 +329,17 @@ const styles = StyleSheet.create({
   },
   isActive: {
     backgroundColor: Colors.primary,
+  },
+  bottomModal: {
+    zIndex: 999,
+    backgroundColor: Colors.white,
+    justifyContent: 'center',
+  },
+  overlay: {
+    position: 'absolute',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    height: '100%',
+    width: '100%',
   },
 });
 

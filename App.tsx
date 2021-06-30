@@ -64,11 +64,11 @@ const App = () => {
   } else {
     return (
       <SocketProvider socket={socket}>
+        <ModalPortal />
         <SafeAreaProvider>
           <ModalProvider>
             <Navigation />
             <StatusBar />
-            <ModalPortal />
           </ModalProvider>
         </SafeAreaProvider>
       </SocketProvider>

@@ -49,13 +49,34 @@ export const createToken = async () => {
     });
 };
 
-export const addPaymentMethod = async (cardToken: string) => {
+export const getPaymentMethods = async (customerId: string) => {
+  const token = await SecureStore.getItemAsync('access-token');
+  return await axios
+    .get(`${API_URL}/payment/paymentMethods/${customerId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .then((response: AxiosResponse<any>) => {
+      return response.data;
+    })
+    .catch((err) => {
+      console.log(err);
+      return Promise.reject(err);
+    });
+};
+
+export const addPaymentMethod = async (
+  customerId: string,
+  paymentMethodId: string,
+) => {
   const token = await SecureStore.getItemAsync('access-token');
   return await axios
     .post(
-      `${API_URL}/payment/paymentMethod/add`,
+      `${API_URL}/payment/paymentMethods/add`,
       {
-        cardToken,
+        customerId,
+        paymentMethodId,
       },
       {
         headers: {
@@ -64,7 +85,56 @@ export const addPaymentMethod = async (cardToken: string) => {
       },
     )
     .then((response: AxiosResponse<any>) => {
-      console.log(response.data);
+      return response.data;
+    })
+    .catch((err) => {
+      console.log(err);
+      return Promise.reject(err);
+    });
+};
+
+export const updatePaymentMethod = async (
+  customerId: string,
+  paymentMethodId: string,
+) => {
+  const token = await SecureStore.getItemAsync('access-token');
+  return await axios
+    .post(
+      `${API_URL}/payment/paymentMethods/update`,
+      {
+        customerId,
+        paymentMethodId,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    )
+    .then((response: AxiosResponse<any>) => {
+      return response.data;
+    })
+    .catch((err) => {
+      console.log(err);
+      return Promise.reject(err);
+    });
+};
+
+export const removePaymentMethod = async (paymentMethodId: string) => {
+  const token = await SecureStore.getItemAsync('access-token');
+  return await axios
+    .post(
+      `${API_URL}/payment/paymentMethods/remove`,
+      {
+        paymentMethodId,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    )
+    .then((response: AxiosResponse<any>) => {
       return response.data;
     })
     .catch((err) => {

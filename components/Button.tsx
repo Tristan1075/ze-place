@@ -39,6 +39,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: Colors.white,
     alignItems: 'center',
+    justifyContent: 'center',
     borderRadius: 10,
     paddingVertical: 15,
     paddingHorizontal: 20,
@@ -51,6 +52,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
+    height: 50,
   },
   text: {
     fontFamily: 'poppins-semiBold',
