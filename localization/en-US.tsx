@@ -209,6 +209,19 @@ export default {
   bug_ticket_description_input: 'Please describe your bug',
   bug_ticket_submit: 'Submit',
 
+  //confirmation_booking
+  confirmation_booking_arrival: 'Arrival',
+  confirmation_booking_departure: 'Departure',
+  confirmation_booking_payment_title: 'Payment and details',
+  confirmation_booking_promotionnal_code: 'Promotionnal code',
+  confirmation_booking_promotionnal_code_input: 'ENTER YOUR CODE',
+  confirmation_booking_promotionnal_code_submit: 'OK',
+  confirmation_booking_days: 'days',
+  confirmation_booking_day: 'day',
+  confirmation_booking_servicing_charge: 'Servicing charge',
+  confirmation_booking_tva: 'TVA 20%',
+  confirmation_booking_total: 'TOTAL',
+
   //COMPONENT
 
   //component_booking_card

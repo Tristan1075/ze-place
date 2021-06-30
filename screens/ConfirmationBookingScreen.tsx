@@ -10,17 +10,16 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {useStripe} from '@stripe/stripe-react-native';
+import i18n from 'i18n-js';
 
 import Button from '../components/Button';
 import SimpleInput from '../components/SimpleInput';
 import TitleWithDescription from '../components/TitleWithDescription';
 import Colors from '../constants/Colors';
-import {addPaymentMethod, initPaymentIntent} from '../api/payment';
+import {initPaymentIntent} from '../api/payment';
 import {Booking, Place} from '../types';
-import {getBookingPriceWithDuration} from '../utils';
 import {ModalContext} from '../providers/modalContext';
 import {bookPlace} from '../api/bookings';
-import { navigate } from '../App';
 
 type Props = {
   place: Place;
@@ -39,7 +38,8 @@ const ConfirmationBookingScreen = ({place, booking, navigation}: Props) => {
 
   const getPaymentIntent = async () => {
     const {paymentIntent, ephemeralKey, customer} = await initPaymentIntent(
-      place.price * 100 * booking.duration, place.ownerId,
+      place.price * 100 * booking.duration,
+      place.ownerId,
     );
     const {error} = await initPaymentSheet({
       customerId: customer,
@@ -75,13 +75,20 @@ const ConfirmationBookingScreen = ({place, booking, navigation}: Props) => {
           subtitle={true}
           description={`${place.location.city}, ${place.location.postalCode} ${place.location.country}`}
         />
-        <Text style={styles.title}>Arrival</Text>
+        <Text style={styles.title}>
+          {i18n.t('confirmation_booking_arrival')}
+        </Text>
         <Text style={styles.description}>{booking.startDate}</Text>
-        <Text style={styles.title}>Departure</Text>
+        <Text style={styles.title}>
+          {i18n.t('confirmation_booking_departure')}
+        </Text>
         <Text style={styles.description}>{booking.endDate}</Text>
       </View>
       <View style={styles.paymentBloc}>
-        <TitleWithDescription title="Payment and details" subtitle={true} />
+        <TitleWithDescription
+          title={i18n.t('confirmation_booking_payment_title')}
+          subtitle={true}
+        />
         <View style={styles.row}>
           <TouchableWithoutFeedback onPress={() => setActivePaymentMethod(0)}>
             <View
@@ -123,14 +130,21 @@ const ConfirmationBookingScreen = ({place, booking, navigation}: Props) => {
           <View style={styles.flex} />
           <TouchableOpacity
             onPress={() => showPromotionalCode(!promotionalCode)}>
-            <Text style={styles.title}>Promotionnal code</Text>
+            <Text style={styles.title}>
+              {i18n.t('confirmation_booking_promotionnal_code')}
+            </Text>
           </TouchableOpacity>
         </View>
         {promotionalCode && (
           <View style={styles.row}>
-            <SimpleInput style={styles.input} placeholder="ENTER YOUR CODE" />
+            <SimpleInput
+              style={styles.input}
+              placeholder={i18n.t(
+                'confirmation_booking_promotionnal_code_input',
+              )}
+            />
             <Button
-              value="OK"
+              value={i18n.t('confirmation_booking_promotionnal_code_submit')}
               backgroundColor={Colors.dark}
               textColor={Colors.white}
               style={styles.button}
@@ -138,14 +152,21 @@ const ConfirmationBookingScreen = ({place, booking, navigation}: Props) => {
           </View>
         )}
         <View style={styles.paymentRow}>
-          <Text style={styles.keyBold}>{booking.duration} days</Text>
+          <Text style={styles.keyBold}>
+            {booking.duration}{' '}
+            {booking.duration && booking.duration > 1
+              ? i18n.t('confirmation_booking_days')
+              : i18n.t('confirmation_booking_day')}
+          </Text>
           {booking.duration && (
             <Text style={styles.value}>{booking.duration * place.price}€</Text>
           )}
         </View>
         <View style={styles.border} />
         <View style={styles.paymentRow}>
-          <Text style={styles.key}>Servicing charge</Text>
+          <Text style={styles.key}>
+            {i18n.t('confirmation_booking_servicing_charge')}
+          </Text>
           {booking.duration && (
             <Text style={styles.value}>
               {place.price * booking.duration * 0.2}€
@@ -153,12 +174,14 @@ const ConfirmationBookingScreen = ({place, booking, navigation}: Props) => {
           )}
         </View>
         <View style={styles.paymentRow}>
-          <Text style={styles.key}>TVA 20%</Text>
+          <Text style={styles.key}> {i18n.t('confirmation_booking_tva')}</Text>
           <Text style={styles.value}>{place.price * 0.2}€</Text>
         </View>
         <View style={styles.resume}>
           <View style={styles.totalRow}>
-            <Text style={styles.total}>TOTAL </Text>
+            <Text style={styles.total}>
+              {i18n.t('confirmation_booking_total')}
+            </Text>
             {booking.duration && (
               <Text style={styles.total}>
                 {place.price * 0.4 +

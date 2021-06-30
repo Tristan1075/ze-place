@@ -206,8 +206,21 @@ export default {
   bug_ticket_title: 'Titre',
   bug_ticket_title_input: 'Veuillez saisir un titre',
   bug_ticket_description: 'Description',
-  bug_ticket_description_input: 'Veuilez décrir votre bug',
+  bug_ticket_description_input: 'Veuilez décrire votre bug',
   bug_ticket_submit: 'Envoyer',
+
+  //confirmation_booking
+  confirmation_booking_arrival: 'Arrivée',
+  confirmation_booking_departure: 'Départ',
+  confirmation_booking_payment_title: 'Paiement et détail',
+  confirmation_booking_promotionnal_code: 'Code promotionnel',
+  confirmation_booking_promotionnal_code_input: 'ENTREZ VOTRE CODE',
+  confirmation_booking_promotionnal_code_submit: 'OK',
+  confirmation_booking_days: 'jours',
+  confirmation_booking_day: 'jour',
+  confirmation_booking_servicing_charge: 'Frais de service',
+  confirmation_booking_tva: 'TVA 20%',
+  confirmation_booking_total: 'TOTAL',
 
   //COMPONENT
 

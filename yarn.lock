@@ -8928,31 +8928,10 @@ react-native-swipe-gestures@^1.0.5:
   resolved "https://registry.yarnpkg.com/react-native-swipe-gestures/-/react-native-swipe-gestures-1.0.5.tgz#a172cb0f3e7478ccd681fd36b8bfbcdd098bde7c"
   integrity sha512-Ns7Bn9H/Tyw278+5SQx9oAblDZ7JixyzeOczcBK8dipQk2pD7Djkcfnf1nB/8RErAmMLL9iXgW0QHqiII8AhKw==
 
-react-native-switch@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/react-native-switch/-/react-native-switch-2.0.0.tgz#028371b946ba0520e421f02caa7685878cf4bd4e"
-  integrity sha512-Yy8GQBazGBz/VI/Xl2LkyO/4wElnt9hRQ+gY3j/7ZkdfIQftY6IAtvSpU2NEksezUxs4DgNAkcmeDfRO0t2wbg==
-  dependencies:
-    prop-types "^15.6.0"
-
-react-native-tab-view@^1.0.2:
-  version "1.4.1"
-  resolved "https://registry.yarnpkg.com/react-native-tab-view/-/react-native-tab-view-1.4.1.tgz#f113cd87485808f0c991abec937f70fa380478b9"
-  integrity sha512-Bke8KkDcDhvB/z0AS7MnQKMD2p6Kwfc1rSKlMOvg9CC5CnClQ2QEnhPSbwegKDYhUkBI92iH/BYy7hNSm5kbUQ==
-  dependencies:
-    prop-types "^15.6.1"
-
 react-native-tab-view@^3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/react-native-tab-view/-/react-native-tab-view-3.0.1.tgz#7ed8c5c4a0bb48fa8895e612d26e6d545ed03447"
   integrity sha512-L7qXtYz5Z+NdWyu38zaJrlHA/8H6rNFRZXe3ydym12UEEPPoefbVZ71b9YK2O6QP0u4pUlzMpMVM/Lsz2DJ4jg==
-
-react-native-vertical-tab-view@^0.1.3:
-  version "0.1.3"
-  resolved "https://registry.yarnpkg.com/react-native-vertical-tab-view/-/react-native-vertical-tab-view-0.1.3.tgz#415d53411bb2ab43a91cafc1391edae3cf22e48a"
-  integrity sha512-0WCE865MyrUmTz6KkYcDvCE754CG+JtS/raGbsbWeMO+eRhDz5ZvvlkTcJJB2ap/xqAAcmTbnAHS8GrOzHtHlQ==
-  dependencies:
-    react-native-tab-view "^1.0.2"
 
 react-native-web@~0.13.12:
   version "0.13.18"

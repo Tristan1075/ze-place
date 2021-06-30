@@ -46,7 +46,7 @@ const BookingListScreen = (props: Props) => {
         <TitleWithDescription
           title={i18n.t('booking_list_title')}
           subtitle={true}
-          description={i18n.t('booking_list_active_description')}
+          description={i18n.t('booking_list_description')}
         />
         {bookings &&
         bookings.filter((booking) => booking.isPast !== true).length > 0 ? (
