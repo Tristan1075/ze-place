@@ -51,7 +51,7 @@
         {
           "file": "sentry-expo/upload-sourcemaps",
           "config": {
-            "organization": "ZP",
+            "organization": "esgi",
             "project": "zeplace",
             "authToken": "cc6d9137b439409d97800a9d00721ac83c95dcf6505443dd87d339ceae11fd86"
           }
