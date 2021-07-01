@@ -31,10 +31,11 @@ const stripeClient = stripe(PUBLIC_KEY_STRIPE);
 type Props = {
   onTouchOutside?: () => void;
   onBookPress?: (paymentIntent: any) => void;
+  bookingPrice: number;
 };
 
 const PaymentModal = (props: Props) => {
-  const {onTouchOutside, onBookPress} = props;
+  const {onTouchOutside, onBookPress, bookingPrice} = props;
   const [addPaymentMethod, setAddPaymentMethod] = useState<boolean>(false);
   const [paymentMethods, setPaymentMethods] = useState<Array<PaymentMethod>>(
     [],
@@ -89,6 +90,7 @@ const PaymentModal = (props: Props) => {
       const paymentIntent = await createPaymentIntent(
         UserStore.user.customerId,
         item?.id,
+        bookingPrice,
       );
       if (paymentIntent) {
         setIsSuccess(true);

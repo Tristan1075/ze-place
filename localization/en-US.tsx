@@ -228,7 +228,7 @@ export default {
   component_booking_card_from: 'From :',
   component_booking_card_to: 'To :',
   component_booking_card_days: 'days',
-  component_booking_card_send_message: 'Send a message to owner',
+  component_booking_card_send_message: 'Send a message',
   component_booking_card_denied: 'DENIED',
   component_booking_card_accepted: 'ACCEPTED',
   component_booking_card_pending: 'PENDING',

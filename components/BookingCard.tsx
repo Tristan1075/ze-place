@@ -43,12 +43,14 @@ const BookingCard = ({
       {item.description ? (
         <Text style={styles.description}>{item.description}</Text>
       ) : null}
-      <TouchableOpacity onPress={onSendMessagePress}>
-        <AntDesign name="message1" size={20} />
-        <Text style={styles.description}>
-          {i18n.t('component_booking_card_send_message')}
-        </Text>
-      </TouchableOpacity>
+      {!isUser && (
+        <TouchableOpacity onPress={onSendMessagePress} style={styles.sendRow}>
+          <Text style={styles.sendText}>
+            {i18n.t('component_booking_card_send_message')}
+          </Text>
+          <AntDesign name="message1" size={20} />
+        </TouchableOpacity>
+      )}
       <View style={styles.border} />
       <View style={styles.actions}>
         {!item.isDenied && (
@@ -130,6 +132,14 @@ const styles = StyleSheet.create({
   },
   success: {
     color: Colors.success,
+  },
+  sendRow: {
+    flexDirection: 'row',
+    marginTop: 20,
+  },
+  sendText: {
+    fontFamily: 'oswald',
+    paddingRight: 10,
   },
 });
 

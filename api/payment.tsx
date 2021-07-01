@@ -26,6 +26,7 @@ export const createToken = async () => {
 export const createPaymentIntent = async (
   customerId: string,
   paymentMethodId: string,
+  bookingPrice: number,
 ) => {
   const token = await SecureStore.getItemAsync('access-token');
   return await axios
@@ -34,6 +35,7 @@ export const createPaymentIntent = async (
       {
         customerId,
         paymentMethodId,
+        bookingPrice,
       },
       {
         headers: {

@@ -32,7 +32,11 @@ const BookingListScreen = (props: Props) => {
 
   const renderItem = ({item, index}: {item: Booking; index: number}) => {
     return (
-      <PlaceCardSquare key={index} item={item} onPress={handlePlacePress} />
+      <PlaceCardSquare
+        key={index}
+        item={item}
+        onPress={() => handlePlacePress(item.placeId)}
+      />
     );
   };
 

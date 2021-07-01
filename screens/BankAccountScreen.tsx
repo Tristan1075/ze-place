@@ -32,12 +32,9 @@ const BankAccountScreen = () => {
   });
 
   useEffect(() => {
-    getBalance(UserStore.user.stripeAccount).then((balance) => {
-      setBalance(balance.available);
-    });
     getConnectedAccount(UserStore.user.stripeAccount).then((account) => {
-      setAccount(account);
       console.log(account);
+      setAccount(account);
     });
   }, []);
 
@@ -182,6 +179,7 @@ const BankAccountScreen = () => {
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: Colors.background,
     paddingTop: 150,
     paddingHorizontal: 20,
     paddingBottom: 100,

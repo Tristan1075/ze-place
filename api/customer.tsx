@@ -220,6 +220,8 @@ export const setToHistory = async (promo) =>{
       },
     )
     .then((response: AxiosResponse<any>) => {
+      
+       
       return response.data;
     })
     .catch((err) => {

@@ -142,12 +142,21 @@ export type Conversation = {
   placeId: string;
   userId: string;
   ownerId: string;
+  lastMessage: Message;
+  userAvatar: string;
+  userName: string;
+  ownerAvatar: string;
+  ownerName: string;
   created_at: Date;
 };
 
 export type Message = {
-  value: string;
-  from: string;
+  _id: string;
+  conversationId: string;
+  senderId: string;
+  receiverId: string;
+  text: string;
+  created_at: Date;
 };
 
 export type SigninForm = {
