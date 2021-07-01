@@ -36,8 +36,13 @@ const MessagesScreen = (props: Props) => {
   const [conversations, setConversations] = useState<Conversation[]>();
 
   const init = useCallback(async () => {
-    const conversation = await getConversationByPlace(place._id);
-    console.log(conversation);
+    const conversation: Conversation[] = await getConversationByPlace(
+      place._id,
+    );
+    conversation.sort(function (o1, o2) {
+      return o1.created_at ? 1 : o2.created_at ? -1 : 0;
+    });
+
     if (conversation) {
       setConversations(conversation);
     }
@@ -53,6 +58,7 @@ const MessagesScreen = (props: Props) => {
         placeId: place._id,
         ownerId: UserStore.user._id,
         userId: item.userId,
+        conversation: item,
       },
     });
   };

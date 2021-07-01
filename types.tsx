@@ -151,8 +151,12 @@ export type Conversation = {
 };
 
 export type Message = {
-  value: string;
-  from: string;
+  _id: string;
+  conversationId: string;
+  senderId: string;
+  receiverId: string;
+  text: string;
+  created_at: Date;
 };
 
 export type SigninForm = {

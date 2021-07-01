@@ -10,7 +10,10 @@ type Props = {
 const EmptyBloc = ({title, image, size}: Props) => {
   return (
     <View style={styles.container}>
-      <Image source={image} style={styles.image} width={size} height={size} />
+      <Image
+        source={image}
+        style={[styles.image, {width: size, height: size}]}
+      />
       <Text style={styles.title}>{title}</Text>
     </View>
   );

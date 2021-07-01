@@ -31,6 +31,7 @@ const stripeClient = stripe(PUBLIC_KEY_STRIPE);
 type Props = {
   onTouchOutside?: () => void;
   onBookPress?: (paymentIntent: any) => void;
+  bookingPrice: number;
 };
 
 const PaymentModal = (props: Props) => {

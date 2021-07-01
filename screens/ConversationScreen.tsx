@@ -53,9 +53,9 @@ const ConversationScreen = (props: Props) => {
       conversationParams.userId,
       conversationParams.ownerId,
     ).then(async (conversationResult) => {
+      console.log(conversationResult);
       if (conversationResult) {
         getMessageByConversation(conversationResult?._id).then((m) => {
-          console.log(m);
           const messagesMap = m.map((message) => ({
             value: message.text,
             from: UserStore.user._id === message.senderId ? '1' : '0',
@@ -103,7 +103,7 @@ const ConversationScreen = (props: Props) => {
   }, [init, navigation]);
 
   const renderItem = ({item}: {item: Message}) => (
-    <ConversationItem message={item} />
+    <ConversationItem message={item} conversation={conversation} />
   );
 
   const sendMessagePress = async () => {
@@ -145,7 +145,7 @@ const ConversationScreen = (props: Props) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header type="back" showProfil={true} />
+      <Header type="back" showProfil={true} title={conversation?.userName} />
       <View style={styles.content}>
         <FlatList
           ref={_flatList}
