@@ -1,4 +1,4 @@
-import {Place, SignupForm, User} from '../types';
+import {Place, SignupForm, User, Promo} from '../types';
 import axios, {AxiosResponse} from 'axios';
 import * as SecureStore from 'expo-secure-store';
 import {API_URL} from '../env';
@@ -202,3 +202,29 @@ export const addPromoCode = async (promoTitle: string) => {
       return Promise.reject(err);
     });
 };
+
+export const setToHistory = async (promo) =>{
+  const token = await SecureStore.getItemAsync('access-token');
+  
+  await axios
+    .post(
+      `${API_URL}/customers/setToHistory`,
+      {
+        promoId: promo._id,
+        userId:UserStore.user._id
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    )
+    .then((response: AxiosResponse<any>) => {
+      return response.data;
+    })
+    .catch((err) => {
+      console.log(err);
+
+      return Promise.reject(err);
+    });
+}

@@ -15,12 +15,14 @@ import Button from '../components/Button';
 import SimpleInput from '../components/SimpleInput';
 import TitleWithDescription from '../components/TitleWithDescription';
 import Colors from '../constants/Colors';
-import {Booking, Place} from '../types';
+import {Booking, Place, Promo} from '../types';
 import {ModalContext} from '../providers/modalContext';
 import {bookPlace} from '../api/bookings';
 import Modal from '../components/Modal';
 import Layout from '../constants/Layout';
 import PaymentModal from '../components/PaymentModal';
+import BookingPromoScreen from './BookingPromoScreen';
+import { setToHistory } from '../api/customer';
 
 type Props = {
   place: Place;
@@ -34,7 +36,18 @@ const ConfirmationBookingScreen = ({place, booking, navigation}: Props) => {
   const [paymentSheetEnabled, setPaymentSheetEnabled] = useState(false);
   const [activePaymentMethod, setActivePaymentMethod] = useState(0);
   const [promotionalCode, showPromotionalCode] = useState<boolean>(false);
+  const [placeBook, setPlace] = useState<Place>(place);
+  const [bookPromo, setBooking] = useState<Booking>(booking);
+  const [promoCode, setPromoCode] = useState<Promo>();
+
   const {handleModal} = useContext(ModalContext);
+  
+
+  const showPromotionalCodeModal = async () => {
+    showPromotionalCode(true);
+
+    
+  };
 
   // const getPaymentIntent = async () => {
   //   const {paymentIntent, ephemeralKey, customer} = await initPaymentIntent(
@@ -53,11 +66,25 @@ const ConfirmationBookingScreen = ({place, booking, navigation}: Props) => {
   //   return paymentIntent;
   // };
 
+  const updatePlace = (placePromo:number,promo:Promo) => {
+    setPlace({...placeBook , price:placePromo})  
+    setBooking({...bookPromo, price:(placePromo*bookPromo.duration)})
+    setPromoCode(promo)
+  console.log('parent',placeBook.price);
+  }
+
   const onBookPress = async (paymentIntent: any) => {
-    await bookPlace(place, booking, paymentIntent.id);
-    setPaymentSheetEnabled(false);
-    handleModal();
-    navigation.navigate('BookingAndPlaces');
+
+    // console.log('book',placeBook);
+    // console.log('bookingPromo',bookPromo);
+    // console.log('promo',promoCode);
+    
+    await setToHistory(promoCode);
+    // await bookPlace(placeBook, bookPromo, paymentIntent.id);
+
+    // setPaymentSheetEnabled(false);
+    // handleModal();
+    // navigation.navigate('BookingAndPlaces');
   };
 
   return (
@@ -66,9 +93,9 @@ const ConfirmationBookingScreen = ({place, booking, navigation}: Props) => {
         <Image source={creditCard} style={styles.creditCard} />
         <View style={styles.content}>
           <TitleWithDescription
-            title={place.title}
+            title={placeBook.title}
             subtitle={true}
-            description={`${place.location.city}, ${place.location.postalCode} ${place.location.country}`}
+            description={`${placeBook.location.city}, ${placeBook.location.postalCode} ${placeBook.location.country}`}
           />
           <Text style={styles.title}>
             {i18n.t('confirmation_booking_arrival')}
@@ -121,14 +148,14 @@ const ConfirmationBookingScreen = ({place, booking, navigation}: Props) => {
                   style={styles.googleIcon}
                 />
               </View>
-            </TouchableWithoutFeedback>
+            </TouchableWithoutFeedback>*/}
             <View style={styles.flex} />
             <TouchableOpacity
-              onPress={() => showPromotionalCode(!promotionalCode)}>
+              onPress={() => showPromotionalCodeModal()}>
               <Text style={styles.title}>
                 {i18n.t('confirmation_booking_promotionnal_code')}
               </Text>
-            </TouchableOpacity> */}
+            </TouchableOpacity> 
           </View>
           {promotionalCode && (
             <View style={styles.row}>
@@ -156,7 +183,7 @@ const ConfirmationBookingScreen = ({place, booking, navigation}: Props) => {
             </Text>
             {booking.duration && (
               <Text style={styles.value}>
-                {booking.duration * place.price}€
+                {booking.duration * placeBook.price}€
               </Text>
             )}
           </View>
@@ -167,7 +194,7 @@ const ConfirmationBookingScreen = ({place, booking, navigation}: Props) => {
             </Text>
             {booking.duration && (
               <Text style={styles.value}>
-                {place.price * booking.duration * 0.2}€
+                {placeBook.price * booking.duration * 0.2}€
               </Text>
             )}
           </View>
@@ -176,7 +203,7 @@ const ConfirmationBookingScreen = ({place, booking, navigation}: Props) => {
               {' '}
               {i18n.t('confirmation_booking_tva')}
             </Text>
-            <Text style={styles.value}>{place.price * 0.2}€</Text>
+            <Text style={styles.value}>{placeBook.price * 0.2}€</Text>
           </View>
           <View style={styles.resume}>
             <View style={styles.totalRow}>
@@ -185,9 +212,9 @@ const ConfirmationBookingScreen = ({place, booking, navigation}: Props) => {
               </Text>
               {booking.duration && (
                 <Text style={styles.total}>
-                  {place.price * 0.4 +
-                    place.price * 0.2 +
-                    booking.duration * place.price}
+                  {placeBook.price * 0.4 +
+                    placeBook.price * 0.2 +
+                    booking.duration * placeBook.price}
                   €
                 </Text>
               )}
@@ -213,6 +240,18 @@ const ConfirmationBookingScreen = ({place, booking, navigation}: Props) => {
         }
         handleModal={() => setPaymentSheetEnabled(false)}
       />
+
+      <Modal
+        visible={promotionalCode}
+        child={
+          <BookingPromoScreen
+          place={place}
+          onPromoSelected={updatePlace}
+
+          />
+        }
+        handleModal={() => showPromotionalCode(false)}
+      />  
     </View>
   );
 };

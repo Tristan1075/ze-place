@@ -296,12 +296,14 @@ const SignupScreen = (props: Props) => {
               value={form.gender}
               placeholder={i18n.t('sign_up_gender_placeholder')}
               isEditable={false}
-              onPress={() => setGenderVisible(true)}
+              onPress={() => setGenderVisible(true)
+              }
               suffix={
                 <Ionicons name="chevron-down" size={20} color={Colors.dark} />
               }
               error={errors.gender}
             />
+            
            
             <SimpleInput
               onChange={() => setErrors({...errors, firstname: ''})}
