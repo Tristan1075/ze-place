@@ -36,23 +36,6 @@ const ConfirmationBookingScreen = ({place, booking, navigation}: Props) => {
   const [promotionalCode, showPromotionalCode] = useState<boolean>(false);
   const {handleModal} = useContext(ModalContext);
 
-  // const getPaymentIntent = async () => {
-  //   const {paymentIntent, ephemeralKey, customer} = await initPaymentIntent(
-  //     place.price * 100 * booking.duration,
-  //     place.ownerId,
-  //   );
-  //   const {error} = await initPaymentSheet({
-  //     customerId: customer,
-  //     customerEphemeralKeySecret: ephemeralKey,
-  //     paymentIntentClientSecret: paymentIntent.client_secret,
-  //     merchantDisplayName: 'Example Inc.',
-  //   });
-  //   if (!error) {
-  //     setPaymentSheetEnabled(true);
-  //   }
-  //   return paymentIntent;
-  // };
-
   const onBookPress = async (paymentIntent: any) => {
     await bookPlace(place, booking, paymentIntent.id);
     setPaymentSheetEnabled(false);
@@ -185,10 +168,7 @@ const ConfirmationBookingScreen = ({place, booking, navigation}: Props) => {
               </Text>
               {booking.duration && (
                 <Text style={styles.total}>
-                  {place.price * 0.4 +
-                    place.price * 0.2 +
-                    booking.duration * place.price}
-                  €
+                  {(place.price * booking.duration + place.price * 0.2) * 1.2}€
                 </Text>
               )}
             </View>
@@ -209,6 +189,9 @@ const ConfirmationBookingScreen = ({place, booking, navigation}: Props) => {
           <PaymentModal
             onTouchOutside={() => setPaymentSheetEnabled(false)}
             onBookPress={onBookPress}
+            bookingPrice={
+              (place.price * booking.duration + place.price * 0.2) * 1.2
+            }
           />
         }
         handleModal={() => setPaymentSheetEnabled(false)}

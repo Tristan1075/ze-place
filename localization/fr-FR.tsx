@@ -228,7 +228,7 @@ export default {
   component_booking_card_from: 'Du :',
   component_booking_card_to: 'Au :',
   component_booking_card_days: 'jours',
-  component_booking_card_send_message: 'Contacter le propriétaire',
+  component_booking_card_send_message: 'Envoyer un message',
   component_booking_card_denied: 'REFUSÉ',
   component_booking_card_accepted: 'ACCEPTÉ',
   component_booking_card_pending: 'EN ATTENTE',

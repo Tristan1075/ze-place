@@ -91,8 +91,8 @@ const UserBookingsScreen = ({navigation}) => {
         userId: item.userId,
         ownerId: UserStore.user._id,
       },
-    })
-  }
+    });
+  };
 
   return (
     <ScrollView
@@ -146,7 +146,31 @@ const UserBookingsScreen = ({navigation}) => {
             <View style={styles.list}>
               <FlatList
                 scrollEnabled={false}
-                data={bookings}
+                data={bookings.filter((booking) => booking.isPast !== true)}
+                renderItem={renderItems}
+                keyExtractor={(item) => item._id}
+                showsVerticalScrollIndicator={false}
+              />
+            </View>
+          </>
+        ) : !activeBooking ? (
+          <EmptyBloc
+            size={80}
+            image={require('../assets/images/sad.png')}
+            title="You don't have reservations for the moment..."
+          />
+        ) : null}
+        {bookings.length > 0 ? (
+          <>
+            <TitleWithDescription
+              title="History"
+              subtitle={true}
+              style={styles.paddingHorizontal}
+            />
+            <View style={styles.list}>
+              <FlatList
+                scrollEnabled={false}
+                data={bookings.filter((booking) => booking.isPast === true)}
                 renderItem={renderItems}
                 keyExtractor={(item) => item._id}
                 showsVerticalScrollIndicator={false}

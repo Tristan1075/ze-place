@@ -1,7 +1,7 @@
 import React from 'react';
 import {Text, StyleSheet, View, Image, TouchableOpacity} from 'react-native';
 import Colors from '../constants/Colors';
-import { Conversation } from '../types';
+import {Conversation} from '../types';
 
 type Props = {
   conversation: Conversation;
@@ -10,15 +10,27 @@ type Props = {
 
 const MessageItem = (props: Props) => {
   const {conversation, onConversationPress} = props;
+  const time = new Date(conversation.lastMessage.created_at);
   return (
     <TouchableOpacity style={styles.container} onPress={onConversationPress}>
       <View style={styles.container}>
         <Image source={{uri: conversation.userAvatar}} style={styles.image} />
-        <Text style={styles.from}>{conversation.userName}</Text>
+        <View>
+          <Text style={styles.from}>{conversation.userName}</Text>
+          {conversation.lastMessage && (
+            <Text style={styles.lastMessage}>
+              {conversation.lastMessage.text}
+            </Text>
+          )}
+        </View>
       </View>
-      <View style={styles.badge}>
-        <Text style={styles.number}>2</Text>
-      </View>
+      {conversation.lastMessage && (
+        <Text style={styles.date}>
+          {time.getHours() < 10 ? '0' : ''}
+          {time.getHours()}:{time.getMinutes() < 10 ? '0' : ''}
+          {time.getMinutes()}
+        </Text>
+      )}
     </TouchableOpacity>
   );
 };
@@ -52,6 +64,16 @@ const styles = StyleSheet.create({
   number: {
     color: Colors.white,
     fontFamily: 'poppins-semiBold',
+  },
+  lastMessage: {
+    fontFamily: 'poppins',
+    fontSize: 14,
+    color: Colors.gray,
+  },
+  date: {
+    fontFamily: 'poppins',
+    fontSize: 14,
+    color: Colors.primary,
   },
 });
 
