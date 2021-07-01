@@ -40,12 +40,11 @@ const CreatePlaceScreen = () => {
 
   useEffect(() => {
     if (place) {
-      console.log(place.features);
       setCreatePlaceForm({
         title: place.title,
         location: place.location,
         surface: place.surface.toString(),
-        placeType: place.placeType[0],
+        placeType: place.placeType,
         price: place.price.toString(),
         description: place.description,
         features: place.features,

@@ -13,9 +13,7 @@ type Credentials = {
   password: string;
 };
 
-export const login = async (
-  credentials: Credentials,
-): Promise<AxiosResponse> => {
+export const login = async (credentials: Credentials): Promise<Token> => {
   return await axios
     .post(
       `${API_URL}/auth/login`,

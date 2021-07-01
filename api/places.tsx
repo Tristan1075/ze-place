@@ -64,7 +64,7 @@ export const getPlacesNearbyCoordinates = async (
 };
 
 export const createPlace = async (form: CreatePlaceForm) => {
-  const token = await SecureStore.getItemAsync('access-token');  
+  const token = await SecureStore.getItemAsync('access-token');
   return await axios
     .post(
       `${API_URL}/places/create`,
@@ -167,7 +167,7 @@ export const searchPlaces = async (filterForm: FilterForm) => {
     .post(
       `${API_URL}/places/searchPlaces`,
       {
-        placeTypeName: filterForm.placeType?.name,
+        placeTypeName: filterForm.placeType,
         price: filterForm.price,
         surface: filterForm.surface,
         features: filterForm.features,

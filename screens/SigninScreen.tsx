@@ -8,9 +8,9 @@ import {RootStackParamList, SigninForm} from '../types';
 import Button from '../components/Button';
 import Colors from '../constants/Colors';
 import Header from '../components/Header';
-import {login, test} from '../api/auth';
-import {getUser} from '../api/customer';
+import {login} from '../api/auth';
 import UserStore from '../store/UserStore';
+import { Token } from './SignupScreen';
 
 type RootScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -35,7 +35,7 @@ const SigninScreen = (props: Props) => {
 
   const handleSigninPress = async () => {
     try {
-      const token = await login(credentials);
+      const token: Token = await login(credentials);
       await SecureStore.setItemAsync('access-token', token.access_token);
       await UserStore.updateUser(token.user);
       navigation.dispatch(

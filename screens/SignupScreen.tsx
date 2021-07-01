@@ -57,8 +57,6 @@ import avatar from '../assets/images/man.png';
 import {ModalContext} from '../providers/modalContext';
 import SearchPlaceScreen from './SearchPlaceScreen';
 import UserStore from '../store/UserStore';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
-import { number } from 'prop-types';
 const input: SignupForm = {
   gender: '',
   avatar: '',
@@ -167,9 +165,6 @@ const SignupScreen = (props: Props) => {
       return response;
     });
   };
-  const sleep = (ms) => {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-  };
 
   const handleSigninPress = async () => {
     const isFormValid = verifyForm();
@@ -184,7 +179,7 @@ const SignupScreen = (props: Props) => {
       uploadID(form.IDRecto, form.IDVerso)
         .then(async (res) => {
           try {
-            setForm({...form, avatar: `${form.email}${form.lastname}.png`})
+            setForm({...form, avatar: `${form.email}${form.lastname}.png`});
             const token = await register(form, res);
             await SecureStore.setItemAsync('access-token', token.access_token);
             await UserStore.updateUser(token.user);
