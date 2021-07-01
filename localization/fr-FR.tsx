@@ -86,7 +86,7 @@ export default {
   search_filter_search: 'Rechercher',
 
   //search_place_location
-  search_place_location_title: 'Trouvez votre espace !',
+  search_place_location_title: 'Adresse',
   search_place_location_enter_address_placeholder: `Saisissez l'adresse...`,
   search_place_location_results: 'Résultats',
 
