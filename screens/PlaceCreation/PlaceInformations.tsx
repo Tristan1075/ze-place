@@ -5,17 +5,7 @@ import React, {
   useState,
   useEffect,
 } from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  ScrollView,
-  TouchableOpacity,
-} from 'react-native';
-import {Platform} from 'react-native';
-
-//@ts-ignore
-import {ModalContent, BottomModal} from 'react-native-modals';
+import {StyleSheet, Text, View} from 'react-native';
 
 import TitleWithDescription from '../../components/TitleWithDescription';
 import SimpleInput from '../../components/SimpleInput';
@@ -23,18 +13,15 @@ import Button from '../../components/Button';
 import Colors from '../../constants/Colors';
 import Layout from '../../constants/Layout';
 import {Ionicons} from '@expo/vector-icons';
-import CalendarPicker from '../../components/CalendarPicker';
-import Feature from '../../components/Feature';
 import {ModalContext} from '../../providers/modalContext';
 import SelectPlaceTypeScreen from '../SelectPlaceTypeScreen';
-import SelectableItem from '../../components/SelectableItem';
-import {CreatePlaceForm, FeatureType, PlaceType} from '../../types';
-import Constants from '../../utils/Constants';
+import {CreatePlaceForm, FeatureType, Place, PlaceType} from '../../types';
 import FeatureList from '../../components/FeatureList';
 import {getPlaceFeatures} from '../../api/type-features';
 import i18n from 'i18n-js';
 
 type Props = {
+  place?: Place;
   prevStep: () => void;
   nextStep: () => void;
   createPlaceForm: CreatePlaceForm;
@@ -42,10 +29,21 @@ type Props = {
 };
 
 const PlaceInformations = (props: Props) => {
-  const {prevStep, nextStep, createPlaceForm, setCreatePlaceForm} = props;
+  const {
+    prevStep,
+    nextStep,
+    createPlaceForm,
+    setCreatePlaceForm,
+    place,
+  } = props;
   const {handleModal} = useContext(ModalContext);
   const [minDate, setMinDate] = useState<string>();
   const [features, setFeatures] = useState<FeatureType[]>([]);
+
+  useEffect(() => {
+    if (place) {
+    }
+  }, []);
 
   const handleSelectPlaceType = () => {
     handleModal({
@@ -74,7 +72,6 @@ const PlaceInformations = (props: Props) => {
       <SimpleInput
         placeholder={i18n.t('place_information_place_type_placeholder')}
         value={createPlaceForm.placeType?.name}
-        isEditable={false}
         onPress={handleSelectPlaceType}
         suffix={<Ionicons name="chevron-down" size={20} color={Colors.dark} />}
       />
@@ -137,28 +134,6 @@ const PlaceInformations = (props: Props) => {
         onChange={setCreatePlaceForm}
         onlyOne={false}
       />
-      <TitleWithDescription
-        title={i18n.t('place_information_availability_title')}
-        description={i18n.t('place_information_availability_description')}
-        subtitle={true}
-        style={styles.paddingVertical}
-      />
-      <CalendarPicker
-        startDate={createPlaceForm.startDate}
-        endDate={createPlaceForm.endDate}
-        minDate={minDate}
-        showDates={true}
-        onChange={(startDate, endDate, duration) => {
-          startDate && setMinDate(startDate);
-          if (duration) {
-            setCreatePlaceForm({
-              ...createPlaceForm,
-              startDate: startDate,
-              endDate: endDate,
-            });
-          }
-        }}
-      />
       <View style={styles.row}>
         <Button
           value={i18n.t('place_information_back')}
@@ -192,7 +167,7 @@ const styles = StyleSheet.create({
   },
   row: {
     flexDirection: 'row',
-    marginTop: 80,
+    marginTop: 60,
     marginBottom: 20,
   },
   durationBloc: {

@@ -169,9 +169,6 @@ const SignupScreen = (props: Props) => {
       return response;
     });
   };
-  const sleep = (ms) => {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-  };
 
   const handleSigninPress = async () => {
     const isFormValid = verifyForm();
