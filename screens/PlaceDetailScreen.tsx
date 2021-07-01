@@ -136,6 +136,10 @@ const PlaceDetailScreen = () => {
     });
   };
 
+  const handleModifyPress = () => {
+    navigation.navigate('CreatePlace', {place});
+  };
+
   return (
     <View>
       <ScrollView showsVerticalScrollIndicator={false} style={styles.screen}>
@@ -168,22 +172,26 @@ const PlaceDetailScreen = () => {
               {place?.location.country}
             </Text>
             <View style={styles.descriptionBloc}>
-              <TouchableOpacity
-                style={[styles.row, styles.padding]}
-                onPress={() =>
-                  UserStore.user._id === place?.ownerId
-                    ? navigation.navigate('Messages', {place})
-                    : navigation.navigate('Conversation', {
-                        conversation: {
-                          placeId: place?._id,
-                          userId: UserStore.user._id,
-                          ownerId: place?.ownerId,
-                        },
-                      })
-                }>
-                <AntDesign name="message1" style={styles.message} size={20} />
-                <Text style={styles.description}>Send a message to owner</Text>
-              </TouchableOpacity>
+              {UserStore.user._id !== place?.ownerId && (
+                <TouchableOpacity
+                  style={[styles.row, styles.padding]}
+                  onPress={() =>
+                    UserStore.user._id === place?.ownerId
+                      ? navigation.navigate('Messages', {place})
+                      : navigation.navigate('Conversation', {
+                          conversation: {
+                            placeId: place?._id,
+                            userId: UserStore.user._id,
+                            ownerId: place?.ownerId,
+                          },
+                        })
+                  }>
+                  <AntDesign name="message1" style={styles.message} size={20} />
+                  <Text style={styles.description}>
+                    Send a message to owner
+                  </Text>
+                </TouchableOpacity>
+              )}
               {place?.reviews.length > 0 && (
                 <View style={styles.padding}>
                   <Rating
@@ -369,19 +377,23 @@ const PlaceDetailScreen = () => {
       <View style={styles.chooseBanner}>
         <Text style={styles.chooseBannerText}>
           {UserStore.user._id === place?.ownerId
-            ? i18n.t('place_detail_active_bookings')
+            ? ''
             : userBooking.length > 0 &&
               userBooking.find((booking) => !booking.isPast)
             ? ''
             : i18n.t('place_detail_per_day')}
         </Text>
         <Text style={styles.chooseBannerPrice}>
-          {UserStore.user._id === place?.ownerId
-            ? `${place?.bookings.length}`
-            : userBooking.length > 0 &&
-              userBooking.find((booking) => !booking.isPast)
-            ? userBooking.find((booking) => !booking.isPast)?.startDate
-            : `${place?.price}€`}
+          {UserStore.user._id === place?.ownerId ? (
+            <Text style={styles.updatePlace} onPress={handleModifyPress}>
+              Modifier cette annonce
+            </Text>
+          ) : userBooking.length > 0 &&
+            userBooking.find((booking) => !booking.isPast) ? (
+            userBooking.find((booking) => !booking.isPast)?.startDate
+          ) : (
+            `${place?.price}€`
+          )}
         </Text>
         <Button
           backgroundColor={Colors.white}
@@ -603,6 +615,9 @@ const styles = StyleSheet.create({
   locationIcon: {
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  updatePlace: {
+    textDecorationLine: 'underline',
   },
 });
 

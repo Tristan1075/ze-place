@@ -57,7 +57,6 @@ const HomeScreen = (props: Props) => {
   }, [init, navigation]);
 
   const handlePlacePress = (place: Place) => {
-    console.log(place);
     navigation.navigate('PlaceDetail', {place: place._id});
   };
 
@@ -108,19 +107,6 @@ const HomeScreen = (props: Props) => {
         onPress={() => handlePlacePress(item)}
         key={item._id}
       />
-    );
-  };
-
-  const renderListItem = ({item}: {item: Place}) => {
-    return (
-      <View style={styles.paddingHorizontal} key={item._id}>
-        <PlaceCard
-          place={item}
-          onPress={() => handlePlacePress(item)}
-          onFavoritePress={handleFavoritePress}
-          isFavorite={item.isFavorite}
-        />
-      </View>
     );
   };
 
