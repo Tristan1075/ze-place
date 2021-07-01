@@ -2,7 +2,7 @@
   "expo": {
     "name": "ze-place",
     "slug": "ze-place",
-    "version": "1.0.8",
+    "version": "1.0.9",
     "orientation": "portrait",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
