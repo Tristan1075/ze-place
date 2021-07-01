@@ -21,7 +21,7 @@ import {
 import UserStore from '../store/UserStore';
 import TitleWithDescription from '../components/TitleWithDescription';
 import i18n from 'i18n-js';
-import { ModalContext } from '../providers/modalContext';
+import {ModalContext} from '../providers/modalContext';
 import PaymentMethodForm from './PaymentMethodForm';
 
 const PaymentMethods = () => {
@@ -55,7 +55,7 @@ const PaymentMethods = () => {
         name={'test'}
         number={`.... .... .... ${item.card?.last4}`}
         available={true}
-        isDefault={item?.is_default}
+        isDefault={item?.isFavorite}
         onAddPress={
           item.card?.brand === 'add_card' ? handleAddNewCardPress : undefined
         }
@@ -65,8 +65,18 @@ const PaymentMethods = () => {
 
   const handleAddNewCardPress = () => {
     handleModal({
-      child: <PaymentMethodForm closeModal={handleModal} />,
+      child: (
+        <PaymentMethodForm
+          closeModal={handleModal}
+          onSubmit={handleSaveCardPress}
+        />
+      ),
     });
+  };
+
+  const handleSaveCardPress = () => {
+    handleModal();
+    handleStateChange();
   };
 
   const handleUpdatePaymentMethodPress = () => {
@@ -78,7 +88,10 @@ const PaymentMethods = () => {
   };
 
   const handleRemovePaymentMethodPress = () => {
-    removePaymentMethod(paymentMethods[cardIndex].id);
+    removePaymentMethod(
+      paymentMethods[cardIndex].id,
+      UserStore.user.customerId,
+    );
     handleStateChange();
   };
 
@@ -108,17 +121,18 @@ const PaymentMethods = () => {
           {cardIndex !== paymentMethods.length - 1 && (
             <View style={styles.actionButtons}>
               {paymentMethods.length > 0 &&
-              !paymentMethods[cardIndex].is_default ? (
-                <TouchableOpacity onPress={handleUpdatePaymentMethodPress}>
-                <Text style={styles.updateButton}>Update default card</Text>
-                </TouchableOpacity>
-              ) : (
-                <View style={styles.invisibleSpace} />
-              )}
+                !paymentMethods[cardIndex].isFavorite && (
+                  <TouchableOpacity onPress={handleUpdatePaymentMethodPress}>
+                    <Text style={styles.updateButton}>Update default card</Text>
+                  </TouchableOpacity>
+                )}
               <View style={styles.separator} />
-              <TouchableOpacity onPress={handleRemovePaymentMethodPress}>
-                <Text style={styles.removeButton}>Remove card</Text>
-              </TouchableOpacity>
+              {paymentMethods.length > 0 &&
+                !paymentMethods[cardIndex].isFavorite && (
+                  <TouchableOpacity onPress={handleRemovePaymentMethodPress}>
+                    <Text style={styles.removeButton}>Remove card</Text>
+                  </TouchableOpacity>
+                )}
             </View>
           )}
         </View>
@@ -135,9 +149,11 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     flexGrow: 1,
+    backgroundColor: Colors.background,
   },
   contentContainer: {
     flex: 1,
+    backgroundColor: Colors.background,
   },
   title: {
     paddingHorizontal: 20,

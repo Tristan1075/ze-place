@@ -26,7 +26,7 @@ const BookingScreen = ({place, navigation}: Props) => {
   const [confirmationBooking, showConfirmationBooking] = useState(false);
   const [minDate, setMinDate] = useState<string>(Date());
   const [booking, setBooking] = useState<Booking>({
-    placeId: '',
+    placeId: place._id,
     features: [],
     startDate: '',
     endDate: '',

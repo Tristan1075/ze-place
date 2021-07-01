@@ -53,17 +53,11 @@ const ConfirmationBookingScreen = ({place, booking, navigation}: Props) => {
   //   return paymentIntent;
   // };
 
-  const onBookPress = async () => {
-    // const paymentIntent = await getPaymentIntent();
-    // const {error} = await presentPaymentSheet({
-    //   clientSecret: paymentIntent.clientSecret,
-    // });
-    // if (!error) {
-    //   await bookPlace(place, booking, paymentIntent.id);
-    //   handleModal();
-    //   navigation.navigate('BookingAndPlaces');
-    // }
-    // setPaymentSheetEnabled(false);
+  const onBookPress = async (paymentIntent: any) => {
+    await bookPlace(place, booking, paymentIntent.id);
+    setPaymentSheetEnabled(false);
+    handleModal();
+    navigation.navigate('BookingAndPlaces');
   };
 
   return (
@@ -212,7 +206,10 @@ const ConfirmationBookingScreen = ({place, booking, navigation}: Props) => {
         type="bottom"
         visible={paymentSheetEnabled}
         child={
-          <PaymentModal onTouchOutside={() => setPaymentSheetEnabled(false)} />
+          <PaymentModal
+            onTouchOutside={() => setPaymentSheetEnabled(false)}
+            onBookPress={onBookPress}
+          />
         }
         handleModal={() => setPaymentSheetEnabled(false)}
       />

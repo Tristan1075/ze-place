@@ -1,4 +1,4 @@
-import {Ionicons} from '@expo/vector-icons';
+import {AntDesign, Ionicons} from '@expo/vector-icons';
 import React, {useEffect, useState} from 'react';
 import {View, StyleSheet, Text, Image} from 'react-native';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
@@ -88,7 +88,12 @@ const CreditCardBloc = ({
           style={[styles.rightCircle, {backgroundColor: card.transparentColor}]}
         />
         {isDefault ? (
-          <Text style={styles.creditCardName}>{name}</Text>
+          <AntDesign
+            name="checkcircle"
+            size={28}
+            color={Colors.white}
+            style={styles.default}
+          />
         ) : (
           <View style={styles.invisibleSpace} />
         )}
@@ -182,6 +187,11 @@ const styles = StyleSheet.create({
     right: 0,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  default: {
+    position: 'absolute',
+    top: 20,
+    right: 20,
   },
 });
 

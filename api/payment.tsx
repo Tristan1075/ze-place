@@ -2,31 +2,6 @@ import axios, {AxiosResponse} from 'axios';
 import * as SecureStore from 'expo-secure-store';
 import {API_URL} from '../env';
 
-export const initPaymentIntent = async (bookingPrice, ownerId) => {
-  const token = await SecureStore.getItemAsync('access-token');
-  return await axios
-    .post(
-      `${API_URL}/payment/init`,
-      {
-        bookingPrice: bookingPrice,
-        ownerId: ownerId,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      },
-    )
-    .then((response: AxiosResponse<any>) => {
-      console.log(response.data);
-      return response.data;
-    })
-    .catch((err) => {
-      console.log(err);
-      return Promise.reject(err);
-    });
-};
-
 export const createToken = async () => {
   const token = await SecureStore.getItemAsync('access-token');
   return await axios
@@ -40,7 +15,50 @@ export const createToken = async () => {
       },
     )
     .then((response: AxiosResponse<any>) => {
-      console.log(response.data);
+      return response.data;
+    })
+    .catch((err) => {
+      console.log(err);
+      return Promise.reject(err);
+    });
+};
+
+export const createPaymentIntent = async (
+  customerId: string,
+  paymentMethodId: string,
+) => {
+  const token = await SecureStore.getItemAsync('access-token');
+  return await axios
+    .post(
+      `${API_URL}/payment/paymentIntent/create`,
+      {
+        customerId,
+        paymentMethodId,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    )
+    .then((response: AxiosResponse<any>) => {
+      return response.data;
+    })
+    .catch((err) => {
+      console.log(err);
+      return Promise.reject(err);
+    });
+};
+
+export const getCustomer = async (customerId: string) => {
+  const token = await SecureStore.getItemAsync('access-token');
+  return await axios
+    .get(`${API_URL}/payment/paymentMethods/${customerId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .then((response: AxiosResponse<any>) => {
       return response.data;
     })
     .catch((err) => {
@@ -120,13 +138,17 @@ export const updatePaymentMethod = async (
     });
 };
 
-export const removePaymentMethod = async (paymentMethodId: string) => {
+export const removePaymentMethod = async (
+  paymentMethodId: string,
+  customerId: string,
+) => {
   const token = await SecureStore.getItemAsync('access-token');
   return await axios
     .post(
       `${API_URL}/payment/paymentMethods/remove`,
       {
         paymentMethodId,
+        customerId,
       },
       {
         headers: {
@@ -270,6 +292,33 @@ export const getBalance = async (accountId: string) => {
       return response.data;
     })
     .catch((err) => {
+      return Promise.reject(err);
+    });
+};
+
+export const initSetupIntent = async (
+  customerId: string,
+  paymentMethodId: string,
+) => {
+  const token = await SecureStore.getItemAsync('access-token');
+  return await axios
+    .post(
+      `${API_URL}/payment/setupIntent/create`,
+      {
+        customerId,
+        paymentMethodId,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    )
+    .then((response: AxiosResponse<any>) => {
+      return response.data;
+    })
+    .catch((err) => {
+      console.log(err);
       return Promise.reject(err);
     });
 };

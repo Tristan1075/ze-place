@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useContext, useEffect, useState} from 'react';
 import {
   Text,
   StyleSheet,
@@ -8,7 +8,12 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
-import {getPaymentMethods} from '../api/payment';
+import {
+  createPaymentIntent,
+  getPaymentMethods,
+  initSetupIntent,
+  updatePaymentMethod,
+} from '../api/payment';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
 import UserStore from '../store/UserStore';
@@ -17,18 +22,26 @@ import Button from '../components/Button';
 import {Ionicons, AntDesign} from '@expo/vector-icons';
 import PaymentMethodForm from '../screens/PaymentMethodForm';
 import Modal from './Modal';
+import stripe from 'react-native-stripe-client';
+import {PUBLIC_KEY_STRIPE} from '../env';
+import { ModalContext } from '../providers/modalContext';
+
+const stripeClient = stripe(PUBLIC_KEY_STRIPE);
 
 type Props = {
   onTouchOutside?: () => void;
+  onBookPress?: (paymentIntent: any) => void;
 };
 
 const PaymentModal = (props: Props) => {
-  const {onTouchOutside} = props;
+  const {onTouchOutside, onBookPress} = props;
   const [addPaymentMethod, setAddPaymentMethod] = useState<boolean>(false);
   const [paymentMethods, setPaymentMethods] = useState<Array<PaymentMethod>>(
     [],
   );
-  const [isFetching, setIsFetching] = useState(true);
+  const [isFetching, setIsFetching] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const {handleModal} = useContext(ModalContext);
 
   const handleStateChange = useCallback(async () => {
     const methods = await getPaymentMethods(UserStore.user.customerId);
@@ -62,6 +75,32 @@ const PaymentModal = (props: Props) => {
     setAddPaymentMethod(false);
   };
 
+  const updateDefaultPaymentMethod = (paymentMethod: PaymentMethod) => {
+    updatePaymentMethod(UserStore.user.customerId, paymentMethod.id);
+    handleStateChange();
+  };
+
+  const handlePayPress = async () => {
+    setIsFetching(true);
+    const item = paymentMethods.find(
+      (paymentMethod: PaymentMethod) => paymentMethod.isFavorite === true,
+    );
+    if (item) {
+      const paymentIntent = await createPaymentIntent(
+        UserStore.user.customerId,
+        item?.id,
+      );
+      if (paymentIntent) {
+        setIsSuccess(true);
+        setIsFetching(false);
+        setTimeout(() => {
+          setIsSuccess(false);
+          onBookPress && onBookPress(paymentIntent);
+        }, 2000);
+      }
+    }
+  };
+
   return (
     <TouchableWithoutFeedback onPress={onTouchOutside}>
       <View style={styles.modal}>
@@ -77,14 +116,16 @@ const PaymentModal = (props: Props) => {
                   onPress={
                     paymentMethod.card.brand === 'add_card'
                       ? () => setAddPaymentMethod(true)
-                      : undefined
+                      : () => updateDefaultPaymentMethod(paymentMethod)
                   }>
-                  <AntDesign
-                    name="checkcircle"
-                    size={15}
-                    color={Colors.success}
-                    style={styles.default}
-                  />
+                  {paymentMethod.isFavorite && (
+                    <AntDesign
+                      name="checkcircle"
+                      size={15}
+                      color={Colors.success}
+                      style={styles.default}
+                    />
+                  )}
                   {paymentMethod.card.brand === 'add_card' ? (
                     <Ionicons
                       name="add-circle"
@@ -107,9 +148,11 @@ const PaymentModal = (props: Props) => {
             })}
           </ScrollView>
           <Button
-            value="Payer"
-            backgroundColor={Colors.primary}
+            value={isSuccess ? "Réservation réussie" : "Réserver"}
+            backgroundColor={isSuccess ? Colors.success : Colors.primary}
             textColor={Colors.white}
+            onPress={handlePayPress}
+            isFetching={isFetching}
           />
         </View>
         <Modal
@@ -133,7 +176,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   modalContent: {
-    height: 300,
+    height: 250,
     backgroundColor: Colors.background,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
@@ -146,6 +189,7 @@ const styles = StyleSheet.create({
     fontFamily: 'oswald-light',
     fontSize: 18,
     flex: 1,
+    paddingBottom: 20,
   },
   paymentMethodCard: {
     position: 'relative',

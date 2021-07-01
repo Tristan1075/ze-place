@@ -287,7 +287,7 @@ export type PaymentMethod = {
   livemode: boolean;
   object: string;
   type: string;
-  is_default: boolean;
+  isFavorite: boolean;
 };
 
 export type Booking = {
