@@ -35,7 +35,7 @@ export const createPaymentIntent = async (
       {
         customerId,
         paymentMethodId,
-        bookingPrice,
+        bookingPrice: parseInt(bookingPrice * 100),
       },
       {
         headers: {

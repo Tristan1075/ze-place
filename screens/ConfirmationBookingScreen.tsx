@@ -36,7 +36,17 @@ const ConfirmationBookingScreen = ({place, booking, navigation}: Props) => {
   const [promotionalCode, showPromotionalCode] = useState<boolean>(false);
   const {handleModal} = useContext(ModalContext);
 
+  const fees = 0.2; // TODO :change for a website value
+  const tva = 0.2; // TODO :change for a website value
+  const priceHT: number = parseFloat(
+    (booking.duration * place.price).toFixed(2),
+  );
+  const priceFee = priceHT * fees;
+  const priceTVA = (priceHT + priceFee) * tva;
+  const priceTTC = priceHT + priceFee + priceTVA;
+
   const onBookPress = async (paymentIntent: any) => {
+    booking.price = priceTTC;
     await bookPlace(place, booking, paymentIntent.id);
     setPaymentSheetEnabled(false);
     handleModal();
@@ -138,9 +148,7 @@ const ConfirmationBookingScreen = ({place, booking, navigation}: Props) => {
                 : i18n.t('confirmation_booking_day')}
             </Text>
             {booking.duration && (
-              <Text style={styles.value}>
-                {booking.duration * place.price}€
-              </Text>
+              <Text style={styles.value}>{priceHT.toFixed(2)}€</Text>
             )}
           </View>
           <View style={styles.border} />
@@ -149,9 +157,7 @@ const ConfirmationBookingScreen = ({place, booking, navigation}: Props) => {
               {i18n.t('confirmation_booking_servicing_charge')}
             </Text>
             {booking.duration && (
-              <Text style={styles.value}>
-                {place.price * booking.duration * 0.2}€
-              </Text>
+              <Text style={styles.value}>{priceFee.toFixed(2)}€</Text>
             )}
           </View>
           <View style={styles.paymentRow}>
@@ -159,7 +165,7 @@ const ConfirmationBookingScreen = ({place, booking, navigation}: Props) => {
               {' '}
               {i18n.t('confirmation_booking_tva')}
             </Text>
-            <Text style={styles.value}>{place.price * 0.2}€</Text>
+            <Text style={styles.value}>{priceTVA.toFixed(2)}€</Text>
           </View>
           <View style={styles.resume}>
             <View style={styles.totalRow}>
@@ -167,9 +173,7 @@ const ConfirmationBookingScreen = ({place, booking, navigation}: Props) => {
                 {i18n.t('confirmation_booking_total')}{' '}
               </Text>
               {booking.duration && (
-                <Text style={styles.total}>
-                  {(place.price * booking.duration + place.price * 0.2) * 1.2}€
-                </Text>
+                <Text style={styles.total}>{priceTTC.toFixed(2)}€</Text>
               )}
             </View>
             <Button
@@ -189,9 +193,7 @@ const ConfirmationBookingScreen = ({place, booking, navigation}: Props) => {
           <PaymentModal
             onTouchOutside={() => setPaymentSheetEnabled(false)}
             onBookPress={onBookPress}
-            bookingPrice={
-              (place.price * booking.duration + place.price * 0.2) * 1.2
-            }
+            bookingPrice={parseFloat(priceTTC.toFixed(2))}
           />
         }
         handleModal={() => setPaymentSheetEnabled(false)}
