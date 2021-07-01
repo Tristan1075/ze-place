@@ -53,13 +53,7 @@ const ConversationScreen = (props: Props) => {
       conversationParams.userId,
       conversationParams.ownerId,
     ).then(async (conversationResult) => {
-      if (!conversationResult) {
-        conversationResult = await createConversation(
-          conversationParams.placeId,
-          conversationParams.userId,
-          conversationParams.ownerId,
-        );
-      }
+      console.log(conversationResult);
       if (conversationResult) {
         getMessageByConversation(conversationResult?._id).then((m) => {
           const messagesMap = m.map((message) => ({
@@ -67,10 +61,10 @@ const ConversationScreen = (props: Props) => {
             from: UserStore.user._id === message.senderId ? '1' : '0',
           }));
           setMessages(messagesMap);
+          setConversation(conversationResult);
+          initNotifications(conversationResult);
         });
       }
-      setConversation(conversationResult);
-      initNotifications(conversationResult);
     });
   }, []);
 
@@ -111,25 +105,36 @@ const ConversationScreen = (props: Props) => {
     <ConversationItem message={item} />
   );
 
-  const sendMessage = async () => {
+  const sendMessagePress = async () => {
     if (conversation) {
-      const newMessage = {
-        value: input,
-        from: '1',
-      };
-      sendMessageApi(
-        conversation?._id,
-        UserStore.user._id,
-        UserStore.user._id === conversationParams.userId
-          ? conversationParams.ownerId
-          : conversationParams.userId,
-        input,
+      sendMessage(conversation);
+    } else {
+      const conversationResult = await createConversation(
+        conversationParams.placeId,
+        conversationParams.userId,
+        conversationParams.ownerId,
       );
-      setMessages((prev) => [...prev, newMessage]);
-      setInput('');
-      scrollToBottom();
+      sendMessage(conversationResult);
     }
   };
+
+  const sendMessage = (conversation: Conversation) => {
+    const newMessage = {
+      value: input,
+      from: '1',
+    };
+    sendMessageApi(
+      conversation?._id,
+      UserStore.user._id,
+      UserStore.user._id === conversationParams.userId
+        ? conversationParams.ownerId
+        : conversationParams.userId,
+      input,
+    );
+    setMessages((prev) => [...prev, newMessage]);
+    setInput('');
+    scrollToBottom();
+  }
 
   const scrollToBottom = () => {
     if (_flatList.current) {
@@ -157,14 +162,14 @@ const ConversationScreen = (props: Props) => {
             value={input}
             onTouchStart={scrollToBottom}
             returnKeyType="send"
-            onSubmitEditing={sendMessage}
+            onSubmitEditing={sendMessagePress}
             onChangeText={(text) => setInput(text)}
           />
           <Ionicons
             size={20}
             name="md-send-sharp"
             color={Colors.primary}
-            onPress={sendMessage}
+            onPress={sendMessagePress}
           />
         </View>
       </View>

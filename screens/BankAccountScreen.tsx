@@ -182,6 +182,7 @@ const BankAccountScreen = () => {
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: Colors.background,
     paddingTop: 150,
     paddingHorizontal: 20,
     paddingBottom: 100,

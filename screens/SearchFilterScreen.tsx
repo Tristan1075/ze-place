@@ -1,7 +1,14 @@
 import {Ionicons} from '@expo/vector-icons';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useState, useEffect} from 'react';
-import {ScrollView, StyleSheet, Text, View, TouchableWithoutFeedback, TouchableOpacity} from 'react-native';
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+  TouchableWithoutFeedback,
+  TouchableOpacity,
+} from 'react-native';
 // @ts-ignore
 import Slider from 'react-native-slider';
 import i18n from 'i18n-js';
@@ -13,7 +20,7 @@ import Modal from '../components/Modal';
 import SearchCard from '../components/SearchCard';
 import SimpleInput from '../components/SimpleInput';
 import TitleWithDescription from '../components/TitleWithDescription';
-import { Platform } from 'react-native';
+import {Platform} from 'react-native';
 
 import Colors from '../constants/Colors';
 import {features} from '../mocks';
@@ -91,19 +98,18 @@ const SearchFilterScreen = ({onSearchPress}: Props) => {
             title={i18n.t('search_filter_type')}
             subtitle={true}
           />
-          
-              <SimpleInput
-                style={styles.input}
-                placeholder={i18n.t('search_filter_choose_type')}
-                value={filterForm.placeType?.name}
-                isEditable={false}
-                onPress={() => setShowPlaceType(true)}
-                suffix={
-                  <Ionicons name="chevron-down" size={20} color={Colors.dark} />
-                }
-              />
-              
-          
+
+          <SimpleInput
+            style={styles.input}
+            placeholder={i18n.t('search_filter_choose_type')}
+            value={filterForm.placeType?.name}
+            isEditable={false}
+            onPress={() => setShowPlaceType(true)}
+            suffix={
+              <Ionicons name="chevron-down" size={20} color={Colors.dark} />
+            }
+          />
+
           <TitleWithDescription
             title={i18n.t('search_filter_price')}
             subtitle={true}
@@ -161,17 +167,14 @@ const SearchFilterScreen = ({onSearchPress}: Props) => {
             subtitle={true}
           />
           <View style={styles.input}>
-          
-              <SimpleInput
-                placeholder={i18n.t('search_filter_search')}
-                isEditable={false}
-                onPress={() => setShowSearchLocation(true)}
-                suffix={
-                  <Ionicons name="chevron-down" size={20} color={Colors.dark} />
-                }
-              />
-             
-            
+            <SimpleInput
+              placeholder={i18n.t('search_filter_search')}
+              isEditable={false}
+              onPress={() => setShowSearchLocation(true)}
+              suffix={
+                <Ionicons name="chevron-down" size={20} color={Colors.dark} />
+              }
+            />
           </View>
           {filterForm.location && (
             <SearchCard
@@ -211,6 +214,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
+    backgroundColor: Colors.background,
     paddingTop: 100,
   },
   center: {
