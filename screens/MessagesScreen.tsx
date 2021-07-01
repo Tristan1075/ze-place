@@ -37,6 +37,7 @@ const MessagesScreen = (props: Props) => {
 
   const init = useCallback(async () => {
     const conversation = await getConversationByPlace(place._id);
+    console.log(conversation);
     if (conversation) {
       setConversations(conversation);
     }
@@ -59,8 +60,8 @@ const MessagesScreen = (props: Props) => {
   const renderItem = ({item, index}: {item: Conversation; index: number}) => (
     <View>
       <MessageItem
-        message={item}
-        onMessagePress={() => handleMessagePress(item)}
+        conversation={item}
+        onConversationPress={() => handleMessagePress(item)}
       />
       {index !== senders.length - 1 && <View style={styles.separator} />}
     </View>

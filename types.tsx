@@ -142,6 +142,11 @@ export type Conversation = {
   placeId: string;
   userId: string;
   ownerId: string;
+  lastMessage: Message;
+  userAvatar: string;
+  userName: string;
+  ownerAvatar: string;
+  ownerName: string;
   created_at: Date;
 };
 

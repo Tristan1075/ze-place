@@ -78,19 +78,21 @@ const UserBookingsScreen = ({navigation}) => {
           setConfirmation(true);
           setSelectedBooking(bookingId);
         }}
-        onSendMessagePress={() =>
-          navigation.navigate('Conversation', {
-            conversation: {
-              placeId: item.placeId,
-              userId: item.userId,
-              ownerId: UserStore.user._id,
-            },
-          })
-        }
+        onSendMessagePress={() => handleSendMessagePress(item)}
         isUser={item.userId === UserStore.user._id}
       />
     );
   };
+
+  const handleSendMessagePress = (item: Booking) => {
+    navigation.navigate('Conversation', {
+      conversation: {
+        placeId: item.placeId,
+        userId: item.userId,
+        ownerId: UserStore.user._id,
+      },
+    })
+  }
 
   return (
     <ScrollView
@@ -130,6 +132,7 @@ const UserBookingsScreen = ({navigation}) => {
               setConfirmation(true);
               setSelectedBooking(bookingId);
             }}
+            onSendMessagePress={() => handleSendMessagePress(activeBooking)}
             isUser={activeBooking.userId === UserStore.user._id}
           />
         )}

@@ -1,9 +1,6 @@
 import axios, {AxiosResponse} from 'axios';
 import * as SecureStore from 'expo-secure-store';
 import {API_URL} from '../env';
-import UserStore from '../store/UserStore';
-
-import {Coords, CreatePlaceForm, FilterForm} from '../types';
 
 export const getPlaceTypes = async () => {
   const token = await SecureStore.getItemAsync('access-token');
@@ -14,10 +11,6 @@ export const getPlaceTypes = async () => {
       },
     })
     .then((response: AxiosResponse<any>) => {
-        console.log('log');
-        
-        console.log(response.data);
-        
       return response.data;
     })
     .catch((err) => {
@@ -26,22 +19,17 @@ export const getPlaceTypes = async () => {
 };
 
 export const getPlaceFeatures = async () => {
-    const token = await SecureStore.getItemAsync('access-token');
-    return await axios
-      .get(`${API_URL}/place-type/features`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((response: AxiosResponse<any>) => {
-          console.log('log');
-          
-          console.log(response.data);
-          
-        return response.data;
-      })
-      .catch((err) => {
-        return Promise.reject(err);
-      });
-  };
-
+  const token = await SecureStore.getItemAsync('access-token');
+  return await axios
+    .get(`${API_URL}/place-type/features`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .then((response: AxiosResponse<any>) => {
+      return response.data;
+    })
+    .catch((err) => {
+      return Promise.reject(err);
+    });
+};

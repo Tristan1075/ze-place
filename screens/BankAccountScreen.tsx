@@ -32,12 +32,9 @@ const BankAccountScreen = () => {
   });
 
   useEffect(() => {
-    getBalance(UserStore.user.stripeAccount).then((balance) => {
-      setBalance(balance.available);
-    });
     getConnectedAccount(UserStore.user.stripeAccount).then((account) => {
-      setAccount(account);
       console.log(account);
+      setAccount(account);
     });
   }, []);
 

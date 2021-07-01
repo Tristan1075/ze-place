@@ -38,7 +38,8 @@ export const createConversation = async (
       },
     )
     .then((response: AxiosResponse<any>) => {
-      return response.data;
+      console.log(response.data);
+      return response.data.conversation;
     })
     .catch((err) => {
       return Promise.reject(err);

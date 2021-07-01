@@ -53,9 +53,9 @@ const ConversationScreen = (props: Props) => {
       conversationParams.userId,
       conversationParams.ownerId,
     ).then(async (conversationResult) => {
-      console.log(conversationResult);
       if (conversationResult) {
         getMessageByConversation(conversationResult?._id).then((m) => {
+          console.log(m);
           const messagesMap = m.map((message) => ({
             value: message.text,
             from: UserStore.user._id === message.senderId ? '1' : '0',
@@ -63,6 +63,7 @@ const ConversationScreen = (props: Props) => {
           setMessages(messagesMap);
           setConversation(conversationResult);
           initNotifications(conversationResult);
+          scrollToBottom();
         });
       }
     });
@@ -118,13 +119,13 @@ const ConversationScreen = (props: Props) => {
     }
   };
 
-  const sendMessage = (conversation: Conversation) => {
+  const sendMessage = (c: Conversation) => {
     const newMessage = {
       value: input,
       from: '1',
     };
     sendMessageApi(
-      conversation?._id,
+      c?._id,
       UserStore.user._id,
       UserStore.user._id === conversationParams.userId
         ? conversationParams.ownerId
@@ -134,7 +135,7 @@ const ConversationScreen = (props: Props) => {
     setMessages((prev) => [...prev, newMessage]);
     setInput('');
     scrollToBottom();
-  }
+  };
 
   const scrollToBottom = () => {
     if (_flatList.current) {
