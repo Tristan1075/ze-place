@@ -48,6 +48,7 @@ export default {
   sign_up_id_card_placeholder: 'ID Card',
   sign_up_signup_button: 'Sign up',
   sign_up_account_exist: 'Already have an account ?',
+  sign_up_user_exist: 'This email is already exist',
   sign_up_sign_in: 'Sign in',
   sign_up_confirm: 'Confirm',
   sign_up_cancel: 'Cancel',

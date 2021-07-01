@@ -36,14 +36,31 @@ export const getUserById = async (id?: string) => {
     });
 };
 
+export const getUserByEmail = async (email: string) => {
+  const token = await SecureStore.getItemAsync('access-token');
+  return await axios
+    .get(`${API_URL}/customers/email/${email}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .then((response: AxiosResponse<any>) => {
+      if (response.data) {
+        return true;
+      }
+      return false;
+    })
+    .catch((err) => {
+      return Promise.reject(err);
+    });
+};
+
 export const modifyUser = async (form: SignupForm, id: string) => {
   const token = await SecureStore.getItemAsync('access-token');
   const url = `${API_URL}/customers/update?customerID=${id}`;
   await axios
     .put(
       url,
-      //"http://localhost:3000/customers/update?id=609147e8d9812e8d373f0846",
-      //"http://localhost:3000/auth/register",
       {
         avatar: form.avatar,
         first_name: form.firstname,
@@ -125,14 +142,12 @@ export const getActivePromos = async () => {
   const token = await SecureStore.getItemAsync('access-token');
   const promoId = UserStore.user.promoCode;
   console.log(promoId);
-  
+
   const url = `${API_URL}/promo/getSevralCode`;
 
   return await axios
     .post(
       url,
-      //"http://localhost:3000/customers/update?id=609147e8d9812e8d373f0846",
-      //"http://localhost:3000/auth/register",
       {
         code: promoId,
       },
@@ -144,7 +159,7 @@ export const getActivePromos = async () => {
     )
     .then((response: AxiosResponse<any>) => {
       console.log(response.data);
-      
+
       return response.data;
     })
     .catch((err) => {

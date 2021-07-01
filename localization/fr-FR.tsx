@@ -48,6 +48,7 @@ export default {
   sign_up_id_card_placeholder: `Carte d'identité`,
   sign_up_signup_button: 'Créer',
   sign_up_account_exist: 'Vous avez déjà un compte ?',
+  sign_up_user_exist: 'Cet email existe déjà',
   sign_up_sign_in: 'Se connecter',
   sign_up_confirm: 'Confirmer',
   sign_up_cancel: 'Annuler',

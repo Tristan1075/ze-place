@@ -17,6 +17,7 @@ type Props = {
   onPress?: () => void;
   onChange?: () => void;
   onChangeText?: (v: string) => void;
+  onEndEditing?: () => void;
   error?: string;
   placeholder?: string;
   isEditable?: boolean;
@@ -35,6 +36,7 @@ const SimpleInput = (props: Props) => {
     onChange,
     onChangeText,
     onPress,
+    onEndEditing,
     error,
     placeholder,
     isEditable,
@@ -53,6 +55,7 @@ const SimpleInput = (props: Props) => {
       <TouchableWithoutFeedback onPress={onPress}>
         <View style={styles.inputContainer}>
           <TextInput
+            onEndEditing={onEndEditing}
             keyboardType={type}
             onTouchStart={onPress}
             maxLength={maxLength}
