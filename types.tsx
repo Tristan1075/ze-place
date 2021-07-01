@@ -312,7 +312,7 @@ export type Booking = {
   features: FeatureType[];
   startDate: string;
   endDate: string;
-  duration?: number;
+  duration: number;
   price?: number;
   description: string;
   isAccepted?: boolean;
