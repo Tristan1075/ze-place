@@ -49,7 +49,6 @@ const HomeScreen = (props: Props) => {
   const {handleModal} = useContext(ModalContext);
 
   const init = useCallback(async () => {
-    socket.emit('init_conversations', {userId: UserStore.user._id});
     setPlaces(await getAllPlaces());
   }, []);
 
@@ -58,6 +57,7 @@ const HomeScreen = (props: Props) => {
   }, [init, navigation]);
 
   const handlePlacePress = (place: Place) => {
+    console.log(place);
     navigation.navigate('PlaceDetail', {place: place._id});
   };
 
@@ -77,6 +77,10 @@ const HomeScreen = (props: Props) => {
               initialCoords={{
                 longitude: location.coords.longitude,
                 latitude: location.coords.latitude,
+              }}
+              onItemPress={(place) => {
+                handleModal();
+                handlePlacePress(place);
               }}
             />
           ),

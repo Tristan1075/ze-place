@@ -77,7 +77,7 @@ const PlaceDetailScreen = () => {
   };
 
   const handleFavoritePress = async (p: Place) => {
-    p.isFavorite ? removeFavorite(p) : addFavorite(p);
+    p.isFavorite ? await removeFavorite(p) : await addFavorite(p);
     await init();
   };
 
@@ -147,9 +147,16 @@ const PlaceDetailScreen = () => {
           }}
           style={styles.cover}
         />
-        <View style={styles.favorite}>
-          <Ionicons size={20} name="star" color={Colors.primary} />
-        </View>
+        <TouchableOpacity
+          style={styles.favorite}
+          onPress={() => handleFavoritePress(place)}>
+          <Ionicons
+            size={40}
+            name="heart-circle"
+            color={place?.isFavorite ? Colors.primary : Colors.gray}
+            style={styles.locationIcon}
+          />
+        </TouchableOpacity>
         <View style={styles.container}>
           <Header type="back" />
           <View style={[styles.content, styles.paddingTop]}>
@@ -583,9 +590,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 20,
     top: 60,
-    backgroundColor: 'rgba(220, 220, 220, 0.4)',
-    padding: 5,
     borderRadius: 20,
+    zIndex: 999,
   },
   authorization: {
     flexDirection: 'row',
@@ -593,6 +599,10 @@ const styles = StyleSheet.create({
   },
   message: {
     paddingRight: 10,
+  },
+  locationIcon: {
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 
