@@ -11,6 +11,7 @@ import UserStore from '../store/UserStore';
 import TitleWithDescription from '../components/TitleWithDescription';
 import EmptyBloc from '../components/EmptyBloc';
 import {useNavigation} from '@react-navigation/native';
+import i18n from 'i18n-js';
 
 type MessagesScreenNavigationProp = StackNavigationProp<
   MessagesParamList,
@@ -46,9 +47,9 @@ const MyPlaceScreen = (props: Props) => {
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
         <TitleWithDescription
-          title="Active places"
+          title={i18n.t('my_place_title')}
           subtitle={true}
-          description="Find nearby you the available places to rent"
+          description={i18n.t('my_place_description')}
         />
         {places.length > 0 ? (
           <FlatList
@@ -59,7 +60,11 @@ const MyPlaceScreen = (props: Props) => {
           />
         ) : (
           <View>
-            <EmptyBloc title="You don't have announces for the moment" />
+            <EmptyBloc
+              title={i18n.t('my_place_no_place')}
+              image={require('../assets/images/impatient.png')}
+              size={100}
+            />
           </View>
         )}
       </View>

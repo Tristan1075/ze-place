@@ -74,6 +74,11 @@ export default {
   home_announces: 'Annonces',
   home_see_more: 'En voir plus',
 
+  //my_place
+  my_place_title: 'Espace actifs',
+  my_place_description: 'retrouvez ici vos espaces actifs à louer',
+  my_place_no_place:`Vous n'avez pas d'espace à louer pour le moment`,
+
   //search_filter
   search_filter_type: 'Type',
   search_filter_choose_type: `Définir le type d'espace`,

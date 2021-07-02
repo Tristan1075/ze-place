@@ -28,6 +28,9 @@ const CardWithRate = (props: Props) => {
         </View>
         <View style={styles.content}>
           <Text style={styles.title}>{place.title}</Text>
+          <Text style={styles.subtitlePlaceType}>
+            {place.placeType && place.placeType.name}
+          </Text>
           <Text style={styles.subtitle}>{place.location.city}</Text>
         </View>
       </View>
@@ -83,6 +86,11 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontFamily: 'poppins',
+    fontSize: 16,
+    color: Colors.white,
+  },
+  subtitlePlaceType: {
+    fontFamily: 'oswald',
     fontSize: 16,
     color: Colors.white,
   },

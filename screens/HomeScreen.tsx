@@ -151,6 +151,7 @@ const HomeScreen = (props: Props) => {
       <Carousel
         contentContainerCustomStyle={{paddingLeft: Layout.padding}}
         useScrollView={true}
+        // data={places.slice(0, 15)}
         data={places}
         renderItem={renderCarouselItem}
         sliderWidth={Layout.window.width}
@@ -167,7 +168,7 @@ const HomeScreen = (props: Props) => {
         subtitle={true}
         onActionPress={showFilterModal}
       />
-      {places.slice(0, 5).map((item) => (
+      {places.slice(0, 10).map((item) => (
         <View style={styles.paddingHorizontal} key={item._id}>
           <PlaceCard
             place={item}

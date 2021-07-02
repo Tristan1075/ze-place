@@ -74,6 +74,11 @@ export default {
   home_announces: 'Announces',
   home_see_more: 'See more',
 
+  //my_place
+  my_place_title: 'Active places',
+  my_place_description: 'find here your active places for rent',
+  my_place_no_place: `You don't have places for the moment`,
+
   //search_filter
   search_filter_type: 'Type',
   search_filter_choose_type: 'Choose a place type',

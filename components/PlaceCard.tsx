@@ -36,6 +36,11 @@ const PlaceCard = (props: Props) => {
           )}
         </View>
         <View style={styles.row}>
+          <Text style={styles.subtitle}>
+            {place.placeType && place.placeType.name}
+          </Text>
+        </View>
+        <View style={styles.row}>
           <Ionicons
             size={12}
             name="map"
@@ -97,6 +102,12 @@ const styles = StyleSheet.create({
     fontFamily: 'oswald',
     color: Colors.dark,
     fontSize: 16,
+    flex: 1,
+  },
+  subtitle: {
+    fontFamily: 'poppins',
+    color: Colors.dark,
+    fontSize: 14,
     flex: 1,
   },
   location: {
