@@ -1,27 +1,29 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {StyleSheet, Text, View, ScrollView, TouchableOpacity} from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import i18n from 'i18n-js';
-import Header from '../components/Header';
-import {FilterForm, HomeParamList, Place, Review, Promo} from '../types';
+import {FilterForm, HomeParamList, Place, Promo} from '../types';
 import TitleWithDescription from '../components/TitleWithDescription';
-import {getPlaceReview} from '../api/reviews';
-import {Rating} from 'react-native-ratings';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
 import { getActivePromos } from '../api/customer';
+import { ModalContext } from '../providers/modalContext';
 
 type RootScreenNavigationProp = StackNavigationProp<HomeParamList, 'Home'>;
 
 type Props = {
     place: Place;
     onPromoSelected:Function;
+    navigation: any;
+    
+
 };
 
-const PlaceReviewScreen = ({place,onPromoSelected}: Props) => {
+const PlaceReviewScreen = ({place,onPromoSelected,navigation}: Props) => {
     const [activePromo, setActivePromo] = useState<Promo[]>();
     const [placePromo, setPlace] = useState<Place>(place);
-
+    const {handleModal} = useContext(ModalContext);
+    const [selectedElem, setSelectedElem] = useState<any>('');
 
   useEffect(() => {
     const getActivePromovar = async () =>
@@ -31,13 +33,13 @@ const PlaceReviewScreen = ({place,onPromoSelected}: Props) => {
 
   const handlePromo =  (promo) =>{
 
-    let finalPrice = placePromo.price
-    finalPrice -= finalPrice * (promo.value/100)
+   
+      setSelectedElem(promo.name)
+      let finalPrice = placePromo.price
+      finalPrice -= finalPrice * (promo.value/100)
+      onPromoSelected(finalPrice,promo)
     
-    console.log('final',finalPrice);
-    console.log('place',placePromo.price);
-    onPromoSelected(finalPrice,promo)
-
+    
     
   }
 
@@ -53,13 +55,15 @@ const PlaceReviewScreen = ({place,onPromoSelected}: Props) => {
 
           {activePromo &&
             activePromo.map((e) => (
-              <TouchableOpacity style={styles.codeCard} onPress={() => handlePromo(e)}>
+              <TouchableOpacity style={selectedElem==e.name ? styles.selectedCode:styles.codeCard} onPress={() => handlePromo(e)}>
                 <TitleWithDescription
                   title={e.name}
                   subtitle={true}
                   description={e.end_date.slice(0, 10)}></TitleWithDescription>
+                  <Text>{e.value}%</Text>
               </TouchableOpacity>
             ))}
+            
         </View>
       </ScrollView>
     </View>
@@ -115,9 +119,8 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   codeCard: {
-    flexDirection: 'row',
     backgroundColor: Colors.white,
-    alignItems: 'flex-start',
+   textAlign:'center',
     borderRadius: 15,
     paddingVertical: 15,
     paddingHorizontal: 20,
@@ -131,6 +134,23 @@ const styles = StyleSheet.create({
     elevation: 5,
     marginBottom: 20,
     flex: 0.9,
+  },
+  selectedCode:{
+    backgroundColor: Colors.white,
+    textAlign:'center',
+     borderRadius: 15,
+     paddingVertical: 15,
+     paddingHorizontal: 20,
+     shadowColor: '#000',
+     shadowOffset: {
+       width: 0,
+       height: 2,
+     },
+     shadowOpacity: 0.75,
+     shadowRadius: 3.84,
+     elevation: 5,
+     marginBottom: 20,
+     flex: 0.9,
   },
   name: {
     fontFamily: 'poppins',

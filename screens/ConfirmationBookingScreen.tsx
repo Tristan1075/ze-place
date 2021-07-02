@@ -237,8 +237,9 @@ const ConfirmationBookingScreen = ({place, booking, navigation}: Props) => {
         visible={promotionalCode}
         child={
           <BookingPromoScreen
-          place={placeBook}
+          place={place}
           onPromoSelected={updatePlace}
+          navigation={navigation}
 
           />
         }
