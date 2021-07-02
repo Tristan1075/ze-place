@@ -153,11 +153,9 @@ export const getActivePromos = async () => {
       },
     )
     .then((response: AxiosResponse<any>) => {
-
       return response.data;
     })
     .catch((err) => {
-
       return Promise.reject(err);
     });
 };
@@ -204,20 +202,19 @@ export const addPromoCode = async (promoTitle: string) => {
       return response.data;
     })
     .catch((err) => {
-
       return Promise.reject(err);
     });
 };
 
-export const setToHistory = async (promo) =>{
+export const setToHistory = async (promo) => {
   const token = await SecureStore.getItemAsync('access-token');
-  
+
   await axios
     .post(
       `${API_URL}/customers/setToHistory`,
       {
         promoId: promo._id,
-        userId:UserStore.user._id
+        userId: UserStore.user._id,
       },
       {
         headers: {
@@ -226,12 +223,9 @@ export const setToHistory = async (promo) =>{
       },
     )
     .then((response: AxiosResponse<any>) => {
-      
-       
       return response.data;
     })
     .catch((err) => {
-
       return Promise.reject(err);
     });
-}
+};
