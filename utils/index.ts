@@ -9,7 +9,7 @@ export const isEmailValid = (email: string) => {
 };
 
 export const getUserLocation = async () => {
-  const {status} = await Location.requestPermissionsAsync();
+  const {status} = await Location.requestForegroundPermissionsAsync();
   if (status !== 'granted') {
     return;
   }

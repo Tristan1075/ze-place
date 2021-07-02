@@ -320,8 +320,11 @@ const PlaceDetailScreen = () => {
               scrollEnabled={false}
               style={styles.map}
               initialRegion={{
-                latitude: parseFloat(place?.location.latitude) || 0,
-                longitude: parseFloat(place?.location.longitude) || 0,
+                latitude:
+                  (place?.location && parseFloat(place.location.latitude)) || 0,
+                longitude:
+                  (place?.location && parseFloat(place.location.longitude)) ||
+                  0,
                 latitudeDelta: 0.0922,
                 longitudeDelta: 0.0421,
               }}

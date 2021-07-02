@@ -44,6 +44,7 @@ const MapScreen = ({initialCoords, onItemPress}: Props) => {
   const [placeModal, showPlaceModal] = useState<boolean>(false);
   const [selectedPlace, setSelectedPlace] = useState<Place>();
   let mapRef: any;
+  let carouselRef: any;
 
   useEffect(() => {
     const init = async () => {
@@ -70,6 +71,17 @@ const MapScreen = ({initialCoords, onItemPress}: Props) => {
     setActiveIndex(index);
   };
 
+  const onMarkerTap = (index: number) => {
+    mapRef.animateCamera({
+      center: {
+        longitude: places[index].location.longitude,
+        latitude: places[index].location.latitude,
+      },
+    });
+    setActiveIndex(index);
+    carouselRef.snapToItem(index);
+  }
+
   return (
     <View style={styles.flex}>
       <MapView
@@ -91,7 +103,9 @@ const MapScreen = ({initialCoords, onItemPress}: Props) => {
             latitude: place.location.latitude,
           };
           return (
-            <Marker coordinate={markerCoords}>
+            <Marker
+              coordinate={markerCoords}
+              onPress={() => onMarkerTap(index)}>
               <CustomMarker
                 isActive={activeIndex === index}
                 image={place.images[0].url}
@@ -102,6 +116,7 @@ const MapScreen = ({initialCoords, onItemPress}: Props) => {
       </MapView>
       <View style={styles.carousel}>
         <Carousel
+          ref={(ref) => (carouselRef = ref)}
           contentContainerCustomStyle={{paddingLeft: Layout.padding}}
           useScrollView={true}
           data={places}

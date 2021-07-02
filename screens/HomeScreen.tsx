@@ -130,7 +130,7 @@ const HomeScreen = (props: Props) => {
       <View style={styles.overlay} />
       <View style={styles.container}>
         <Header type="menu" showProfil={true} />
-        <Text style={styles.title}>{i18n.t('home_discover')}</Text>
+        <Text style={styles.title} numberOfLines={3}>{i18n.t('home_discover')}</Text>
         <SimpleInput
           isEditable={false}
           style={styles.input}
@@ -188,7 +188,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingBottom: 20,
-    marginTop: 50,
+    marginTop: 48,
     zIndex: 5,
   },
   imageBanner: {
@@ -201,9 +201,8 @@ const styles = StyleSheet.create({
     fontFamily: 'oswald-light',
     fontSize: 32,
     color: Colors.white,
-    paddingBottom: 20,
-    width: 200,
-    height: 160,
+    paddingBottom: 60,
+    width: 250,
     paddingHorizontal: 20,
   },
   subtitle: {

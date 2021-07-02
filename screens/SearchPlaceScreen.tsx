@@ -16,6 +16,8 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import SearchCard from '../components/SearchCard';
 import {Location, MapboxSearch} from '../types';
 import i18n from 'i18n-js';
+import {getUserLocation} from '../utils';
+import {LocationObject} from 'expo-location';
 
 type Props = {
   onLocationPress: (location: Location) => void;
@@ -24,15 +26,32 @@ type Props = {
 const SearchPlaceScreen = ({onLocationPress}: Props) => {
   const [query, setQuery] = useState<string>('');
   const [places, setPlaces] = useState<Array<MapboxSearch>>([]);
+  const [userLocation, setUserLocation] = useState<LocationObject>();
+
+  useEffect(() => {
+    const init = async () => {
+      setUserLocation(await getUserLocation());
+    };
+    init();
+  }, []);
 
   useEffect(() => {
     if (query.length > 3) {
-      const fetchAddress = async () => setPlaces(await searchPlace(query));
+      const fetchAddress = async () =>
+        setPlaces(
+          await searchPlace(
+            query,
+            userLocation && {
+              longitude: userLocation.coords.longitude,
+              latitude: userLocation.coords.latitude,
+            },
+          ),
+        );
       fetchAddress();
     } else {
       setPlaces([]);
     }
-  }, [query]);
+  }, [query, userLocation]);
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
