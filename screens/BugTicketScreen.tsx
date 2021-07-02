@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Image, StyleSheet, View} from 'react-native';
+import {Image, Keyboard, StyleSheet, TouchableWithoutFeedback, View} from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import Button from '../components/Button';
 import i18n from 'i18n-js';
@@ -37,37 +37,39 @@ const BugTicketScreen = (props: Props) => {
     }
   };
   return (
-    <View style={styles.screen}>
-      <View style={styles.headerBloc}>
-        <Header type="back" />
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+      <View style={styles.screen}>
+        <View style={styles.headerBloc}>
+          <Header type="back" />
+        </View>
+        <View style={styles.paddingHorizontal}>
+          <Image
+            source={require('../assets/images/check.png')}
+            style={styles.image}
+          />
+          <TitleWithDescription title={i18n.t('bug_ticket_title')} />
+          <SimpleInput
+            placeholder={i18n.t('bug_ticket_title_input')}
+            type="default"
+            onChangeText={(value) => setForm({...form, name: value})}
+          />
+          <TitleWithDescription title={i18n.t('bug_ticket_description')} />
+          <SimpleInput
+            onChangeText={(v) => setForm({...form, description: v})}
+            placeholder={i18n.t('bug_ticket_description_input')}
+            multiline={true}
+            numberOfLines={1}
+          />
+          <Button
+            value={i18n.t('bug_ticket_submit')}
+            onPress={handleBugPress}
+            backgroundColor={Colors.primary}
+            textColor={Colors.white}
+            style={styles.button}
+          />
+        </View>
       </View>
-      <View style={styles.paddingHorizontal}>
-        <Image
-          source={require('../assets/images/check.png')}
-          style={styles.image}
-        />
-        <TitleWithDescription title={i18n.t('bug_ticket_title')} />
-        <SimpleInput
-          placeholder={i18n.t('bug_ticket_title_input')}
-          type="default"
-          onChangeText={(value) => setForm({...form, name: value})}
-        />
-        <TitleWithDescription title={i18n.t('bug_ticket_description')} />
-        <SimpleInput
-          onChangeText={(v) => setForm({...form, description: v})}
-          placeholder={i18n.t('bug_ticket_description_input')}
-          multiline={true}
-          numberOfLines={1}
-        />
-        <Button
-          value={i18n.t('bug_ticket_submit')}
-          onPress={handleBugPress}
-          backgroundColor={Colors.primary}
-          textColor={Colors.white}
-          style={styles.button}
-        />
-      </View>
-    </View>
+    </TouchableWithoutFeedback>
   );
 };
 
