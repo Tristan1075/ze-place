@@ -112,7 +112,7 @@ export type Review = {
   name: string;
   description: string;
   writerId: string;
-  writerName:string;
+  writerName: string;
   rate: number;
   created_at: {type: Date; default: Date};
 };

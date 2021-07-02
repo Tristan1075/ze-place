@@ -58,6 +58,7 @@ import {ModalContext} from '../providers/modalContext';
 import SearchPlaceScreen from './SearchPlaceScreen';
 import UserStore from '../store/UserStore';
 import CameraScreen from './CameraScreen';
+import { getUserByEmail } from '../api/customer';
 const input: SignupForm = {
   gender: '',
   avatar: '',
@@ -85,7 +86,7 @@ const SignupScreen = (props: Props) => {
   const [overlayText, setOverlayText] = useState('Preparing the registration');
   const {handleModal} = useContext(ModalContext);
 
-  const verifyForm = (): boolean => {
+  const verifyForm = async (): Promise<boolean> => {
     let isValid = true;
     const e: any = {};
 
@@ -123,6 +124,7 @@ const SignupScreen = (props: Props) => {
       e.email = i18n.t('sign_up_invalid_format');
       isValid = false;
     }
+
     if (form.password.length < 8 || form.password.length > 64) {
       e.password = i18n.t('sign_up_password_size');
       isValid = false;
@@ -169,7 +171,7 @@ const SignupScreen = (props: Props) => {
 
   const handleSigninPress = async () => {
     const isFormValid = verifyForm();
-    if (isFormValid) {
+    if (await isFormValid) {
       setOverlayVisible(true);
       try {
         await uploadToS3();
@@ -245,6 +247,17 @@ const SignupScreen = (props: Props) => {
   const handleLocationPress = (location: Location) => {
     setForm({...form, location: location});
     handleModal();
+  };
+
+  const checkMail = async (email: string) => {
+    console.log(email);
+    if (isEmail(email)) {
+      const emailExist = await getUserByEmail(email);
+      console.log(emailExist);
+      if (emailExist) {
+        setErrors({...errors, email: i18n.t('sign_up_user_exist')});
+      }
+    }
   };
 
   return (
@@ -338,6 +351,7 @@ const SignupScreen = (props: Props) => {
             <SimpleInput
               onChange={() => setErrors({...errors, email: ''})}
               onChangeText={(v) => setForm({...form, email: v.toLowerCase()})}
+              onEndEditing={() => checkMail(form.email)}
               placeholder={i18n.t('sign_up_email_placeholder')}
               error={errors.email}
               type={'email-address'}
