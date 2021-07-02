@@ -14,12 +14,14 @@ import {mapStyle} from '../utils/mapStyle';
 import Modal from '../components/Modal';
 import PlaceDetailScreen from './PlaceDetailScreen';
 
-const CustomMarker = ({isActive}) => {
+const CustomMarker = ({isActive, image}) => {
   return (
     <View style={styles.calloutContainer}>
       <View style={styles.callout}>
         <Image
-          source={require('../assets/images/home_banner.jpg')}
+          source={{
+            uri: image,
+          }}
           style={[styles.calloutImage, isActive && styles.activeImage]}
         />
       </View>
@@ -90,7 +92,10 @@ const MapScreen = ({initialCoords, onItemPress}: Props) => {
           };
           return (
             <Marker coordinate={markerCoords}>
-              <CustomMarker isActive={activeIndex === index} />
+              <CustomMarker
+                isActive={activeIndex === index}
+                image={place.images[0].url}
+              />
             </Marker>
           );
         })}

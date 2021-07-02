@@ -63,8 +63,10 @@ const ConfirmationBookingScreen = ({place, booking, navigation}: Props) => {
   const priceTTC = priceHT + priceFee + priceTVA;
 
   const onBookPress = async (paymentIntent: any) => {
-    await setToHistory(promoCode);
-    UserStore.updateUser(await getUser());
+    if (promoCode) {
+      await setToHistory(promoCode);
+      UserStore.updateUser(await getUser());
+    }
     bookPromo.price = parseFloat(priceTTC.toFixed(2));
     await bookPlace(placeBook, bookPromo, paymentIntent.id);
     setPaymentSheetEnabled(false);
@@ -109,31 +111,6 @@ const ConfirmationBookingScreen = ({place, booking, navigation}: Props) => {
                 />
               </View>
             </TouchableWithoutFeedback>
-            {/* <TouchableWithoutFeedback onPress={() => setActivePaymentMethod(1)}>
-              <View
-                style={[
-                  styles.paymentMethodContainer,
-                  activePaymentMethod === 1 && styles.isActive,
-                ]}>
-                <AntDesign
-                  name="apple1"
-                  color={activePaymentMethod === 1 ? Colors.white : Colors.dark}
-                  size={20}
-                />
-              </View>
-            </TouchableWithoutFeedback>
-            <TouchableWithoutFeedback onPress={() => setActivePaymentMethod(2)}>
-              <View
-                style={[
-                  styles.paymentMethodContainer,
-                  activePaymentMethod === 2 && styles.isActive,
-                ]}>
-                <Image
-                  source={require('../assets/icons/google.png')}
-                  style={styles.googleIcon}
-                />
-              </View>
-            </TouchableWithoutFeedback>*/}
             <View style={styles.flex} />
             <TouchableOpacity onPress={() => showPromotionalCodeModal()}>
               <Text style={styles.title}>
