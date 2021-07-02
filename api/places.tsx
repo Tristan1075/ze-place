@@ -162,12 +162,11 @@ export const getSimilarPlaces = async (placeID: String) => {
 
 export const searchPlaces = async (filterForm: FilterForm) => {
   const token = await SecureStore.getItemAsync('access-token');
-
   return await axios
     .post(
       `${API_URL}/places/searchPlaces`,
       {
-        placeTypeName: filterForm.placeType,
+        placeType: filterForm.placeType,
         price: filterForm.price,
         surface: filterForm.surface,
         features: filterForm.features,
