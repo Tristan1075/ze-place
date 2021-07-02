@@ -193,9 +193,11 @@ const PlaceDetailScreen = () => {
                   </Text>
                 </TouchableOpacity>
               )}
-              <Text style={styles.subtitlePlaceType} numberOfLines={1}>
-                Type : {place?.placeType.name}
-              </Text>
+              {place && place.placeType ? (
+                <Text style={styles.subtitlePlaceType} numberOfLines={1}>
+                  Type : {place?.placeType.name}
+                </Text>
+              ) : null}
               {place?.reviews.length > 0 && (
                 <View style={styles.padding}>
                   <Rating
