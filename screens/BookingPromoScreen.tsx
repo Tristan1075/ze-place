@@ -68,12 +68,7 @@ const PlaceReviewScreen = ({place,onPromoSelected,navigationn,promo}: Props) => 
                   subtitle={true}
                   description={e.end_date.slice(0, 10)}></TitleWithDescription>
                   <Text>{e.value}%</Text>
-                  {selectedElem==e.name &&<AntDesign
-                      name="checkcircle"
-                      size={15}
-                      color={Colors.success}
-                      style={styles.default}
-                    />}
+                  
               </TouchableOpacity>
             ))}
             
@@ -166,7 +161,7 @@ const styles = StyleSheet.create({
        width: 0,
        height: 2,
      },
-     shadowOpacity: 0.75,
+     shadowOpacity: 1,
      shadowRadius: 3.84,
      elevation: 5,
      marginBottom: 20,
