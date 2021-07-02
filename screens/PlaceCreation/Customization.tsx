@@ -29,6 +29,7 @@ import {CreatePlaceForm, Place} from '../../types';
 import {createPlace, updatePlace} from '../../api/places';
 import * as SecureStore from 'expo-secure-store';
 import i18n from 'i18n-js';
+import UserStore from '../../store/UserStore';
 
 type Props = {
   prevStep: () => void;

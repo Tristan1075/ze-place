@@ -193,6 +193,9 @@ const PlaceDetailScreen = () => {
                   </Text>
                 </TouchableOpacity>
               )}
+              <Text style={styles.subtitlePlaceType} numberOfLines={1}>
+                Type : {place?.placeType.name}
+              </Text>
               {place?.reviews.length > 0 && (
                 <View style={styles.padding}>
                   <Rating
@@ -470,6 +473,11 @@ const styles = StyleSheet.create({
     fontFamily: 'poppins',
     fontSize: 16,
     color: Colors.white,
+  },
+  subtitlePlaceType: {
+    fontFamily: 'oswald-light',
+    fontSize: 20,
+    marginBottom: 15,
   },
   descriptionBloc: {
     paddingTop: 60,
