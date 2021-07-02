@@ -77,7 +77,7 @@ const PlaceDetailScreen = () => {
   };
 
   const handleFavoritePress = async (p: Place) => {
-    p.isFavorite ? removeFavorite(p) : addFavorite(p);
+    p.isFavorite ? await removeFavorite(p) : await addFavorite(p);
     await init();
   };
 
@@ -136,6 +136,10 @@ const PlaceDetailScreen = () => {
     });
   };
 
+  const handleModifyPress = () => {
+    navigation.navigate('CreatePlace', {place});
+  };
+
   return (
     <View>
       <ScrollView showsVerticalScrollIndicator={false} style={styles.screen}>
@@ -147,9 +151,16 @@ const PlaceDetailScreen = () => {
           }}
           style={styles.cover}
         />
-        <View style={styles.favorite}>
-          <Ionicons size={20} name="star" color={Colors.primary} />
-        </View>
+        <TouchableOpacity
+          style={styles.favorite}
+          onPress={() => handleFavoritePress(place)}>
+          <Ionicons
+            size={40}
+            name="heart-circle"
+            color={place?.isFavorite ? Colors.primary : Colors.gray}
+            style={styles.locationIcon}
+          />
+        </TouchableOpacity>
         <View style={styles.container}>
           <Header type="back" />
           <View style={[styles.content, styles.paddingTop]}>
@@ -161,22 +172,26 @@ const PlaceDetailScreen = () => {
               {place?.location.country}
             </Text>
             <View style={styles.descriptionBloc}>
-              <TouchableOpacity
-                style={[styles.row, styles.padding]}
-                onPress={() =>
-                  UserStore.user._id === place?.ownerId
-                    ? navigation.navigate('Messages', {place})
-                    : navigation.navigate('Conversation', {
-                        conversation: {
-                          placeId: place?._id,
-                          userId: UserStore.user._id,
-                          ownerId: place?.ownerId,
-                        },
-                      })
-                }>
-                <AntDesign name="message1" style={styles.message} size={20} />
-                <Text style={styles.description}>Send a message to owner</Text>
-              </TouchableOpacity>
+              {UserStore.user._id !== place?.ownerId && (
+                <TouchableOpacity
+                  style={[styles.row, styles.padding]}
+                  onPress={() =>
+                    UserStore.user._id === place?.ownerId
+                      ? navigation.navigate('Messages', {place})
+                      : navigation.navigate('Conversation', {
+                          conversation: {
+                            placeId: place?._id,
+                            userId: UserStore.user._id,
+                            ownerId: place?.ownerId,
+                          },
+                        })
+                  }>
+                  <AntDesign name="message1" style={styles.message} size={20} />
+                  <Text style={styles.description}>
+                    Send a message to owner
+                  </Text>
+                </TouchableOpacity>
+              )}
               {place?.reviews.length > 0 && (
                 <View style={styles.padding}>
                   <Rating
@@ -362,19 +377,23 @@ const PlaceDetailScreen = () => {
       <View style={styles.chooseBanner}>
         <Text style={styles.chooseBannerText}>
           {UserStore.user._id === place?.ownerId
-            ? i18n.t('place_detail_active_bookings')
+            ? ''
             : userBooking.length > 0 &&
               userBooking.find((booking) => !booking.isPast)
             ? ''
             : i18n.t('place_detail_per_day')}
         </Text>
         <Text style={styles.chooseBannerPrice}>
-          {UserStore.user._id === place?.ownerId
-            ? `${place?.bookings.length}`
-            : userBooking.length > 0 &&
-              userBooking.find((booking) => !booking.isPast)
-            ? userBooking.find((booking) => !booking.isPast)?.startDate
-            : `${place?.price}€`}
+          {UserStore.user._id === place?.ownerId ? (
+            <Text style={styles.updatePlace} onPress={handleModifyPress}>
+              Modifier cette annonce
+            </Text>
+          ) : userBooking.length > 0 &&
+            userBooking.find((booking) => !booking.isPast) ? (
+            userBooking.find((booking) => !booking.isPast)?.startDate
+          ) : (
+            `${place?.price}€`
+          )}
         </Text>
         <Button
           backgroundColor={Colors.white}
@@ -583,9 +602,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 20,
     top: 60,
-    backgroundColor: 'rgba(220, 220, 220, 0.4)',
-    padding: 5,
     borderRadius: 20,
+    zIndex: 999,
   },
   authorization: {
     flexDirection: 'row',
@@ -593,6 +611,13 @@ const styles = StyleSheet.create({
   },
   message: {
     paddingRight: 10,
+  },
+  locationIcon: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  updatePlace: {
+    textDecorationLine: 'underline',
   },
 });
 

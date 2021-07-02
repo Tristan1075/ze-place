@@ -57,8 +57,8 @@ import avatar from '../assets/images/man.png';
 import {ModalContext} from '../providers/modalContext';
 import SearchPlaceScreen from './SearchPlaceScreen';
 import UserStore from '../store/UserStore';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
-import { number } from 'prop-types';
+import CameraScreen from './CameraScreen';
+import { getUserByEmail } from '../api/customer';
 const input: SignupForm = {
   gender: '',
   avatar: '',
@@ -86,7 +86,7 @@ const SignupScreen = (props: Props) => {
   const [overlayText, setOverlayText] = useState('Preparing the registration');
   const {handleModal} = useContext(ModalContext);
 
-  const verifyForm = (): boolean => {
+  const verifyForm = async (): Promise<boolean> => {
     let isValid = true;
     const e: any = {};
 
@@ -124,6 +124,7 @@ const SignupScreen = (props: Props) => {
       e.email = i18n.t('sign_up_invalid_format');
       isValid = false;
     }
+
     if (form.password.length < 8 || form.password.length > 64) {
       e.password = i18n.t('sign_up_password_size');
       isValid = false;
@@ -167,13 +168,10 @@ const SignupScreen = (props: Props) => {
       return response;
     });
   };
-  const sleep = (ms) => {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-  };
 
   const handleSigninPress = async () => {
     const isFormValid = verifyForm();
-    if (isFormValid) {
+    if (await isFormValid) {
       setOverlayVisible(true);
       try {
         await uploadToS3();
@@ -184,7 +182,7 @@ const SignupScreen = (props: Props) => {
       uploadID(form.IDRecto, form.IDVerso)
         .then(async (res) => {
           try {
-            setForm({...form, avatar: `${form.email}${form.lastname}.png`})
+            setForm({...form, avatar: `${form.email}${form.lastname}.png`});
             const token = await register(form, res);
             await SecureStore.setItemAsync('access-token', token.access_token);
             await UserStore.updateUser(token.user);
@@ -223,33 +221,20 @@ const SignupScreen = (props: Props) => {
   };
 
   const handleTakPicturePress = async (type: string) => {
-    const permission = await ImagePicker.requestCameraPermissionsAsync();
-    if (permission.granted) {
-      if (environnment === 'production') {
-        const result = await ImagePicker.launchCameraAsync();
-        if (!result.cancelled) {
-          if (type === 'recto') {
-            setForm({...form, IDRecto: result.uri});
-          } else {
-            setForm({...form, IDVerso: result.uri});
-          }
-          setErrors({...errors, IDRecto: ''});
-        }
+    handleModal({
+      child: <CameraScreen onPress={(photo) => takePhoto(photo, type)} />,
+    });
+  };
+
+  const takePhoto = (photo, type: string) => {
+    if (photo) {
+      if (type === 'recto') {
+        setForm({...form, IDRecto: photo.uri});
       } else {
-        const result = await ImagePicker.launchImageLibraryAsync({
-          mediaTypes: ImagePicker.MediaTypeOptions.All,
-          allowsEditing: true,
-          aspect: [4, 3],
-          quality: 1,
-        });
-        if (!result.cancelled) {
-          if (type === 'recto') {
-            setForm({...form, IDRecto: result.uri});
-          } else {
-            setForm({...form, IDVerso: result.uri});
-          }
-        }
+        setForm({...form, IDVerso: photo.uri});
       }
+      setErrors({...errors, IDRecto: ''});
+      handleModal();
     }
   };
 
@@ -262,6 +247,17 @@ const SignupScreen = (props: Props) => {
   const handleLocationPress = (location: Location) => {
     setForm({...form, location: location});
     handleModal();
+  };
+
+  const checkMail = async (email: string) => {
+    console.log(email);
+    if (isEmail(email)) {
+      const emailExist = await getUserByEmail(email);
+      console.log(emailExist);
+      if (emailExist) {
+        setErrors({...errors, email: i18n.t('sign_up_user_exist')});
+      }
+    }
   };
 
   return (
@@ -290,8 +286,7 @@ const SignupScreen = (props: Props) => {
               <Text style={styles.error}>{errors.avatar}</Text>
             ) : null}
 
-           
-              <SimpleInput
+            <SimpleInput
               style={styles.input}
               value={form.gender}
               placeholder={i18n.t('sign_up_gender_placeholder')}
@@ -303,8 +298,6 @@ const SignupScreen = (props: Props) => {
               }
               error={errors.gender}
             />
-            
-           
             <SimpleInput
               onChange={() => setErrors({...errors, firstname: ''})}
               onChangeText={(v) => setForm({...form, firstname: v})}
@@ -320,8 +313,7 @@ const SignupScreen = (props: Props) => {
               style={styles.input}
             />
 
-            
-              <SimpleInput
+            <SimpleInput
               style={styles.input}
               value={form.location?.address}
               placeholder={i18n.t('sign_up_address_placeholder')}
@@ -332,9 +324,8 @@ const SignupScreen = (props: Props) => {
               }
               error={errors.location}
             />
-              
-           
-              <SimpleInput
+
+            <SimpleInput
               onPress={() => setShowDateTimePicker(true)}
               isEditable={false}
               onChange={() => setErrors({...errors, lastname: ''})}
@@ -347,23 +338,23 @@ const SignupScreen = (props: Props) => {
               error={errors.birthdate ? i18n.t('sign_up_field_required') : ''}
               style={styles.input}
             />
-          
-            
+
             <SimpleInput
               onChange={() => setErrors({...errors, phoneNumber: ''})}
               onChangeText={(v) => setForm({...form, phoneNumber: v})}
               placeholder={i18n.t('sign_up_phone_placeholder')}
               error={errors.phoneNumber}
-              type={"phone-pad"}
+              type={'phone-pad'}
               style={styles.input}
               maxLength={10}
             />
             <SimpleInput
               onChange={() => setErrors({...errors, email: ''})}
               onChangeText={(v) => setForm({...form, email: v.toLowerCase()})}
+              onEndEditing={() => checkMail(form.email)}
               placeholder={i18n.t('sign_up_email_placeholder')}
               error={errors.email}
-              type={"email-address"}
+              type={'email-address'}
               style={styles.input}
             />
             <SimpleInput

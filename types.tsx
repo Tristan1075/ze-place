@@ -112,7 +112,7 @@ export type Review = {
   name: string;
   description: string;
   writerId: string;
-  writerName:string;
+  writerName: string;
   rate: number;
   created_at: {type: Date; default: Date};
 };
@@ -312,7 +312,7 @@ export type Booking = {
   features: FeatureType[];
   startDate: string;
   endDate: string;
-  duration?: number;
+  duration: number;
   price?: number;
   description: string;
   isAccepted?: boolean;

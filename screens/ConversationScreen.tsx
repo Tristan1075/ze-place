@@ -120,21 +120,23 @@ const ConversationScreen = (props: Props) => {
   };
 
   const sendMessage = (c: Conversation) => {
-    const newMessage = {
-      value: input,
-      from: '1',
-    };
-    sendMessageApi(
-      c?._id,
-      UserStore.user._id,
-      UserStore.user._id === conversationParams.userId
-        ? conversationParams.ownerId
-        : conversationParams.userId,
-      input,
-    );
-    setMessages((prev) => [...prev, newMessage]);
-    setInput('');
-    scrollToBottom();
+    if (input.length > 0) {
+      const newMessage = {
+        value: input,
+        from: '1',
+      };
+      sendMessageApi(
+        c?._id,
+        UserStore.user._id,
+        UserStore.user._id === conversationParams.userId
+          ? conversationParams.ownerId
+          : conversationParams.userId,
+        input,
+      );
+      setMessages((prev) => [...prev, newMessage]);
+      setInput('');
+      scrollToBottom();
+    }
   };
 
   const scrollToBottom = () => {
@@ -145,7 +147,15 @@ const ConversationScreen = (props: Props) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header type="back" showProfil={true} title={conversation?.userName} />
+      <Header
+        type="back"
+        showProfil={true}
+        title={
+          conversation?.userId == UserStore.user._id
+            ? conversation?.ownerName
+            : conversation?.userName
+        }
+      />
       <View style={styles.content}>
         <FlatList
           ref={_flatList}

@@ -160,7 +160,7 @@ const UserBookingsScreen = ({navigation}) => {
             title="You don't have reservations for the moment..."
           />
         ) : null}
-        {bookings.length > 0 ? (
+        {bookings.length > 0 && (
           <>
             <TitleWithDescription
               title="History"
@@ -177,13 +177,7 @@ const UserBookingsScreen = ({navigation}) => {
               />
             </View>
           </>
-        ) : !activeBooking ? (
-          <EmptyBloc
-            size={80}
-            image={require('../assets/images/sad.png')}
-            title="You don't have reservations for the moment..."
-          />
-        ) : null}
+        )}
       </View>
       <Popin
         isVisible={confirmation}

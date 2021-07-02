@@ -25,8 +25,8 @@ import Button from '../../components/Button';
 import Colors from '../../constants/Colors';
 import {Ionicons} from '@expo/vector-icons';
 import SelectableItem from '../../components/SelectableItem';
-import {CreatePlaceForm} from '../../types';
-import {createPlace} from '../../api/places';
+import {CreatePlaceForm, Place} from '../../types';
+import {createPlace, updatePlace} from '../../api/places';
 import * as SecureStore from 'expo-secure-store';
 import i18n from 'i18n-js';
 
@@ -34,10 +34,11 @@ type Props = {
   prevStep: () => void;
   createPlaceForm: CreatePlaceForm;
   setCreatePlaceForm: Dispatch<SetStateAction<CreatePlaceForm>>;
+  place?: Place;
 };
 
 const Customization = (props: Props) => {
-  const {prevStep, createPlaceForm, setCreatePlaceForm} = props;
+  const {prevStep, createPlaceForm, setCreatePlaceForm, place} = props;
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [submitModal, setSubmitModal] = useState<boolean>(false);
   const navigation = useNavigation();
@@ -74,7 +75,6 @@ const Customization = (props: Props) => {
         successActionStatus: 201,
       };
       const file = {
-        // `uri` can also be a file system path (i.e. file://)
         uri: element.url,
         name: `${createPlaceForm.title}${id}index${cpt}.png`,
         type: 'image/png',
@@ -92,15 +92,19 @@ const Customization = (props: Props) => {
       cpt2++;
     });
   };
-  function sleep(ms: number) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-  }
+
   const handleSubmitForm = async () => {
     try {
-      await uploadToS3();
-      await createPlace(createPlaceForm);
-      setSubmitModal(false);
-      navigation.dispatch(StackActions.popToTop());
+      if (place) {
+        await updatePlace(place._id, createPlaceForm);
+        setSubmitModal(false);
+        navigation.dispatch(StackActions.pop());
+      } else {
+        await uploadToS3();
+        await createPlace(createPlaceForm);
+        setSubmitModal(false);
+        navigation.dispatch(StackActions.popToTop());
+      }
     } catch (err) {
       console.log(err);
     }

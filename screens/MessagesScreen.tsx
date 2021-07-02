@@ -18,6 +18,7 @@ import {getConversationByPlace} from '../api/conversations';
 import {useState} from 'react';
 import {useRoute} from '@react-navigation/native';
 import UserStore from '../store/UserStore';
+import EmptyBloc from '../components/EmptyBloc';
 
 type MessagesScreenNavigationProp = StackNavigationProp<
   MessagesParamList,
@@ -77,11 +78,19 @@ const MessagesScreen = (props: Props) => {
     <SafeAreaView style={styles.container}>
       <Header type="back" showProfil={true} />
       <View style={styles.content}>
-        <FlatList
-          data={conversations}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.id}
-        />
+        {conversations && conversations.length > 0 ? (
+          <FlatList
+            data={conversations}
+            renderItem={renderItem}
+            keyExtractor={(item) => item.id}
+          />
+        ) : (
+          <EmptyBloc
+            size={80}
+            image={require('../assets/images/sad.png')}
+            title="You don't have conversations for the moment..."
+          />
+        )}
       </View>
     </SafeAreaView>
   );

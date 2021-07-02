@@ -49,7 +49,6 @@ const HomeScreen = (props: Props) => {
   const {handleModal} = useContext(ModalContext);
 
   const init = useCallback(async () => {
-    socket.emit('init_conversations', {userId: UserStore.user._id});
     setPlaces(await getAllPlaces());
   }, []);
 
@@ -78,6 +77,10 @@ const HomeScreen = (props: Props) => {
                 longitude: location.coords.longitude,
                 latitude: location.coords.latitude,
               }}
+              onItemPress={(place) => {
+                handleModal();
+                handlePlacePress(place);
+              }}
             />
           ),
         });
@@ -104,19 +107,6 @@ const HomeScreen = (props: Props) => {
         onPress={() => handlePlacePress(item)}
         key={item._id}
       />
-    );
-  };
-
-  const renderListItem = ({item}: {item: Place}) => {
-    return (
-      <View style={styles.paddingHorizontal} key={item._id}>
-        <PlaceCard
-          place={item}
-          onPress={() => handlePlacePress(item)}
-          onFavoritePress={handleFavoritePress}
-          isFavorite={item.isFavorite}
-        />
-      </View>
     );
   };
 

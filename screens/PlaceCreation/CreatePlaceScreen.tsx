@@ -1,7 +1,7 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import Modal, {ModalContent} from 'react-native-modals';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 
 // @ts-ignore
 import {ProgressSteps, ProgressStep} from 'react-native-progress-steps';
@@ -9,7 +9,7 @@ import Button from '../../components/Button';
 
 import Header from '../../components/Header';
 import Colors from '../../constants/Colors';
-import {CreatePlaceForm} from '../../types';
+import {CreatePlaceForm, Place} from '../../types';
 import GeneralInformations from './GeneralInformations';
 import PlaceInformations from './PlaceInformations';
 import PlaceAuthorization from './PlaceAuthorization';
@@ -18,6 +18,8 @@ import i18n from 'i18n-js';
 
 const CreatePlaceScreen = () => {
   const navigation = useNavigation();
+  const route = useRoute();
+  const place: Place = route.params?.place;
   const [activeStep, setActiveStep] = useState<number>(0);
   const [exitModal, setExitModal] = useState<boolean>(false);
   const [createPlaceForm, setCreatePlaceForm] = useState<CreatePlaceForm>({
@@ -35,6 +37,26 @@ const CreatePlaceScreen = () => {
     authorizeFire: true,
     authorizeFoodAndDrink: true,
   });
+
+  useEffect(() => {
+    if (place) {
+      setCreatePlaceForm({
+        title: place.title,
+        location: place.location,
+        surface: place.surface.toString(),
+        placeType: place.placeType,
+        price: place.price.toString(),
+        description: place.description,
+        features: place.features,
+        images: place.images,
+        authorizeAnimals: place.authorizeAnimals,
+        authorizeMusic: place.authorizeMusic,
+        authorizeSmoking: place.authorizeSmoking,
+        authorizeFire: place.authorizeFire,
+        authorizeFoodAndDrink: place.authorizeFoodAndDrink,
+      });
+    }
+  }, []);
 
   const handleBackPress = () => {
     setExitModal(false);
@@ -76,6 +98,7 @@ const CreatePlaceScreen = () => {
             scrollViewProps={{showsVerticalScrollIndicator: false}}>
             <View>
               <PlaceInformations
+                place={place}
                 prevStep={prevStep}
                 nextStep={nextStep}
                 createPlaceForm={createPlaceForm}
@@ -105,6 +128,7 @@ const CreatePlaceScreen = () => {
                 prevStep={prevStep}
                 createPlaceForm={createPlaceForm}
                 setCreatePlaceForm={setCreatePlaceForm}
+                place={place}
               />
             </View>
           </ProgressStep>

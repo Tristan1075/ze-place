@@ -25,14 +25,9 @@ const SelectPlaceTypeScreen = (props: Props) => {
   const {onPlaceTypePress} = props;
   const [items, setItems] = React.useState<Array<PlaceType>>([]);
 
-
-  const init = useCallback(async () => {
-   
-  }, []);
-
-  useEffect(()=> {
+  useEffect(() => {
     const getCardType = async () => setItems(await getPlaceTypes());
-    getCardType()
+    getCardType();
   }, []);
 
   return (

@@ -24,7 +24,7 @@ import PaymentMethodForm from '../screens/PaymentMethodForm';
 import Modal from './Modal';
 import stripe from 'react-native-stripe-client';
 import {PUBLIC_KEY_STRIPE} from '../env';
-import { ModalContext } from '../providers/modalContext';
+import {ModalContext} from '../providers/modalContext';
 
 const stripeClient = stripe(PUBLIC_KEY_STRIPE);
 
@@ -150,7 +150,7 @@ const PaymentModal = (props: Props) => {
             })}
           </ScrollView>
           <Button
-            value={isSuccess ? "Réservation réussie" : "Réserver"}
+            value={isSuccess ? 'Réservation réussie' : 'Réserver'}
             backgroundColor={isSuccess ? Colors.success : Colors.primary}
             textColor={Colors.white}
             onPress={handlePayPress}

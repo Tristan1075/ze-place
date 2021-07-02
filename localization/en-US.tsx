@@ -48,6 +48,7 @@ export default {
   sign_up_id_card_placeholder: 'ID Card',
   sign_up_signup_button: 'Sign up',
   sign_up_account_exist: 'Already have an account ?',
+  sign_up_user_exist: 'This email is already exist',
   sign_up_sign_in: 'Sign in',
   sign_up_confirm: 'Confirm',
   sign_up_cancel: 'Cancel',
@@ -86,7 +87,7 @@ export default {
   search_filter_search: 'Search',
 
   //search_place_location
-  search_place_location_title: 'Find your place !',
+  search_place_location_title: 'Address',
   search_place_location_enter_address_placeholder: 'Enter the adress...',
   search_place_location_results: 'Results',
 

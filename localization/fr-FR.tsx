@@ -48,6 +48,7 @@ export default {
   sign_up_id_card_placeholder: `Carte d'identité`,
   sign_up_signup_button: 'Créer',
   sign_up_account_exist: 'Vous avez déjà un compte ?',
+  sign_up_user_exist: 'Cet email existe déjà',
   sign_up_sign_in: 'Se connecter',
   sign_up_confirm: 'Confirmer',
   sign_up_cancel: 'Annuler',
@@ -86,7 +87,7 @@ export default {
   search_filter_search: 'Rechercher',
 
   //search_place_location
-  search_place_location_title: 'Trouvez votre espace !',
+  search_place_location_title: 'Adresse',
   search_place_location_enter_address_placeholder: `Saisissez l'adresse...`,
   search_place_location_results: 'Résultats',
 
