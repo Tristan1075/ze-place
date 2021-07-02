@@ -50,11 +50,11 @@ const ConfirmationBookingScreen = ({place, booking, navigation}: Props) => {
     
   };
 
-  const updatePlace = (placePromo:number,promo:Promo) => {
+  const updatePlace = (placePromo:number,promo?:Promo) => {
+    
     setPlace({...placeBook , price:placePromo})  
     setBooking({...bookPromo, price:(placePromo*bookPromo.duration)})
     setPromoCode(promo)
-  console.log('parent',placeBook.price);
   }
  
 
@@ -70,13 +70,9 @@ const ConfirmationBookingScreen = ({place, booking, navigation}: Props) => {
 
   const onBookPress = async (paymentIntent: any) => {
 
-    console.log('book',placeBook);
-    console.log('bookingPromo',bookPromo);
-    console.log('promo',promoCode);
-    
     await setToHistory(promoCode);
     UserStore.updateUser(await getUser())
-    
+    bookPromo.price = parseFloat( priceTTC.toFixed(2)); 
     await bookPlace(placeBook, bookPromo, paymentIntent.id);
     setPaymentSheetEnabled(false);
     handleModal();
@@ -181,7 +177,20 @@ const ConfirmationBookingScreen = ({place, booking, navigation}: Props) => {
             {bookPromo.duration && (
               <Text style={styles.value}>{priceHT.toFixed(2)}€</Text>
             )}
+            
+          </View>{
+            promoCode && 
+            <View style={styles.paymentRow}>
+            <Text style={styles.keyBold}>
+              {promoCode.name}
+            </Text>
+              <Text style={styles.value}>{promoCode.value}%</Text>
+            
+            
           </View>
+
+          }
+         
           <View style={styles.border} />
           <View style={styles.paymentRow}>
             <Text style={styles.key}>
@@ -240,6 +249,7 @@ const ConfirmationBookingScreen = ({place, booking, navigation}: Props) => {
           place={place}
           onPromoSelected={updatePlace}
           navigation={navigation}
+          promo={promoCode}
 
           />
         }

@@ -250,10 +250,8 @@ const SignupScreen = (props: Props) => {
   };
 
   const checkMail = async (email: string) => {
-    console.log(email);
     if (isEmail(email)) {
       const emailExist = await getUserByEmail(email);
-      console.log(emailExist);
       if (emailExist) {
         setErrors({...errors, email: i18n.t('sign_up_user_exist')});
       }

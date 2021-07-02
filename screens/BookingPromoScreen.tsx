@@ -2,6 +2,8 @@ import React, {useState, useEffect, useContext} from 'react';
 import {StyleSheet, Text, View, ScrollView, TouchableOpacity} from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import i18n from 'i18n-js';
+import {AntDesign} from '@expo/vector-icons';
+
 import {FilterForm, HomeParamList, Place, Promo} from '../types';
 import TitleWithDescription from '../components/TitleWithDescription';
 import Colors from '../constants/Colors';
@@ -15,15 +17,16 @@ type Props = {
     place: Place;
     onPromoSelected:Function;
     navigation: any;
+    promo? : Promo;
     
 
 };
 
-const PlaceReviewScreen = ({place,onPromoSelected,navigation}: Props) => {
+const PlaceReviewScreen = ({place,onPromoSelected,navigationn,promo}: Props) => {
     const [activePromo, setActivePromo] = useState<Promo[]>();
     const [placePromo, setPlace] = useState<Place>(place);
     const {handleModal} = useContext(ModalContext);
-    const [selectedElem, setSelectedElem] = useState<any>('');
+    const [selectedElem, setSelectedElem] = useState<any>(promo ? promo.name:'');
 
   useEffect(() => {
     const getActivePromovar = async () =>
@@ -33,12 +36,16 @@ const PlaceReviewScreen = ({place,onPromoSelected,navigation}: Props) => {
 
   const handlePromo =  (promo) =>{
 
-   
+   if(selectedElem == promo.name){
+    setSelectedElem('')
+    let finalPrice = placePromo.price
+    onPromoSelected(finalPrice)
+   }else{
       setSelectedElem(promo.name)
       let finalPrice = placePromo.price
       finalPrice -= finalPrice * (promo.value/100)
       onPromoSelected(finalPrice,promo)
-    
+    }
     
     
   }
@@ -61,6 +68,12 @@ const PlaceReviewScreen = ({place,onPromoSelected,navigation}: Props) => {
                   subtitle={true}
                   description={e.end_date.slice(0, 10)}></TitleWithDescription>
                   <Text>{e.value}%</Text>
+                  {selectedElem==e.name &&<AntDesign
+                      name="checkcircle"
+                      size={15}
+                      color={Colors.success}
+                      style={styles.default}
+                    />}
               </TouchableOpacity>
             ))}
             
@@ -71,6 +84,11 @@ const PlaceReviewScreen = ({place,onPromoSelected,navigation}: Props) => {
 };
 
 const styles = StyleSheet.create({
+  default: {
+    position: 'absolute',
+    top: 30,
+    left: 10,
+  },
   container: {
     flex: 1,
     backgroundColor: Colors.dark,
@@ -136,6 +154,8 @@ const styles = StyleSheet.create({
     flex: 0.9,
   },
   selectedCode:{
+    position: 'relative',
+
     backgroundColor: Colors.white,
     textAlign:'center',
      borderRadius: 15,

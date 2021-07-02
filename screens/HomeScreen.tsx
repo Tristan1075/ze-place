@@ -86,7 +86,6 @@ const HomeScreen = (props: Props) => {
         });
       }
     } catch (err) {
-      console.log(err);
     }
   };
 
