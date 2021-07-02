@@ -1,6 +1,13 @@
 import {AntDesign} from '@expo/vector-icons';
 import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity, TouchableWithoutFeedback, Keyboard} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from 'react-native';
 import {Flow} from 'react-native-animated-spinkit';
 import {ScrollView} from 'react-native-gesture-handler';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
@@ -23,6 +30,7 @@ const BankAccountScreen = () => {
   const [account, setAccount] = useState();
   const [balance, setBalance] = useState();
   const [showForm, setShowForm] = useState<boolean>(false);
+  const [screenFetching, setScreenFetching] = useState<boolean>(true);
   const [isFetching, setIsFetching] = useState<boolean>(false);
   const [actionFetching, setActionFetching] = useState<boolean>(false);
   const [form, setForm] = useState({
@@ -32,10 +40,13 @@ const BankAccountScreen = () => {
   });
 
   useEffect(() => {
-    getConnectedAccount(UserStore.user.stripeAccount).then((account) => {
-      console.log(account);
-      setAccount(account);
-    });
+    getConnectedAccount(UserStore.user.stripeAccount)
+      .then((account) => {
+        console.log(account);
+        setAccount(account);
+        setScreenFetching(false);
+      })
+      .catch((err) => setIsFetching(false));
   }, []);
 
   const handleAddBankPress = async () => {
@@ -129,13 +140,13 @@ const BankAccountScreen = () => {
                 </TouchableOpacity>
               );
             })
-          ) : (
+          ) : !screenFetching ? (
             <EmptyBloc
               title={i18n.t('bank_account_no_account')}
               size={150}
               image={require('../assets/images/bank.png')}
             />
-          )}
+          ) : null}
         </ScrollView>
         <View style={styles.border} />
         <TouchableOpacity
