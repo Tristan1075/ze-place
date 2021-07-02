@@ -32,6 +32,11 @@ export type BookingTab = {
   UserBookings: {userBooking: Booking[]; placeId: string};
 };
 
+export type MessageTab = {
+  Messages: {tab?: boolean};
+  Conversation: undefined;
+};
+
 export type HeaderParamList = {
   Home: undefined;
   PlaceDetail: {place: PlaceType};

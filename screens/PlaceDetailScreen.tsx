@@ -77,6 +77,7 @@ const PlaceDetailScreen = () => {
   };
 
   const handleFavoritePress = async (p: Place) => {
+    console.log(p);
     p.isFavorite ? await removeFavorite(p) : await addFavorite(p);
     await init();
   };

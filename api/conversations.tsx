@@ -88,6 +88,22 @@ export const getConversationByPlace = async (placeId: string) => {
     });
 };
 
+export const getConversationByUser = async (userId: string) => {
+  const token = await SecureStore.getItemAsync('access-token');
+  return await axios
+    .get(`${API_URL}/conversations/user/${userId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .then((response: AxiosResponse<any>) => {
+      return response.data;
+    })
+    .catch((err) => {
+      return Promise.reject(err);
+    });
+};
+
 export const sendMessageApi = async (
   conversationId: string,
   senderId: string,

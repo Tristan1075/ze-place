@@ -23,11 +23,11 @@ type Props = {
 
 const MyPlaceScreen = (props: Props) => {
   const navigation = useNavigation();
-  const [user, setUser] = useState<User>(UserStore.user);
-  const places = user?.ownedPlaces;
+  const [places, setPlaces] = useState<Place[]>([]);
 
   const init = useCallback(async () => {
-    setUser(await getUser());
+    const user = await getUser();
+    setPlaces(user.ownedPlaces);
   }, []);
 
   useEffect(() => {

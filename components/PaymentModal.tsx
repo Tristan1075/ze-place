@@ -96,8 +96,8 @@ const PaymentModal = (props: Props) => {
         setIsSuccess(true);
         setIsFetching(false);
         setTimeout(() => {
-          setIsSuccess(false);
           onBookPress && onBookPress(paymentIntent);
+          setIsSuccess(false);
         }, 2000);
       }
     }

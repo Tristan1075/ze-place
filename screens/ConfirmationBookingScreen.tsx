@@ -22,7 +22,7 @@ import Modal from '../components/Modal';
 import Layout from '../constants/Layout';
 import PaymentModal from '../components/PaymentModal';
 import BookingPromoScreen from './BookingPromoScreen';
-import { setToHistory, getUser } from '../api/customer';
+import {setToHistory, getUser} from '../api/customer';
 import UserStore from '../store/UserStore';
 
 type Props = {
@@ -42,22 +42,16 @@ const ConfirmationBookingScreen = ({place, booking, navigation}: Props) => {
   const [promoCode, setPromoCode] = useState<Promo>();
 
   const {handleModal} = useContext(ModalContext);
-  
 
   const showPromotionalCodeModal = async () => {
     showPromotionalCode(true);
-
-    
   };
 
-  const updatePlace = (placePromo:number,promo?:Promo) => {
-    
-    setPlace({...placeBook , price:placePromo})  
-    setBooking({...bookPromo, price:(placePromo*bookPromo.duration)})
-    setPromoCode(promo)
-  }
- 
-
+  const updatePlace = (placePromo: number, promo?: Promo) => {
+    setPlace({...placeBook, price: placePromo});
+    setBooking({...bookPromo, price: placePromo * bookPromo.duration});
+    setPromoCode(promo);
+  };
 
   const fees = 0.2; // TODO :change for a website value
   const tva = 0.2; // TODO :change for a website value
@@ -69,10 +63,9 @@ const ConfirmationBookingScreen = ({place, booking, navigation}: Props) => {
   const priceTTC = priceHT + priceFee + priceTVA;
 
   const onBookPress = async (paymentIntent: any) => {
-
     await setToHistory(promoCode);
-    UserStore.updateUser(await getUser())
-    bookPromo.price = parseFloat( priceTTC.toFixed(2)); 
+    UserStore.updateUser(await getUser());
+    bookPromo.price = parseFloat(priceTTC.toFixed(2));
     await bookPlace(placeBook, bookPromo, paymentIntent.id);
     setPaymentSheetEnabled(false);
     handleModal();
@@ -142,12 +135,11 @@ const ConfirmationBookingScreen = ({place, booking, navigation}: Props) => {
               </View>
             </TouchableWithoutFeedback>*/}
             <View style={styles.flex} />
-            <TouchableOpacity
-              onPress={() => showPromotionalCodeModal()}>
+            <TouchableOpacity onPress={() => showPromotionalCodeModal()}>
               <Text style={styles.title}>
                 {i18n.t('confirmation_booking_promotionnal_code')}
               </Text>
-            </TouchableOpacity> 
+            </TouchableOpacity>
           </View>
           {promotionalCode && (
             <View style={styles.row}>
@@ -177,20 +169,13 @@ const ConfirmationBookingScreen = ({place, booking, navigation}: Props) => {
             {bookPromo.duration && (
               <Text style={styles.value}>{priceHT.toFixed(2)}€</Text>
             )}
-            
-          </View>{
-            promoCode && 
-            <View style={styles.paymentRow}>
-            <Text style={styles.keyBold}>
-              {promoCode.name}
-            </Text>
-              <Text style={styles.value}>{promoCode.value}%</Text>
-            
-            
           </View>
-
-          }
-         
+          {promoCode && (
+            <View style={styles.paymentRow}>
+              <Text style={styles.keyBold}>{promoCode.name}</Text>
+              <Text style={styles.value}>{promoCode.value}%</Text>
+            </View>
+          )}
           <View style={styles.border} />
           <View style={styles.paymentRow}>
             <Text style={styles.key}>
@@ -235,7 +220,6 @@ const ConfirmationBookingScreen = ({place, booking, navigation}: Props) => {
           <PaymentModal
             onTouchOutside={() => setPaymentSheetEnabled(false)}
             onBookPress={onBookPress}
-
             bookingPrice={parseFloat(priceTTC.toFixed(2))}
           />
         }
@@ -246,15 +230,14 @@ const ConfirmationBookingScreen = ({place, booking, navigation}: Props) => {
         visible={promotionalCode}
         child={
           <BookingPromoScreen
-          place={place}
-          onPromoSelected={updatePlace}
-          navigation={navigation}
-          promo={promoCode}
-
+            place={place}
+            onPromoSelected={updatePlace}
+            navigation={navigation}
+            promo={promoCode}
           />
         }
         handleModal={() => showPromotionalCode(false)}
-      />  
+      />
     </View>
   );
 };

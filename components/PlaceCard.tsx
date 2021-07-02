@@ -42,8 +42,7 @@ const PlaceCard = (props: Props) => {
             color={Colors.primary}
             style={styles.locationIcon}
           />
-          {/* <Text style={styles.location}>{place.location.city}</Text> */}
-          <Text style={styles.location}>city</Text>
+          <Text style={styles.location}>{place.location.city}</Text>
         </View>
         <View style={styles.row}>
           <Rating

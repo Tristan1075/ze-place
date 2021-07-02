@@ -42,7 +42,6 @@ const BankAccountScreen = () => {
   useEffect(() => {
     getConnectedAccount(UserStore.user.stripeAccount)
       .then((account) => {
-        console.log(account);
         setAccount(account);
         setScreenFetching(false);
       })

@@ -85,8 +85,7 @@ const HomeScreen = (props: Props) => {
           ),
         });
       }
-    } catch (err) {
-    }
+    } catch (err) {}
   };
 
   const handleSeeAnnouncesPress = (filter: FilterForm) => {
@@ -95,6 +94,7 @@ const HomeScreen = (props: Props) => {
   };
 
   const handleFavoritePress = async (p: Place) => {
+    console.log(p);
     p.isFavorite ? await removeFavorite(p) : await addFavorite(p);
     await init();
   };

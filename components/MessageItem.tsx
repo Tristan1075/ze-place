@@ -1,6 +1,7 @@
 import React from 'react';
 import {Text, StyleSheet, View, Image, TouchableOpacity} from 'react-native';
 import Colors from '../constants/Colors';
+import UserStore from '../store/UserStore';
 import {Conversation} from '../types';
 
 type Props = {
@@ -10,13 +11,18 @@ type Props = {
 
 const MessageItem = (props: Props) => {
   const {conversation, onConversationPress} = props;
-  const time = new Date(conversation.lastMessage.created_at);
+  const time =
+    conversation.lastMessage && new Date(conversation.lastMessage.created_at);
   return (
     <TouchableOpacity style={styles.container} onPress={onConversationPress}>
       <View style={styles.container}>
         <Image source={{uri: conversation.userAvatar}} style={styles.image} />
         <View>
-          <Text style={styles.from}>{conversation.userName}</Text>
+          <Text style={styles.from}>
+            {conversation?.userId == UserStore.user._id
+              ? conversation?.ownerName
+              : conversation?.userName}
+          </Text>
           {conversation.lastMessage && (
             <Text style={styles.lastMessage}>
               {conversation.lastMessage.text}

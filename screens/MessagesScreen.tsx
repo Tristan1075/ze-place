@@ -9,21 +9,21 @@ import {
 import {StackNavigationProp} from '@react-navigation/stack';
 
 import Header from '../components/Header';
-import {MessagesParamList, Conversation, Place} from '../types';
+import {MessageTab, Conversation} from '../types';
 import {senders} from '../mocks';
 import MessageItem from '../components/MessageItem';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
-import {getConversationByPlace} from '../api/conversations';
+import {
+  getConversationByPlace,
+  getConversationByUser,
+} from '../api/conversations';
 import {useState} from 'react';
 import {useRoute} from '@react-navigation/native';
 import UserStore from '../store/UserStore';
 import EmptyBloc from '../components/EmptyBloc';
 
-type MessagesScreenNavigationProp = StackNavigationProp<
-  MessagesParamList,
-  'Messages'
->;
+type MessagesScreenNavigationProp = StackNavigationProp<MessageTab, 'Messages'>;
 
 type Props = {
   navigation: MessagesScreenNavigationProp;
@@ -31,20 +31,25 @@ type Props = {
 
 const MessagesScreen = (props: Props) => {
   const {navigation} = props;
-  const route = useRoute<ConversationScreenNavigationProp>();
-  const place: Place = route.params.place;
+  const route = useRoute<MessagesScreenNavigationProp>();
 
   const [conversations, setConversations] = useState<Conversation[]>();
 
   const init = useCallback(async () => {
-    const conversation: Conversation[] = await getConversationByPlace(
-      place._id,
+    const conversation: Conversation[] = await getConversationByUser(
+      UserStore.user._id,
     );
-    conversation.sort(function (o1, o2) {
-      return o1.created_at ? 1 : o2.created_at ? -1 : 0;
-    });
-
     if (conversation) {
+      conversation.sort((o1: Conversation, o2: Conversation) => {
+        if (!o1.lastMessage.created_at || !o2.lastMessage.created_at) {
+          return;
+        }
+        return o1.lastMessage && o1.lastMessage.created_at
+          ? -1
+          : o2.lastMessage && o2.lastMessage.created_at
+          ? 1
+          : 0;
+      });
       setConversations(conversation);
     }
   }, []);
@@ -54,18 +59,20 @@ const MessagesScreen = (props: Props) => {
   }, [init, navigation]);
 
   const handleMessagePress = (item: Conversation) => {
-    navigation.navigate('Conversation', {
-      conversation: {
-        placeId: place._id,
-        ownerId: UserStore.user._id,
-        userId: item.userId,
-        conversation: item,
-      },
-    });
+    if (item) {
+      navigation.navigate('Conversation', {
+        conversation: {
+          placeId: item.placeId,
+          ownerId: UserStore.user._id,
+          userId: item.userId,
+          conversation: item,
+        },
+      });
+    }
   };
 
   const renderItem = ({item, index}: {item: Conversation; index: number}) => (
-    <View>
+    <View key={index}>
       <MessageItem
         conversation={item}
         onConversationPress={() => handleMessagePress(item)}
@@ -76,13 +83,14 @@ const MessagesScreen = (props: Props) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header type="back" showProfil={true} />
+      <Header type={route.params.tab ? 'menu': 'back'} showProfil={true} />
       <View style={styles.content}>
         {conversations && conversations.length > 0 ? (
           <FlatList
             data={conversations}
             renderItem={renderItem}
             keyExtractor={(item) => item.id}
+            showsVerticalScrollIndicator={false}
           />
         ) : (
           <EmptyBloc

@@ -1,4 +1,4 @@
-import {Ionicons} from '@expo/vector-icons';
+import {Ionicons, MaterialCommunityIcons} from '@expo/vector-icons';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createStackNavigator} from '@react-navigation/stack';
 import * as React from 'react';
@@ -8,6 +8,7 @@ import {
   BottomTabParamList,
   HomeParamList,
   FavoritesTab,
+  MessageTab,
 } from '../types';
 import Colors from '../constants/Colors';
 
@@ -41,6 +42,19 @@ export default function BottomTabNavigator() {
         options={{
           tabBarIcon: ({color}) => (
             <Ionicons name="list" color={color} size={30} />
+          ),
+        }}
+      />
+      <BottomTab.Screen
+        name="Messages"
+        component={MessageNavigator}
+        options={{
+          tabBarIcon: ({color}) => (
+            <MaterialCommunityIcons
+              name="message-processing-outline"
+              color={color}
+              size={30}
+            />
           ),
         }}
       />
@@ -92,6 +106,21 @@ const BookingNavigator = () => {
       <BookingStack.Screen name="Messages" component={MessagesScreen} />
       <HomeStack.Screen name="CreatePlace" component={CreatePlaceScreen} />
     </BookingStack.Navigator>
+  );
+};
+
+const MessageStack = createStackNavigator<MessageTab>();
+
+const MessageNavigator = () => {
+  return (
+    <MessageStack.Navigator screenOptions={{headerShown: false}}>
+      <MessageStack.Screen
+        name="Messages"
+        component={MessagesScreen}
+        initialParams={{tab: true}}
+      />
+      <MessageStack.Screen name="Conversation" component={ConversationScreen} />
+    </MessageStack.Navigator>
   );
 };
 
