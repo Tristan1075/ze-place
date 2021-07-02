@@ -53,7 +53,6 @@ const ConversationScreen = (props: Props) => {
       conversationParams.userId,
       conversationParams.ownerId,
     ).then(async (conversationResult) => {
-      console.log(conversationResult);
       if (conversationResult) {
         getMessageByConversation(conversationResult?._id).then((m) => {
           const messagesMap = m.map((message) => ({

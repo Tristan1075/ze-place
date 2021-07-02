@@ -46,7 +46,6 @@ const SigninScreen = (props: Props) => {
       );
     } catch (e) {
       setError(true);
-      console.log(e);
     }
   };
 

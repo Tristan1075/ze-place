@@ -250,10 +250,8 @@ const SignupScreen = (props: Props) => {
   };
 
   const checkMail = async (email: string) => {
-    console.log(email);
     if (isEmail(email)) {
       const emailExist = await getUserByEmail(email);
-      console.log(emailExist);
       if (emailExist) {
         setErrors({...errors, email: i18n.t('sign_up_user_exist')});
       }
@@ -291,13 +289,13 @@ const SignupScreen = (props: Props) => {
               value={form.gender}
               placeholder={i18n.t('sign_up_gender_placeholder')}
               isEditable={false}
-              onPress={() => setGenderVisible(true)}
+              onPress={() => setGenderVisible(true)
+              }
               suffix={
                 <Ionicons name="chevron-down" size={20} color={Colors.dark} />
               }
               error={errors.gender}
             />
-
             <SimpleInput
               onChange={() => setErrors({...errors, firstname: ''})}
               onChangeText={(v) => setForm({...form, firstname: v})}

@@ -108,6 +108,7 @@ const PromoScreen = (props: Props) => {
                   title={e.name}
                   subtitle={true}
                   description={e.end_date.slice(0, 10)}></TitleWithDescription>
+                  <Text>{e.value}%</Text>
               </TouchableOpacity>
             ))}
         </View>
@@ -120,6 +121,7 @@ const PromoScreen = (props: Props) => {
                   title={e.name}
                   subtitle={true}
                   description={e.end_date.slice(0, 10)}></TitleWithDescription>
+                  <Text>{e.value}%</Text>
               </TouchableOpacity>
             ))}
         </View>
@@ -160,9 +162,8 @@ const styles = StyleSheet.create({
     marginTop: 60,
   },
   codeCard: {
-    flexDirection: 'row',
     backgroundColor: Colors.white,
-    alignItems: 'flex-start',
+   textAlign:'center',
     borderRadius: 15,
     paddingVertical: 15,
     paddingHorizontal: 20,
