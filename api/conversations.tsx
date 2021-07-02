@@ -12,7 +12,6 @@ export const getConversationById = async (id: string) => {
       return response.data;
     })
     .catch((err) => {
-      console.log(err);
       return conversation;
     });
 };
@@ -38,7 +37,6 @@ export const createConversation = async (
       },
     )
     .then((response: AxiosResponse<any>) => {
-      console.log(response.data);
       return response.data.conversation;
     })
     .catch((err) => {
@@ -121,7 +119,6 @@ export const sendMessageApi = async (
 };
 
 export const getMessageByConversation = async (conversationId: string) => {
-  console.log(conversationId);
   const token = await SecureStore.getItemAsync('access-token');
   return await axios
     .get(`${API_URL}/messages/conversation/${conversationId}`, {

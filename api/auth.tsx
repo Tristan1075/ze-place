@@ -100,6 +100,5 @@ export const uploadID = async (IDRecto: string, IDVerso: string) => {
       return response.data;
     })
     .catch((error) => {
-      console.log('error from image :', error);
     });
 };

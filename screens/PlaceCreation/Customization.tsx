@@ -106,7 +106,6 @@ const Customization = (props: Props) => {
         navigation.dispatch(StackActions.popToTop());
       }
     } catch (err) {
-      console.log(err);
     }
   };
 

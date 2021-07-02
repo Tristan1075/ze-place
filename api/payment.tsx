@@ -18,7 +18,6 @@ export const createToken = async () => {
       return response.data;
     })
     .catch((err) => {
-      console.log(err);
       return Promise.reject(err);
     });
 };
@@ -47,7 +46,6 @@ export const createPaymentIntent = async (
       return response.data;
     })
     .catch((err) => {
-      console.log(err);
       return Promise.reject(err);
     });
 };
@@ -64,7 +62,6 @@ export const getCustomer = async (customerId: string) => {
       return response.data;
     })
     .catch((err) => {
-      console.log(err);
       return Promise.reject(err);
     });
 };
@@ -81,7 +78,6 @@ export const getPaymentMethods = async (customerId: string) => {
       return response.data;
     })
     .catch((err) => {
-      console.log(err);
       return Promise.reject(err);
     });
 };
@@ -108,7 +104,6 @@ export const addPaymentMethod = async (
       return response.data;
     })
     .catch((err) => {
-      console.log(err);
       return Promise.reject(err);
     });
 };
@@ -135,7 +130,6 @@ export const updatePaymentMethod = async (
       return response.data;
     })
     .catch((err) => {
-      console.log(err);
       return Promise.reject(err);
     });
 };
@@ -162,7 +156,6 @@ export const removePaymentMethod = async (
       return response.data;
     })
     .catch((err) => {
-      console.log(err);
       return Promise.reject(err);
     });
 };
@@ -320,7 +313,6 @@ export const initSetupIntent = async (
       return response.data;
     })
     .catch((err) => {
-      console.log(err);
       return Promise.reject(err);
     });
 };

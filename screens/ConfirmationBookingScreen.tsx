@@ -15,12 +15,15 @@ import Button from '../components/Button';
 import SimpleInput from '../components/SimpleInput';
 import TitleWithDescription from '../components/TitleWithDescription';
 import Colors from '../constants/Colors';
-import {Booking, Place} from '../types';
+import {Booking, Place, Promo} from '../types';
 import {ModalContext} from '../providers/modalContext';
 import {bookPlace} from '../api/bookings';
 import Modal from '../components/Modal';
 import Layout from '../constants/Layout';
 import PaymentModal from '../components/PaymentModal';
+import BookingPromoScreen from './BookingPromoScreen';
+import { setToHistory, getUser } from '../api/customer';
+import UserStore from '../store/UserStore';
 
 type Props = {
   place: Place;
@@ -34,20 +37,43 @@ const ConfirmationBookingScreen = ({place, booking, navigation}: Props) => {
   const [paymentSheetEnabled, setPaymentSheetEnabled] = useState(false);
   const [activePaymentMethod, setActivePaymentMethod] = useState(0);
   const [promotionalCode, showPromotionalCode] = useState<boolean>(false);
+  const [placeBook, setPlace] = useState<Place>(place);
+  const [bookPromo, setBooking] = useState<Booking>(booking);
+  const [promoCode, setPromoCode] = useState<Promo>();
+
   const {handleModal} = useContext(ModalContext);
+  
+
+  const showPromotionalCodeModal = async () => {
+    showPromotionalCode(true);
+
+    
+  };
+
+  const updatePlace = (placePromo:number,promo?:Promo) => {
+    
+    setPlace({...placeBook , price:placePromo})  
+    setBooking({...bookPromo, price:(placePromo*bookPromo.duration)})
+    setPromoCode(promo)
+  }
+ 
+
 
   const fees = 0.2; // TODO :change for a website value
   const tva = 0.2; // TODO :change for a website value
   const priceHT: number = parseFloat(
-    (booking.duration * place.price).toFixed(2),
+    (bookPromo.duration * placeBook.price).toFixed(2),
   );
   const priceFee = priceHT * fees;
   const priceTVA = (priceHT + priceFee) * tva;
   const priceTTC = priceHT + priceFee + priceTVA;
 
   const onBookPress = async (paymentIntent: any) => {
-    booking.price = priceTTC;
-    await bookPlace(place, booking, paymentIntent.id);
+
+    await setToHistory(promoCode);
+    UserStore.updateUser(await getUser())
+    bookPromo.price = parseFloat( priceTTC.toFixed(2)); 
+    await bookPlace(placeBook, bookPromo, paymentIntent.id);
     setPaymentSheetEnabled(false);
     handleModal();
     navigation.navigate('BookingAndPlaces');
@@ -59,18 +85,18 @@ const ConfirmationBookingScreen = ({place, booking, navigation}: Props) => {
         <Image source={creditCard} style={styles.creditCard} />
         <View style={styles.content}>
           <TitleWithDescription
-            title={place.title}
+            title={placeBook.title}
             subtitle={true}
-            description={`${place.location.city}, ${place.location.postalCode} ${place.location.country}`}
+            description={`${placeBook.location.city}, ${placeBook.location.postalCode} ${placeBook.location.country}`}
           />
           <Text style={styles.title}>
             {i18n.t('confirmation_booking_arrival')}
           </Text>
-          <Text style={styles.description}>{booking.startDate}</Text>
+          <Text style={styles.description}>{bookPromo.startDate}</Text>
           <Text style={styles.title}>
             {i18n.t('confirmation_booking_departure')}
           </Text>
-          <Text style={styles.description}>{booking.endDate}</Text>
+          <Text style={styles.description}>{bookPromo.endDate}</Text>
         </View>
         <View style={styles.paymentBloc}>
           <TitleWithDescription
@@ -114,14 +140,14 @@ const ConfirmationBookingScreen = ({place, booking, navigation}: Props) => {
                   style={styles.googleIcon}
                 />
               </View>
-            </TouchableWithoutFeedback>
+            </TouchableWithoutFeedback>*/}
             <View style={styles.flex} />
             <TouchableOpacity
-              onPress={() => showPromotionalCode(!promotionalCode)}>
+              onPress={() => showPromotionalCodeModal()}>
               <Text style={styles.title}>
                 {i18n.t('confirmation_booking_promotionnal_code')}
               </Text>
-            </TouchableOpacity> */}
+            </TouchableOpacity> 
           </View>
           {promotionalCode && (
             <View style={styles.row}>
@@ -142,21 +168,36 @@ const ConfirmationBookingScreen = ({place, booking, navigation}: Props) => {
           )}
           <View style={styles.paymentRow}>
             <Text style={styles.keyBold}>
-              {booking.duration}{' '}
-              {booking.duration && booking.duration > 1
+              {bookPromo.duration}{' '}
+              {bookPromo.duration && bookPromo.duration > 1
                 ? i18n.t('confirmation_booking_days')
                 : i18n.t('confirmation_booking_day')}
             </Text>
-            {booking.duration && (
+
+            {bookPromo.duration && (
               <Text style={styles.value}>{priceHT.toFixed(2)}€</Text>
             )}
+            
+          </View>{
+            promoCode && 
+            <View style={styles.paymentRow}>
+            <Text style={styles.keyBold}>
+              {promoCode.name}
+            </Text>
+              <Text style={styles.value}>{promoCode.value}%</Text>
+            
+            
           </View>
+
+          }
+         
           <View style={styles.border} />
           <View style={styles.paymentRow}>
             <Text style={styles.key}>
               {i18n.t('confirmation_booking_servicing_charge')}
             </Text>
-            {booking.duration && (
+
+            {bookPromo.duration && (
               <Text style={styles.value}>{priceFee.toFixed(2)}€</Text>
             )}
           </View>
@@ -172,7 +213,8 @@ const ConfirmationBookingScreen = ({place, booking, navigation}: Props) => {
               <Text style={styles.total}>
                 {i18n.t('confirmation_booking_total')}{' '}
               </Text>
-              {booking.duration && (
+
+              {bookPromo.duration && (
                 <Text style={styles.total}>{priceTTC.toFixed(2)}€</Text>
               )}
             </View>
@@ -193,11 +235,26 @@ const ConfirmationBookingScreen = ({place, booking, navigation}: Props) => {
           <PaymentModal
             onTouchOutside={() => setPaymentSheetEnabled(false)}
             onBookPress={onBookPress}
+
             bookingPrice={parseFloat(priceTTC.toFixed(2))}
           />
         }
         handleModal={() => setPaymentSheetEnabled(false)}
       />
+
+      <Modal
+        visible={promotionalCode}
+        child={
+          <BookingPromoScreen
+          place={place}
+          onPromoSelected={updatePlace}
+          navigation={navigation}
+          promo={promoCode}
+
+          />
+        }
+        handleModal={() => showPromotionalCode(false)}
+      />  
     </View>
   );
 };
