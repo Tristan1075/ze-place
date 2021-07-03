@@ -1,6 +1,6 @@
 import axios, {AxiosResponse} from 'axios';
 import {API_URL} from '../env';
-import {Booking, BookingTab, Place} from '../types';
+import {Booking, BookingTab, Place, Charges} from '../types';
 import * as SecureStore from 'expo-secure-store';
 
 export const bookPlace = async (
@@ -43,6 +43,33 @@ export const getBookingByUser = async (): Promise<Booking[]> => {
     })
     .then((response: AxiosResponse<any>) => {
       return response.data.bookings;
+    })
+    .catch((err) => {
+      return Promise.reject(err);
+    });
+};
+
+export const getTVA = async (): Promise<Charges> => {
+  const token = await SecureStore.getItemAsync('access-token');
+  return await axios
+    .get(`${API_URL}/charges/getTVA`, {
+      
+    })
+    .then((response: AxiosResponse<any>) => {
+      return response.data.charges;
+    })
+    .catch((err) => {
+      return Promise.reject(err);
+    });
+};
+export const getService = async (): Promise<Charges> => {
+  const token = await SecureStore.getItemAsync('access-token');
+  return await axios
+    .get(`${API_URL}/charges/getService`, {
+      
+    })
+    .then((response: AxiosResponse<any>) => {
+      return response.data.charges;
     })
     .catch((err) => {
       return Promise.reject(err);

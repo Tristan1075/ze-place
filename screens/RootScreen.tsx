@@ -48,7 +48,7 @@ const RootScreen = (props: Props) => {
     <ImageBackground
       source={{
         uri:
-          'https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500',
+          'https://ze-place.s3.eu-west-3.amazonaws.com/backgroundRoot.jpeg',
       }}
       style={styles.container}>
       <Text style={styles.title}>{i18n.t('root_title')}</Text>

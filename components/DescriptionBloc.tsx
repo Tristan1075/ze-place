@@ -28,7 +28,7 @@ const DescriptionBloc = (props: Props) => {
           {i18n.t('component_description_bloc_see_more')}
         </Text>
         <Image
-          source={require('../assets/images/home_cover.jpeg')}
+          source={{uri:'https://ze-place.s3.eu-west-3.amazonaws.com/backgroundPlace.jpeg'}}
           style={styles.image}
         />
       </View>
@@ -42,11 +42,12 @@ const styles = StyleSheet.create({
     margin: Layout.padding,
     paddingTop: Layout.padding,
     justifyContent: 'center',
-    alignItems: 'center',
+    //alignItems: 'center',
     borderRadius: 20,
     overflow: 'hidden',
   },
   title: {
+    alignSelf:"center",
     color: Colors.white,
     fontFamily: 'oswald-bold',
     fontSize: 24,
@@ -56,6 +57,7 @@ const styles = StyleSheet.create({
     fontFamily: 'poppins',
     paddingHorizontal: Layout.padding,
     paddingTop: 10,
+    alignSelf:"center",
     paddingBottom: Layout.padding,
     textAlign: 'center',
   },
@@ -69,6 +71,7 @@ const styles = StyleSheet.create({
     fontFamily: 'poppins-semiBold',
     backgroundColor: Colors.white,
     padding: 10,
+    alignSelf:"center",
     borderRadius: 10,
     overflow: 'hidden',
   },

@@ -168,6 +168,11 @@ export type SigninForm = {
   email: string;
   password: string;
 };
+export type Charges = {
+  name: string;
+  id: string;
+  value:number;
+};
 
 export type SignupForm = {
   gender: string;

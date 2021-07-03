@@ -1,5 +1,5 @@
 import {AntDesign} from '@expo/vector-icons';
-import React, {useContext, useState} from 'react';
+import React, {useContext, useState, useEffect} from 'react';
 import {
   View,
   StyleSheet,
@@ -15,9 +15,9 @@ import Button from '../components/Button';
 import SimpleInput from '../components/SimpleInput';
 import TitleWithDescription from '../components/TitleWithDescription';
 import Colors from '../constants/Colors';
-import {Booking, Place, Promo} from '../types';
+import {Booking, Place, Promo, Charges} from '../types';
 import {ModalContext} from '../providers/modalContext';
-import {bookPlace} from '../api/bookings';
+import {bookPlace, getTVA, getService} from '../api/bookings';
 import Modal from '../components/Modal';
 import Layout from '../constants/Layout';
 import PaymentModal from '../components/PaymentModal';
@@ -40,8 +40,23 @@ const ConfirmationBookingScreen = ({place, booking, navigation}: Props) => {
   const [placeBook, setPlace] = useState<Place>(place);
   const [bookPromo, setBooking] = useState<Booking>(booking);
   const [promoCode, setPromoCode] = useState<Promo>();
+  const [TVA, setTVA] = useState<Charges>();
+  const [Services, setService] = useState<Charges>();
+
+
 
   const {handleModal} = useContext(ModalContext);
+
+
+  useEffect(() => {
+    const getTVACharges = async () =>
+      setTVA(await getTVA());
+    const getServiceCharges = async () =>
+      setService(await getService());
+
+      getTVACharges();
+    getServiceCharges();
+  }, []);
 
   const showPromotionalCodeModal = async () => {
     showPromotionalCode(true);
@@ -53,8 +68,8 @@ const ConfirmationBookingScreen = ({place, booking, navigation}: Props) => {
     setPromoCode(promo);
   };
 
-  const fees = 0.2; // TODO :change for a website value
-  const tva = 0.2; // TODO :change for a website value
+  const fees = TVA ? TVA.value/100 : 0.3; 
+  const tva = Services ? Services.value/100 : 0.2; 
   const priceHT: number = parseFloat(
     (bookPromo.duration * placeBook.price).toFixed(2),
   );
