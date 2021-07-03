@@ -189,7 +189,7 @@ const PlaceDetailScreen = () => {
                   }>
                   <AntDesign name="message1" style={styles.message} size={20} />
                   <Text style={styles.description}>
-                    Send a message to owner
+                    {i18n.t('place_detail_send_message')}
                   </Text>
                 </TouchableOpacity>
               )}
@@ -395,7 +395,7 @@ const PlaceDetailScreen = () => {
         <Text style={styles.chooseBannerPrice}>
           {UserStore.user._id === place?.ownerId ? (
             <Text style={styles.updatePlace} onPress={handleModifyPress}>
-              Modifier cette annonce
+              {i18n.t('place_detail_update_place')}
             </Text>
           ) : userBooking.length > 0 &&
             userBooking.find((booking) => !booking.isPast) ? (
@@ -412,7 +412,7 @@ const PlaceDetailScreen = () => {
               ? i18n.t('place_detail_see_bookings')
               : userBooking.length > 0 &&
                 Boolean(!userBooking.find((booking) => booking.isPast))
-              ? 'Ma réservation'
+              ? i18n.t('place_detail_booking')
               : i18n.t('place_detail_book')
           }
           onPress={

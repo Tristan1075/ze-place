@@ -103,9 +103,9 @@ const PaymentMethods = () => {
         contentContainerStyle={styles.scrollView}>
         <View style={styles.contentContainer}>
           <TitleWithDescription
-            title="Moyens de paiments"
+            title={i18n.t('payement_methods_title')}
             style={styles.title}
-            description="Retrouvez l'ensemble de vos cartes, vous pouvez choisir votre carte par défaut"
+            description={i18n.t('payement_methods_description')}
           />
           <Carousel
             contentContainerCustomStyle={{paddingLeft: Layout.padding}}
@@ -123,14 +123,18 @@ const PaymentMethods = () => {
               {paymentMethods.length > 0 &&
                 !paymentMethods[cardIndex].isFavorite && (
                   <TouchableOpacity onPress={handleUpdatePaymentMethodPress}>
-                    <Text style={styles.updateButton}>Update default card</Text>
+                    <Text style={styles.updateButton}>
+                      {i18n.t('payement_methods_update')}
+                    </Text>
                   </TouchableOpacity>
                 )}
               <View style={styles.separator} />
               {paymentMethods.length > 0 &&
                 !paymentMethods[cardIndex].isFavorite && (
                   <TouchableOpacity onPress={handleRemovePaymentMethodPress}>
-                    <Text style={styles.removeButton}>Remove card</Text>
+                    <Text style={styles.removeButton}>
+                      {i18n.t('payement_methods_delete')}
+                    </Text>
                   </TouchableOpacity>
                 )}
             </View>

@@ -77,7 +77,7 @@ export default {
   //my_place
   my_place_title: 'Espace actifs',
   my_place_description: 'retrouvez ici vos espaces actifs à louer',
-  my_place_no_place:`Vous n'avez pas d'espace à louer pour le moment`,
+  my_place_no_place: `Vous n'avez pas d'espace à louer pour le moment`,
 
   //search_filter
   search_filter_type: 'Type',
@@ -114,6 +114,36 @@ export default {
   place_detail_per_day: 'Par jour',
   place_detail_see_bookings: 'Voir les réservation',
   place_detail_book: 'Réserver',
+  place_detail_send_message: 'Contacter le propriétaire',
+  place_detail_update_place: 'Modifier cette annonce',
+  place_detail_booking: 'Ma réservation',
+
+  //place_list_
+  place_list_description: 'Trouvez des espaces disponibles à louer',
+  place_list_see_more: 'En savoir plus',
+
+  //search_place_type
+  search_place_type_title: 'Choisissez un type pour votre place',
+  search_place_type_description: `Ce type permet aux utilisateurs de trouver exactement l'endroit dont ils ont besoin.`,
+
+  //user_booking
+  user_booking_send_message: 'Envoyer un message',
+  user_booking_reservations: 'Réservations',
+  user_booking_no_data: `Vous n'avez pas de réservations pour le moment ...`,
+  user_booking_history: 'Historique',
+  user_booking_confirm_action: 'Êtes-vous sûr ?',
+  user_booking_confirm_action_description: `Cette action est irréversible, vous ne pourrez pas revenir en arrière !`,
+
+  //review
+  review_title: 'Avis',
+
+  //write_review
+  write_review_title: 'Nom : ',
+  write_review_content_placeholder: `Entrer le titre de l'avis`,
+  write_review_description_title: 'Description : ',
+  write_review_description_placeholder: 'Laissez votre avis',
+  write_review_rate: 'Note',
+  write_review_publish: 'Publier',
 
   //promo_code
   promo_code_validate: 'Valider',
@@ -227,6 +257,30 @@ export default {
   confirmation_booking_servicing_charge: 'Frais de service',
   confirmation_booking_tva: 'TVA 20%',
   confirmation_booking_total: 'TOTAL',
+  confirmation_booking_confirm: 'Confirmer',
+
+  //conversation
+  conversation_type_message: 'Tapez votre message',
+
+  //favorites
+  favorites_description: 'Trouvez ici vos espaces préférés',
+
+  favorites_no_data: `Vous n'avez pas de favoris pour le moment...`,
+
+  //menu
+  menu_promotional_codes: 'Codes promotionnels',
+  menu_report_bug: 'Signaler un bug',
+  menu_payement_methods: 'Mode de paiement',
+  menu_bank_account: 'Comptes bancaires',
+
+  //message
+  message_no_data: `Vous n'avez pas de conversation pour le moment...`,
+
+  //payement_methods
+  payement_methods_title: 'Moyens de paiments',
+  payement_methods_description: `Retrouvez l'ensemble de vos cartes, vous pouvez choisir votre carte par défaut`,
+  payement_methods_update: 'Modifier la carte par défaut',
+  payement_methods_delete: 'Supprimer la carte',
 
   //COMPONENT
 

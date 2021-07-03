@@ -9,6 +9,7 @@ import {getPlaceReview} from '../api/reviews';
 import {Rating} from 'react-native-ratings';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
+import i18n from 'i18n-js';
 
 type RootScreenNavigationProp = StackNavigationProp<HomeParamList, 'Home'>;
 
@@ -31,7 +32,7 @@ const PlaceReviewScreen = (props: Props) => {
         style={styles.scrollView}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.contentScrollView}>
-        <Text style={styles.mainTitle}>Reviews</Text>
+        <Text style={styles.mainTitle}>{i18n.t('review_title')}</Text>
         {reviews &&
           reviews.map((e) => (
             <View style={styles.review}>

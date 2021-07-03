@@ -16,6 +16,7 @@ import {Ionicons} from '@expo/vector-icons';
 import {PlaceType} from '../types';
 import { getPlaceTypes } from '../api/type-features';
 import { getCardType } from '../utils';
+import I18n from 'i18n-js';
 
 type Props = {
   onPlaceTypePress: (type: PlaceType) => void;
@@ -33,17 +34,17 @@ const SelectPlaceTypeScreen = (props: Props) => {
   return (
     <View style={styles.container}>
       <View style={styles.content}>
-        <Text style={styles.title}>Select the type of your place</Text>
+        <Text style={styles.title}>{I18n.t('search_place_type_title')}</Text>
         <Text style={styles.description}>
-          The type permits users to find exactly the place they need.{' '}
+          {I18n.t('search_place_type_description')}{' '}
         </Text>
-        <View style={styles.row}>
+        {/* <View style={styles.row}>
           <SimpleInput
             placeholder="Search a type"
             style={styles.flex}
             suffix={<Ionicons name="search" size={20} color={Colors.gray} />}
           />
-        </View>
+        </View> */}
       </View>
       <FlatGrid
         data={items}

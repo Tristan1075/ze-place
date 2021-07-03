@@ -17,6 +17,7 @@ import TitleWithDescription from '../components/TitleWithDescription';
 import {createReview} from '../api/reviews';
 import Button from '../components/Button';
 import UserStore from '../store/UserStore';
+import I18n from 'i18n-js';
 
 type RootScreenNavigationProp = StackNavigationProp<HomeParamList, 'Home'>;
 
@@ -48,24 +49,26 @@ const WriteReviewScreen = (props: Props) => {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
       <View style={styles.container}>
         <View style={styles.paddingHorizontal}>
-          <TitleWithDescription title="Name" />
+          <TitleWithDescription title={I18n.t('write_review_title')} />
           <SimpleInput
-            placeholder="Enter a title to your review"
+            placeholder={I18n.t('write_review_content_placeholder')}
             type="default"
             onChangeText={(value) =>
               setReviewsForm({...reviewsForm, name: value})
             }
           />
-          <TitleWithDescription title="Description" />
+          <TitleWithDescription
+            title={I18n.t('write_review_description_title')}
+          />
           <SimpleInput
             onChangeText={(v) =>
               setReviewsForm({...reviewsForm, description: v})
             }
-            placeholder="Describe your review"
+            placeholder={I18n.t('write_review_description_placeholder')}
             multiline={true}
             numberOfLines={1}
           />
-          <TitleWithDescription title="Rate" />
+          <TitleWithDescription title={I18n.t('write_review_rate')} />
           <Picker
             selectedValue={reviewsForm.rate}
             onValueChange={(itemValue, itemIndex) =>
@@ -79,7 +82,7 @@ const WriteReviewScreen = (props: Props) => {
           </Picker>
 
           <Button
-            value="Publish Review"
+            value={I18n.t('write_review_publish')}
             onPress={handleReviewPress}
             backgroundColor={Colors.primary}
             textColor={Colors.white}

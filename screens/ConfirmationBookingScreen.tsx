@@ -182,7 +182,7 @@ const ConfirmationBookingScreen = ({place, booking, navigation}: Props) => {
             </View>
             <Button
               onPress={() => setPaymentSheetEnabled(true)}
-              value="Confirm booking"
+              value={i18n.t('confirmation_booking_confirm')}
               backgroundColor={Colors.primary}
               textColor={Colors.white}
             />

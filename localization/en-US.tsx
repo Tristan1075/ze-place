@@ -114,6 +114,38 @@ export default {
   place_detail_per_day: 'Per day',
   place_detail_see_bookings: 'See bookings',
   place_detail_book: 'Book',
+  place_detail_send_message: 'Send a message to owner',
+  place_detail_update_place: 'Update this announce',
+  place_detail_booking: 'My booking',
+
+  //place_list_
+  place_list_description: 'Find some available places to rent',
+  place_list_see_more: 'See more',
+
+  //search_place_type
+  search_place_type_title: 'Select the type of your place',
+  search_place_type_description:
+    'The type permits users to find exactly the place they need.',
+
+  //user_booking
+  user_booking_send_message: 'Send a message',
+  user_booking_reservations: 'Reservations',
+  user_booking_no_data: `You don't have reservations for the moment...`,
+  user_booking_history: 'History',
+  user_booking_confirm_action: 'Confirm your action ?',
+  user_booking_confirm_action_description:
+    'This action is irreversible, you will not be able to go back !',
+
+  //review
+  review_title: 'Review',
+
+  //write_review
+  write_review_title: 'Name : ',
+  write_review_content_placeholder: 'Enter a title to your review',
+  write_review_description_title: 'Description : ',
+  write_review_description_placeholder: 'Describe your review',
+  write_review_rate: 'Rate',
+  write_review_publish: 'Publish Review',
 
   //promo_code
   promo_code_validate: 'Validate',
@@ -227,6 +259,30 @@ export default {
   confirmation_booking_servicing_charge: 'Servicing charge',
   confirmation_booking_tva: 'TVA 20%',
   confirmation_booking_total: 'TOTAL',
+  confirmation_booking_confirm: 'Confirm booking',
+
+  //conversation
+  conversation_type_message: 'Type your message',
+
+  //favorites
+  favorites_description: 'Find your favorite places here',
+  favorites_no_data: `You don't have favorites for the moment...`,
+
+  //menu
+  menu_promotional_codes: 'Promotional codes',
+  menu_report_bug: 'Report a bug',
+  menu_payement_methods: 'Payment methods',
+  menu_bank_account: 'Bank account',
+
+  //message
+  message_no_data: `You don't have conversations for the moment...`,
+
+  //payement_methods
+  payement_methods_title: 'Payement methods',
+  payement_methods_description:
+    'Find all your cards, you can choose your default card',
+  payement_methods_update: 'Update default card',
+  payement_methods_delete: 'Remove card',
 
   //COMPONENT
 

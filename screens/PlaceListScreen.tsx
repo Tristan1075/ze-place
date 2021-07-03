@@ -76,8 +76,8 @@ const PlaceList = () => {
       <View style={styles.content}>
         <TitleWithDescription
           title={i18n.t('search_place_title')}
-          description="Find nearby you the available places to rent"
-          actionText="See more"
+          description={i18n.t('place_list_description')}
+          actionText={i18n.t('place_list_see_more')}
           actionIcon="list"
           subtitle={true}
           onActionPress={showFilterModal}

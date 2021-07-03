@@ -19,7 +19,6 @@ import {addFavorite, getUser, removeFavorite} from '../api/customer';
 import UserStore from '../store/UserStore';
 import TitleWithDescription from '../components/TitleWithDescription';
 import EmptyBloc from '../components/EmptyBloc';
-
 type MessagesScreenNavigationProp = StackNavigationProp<
   MessagesParamList,
   'Messages'
@@ -69,7 +68,7 @@ const FavoritesScreen = (props: Props) => {
         <TitleWithDescription
           title="Favorites"
           subtitle={true}
-          description="Find nearby you the available places to rent"
+          description={i18n.t('favorites_description')}
         />
         {user.favorites && user.favorites.length > 0 ? (
           <FlatList
@@ -82,7 +81,7 @@ const FavoritesScreen = (props: Props) => {
           <EmptyBloc
             size={80}
             image={require('../assets/images/sad.png')}
-            title="You don't have favorites for the moment..."
+            title={i18n.t('favorites_no_data')}
           />
         )}
       </View>

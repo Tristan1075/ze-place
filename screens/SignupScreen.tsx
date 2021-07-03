@@ -58,7 +58,7 @@ import {ModalContext} from '../providers/modalContext';
 import SearchPlaceScreen from './SearchPlaceScreen';
 import UserStore from '../store/UserStore';
 import CameraScreen from './CameraScreen';
-import { getUserByEmail } from '../api/customer';
+import {getUserByEmail} from '../api/customer';
 const input: SignupForm = {
   gender: '',
   avatar: '',
@@ -289,8 +289,7 @@ const SignupScreen = (props: Props) => {
               value={form.gender}
               placeholder={i18n.t('sign_up_gender_placeholder')}
               isEditable={false}
-              onPress={() => setGenderVisible(true)
-              }
+              onPress={() => setGenderVisible(true)}
               suffix={
                 <Ionicons name="chevron-down" size={20} color={Colors.dark} />
               }

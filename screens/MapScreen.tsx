@@ -80,7 +80,7 @@ const MapScreen = ({initialCoords, onItemPress}: Props) => {
     });
     setActiveIndex(index);
     carouselRef.snapToItem(index);
-  }
+  };
 
   return (
     <View style={styles.flex}>

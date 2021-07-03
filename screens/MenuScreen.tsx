@@ -46,19 +46,19 @@ const MenuScreen = (props: Props) => {
 
   const menu = [
     {
-      title: 'Promotional codes',
+      title: i18n.t('menu_promotional_codes'),
       onPress: () => navigation.navigate('Promo'),
     },
     {
-      title: 'Report a bug',
+      title: i18n.t('menu_report_bug'),
       onPress: () => navigation.navigate('BugTicket'),
     },
     {
-      title: 'Payment methods',
+      title: i18n.t('menu_payement_methods'),
       onPress: () => navigation.navigate('PaymentMethods'),
     },
     {
-      title: 'Bank account',
+      title: i18n.t('menu_bank_account'),
       onPress: () =>
         handleModal({
           child: <BankAccountScreen />,

@@ -7,7 +7,7 @@ import {
   TextInput,
 } from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
-
+import i18n from 'i18n-js';
 import Header from '../components/Header';
 import {MessageTab, Conversation} from '../types';
 import {senders} from '../mocks';
@@ -95,8 +95,8 @@ const MessagesScreen = (props: Props) => {
         ) : (
           <EmptyBloc
             size={80}
-            image={require('../assets/images/sad.png')}
-            title="You don't have conversations for the moment..."
+            image={require('../assets/images/impatient.png')}
+            title={i18n.t('message_no_data')}
           />
         )}
       </View>

@@ -1,5 +1,6 @@
 import {Feather} from '@expo/vector-icons';
 import {RouteProp, useRoute} from '@react-navigation/native';
+import I18n from 'i18n-js';
 import React, {useCallback, useEffect, useState} from 'react';
 import {
   View,
@@ -115,7 +116,9 @@ const UserBookingsScreen = ({navigation}) => {
                 style={styles.rate}
               />
               <View style={styles.row}>
-                <Text style={styles.text}>Envoyer un message</Text>
+                <Text style={styles.text}>
+                  {I18n.t('user_booking_send_message')}
+                </Text>
                 <Feather name="message-circle" size={16} />
               </View>
             </View>
@@ -139,7 +142,7 @@ const UserBookingsScreen = ({navigation}) => {
         {bookings.length > 0 ? (
           <>
             <TitleWithDescription
-              title="Reservations"
+              title={I18n.t('user_booking_reservations')}
               subtitle={true}
               style={styles.paddingHorizontal}
             />
@@ -157,13 +160,13 @@ const UserBookingsScreen = ({navigation}) => {
           <EmptyBloc
             size={80}
             image={require('../assets/images/sad.png')}
-            title="You don't have reservations for the moment..."
+            title={I18n.t('user_booking_no_data')}
           />
         ) : null}
         {bookings.length > 0 && (
           <>
             <TitleWithDescription
-              title="History"
+              title={I18n.t('user_booking_history')}
               subtitle={true}
               style={styles.paddingHorizontal}
             />
@@ -183,15 +186,15 @@ const UserBookingsScreen = ({navigation}) => {
         isVisible={confirmation}
         onConfirmPress={() => handleAcceptPress(selectedBooking)}
         onCancelPress={() => setConfirmation(false)}
-        title="Confirm your action ?"
-        description="This action is irreversible, you will not be able to go back !"
+        title={I18n.t('user_booking_confirm_action')}
+        description={I18n.t('user_booking_confirm_action_description')}
       />
       <Popin
         isVisible={deny}
         onConfirmPress={() => handleDenyPress(selectedBooking)}
         onCancelPress={() => setDeny(false)}
-        title="Confirm your action ?"
-        description="This action is irreversible, you will not be able to go back !"
+        title={I18n.t('user_booking_confirm_action')}
+        description={I18n.t('user_booking_confirm_action_description')}
       />
     </ScrollView>
   );

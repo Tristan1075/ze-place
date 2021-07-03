@@ -10,7 +10,7 @@ import Colors from '../constants/Colors';
 import Header from '../components/Header';
 import {login} from '../api/auth';
 import UserStore from '../store/UserStore';
-import { Token } from './SignupScreen';
+import {Token} from './SignupScreen';
 
 type RootScreenNavigationProp = StackNavigationProp<
   RootStackParamList,

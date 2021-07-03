@@ -22,7 +22,7 @@ import {
   getMessageByConversation,
   sendMessageApi,
 } from '../api/conversations';
-
+import i18n from 'i18n-js';
 import Header from '../components/Header';
 import ConversationItem from '../components/ConversationItem';
 import UserStore from '../store/UserStore';
@@ -165,7 +165,7 @@ const ConversationScreen = (props: Props) => {
         />
         <View style={styles.inputContainer}>
           <TextInput
-            placeholder="Type your message"
+            placeholder={i18n.t('conversation_type_message')}
             placeholderTextColor={Colors.gray}
             style={styles.input}
             blurOnSubmit={false}

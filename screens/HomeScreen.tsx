@@ -130,7 +130,9 @@ const HomeScreen = (props: Props) => {
       <View style={styles.overlay} />
       <View style={styles.container}>
         <Header type="menu" showProfil={true} />
-        <Text style={styles.title} numberOfLines={3}>{i18n.t('home_discover')}</Text>
+        <Text style={styles.title} numberOfLines={3}>
+          {i18n.t('home_discover')}
+        </Text>
         <SimpleInput
           isEditable={false}
           style={styles.input}
