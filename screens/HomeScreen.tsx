@@ -16,8 +16,12 @@ import Header from '../components/Header';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
 import CardWithRate from '../components/CardWithRate';
-import {FilterForm, HomeParamList, Place} from '../types';
-import {getAllPlaces} from '../api/places';
+import {Coords, FilterForm, HomeParamList, Place} from '../types';
+import {
+  getAllPlaces,
+  getAllPlacesShuffle,
+  getPlacesNearbyCoordinates,
+} from '../api/places';
 import DescriptionBloc from '../components/DescriptionBloc';
 import SimpleInput from '../components/SimpleInput';
 import TitleWithDescription from '../components/TitleWithDescription';
@@ -46,10 +50,19 @@ const HomeScreen = (props: Props) => {
   const {socket} = props.socket;
 
   const [places, setPlaces] = useState<Array<Place>>([]);
+  const [nearbyPlaces, setNearbyPlaces] = useState<Array<Place>>([]);
   const {handleModal} = useContext(ModalContext);
-
   const init = useCallback(async () => {
-    setPlaces(await getAllPlaces());
+    setPlaces(await getAllPlacesShuffle());
+    setNearbyPlaces(
+      await getPlacesNearbyCoordinates(
+        {
+          longitude: parseFloat(UserStore.user.location.longitude),
+          latitude: parseFloat(UserStore.user.location.latitude),
+        },
+        40000,
+      ),
+    );
   }, []);
 
   useEffect(() => {
@@ -153,8 +166,7 @@ const HomeScreen = (props: Props) => {
       <Carousel
         contentContainerCustomStyle={{paddingLeft: Layout.padding}}
         useScrollView={true}
-        // data={places.slice(0, 15)}
-        data={places}
+        data={nearbyPlaces.slice(0, 30)}
         renderItem={renderCarouselItem}
         sliderWidth={Layout.window.width}
         activeSlideAlignment="start"

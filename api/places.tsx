@@ -21,6 +21,22 @@ export const getAllPlaces = async () => {
     });
 };
 
+export const getAllPlacesShuffle = async () => {
+  const token = await SecureStore.getItemAsync('access-token');
+  return await axios
+    .get(`${API_URL}/places/shuffle`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .then((response: AxiosResponse<any>) => {
+      return response.data;
+    })
+    .catch((err) => {
+      return Promise.reject(err);
+    });
+};
+
 export const getPlaceById = async (id: string) => {
   const token = await SecureStore.getItemAsync('access-token');
   return await axios
