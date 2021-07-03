@@ -30,6 +30,7 @@ import {createPlace, updatePlace} from '../../api/places';
 import * as SecureStore from 'expo-secure-store';
 import i18n from 'i18n-js';
 import UserStore from '../../store/UserStore';
+import { compressImage } from '../../utils';
 
 type Props = {
   prevStep: () => void;
@@ -62,12 +63,15 @@ const Customization = (props: Props) => {
       setModalVisible(false);
     }
   };
+
   const uploadToS3 = async () => {
     const id = await SecureStore.getItemAsync('access-token');
     let cpt = 0;
     let cpt2 = 0;
 
     for (const element of createPlaceForm.images) {
+      const newurl =  await compressImage(element.url);
+      
       const options = {
         bucket: REACT_APP_BUCKET_NAME,
         region: REACT_APP_REGION,
@@ -76,7 +80,7 @@ const Customization = (props: Props) => {
         successActionStatus: 201,
       };
       const file = {
-        uri: element.url,
+        uri: newurl.uri,
         name: `${createPlaceForm.title}${id}index${cpt}.png`,
         type: 'image/png',
       };
@@ -101,8 +105,9 @@ const Customization = (props: Props) => {
         setSubmitModal(false);
         navigation.dispatch(StackActions.pop());
       } else {
-        await uploadToS3();
-        await createPlace(createPlaceForm);
+
+         await uploadToS3();
+         await createPlace(createPlaceForm);
         setSubmitModal(false);
         navigation.dispatch(StackActions.popToTop());
       }

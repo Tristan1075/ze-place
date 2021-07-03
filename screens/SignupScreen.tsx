@@ -59,6 +59,7 @@ import SearchPlaceScreen from './SearchPlaceScreen';
 import UserStore from '../store/UserStore';
 import CameraScreen from './CameraScreen';
 import {getUserByEmail} from '../api/customer';
+import { compressImage } from '../utils';
 const input: SignupForm = {
   gender: '',
   avatar: '',
@@ -149,8 +150,10 @@ const SignupScreen = (props: Props) => {
   };
 
   const uploadToS3 = async () => {
+
+    const newurl =  await compressImage(form.avatar);
     const file = {
-      uri: form.avatar,
+      uri: newurl.uri,
       name: `${form.email}${form.lastname}.png`,
       type: 'image/png',
     };
