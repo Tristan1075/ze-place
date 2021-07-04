@@ -42,23 +42,34 @@ type RootScreenNavigationProp = StackNavigationProp<HomeParamList, 'Home'>;
 
 type Props = {
   navigation: RootScreenNavigationProp;
-  socket: any;
 };
 
 const HomeScreen = (props: Props) => {
   const {navigation} = props;
-  const {socket} = props.socket;
 
   const [places, setPlaces] = useState<Array<Place>>([]);
   const [nearbyPlaces, setNearbyPlaces] = useState<Array<Place>>([]);
   const {handleModal} = useContext(ModalContext);
+  const [userLocation, setUserLocation] = useState<Coords>({
+    longitude: parseFloat(UserStore.user.location.longitude),
+    latitude: parseFloat(UserStore.user.location.latitude),
+  });
   const init = useCallback(async () => {
+    const location = await getUserLocation();
+    setUserLocation({
+      longitude:
+        location?.coords.longitude ||
+        parseFloat(UserStore.user.location.longitude),
+      latitude:
+        location?.coords.latitude ||
+        parseFloat(UserStore.user.location.latitude),
+    });
     setPlaces(await getAllPlacesShuffle(10));
     setNearbyPlaces(
       await getPlacesNearbyCoordinates(
         {
-          longitude: parseFloat(UserStore.user.location.longitude),
-          latitude: parseFloat(UserStore.user.location.latitude),
+          longitude: location?.coords?.longitude || userLocation.longitude,
+          latitude: location?.coords?.latitude || userLocation.latitude,
         },
         40000,
         10,
@@ -81,25 +92,20 @@ const HomeScreen = (props: Props) => {
   };
 
   const showMapModal = async () => {
-    try {
-      const location = await getUserLocation();
-      if (location) {
-        handleModal({
-          child: (
-            <MapScreen
-              initialCoords={{
-                longitude: location.coords.longitude,
-                latitude: location.coords.latitude,
-              }}
-              onItemPress={(place) => {
-                handleModal();
-                handlePlacePress(place);
-              }}
-            />
-          ),
-        });
-      }
-    } catch (err) {}
+    handleModal({
+      child: (
+        <MapScreen
+          initialCoords={{
+            longitude: userLocation.longitude,
+            latitude: userLocation.latitude,
+          }}
+          onItemPress={(place) => {
+            handleModal();
+            handlePlacePress(place);
+          }}
+        />
+      ),
+    });
   };
 
   const handleSeeAnnouncesPress = (filter: FilterForm) => {
@@ -251,4 +257,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default withSocketContext(HomeScreen);
+export default HomeScreen;

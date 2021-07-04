@@ -2,14 +2,17 @@ import * as Location from 'expo-location';
 import Colors from '../constants/Colors';
 import {Availability} from '../types';
 import Constants from './Constants';
-import { manipulateAsync, SaveFormat } from 'expo-image-manipulator';    
+import {manipulateAsync, SaveFormat} from 'expo-image-manipulator';
+import {LocationObject} from 'expo-location';
 
 export const isEmailValid = (email: string) => {
   const re = /^(([^<>()[]\\.,;:s@"]+(.[^<>()[]\\.,;:s@"]+)*)|(".+"))@(([[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}])|(([a-zA-Z-0-9]+.)+[a-zA-Z]{2,}))$/;
   return re.test(String(email).toLowerCase());
 };
 
-export const getUserLocation = async () => {
+export const getUserLocation = async (): Promise<
+  LocationObject | undefined
+> => {
   const {status} = await Location.requestForegroundPermissionsAsync();
   if (status !== 'granted') {
     return;
@@ -61,13 +64,13 @@ export const isCreditCard = (number: string) => {
   return regexp.test(number);
 };
 
-export const compressImage = async (uri, format = SaveFormat.PNG) => { // SaveFormat.PNG
-  const result = await manipulateAsync(
-      uri,
-      [{ resize: { width:400} }],        
-      { compress: 1, format }
-  );    
-  return  { name: `${Date.now()}.${format}`, type: `image/${format}`, ...result };
+export const compressImage = async (uri, format = SaveFormat.PNG) => {
+  // SaveFormat.PNG
+  const result = await manipulateAsync(uri, [{resize: {width: 400}}], {
+    compress: 1,
+    format,
+  });
+  return {name: `${Date.now()}.${format}`, type: `image/${format}`, ...result};
   // return: { name, type, width, height, uri }
 };
 
