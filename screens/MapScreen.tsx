@@ -104,8 +104,8 @@ const MapScreen = ({initialCoords, onItemPress}: Props) => {
         }}>
         {places.map((place: Place, index) => {
           const markerCoords = {
-            longitude: place.location.longitude,
-            latitude: place.location.latitude,
+            longitude: parseFloat( place.location.longitude),
+            latitude: parseFloat( place.location.latitude),
           };
           return (
             <Marker
