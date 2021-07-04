@@ -53,6 +53,7 @@ const Customization = (props: Props) => {
   } = props;
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [submitModal, setSubmitModal] = useState<boolean>(false);
+  const [submitFinalError, setSubmitFinalError] = useState<boolean>(false);
   const navigation = useNavigation();
 
   const handleChooseImagePress = async () => {
@@ -112,6 +113,7 @@ const Customization = (props: Props) => {
     if (await verifyForm()) {
       try {
         if (place) {
+          setSubmitFinalError(false);
           await updatePlace(place._id, createPlaceForm);
           setSubmitModal(false);
           navigation.dispatch(StackActions.pop());
@@ -124,6 +126,7 @@ const Customization = (props: Props) => {
       } catch (err) {}
     } else {
       setSubmitModal(false);
+      setSubmitFinalError(true);
     }
   };
 
@@ -168,6 +171,11 @@ const Customization = (props: Props) => {
           onPress={() => setSubmitModal(true)}
           style={{marginLeft: 10, flex: 1}}
         />
+      </View>
+      <View style={styles.row}>
+        <Text style={styles.formError}>
+          {submitFinalError && i18n.t('customization_error_missing_fields')}
+        </Text>
       </View>
       <BottomModal
         visible={modalVisible}
@@ -287,6 +295,12 @@ const styles = StyleSheet.create({
     fontFamily: 'poppins',
     fontSize: 14,
     paddingBottom: 20,
+  },
+  formError: {
+    color: Colors.error,
+    fontFamily: 'poppins-bold',
+    fontSize: 16,
+    paddingTop: 20,
   },
 });
 

@@ -185,6 +185,7 @@ export default {
     'Your announce will be available as soon as possible',
   customization_confirm: 'Confirm',
   customization_cancel: 'Cancel',
+  customization_error_missing_fields: 'Not so quick! It seems that you forgot some informations ...',
 
   //general_information
   general_information_title: 'Title',

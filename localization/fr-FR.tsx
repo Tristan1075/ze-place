@@ -182,6 +182,7 @@ export default {
   customization_confirm_form: 'Confirmer le formulaire',
   customization_confirm: 'Confirmer',
   customization_cancel: 'Annuler',
+  customization_error_missing_fields: 'Pas si vite ! Il semblerait que vous ayez oublié quelques renseignements ...',
 
   //general_information
   general_information_title: 'Titre',
