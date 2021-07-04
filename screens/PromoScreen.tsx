@@ -75,9 +75,9 @@ const PromoScreen = () => {
           description={i18n.t('promo_code_description')}
         />
         <SimpleInput
-          
+          autocapitalize={true}
           onChangeText={(v) => {
-            setCode(v.toUpperCase());
+            setCode(v);
             setError('');
           }}
           placeholder="Code"
