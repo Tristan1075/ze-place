@@ -30,6 +30,7 @@ type Props = {
   type?: KeyboardType;
   maxLength?: number;
   textAlign?: 'center' | 'left' | 'right';
+  autocapitalize?: boolean;
 };
 
 const SimpleInput = (props: Props) => {
@@ -50,6 +51,7 @@ const SimpleInput = (props: Props) => {
     type,
     maxLength,
     textAlign,
+    autocapitalize,
   } = props;
 
   return (
@@ -66,7 +68,6 @@ const SimpleInput = (props: Props) => {
             onChangeText={onChangeText}
             style={multiline ? styles.textArea : styles.input}
             placeholder={placeholder}
-            autoCapitalize="none"
             autoCompleteType="off"
             placeholderTextColor={Colors.gray}
             value={value}
@@ -74,6 +75,7 @@ const SimpleInput = (props: Props) => {
             numberOfLines={numberOfLines}
             multiline={multiline}
             textAlign={textAlign}
+            autoCapitalize={autocapitalize ? 'characters' : 'none'}
           />
           {suffix}
         </View>

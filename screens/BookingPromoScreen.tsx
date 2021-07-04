@@ -94,11 +94,11 @@ const PlaceReviewScreen = ({place, onPromoSelected, promo}: Props) => {
             description={i18n.t('promo_code_description')}
           />
           <SimpleInput
-            value={code}
             onChangeText={(v) => {
-              setCode(v.toUpperCase());
+              setCode(v);
               setError('');
             }}
+            autocapitalize={true}
             placeholder="Code"
             style={styles.input}
             textAlign="center"
