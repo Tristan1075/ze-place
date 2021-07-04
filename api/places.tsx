@@ -73,7 +73,7 @@ export const getPlacesNearbyCoordinates = async (
   const token = await SecureStore.getItemAsync('access-token');
   return await axios
     .post(
-      `${API_URL}/places`,
+      `${API_URL}/places/nearby`,
       {
         limit,
         coords,
