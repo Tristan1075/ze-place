@@ -12,32 +12,25 @@ import i18n from 'i18n-js';
 import TitleWithDescription from '../components/TitleWithDescription';
 import Header from '../components/Header';
 import Colors from '../constants/Colors';
-import {  RootStackParamList, Promo,User} from '../types';
-import {getInnactivePromos,getActivePromos,addPromoCode, getUser} from '../api/customer';
+import {RootStackParamList, Promo, User} from '../types';
+import {
+  getInnactivePromos,
+  getActivePromos,
+  addPromoCode,
+  getUser,
+} from '../api/customer';
 
 import Button from '../components/Button';
 import {ScrollView} from 'react-native-gesture-handler';
 import SimpleInput from '../components/SimpleInput';
 import UserStore from '../store/UserStore';
 
-type RootScreenNavigationProp = StackNavigationProp<
-  RootStackParamList,
-  'Promo'
->;
-
-type Props = {
-  navigation: RootScreenNavigationProp;
-};
-
-type Data = {
-  data: string;
-};
-
-const PromoScreen = (props: Props) => {
+const PromoScreen = () => {
   const [activePromo, setActivePromo] = useState<Promo[]>();
   const [inactivePromo, setInctivePromo] = useState<Promo[]>();
-  const [allowAdd, setAllowAdd] = useState<boolean>(false);
   const [code, setCode] = useState<string>();
+  const [error, setError] = useState<string>();
+  const [isFetching, setIsFecthing] = useState<boolean>(false);
 
   useEffect(() => {
     const getActivePromovar = async () =>
@@ -50,83 +43,79 @@ const PromoScreen = (props: Props) => {
   }, []);
 
   const addPromo = async () => {
-
+    setIsFecthing(true);
+    setError('');
     if (code) {
-      await addPromoCode(code);
-      await addPromoCode(code);
-    const token = await getUser();
-    await UserStore.updateUser(token)
+      try {
+        await addPromoCode(code);
+        setIsFecthing(false);
+        setCode('');
+      } catch (err) {
+        console.log(err);
+        setError(i18n.t('promo_code_error'));
+        setIsFecthing(false);
+      }
+      const token = await getUser();
+      await UserStore.updateUser(token);
+    } else {
+      setError(i18n.t('promo_code_error'));
+      setIsFecthing(false);
     }
     setActivePromo(await getActivePromos());
   };
 
-  const handleAdd = () => {
-    if (allowAdd) {
-      addPromo();
-      setAllowAdd(false);
-    } else {
-      setAllowAdd(true);
-    }
-  };
-
   return (
-    <SafeAreaView style={styles.container}>
-      <Header type="back"></Header>
-
+    <View style={styles.container}>
       <ScrollView
         showsVerticalScrollIndicator={false}
         style={styles.scrollView}>
-        {allowAdd ? (
-          <View>
-            <Button
-              value={i18n.t('promo_code_validate')}
-              onPress={handleAdd}
-              backgroundColor={Colors.primary}
-              textColor={Colors.white}></Button>
-            <SimpleInput
-              style={styles.button}
-              onChangeText={(v) => setCode(v)}
-              placeholder="Code"></SimpleInput>
-          </View>
-        ) : (
-          <View>
-            <Button
-              value={i18n.t('promo_code_addCode')}
-              onPress={handleAdd}
-              backgroundColor={Colors.primary}
-              textColor={Colors.white}></Button>
-          </View>
-        )}
-
-        <View>
-          <Text style={styles.title}>{i18n.t('promo_code_active')}</Text>
-
-          {activePromo &&
-            activePromo.map((e) => (
-              <TouchableOpacity style={styles.codeCard}>
-                <TitleWithDescription
-                  title={e.name}
-                  subtitle={true}
-                  description={e.end_date.slice(0, 10)}></TitleWithDescription>
-                  <Text>{e.value}%</Text>
-              </TouchableOpacity>
-            ))}
-        </View>
-        <View>
-          <Text style={styles.title}>{i18n.t('promo_code_innactive')}</Text>
-          {inactivePromo &&
-            inactivePromo.map((e) => (
-              <TouchableOpacity style={styles.codeCard}>
-                <TitleWithDescription
-                  title={e.name}
-                  subtitle={true}
-                  description={e.end_date.slice(0, 10)}></TitleWithDescription>
-                  <Text>{e.value}%</Text>
-              </TouchableOpacity>
-            ))}
-        </View>
+        <TitleWithDescription
+          title={i18n.t('confirmation_booking_promotionnal_code')}
+          subtitle={true}
+          description={i18n.t('promo_code_description')}
+        />
+        <SimpleInput
+          value={code}
+          onChangeText={(v) => {
+            setCode(v.toUpperCase());
+            setError('');
+          }}
+          placeholder="Code"
+          style={styles.input}
+          textAlign="center"
+          error={error}
+        />
+        <Button
+          isFetching={isFetching}
+          value={i18n.t('promo_code_validate')}
+          onPress={addPromo}
+          backgroundColor={Colors.primary}
+          textColor={Colors.white}
+        />
+        <Text style={styles.title}>{i18n.t('promo_code_active')}</Text>
+        {activePromo &&
+          activePromo.map((e, index) => (
+            <TouchableOpacity style={styles.codeCard} key={index}>
+              <TitleWithDescription
+                title={e.name}
+                subtitle={true}
+                description={e.end_date.slice(0, 10)}></TitleWithDescription>
+              <Text>{e.value}%</Text>
+            </TouchableOpacity>
+          ))}
+        <Text style={styles.title}>{i18n.t('promo_code_innactive')}</Text>
+        {inactivePromo &&
+          inactivePromo.map((e, index) => (
+            <TouchableOpacity style={styles.codeCard} key={index}>
+              <TitleWithDescription
+                title={e.name}
+                subtitle={true}
+                description={e.end_date.slice(0, 10)}></TitleWithDescription>
+              <Text>{e.value}%</Text>
+            </TouchableOpacity>
+          ))}
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -134,38 +123,36 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.dark,
-    paddingTop: 130,
   },
   scrollView: {
     flex: 1,
     backgroundColor: Colors.background,
-    borderTopLeftRadius: 40,
-    borderTopRightRadius: 40,
-    paddingTop: 40,
+    paddingTop: 120,
     paddingLeft: 20,
     paddingRight: 20,
   },
-
   row: {
     flex: 1,
   },
-  button: {
-    paddingVertical: 20,
-    paddingHorizontal: 20,
+  input: {
+    marginBottom: 20,
+    textAlign: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   title: {
-    fontFamily: 'poppins-bold',
+    fontFamily: 'oswald',
     fontSize: 18,
     color: Colors.primary,
     paddingBottom: 20,
     marginLeft: 10,
-    marginTop: 60,
+    marginTop: 20,
   },
   codeCard: {
     backgroundColor: Colors.white,
-   textAlign:'center',
+    textAlign: 'center',
     borderRadius: 15,
-    paddingVertical: 15,
+    paddingBottom: 20,
     paddingHorizontal: 20,
     shadowColor: '#000',
     shadowOffset: {

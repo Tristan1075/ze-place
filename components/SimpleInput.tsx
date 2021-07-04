@@ -29,6 +29,7 @@ type Props = {
   style?: ViewStyle;
   type?: KeyboardType;
   maxLength?: number;
+  textAlign?: 'center' | 'left' | 'right';
 };
 
 const SimpleInput = (props: Props) => {
@@ -48,6 +49,7 @@ const SimpleInput = (props: Props) => {
     style,
     type,
     maxLength,
+    textAlign,
   } = props;
 
   return (
@@ -71,6 +73,7 @@ const SimpleInput = (props: Props) => {
             secureTextEntry={secureTextEntry}
             numberOfLines={numberOfLines}
             multiline={multiline}
+            textAlign={textAlign}
           />
           {suffix}
         </View>
@@ -112,6 +115,7 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     color: Colors.error,
     fontFamily: 'poppins',
+    alignSelf: 'flex-start',
   },
 });
 

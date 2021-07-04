@@ -22,6 +22,7 @@ import {useState} from 'react';
 import {useRoute} from '@react-navigation/native';
 import UserStore from '../store/UserStore';
 import EmptyBloc from '../components/EmptyBloc';
+import TitleWithDescription from '../components/TitleWithDescription';
 
 type MessagesScreenNavigationProp = StackNavigationProp<MessageTab, 'Messages'>;
 
@@ -81,6 +82,11 @@ const MessagesScreen = (props: Props) => {
     <SafeAreaView style={styles.container}>
       <Header type={route.params.tab ? 'menu' : 'back'} showProfil={true} />
       <View style={styles.content}>
+        <TitleWithDescription
+          title={i18n.t('messages_title')}
+          subtitle={true}
+          description={i18n.t('messages_description')}
+        />
         {conversations && conversations.length > 0 ? (
           <FlatList
             data={conversations}

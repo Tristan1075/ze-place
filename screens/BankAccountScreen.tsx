@@ -209,7 +209,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   cardAccount: {
-    backgroundColor: Colors.background,
+    backgroundColor: Colors.white,
     padding: 20,
     marginBottom: 20,
     ...Layout.shadow,

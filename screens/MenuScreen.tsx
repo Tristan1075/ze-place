@@ -21,6 +21,7 @@ import {CommonActions} from '@react-navigation/native';
 import UserStore from '../store/UserStore';
 import {ModalContext} from '../providers/modalContext';
 import BankAccountScreen from './BankAccountScreen';
+import PromoScreen from './PromoScreen';
 
 type RootScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Menu'>;
 
@@ -47,7 +48,10 @@ const MenuScreen = (props: Props) => {
   const menu = [
     {
       title: i18n.t('menu_promotional_codes'),
-      onPress: () => navigation.navigate('Promo'),
+      onPress: () =>
+        handleModal({
+          child: <PromoScreen />,
+        }),
     },
     {
       title: i18n.t('menu_report_bug'),
@@ -86,7 +90,6 @@ const MenuScreen = (props: Props) => {
         </TouchableWithoutFeedback>
         {menu.map((item, index) => (
           <View key={index}>
-
             <TouchableOpacity style={[styles.item]} onPress={item.onPress}>
               <Text style={styles.itemValue}>{item.title}</Text>
               <Entypo name="chevron-thin-right" size={16} />

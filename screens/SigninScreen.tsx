@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 10,
   },
   title: {
-    fontFamily: 'playfair-bold',
+    fontFamily: 'oswald',
     fontSize: 32,
     color: Colors.primary,
     paddingBottom: 20,

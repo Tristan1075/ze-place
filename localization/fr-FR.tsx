@@ -158,8 +158,10 @@ export default {
   //promo_code
   promo_code_validate: 'Valider',
   promo_code_addCode: 'Ajouter un nouveau code',
-  promo_code_active: 'Promo actives',
-  promo_code_innactive: 'Promo innactives',
+  promo_code_active: 'Actifs',
+  promo_code_innactive: 'Inactifs',
+  promo_code_error: 'Le code est invalide',
+  promo_code_description: 'Veuillez saisir le code promotionnnel',
 
   //create_place
   create_place_general: 'Général',
@@ -291,6 +293,9 @@ export default {
   payement_methods_description: `Retrouvez l'ensemble de vos cartes, vous pouvez choisir votre carte par défaut`,
   payement_methods_update: 'Modifier la carte par défaut',
   payement_methods_delete: 'Supprimer la carte',
+
+  messages_title: 'Vos messages',
+  messages_description: `Trouvez ici l'ensemble de vos messages`,
 
   //COMPONENT
 

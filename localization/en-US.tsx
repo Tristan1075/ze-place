@@ -160,8 +160,10 @@ export default {
   //promo_code
   promo_code_validate: 'Validate',
   promo_code_addCode: 'Add a new code',
-  promo_code_active: 'Active promo',
-  promo_code_innactive: 'Innactive promo',
+  promo_code_active: 'Actives',
+  promo_code_innactive: 'Inactives',
+  promo_code_error: 'The code is invalid',
+  promo_code_description: 'Enter your promotional code',
 
   //create_place
   create_place_general: 'General',
@@ -286,6 +288,8 @@ export default {
 
   //message
   message_no_data: `You don't have conversations for the moment...`,
+  messages_title: 'Your messages',
+  messages_description: `Find all your messages here`,
 
   //payement_methods
   payement_methods_title: 'Payement methods',

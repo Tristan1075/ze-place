@@ -66,7 +66,7 @@ const FavoritesScreen = (props: Props) => {
       <Header type="menu" showProfil={true} />
       <View style={styles.content}>
         <TitleWithDescription
-          title="Favorites"
+          title={i18n.t('favorites_title')}
           subtitle={true}
           description={i18n.t('favorites_description')}
         />
