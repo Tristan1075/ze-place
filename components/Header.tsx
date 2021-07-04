@@ -78,6 +78,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingRight: Layout.padding,
     paddingBottom: 20,
+    paddingTop:20,
   },
   space: {
     justifyContent: 'space-between',
