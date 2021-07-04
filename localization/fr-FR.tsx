@@ -146,6 +146,7 @@ export default {
 
   //review
   review_title: 'Avis',
+  review_no_reviews: "Cette espace n'a pas d'avis pour le moment...",
 
   //write_review
   write_review_title: 'Nom : ',
@@ -182,6 +183,7 @@ export default {
   customization_take_picture: 'Prendre une photo',
   customization_browse: 'Parcourir',
   customization_confirm_form: 'Confirmer le formulaire',
+  customization_waiting_description: 'Votre annonce sera publier prochainement',
   customization_confirm: 'Confirmer',
   customization_cancel: 'Annuler',
   customization_error_missing_fields:

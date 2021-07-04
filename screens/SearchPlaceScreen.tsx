@@ -69,7 +69,7 @@ const SearchPlaceScreen = ({onLocationPress}: Props) => {
           suffix={<Ionicons name="search" size={20} color={Colors.gray} />}
         />
         <Text style={styles.results}>
-          {i18n.t('search_place_location_results')}({places.length})
+          {i18n.t('search_place_location_results')} ({places.length})
         </Text>
         <ScrollView>
           {places.map((place, index) => {
@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
   },
   results: {
     color: Colors.dark,
-    fontFamily: 'poppins',
+    fontFamily: 'poppins-light',
     paddingTop: 20,
     paddingBottom: 10,
   },

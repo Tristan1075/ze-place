@@ -49,7 +49,7 @@ const PlaceReviewScreen = ({place, onPromoSelected, promo}: Props) => {
 
   const addPromo = async () => {
     console.log(code);
-    
+
     setIsFecthing(true);
     setError('');
     if (code) {
@@ -78,8 +78,6 @@ const PlaceReviewScreen = ({place, onPromoSelected, promo}: Props) => {
       onPromoSelected(finalPrice);
     } else {
       setSelectedElem(promo.name);
-      console.log(promo.name);
-      
       let finalPrice = placePromo.price;
       finalPrice -= finalPrice * (promo.value / 100);
       onPromoSelected(finalPrice, promo);
@@ -93,35 +91,32 @@ const PlaceReviewScreen = ({place, onPromoSelected, promo}: Props) => {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.contentScrollView}>
         <View>
-        <TitleWithDescription
-          title={i18n.t('confirmation_booking_promotionnal_code')}
-          subtitle={true}
-          description={i18n.t('promo_code_description')}
-        />
-        <SimpleInput
-          
-          onChangeText={(v) => {
-            setCode(v.toUpperCase());
-            setError('');
-          }}
-          placeholder="Code"
-          style={styles.input}
-          textAlign="center"
-          error={error}
-        />
-        <Button
-          isFetching={isFetching}
-          value={i18n.t('promo_code_validate')}
-          onPress={addPromo}
-          backgroundColor={Colors.primary}
-          textColor={Colors.white}
-        />
+          <TitleWithDescription
+            title={i18n.t('confirmation_booking_promotionnal_code')}
+            subtitle={true}
+            description={i18n.t('promo_code_description')}
+          />
+          <SimpleInput
+            value={code}
+            onChangeText={(v) => {
+              setCode(v.toUpperCase());
+              setError('');
+            }}
+            placeholder="Code"
+            style={styles.input}
+            textAlign="center"
+            error={error}
+          />
+          <Button
+            isFetching={isFetching}
+            value={i18n.t('promo_code_validate')}
+            onPress={addPromo}
+            backgroundColor={Colors.primary}
+            textColor={Colors.white}
+          />
           <Text style={styles.title}>{i18n.t('promo_code_active')}</Text>
-
           {activePromo &&
             activePromo.map((e) => (
-              console.log(selectedElem == e.name),
-              
               <TouchableOpacity
                 style={
                   selectedElem == e.name ? styles.selectedCode : styles.codeCard
@@ -129,8 +124,8 @@ const PlaceReviewScreen = ({place, onPromoSelected, promo}: Props) => {
                 onPress={() => handlePromo(e)}>
                 <TitleWithDescription
                   title={e.name}
-                  subtitle={true}
-                  description={e.end_date.slice(0, 10)}></TitleWithDescription>
+                  description={e.end_date.slice(0, 10)}
+                />
                 <Text>{e.value}%</Text>
               </TouchableOpacity>
             ))}
@@ -185,9 +180,11 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
   },
   title: {
+    paddingTop: 20,
     fontFamily: 'oswald-light',
     fontSize: 18,
     color: Colors.dark,
+    marginBottom: 20,
   },
   description: {
     fontFamily: 'poppins',
@@ -203,7 +200,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     textAlign: 'center',
     borderRadius: 15,
-    paddingVertical: 15,
+    paddingBottom: 20,
     paddingHorizontal: 20,
     shadowColor: '#000',
     shadowOffset: {
@@ -218,11 +215,9 @@ const styles = StyleSheet.create({
   },
   selectedCode: {
     position: 'relative',
-
     backgroundColor: Colors.lightgray,
     textAlign: 'center',
     borderRadius: 15,
-    paddingVertical: 15,
     paddingHorizontal: 20,
     shadowColor: '#100',
     shadowOffset: {
@@ -234,6 +229,7 @@ const styles = StyleSheet.create({
     elevation: 5,
     marginBottom: 20,
     flex: 0.9,
+    paddingBottom: 20,
   },
   name: {
     fontFamily: 'poppins',

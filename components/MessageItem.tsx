@@ -32,7 +32,7 @@ const MessageItem = (props: Props) => {
               : conversation?.userName}
           </Text>
           {conversation.lastMessage && (
-            <Text style={styles.lastMessage}>
+            <Text style={styles.lastMessage} numberOfLines={1}>
               {conversation.lastMessage.text}
             </Text>
           )}
@@ -83,6 +83,7 @@ const styles = StyleSheet.create({
     fontFamily: 'poppins',
     fontSize: 14,
     color: Colors.gray,
+    width: 230,
   },
   date: {
     fontFamily: 'poppins',

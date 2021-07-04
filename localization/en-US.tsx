@@ -148,7 +148,7 @@ export default {
 
   //review
   review_title: 'Review',
-
+  review_no_reviews: "This place doesn't have reviews for now...",
   //write_review
   write_review_title: 'Name : ',
   write_review_content_placeholder: 'Enter a title to your review',

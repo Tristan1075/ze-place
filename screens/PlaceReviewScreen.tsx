@@ -10,6 +10,7 @@ import {Rating} from 'react-native-ratings';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
 import i18n from 'i18n-js';
+import EmptyBloc from '../components/EmptyBloc';
 
 type RootScreenNavigationProp = StackNavigationProp<HomeParamList, 'Home'>;
 
@@ -32,8 +33,8 @@ const PlaceReviewScreen = (props: Props) => {
         style={styles.scrollView}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.contentScrollView}>
-        <Text style={styles.mainTitle}>{i18n.t('review_title')}</Text>
-        {reviews &&
+        <TitleWithDescription title={i18n.t('review_title')} subtitle={true} />
+        {reviews && reviews?.length > 0 ? (
           reviews.map((e) => (
             <View style={styles.review}>
               <View style={styles.align}>
@@ -53,7 +54,14 @@ const PlaceReviewScreen = (props: Props) => {
                 <Text style={styles.name}>{e.writerName}</Text>
               </View>
             </View>
-          ))}
+          ))
+        ) : (
+          <EmptyBloc
+            size={60}
+            image={require('../assets/images/sad.png')}
+            title={i18n.t('review_no_reviews')}
+          />
+        )}
       </ScrollView>
     </View>
   );
@@ -70,7 +78,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background,
     borderTopLeftRadius: 40,
     borderTopRightRadius: 40,
-    paddingTop: 40,
+    paddingTop: 20,
     paddingLeft: 20,
     paddingRight: 20,
   },
@@ -102,7 +110,7 @@ const styles = StyleSheet.create({
     paddingBottom: 5,
   },
   mainTitle: {
-    fontFamily: 'oswald',
+    fontFamily: 'oswald-light',
     fontSize: 24,
     color: Colors.dark,
     marginBottom: 20,

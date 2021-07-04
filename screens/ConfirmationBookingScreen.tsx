@@ -133,23 +133,6 @@ const ConfirmationBookingScreen = ({place, booking, navigation}: Props) => {
               </Text>
             </TouchableOpacity>
           </View>
-          {promotionalCode && (
-            <View style={styles.row}>
-              <SimpleInput
-                style={styles.input}
-                placeholder={i18n.t(
-                  'confirmation_booking_promotionnal_code_input',
-                )}
-              />
-              <Button
-                value={i18n.t('confirmation_booking_promotionnal_code_submit')}
-                backgroundColor={Colors.dark}
-                textColor={Colors.white}
-                style={styles.button}
-                onPress={() => {}}
-              />
-            </View>
-          )}
           <View style={styles.paymentRow}>
             <Text style={styles.keyBold}>
               {bookPromo.duration}{' '}

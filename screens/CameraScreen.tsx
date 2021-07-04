@@ -62,6 +62,10 @@ const CameraScreen = (props: Props) => {
     }
   };
 
+  if (hasPermission === null) {
+    return <View />;
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.overlay}>

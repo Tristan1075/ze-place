@@ -298,8 +298,8 @@ const styles = StyleSheet.create({
   },
   formError: {
     color: Colors.error,
-    fontFamily: 'poppins-bold',
-    fontSize: 16,
+    fontFamily: 'oswald',
+    fontSize: 20,
     paddingTop: 20,
   },
 });

@@ -40,7 +40,9 @@ const ConversationScreen = (props: Props) => {
   const {navigation} = props;
   const route = useRoute<ConversationScreenNavigationProp>();
   const conversationParams = route.params.conversation;
-  const [messages, setMessages] = useState<Array<Message>>([]);
+  const [messages, setMessages] = useState<
+    Array<{value: string; from: string}>
+  >([]);
   const [conversation, setConversation] = useState<Conversation>();
   const [input, setInput] = useState<string>('');
   const _flatList = useRef<FlatList>(null);
@@ -72,8 +74,9 @@ const ConversationScreen = (props: Props) => {
     notificationListener.current = Notifications.addNotificationReceivedListener(
       (notif: any) => {
         if (
+          notif.request.content.data &&
           notif.request.content.data.conversation.id.toString() ===
-          conversationResult?._id.toString()
+            conversationResult?._id.toString()
         ) {
           const messageNotif = notif.request.content.data.conversation?.message;
           if (messageNotif) {

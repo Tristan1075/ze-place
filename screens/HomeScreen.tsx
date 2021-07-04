@@ -222,7 +222,7 @@ const styles = StyleSheet.create({
     fontFamily: 'oswald-light',
     fontSize: 32,
     color: Colors.white,
-    paddingBottom: 60,
+    paddingBottom: 40,
     width: 250,
     paddingHorizontal: 20,
   },

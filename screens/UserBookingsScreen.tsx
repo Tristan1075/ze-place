@@ -109,17 +109,20 @@ const UserBookingsScreen = ({navigation}) => {
               <Text style={styles.ownerName}>
                 {owner?.first_name} {owner?.last_name}
               </Text>
-              <Rating
-                startingValue={5}
-                imageSize={12}
-                tintColor={Colors.background}
-                style={styles.rate}
-              />
               <View style={styles.row}>
-                <Text style={styles.text}>
+                <Text
+                  style={styles.sendMessageText}
+                  onPress={() => {
+                    navigation.navigate('Conversation', {
+                      conversation: {
+                        placeId: activeBooking.placeId,
+                        userId: activeBooking.userId,
+                        ownerId: activeBooking.ownerId,
+                      },
+                    });
+                  }}>
                   {I18n.t('user_booking_send_message')}
                 </Text>
-                <Feather name="message-circle" size={16} />
               </View>
             </View>
           </View>
@@ -207,8 +210,6 @@ const styles = StyleSheet.create({
   },
   row: {
     flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   scrollView: {
     paddingBottom: 50,
@@ -240,6 +241,7 @@ const styles = StyleSheet.create({
   ownerName: {
     fontFamily: 'oswald',
     fontSize: 18,
+    flex: 1,
   },
   text: {
     fontFamily: 'poppins-light',
@@ -250,6 +252,11 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
     flex: 1,
     paddingTop: 5,
+  },
+  sendMessageText: {
+    fontFamily: 'oswald-light',
+    marginRight: 5,
+    alignSelf: 'flex-start',
   },
 });
 
