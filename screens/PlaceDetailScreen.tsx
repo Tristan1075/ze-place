@@ -460,7 +460,7 @@ const styles = StyleSheet.create({
   cover: {
     position: 'absolute',
     width: Layout.window.width,
-    height: 480,
+    height: 500,
     resizeMode: 'cover',
     justifyContent: 'flex-end',
     borderBottomLeftRadius: 60,

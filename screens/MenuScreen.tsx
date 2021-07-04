@@ -72,46 +72,55 @@ const MenuScreen = (props: Props) => {
   ];
 
   return (
-    <ScrollView>
     <View style={styles.screen}>
-      <View style={styles.headerBloc}>
-        <Header type="back" />
-      </View>
-      <View style={styles.contentContainer}>
-        <TouchableWithoutFeedback onPress={() => navigation.navigate('Profil')}>
-          <View style={styles.profilBloc}>
-            <Image
-              source={user && {uri: user.avatar}}
-              style={styles.profilImage}
-            />
-            <Text style={styles.title}>
-              {user && user.first_name} {user && user.last_name}
-            </Text>
-            <Text style={styles.description}>{user && user.address}</Text>
-          </View>
-        </TouchableWithoutFeedback>
-        {menu.map((item, index) => (
-          <View key={index}>
-            <TouchableOpacity style={[styles.item]} onPress={item.onPress}>
-              <Text style={styles.itemValue}>{item.title}</Text>
-              <Entypo name="chevron-thin-right" size={16} />
-            </TouchableOpacity>
-          </View>
-        ))}
-        <View style={styles.screen} />
-        <TouchableOpacity style={[styles.item]} onPress={handleDisconnectPress}>
-          <Text style={styles.itemValue}>Logout</Text>
-          <MaterialCommunityIcons name="location-exit" size={20} />
-        </TouchableOpacity>
-      </View>
+      <ScrollView>
+        <View style={styles.headerBloc}>
+          <Header type="back" />
+        </View>
+        <View style={styles.contentContainer}>
+          <TouchableWithoutFeedback
+            onPress={() => navigation.navigate('Profil')}>
+            <View style={styles.profilBloc}>
+              <Image
+                source={user && {uri: user.avatar}}
+                style={styles.profilImage}
+              />
+              <Text style={styles.title}>
+                {user && user.first_name} {user && user.last_name}
+              </Text>
+              <Text style={styles.description}>{user && user.address}</Text>
+            </View>
+          </TouchableWithoutFeedback>
+          {menu.map((item, index) => (
+            <View key={index}>
+              <TouchableOpacity style={[styles.item]} onPress={item.onPress}>
+                <Text style={styles.itemValue}>{item.title}</Text>
+                <Entypo name="chevron-thin-right" size={16} />
+              </TouchableOpacity>
+            </View>
+          ))}
+        </View>
+      </ScrollView>
+      <TouchableOpacity
+        style={[styles.item, styles.loggout]}
+        onPress={handleDisconnectPress}>
+        <Text style={styles.itemValue}>Logout</Text>
+        <MaterialCommunityIcons name="location-exit" size={20} />
+      </TouchableOpacity>
     </View>
-    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
+    position: 'relative',
+    backgroundColor: Colors.background,
+  },
+  loggout: {
+    marginHorizontal: 20,
+    position: 'absolute',
+    bottom: 40,
   },
   headerBloc: {
     backgroundColor: Colors.dark,
@@ -121,8 +130,7 @@ const styles = StyleSheet.create({
     height: 250,
   },
   contentContainer: {
-    paddingBottom: 50,
-    marginTop: -120,
+    marginTop: -100,
     flex: 1,
     paddingHorizontal: 20,
   },
@@ -154,7 +162,6 @@ const styles = StyleSheet.create({
   item: {
     padding: 20,
     marginBottom: 10,
-    alignItems: 'center',
     flexDirection: 'row',
     backgroundColor: Colors.white,
     borderRadius: 10,
