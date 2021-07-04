@@ -48,8 +48,6 @@ const PlaceReviewScreen = ({place, onPromoSelected, promo}: Props) => {
   }, []);
 
   const addPromo = async () => {
-    console.log(code);
-
     setIsFecthing(true);
     setError('');
     if (code) {
@@ -58,7 +56,6 @@ const PlaceReviewScreen = ({place, onPromoSelected, promo}: Props) => {
         setIsFecthing(false);
         setCode('');
       } catch (err) {
-        console.log(err);
         setError(i18n.t('promo_code_error'));
         setIsFecthing(false);
       }
@@ -157,7 +154,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background,
     borderTopLeftRadius: 40,
     borderTopRightRadius: 40,
-    paddingTop: 40,
+    paddingTop: 20,
     paddingLeft: 20,
     paddingRight: 20,
   },
@@ -175,9 +172,6 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 5,
     marginBottom: 10,
-  },
-  align: {
-    alignItems: 'flex-start',
   },
   title: {
     paddingTop: 20,

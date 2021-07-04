@@ -43,7 +43,6 @@ const PromoScreen = () => {
   }, []);
 
   const addPromo = async () => {
-    console.log(code);
     
     setIsFecthing(true);
     setError('');
@@ -53,7 +52,6 @@ const PromoScreen = () => {
         setIsFecthing(false);
         setCode('');
       } catch (err) {
-        console.log(err);
         setError(i18n.t('promo_code_error'));
         setIsFecthing(false);
       }
