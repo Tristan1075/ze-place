@@ -6,6 +6,7 @@ import {
   Image,
   TouchableOpacity,
   TouchableWithoutFeedback,
+  ScrollView,
 } from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import i18n from 'i18n-js';
@@ -67,6 +68,7 @@ const MenuScreen = (props: Props) => {
   ];
 
   return (
+    <ScrollView>
     <View style={styles.screen}>
       <View style={styles.headerBloc}>
         <Header type="back" />
@@ -100,6 +102,7 @@ const MenuScreen = (props: Props) => {
         </TouchableOpacity>
       </View>
     </View>
+    </ScrollView>
   );
 };
 
