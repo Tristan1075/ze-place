@@ -130,9 +130,7 @@ const ConversationScreen = (props: Props) => {
       sendMessageApi(
         c?._id,
         UserStore.user._id,
-        UserStore.user._id === conversationParams.userId
-          ? conversationParams.ownerId
-          : conversationParams.userId,
+        UserStore.user._id === c.userId ? c.ownerId : c.userId,
         input,
       );
       setMessages((prev) => [...prev, newMessage]);

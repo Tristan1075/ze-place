@@ -37,6 +37,7 @@ import {hasBankAccount} from '../api/payment';
 import BankAccountScreen from './BankAccountScreen';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {withSocketContext} from '../components/SocketProvider';
+import {Flow} from 'react-native-animated-spinkit';
 
 type RootScreenNavigationProp = StackNavigationProp<HomeParamList, 'Home'>;
 
@@ -169,15 +170,21 @@ const HomeScreen = (props: Props) => {
         actionIcon="map"
         onActionPress={showMapModal}
       />
-      <Carousel
-        contentContainerCustomStyle={{paddingLeft: Layout.padding}}
-        useScrollView={true}
-        data={nearbyPlaces}
-        renderItem={renderCarouselItem}
-        sliderWidth={Layout.window.width}
-        activeSlideAlignment="start"
-        itemWidth={220}
-      />
+      {nearbyPlaces && nearbyPlaces.length > 0 ? (
+        <Carousel
+          contentContainerCustomStyle={{paddingLeft: Layout.padding}}
+          useScrollView={true}
+          data={nearbyPlaces}
+          renderItem={renderCarouselItem}
+          sliderWidth={Layout.window.width}
+          activeSlideAlignment="start"
+          itemWidth={220}
+        />
+      ) : (
+        <View style={styles.loader}>
+          <Flow size={30} color={Colors.primary} />
+        </View>
+      )}
       <DescriptionBloc onPress={handleCreatePlacePress} />
       <TitleWithDescription
         title={i18n.t('home_announces')}
@@ -188,16 +195,22 @@ const HomeScreen = (props: Props) => {
         subtitle={true}
         onActionPress={showFilterModal}
       />
-      {places.map((item) => (
-        <View style={styles.paddingHorizontal} key={item._id}>
-          <PlaceCard
-            place={item}
-            onPress={() => handlePlacePress(item)}
-            onFavoritePress={handleFavoritePress}
-            isFavorite={item.isFavorite}
-          />
+      {places && places.length > 0 ? (
+        places.map((item) => (
+          <View style={styles.paddingHorizontal} key={item._id}>
+            <PlaceCard
+              place={item}
+              onPress={() => handlePlacePress(item)}
+              onFavoritePress={handleFavoritePress}
+              isFavorite={item.isFavorite}
+            />
+          </View>
+        ))
+      ) : (
+        <View style={styles.loader}>
+          <Flow size={30} color={Colors.primary} />
         </View>
-      ))}
+      )}
     </ScrollView>
   );
 };
@@ -254,6 +267,10 @@ const styles = StyleSheet.create({
     height: 40,
     borderRadius: 10,
     alignSelf: 'flex-end',
+  },
+  loader: {
+    alignItems: 'center',
+    marginVertical: 20,
   },
 });
 

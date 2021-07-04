@@ -27,13 +27,19 @@ const input: BugForm = {
 const BugTicketScreen = (props: Props) => {
   const {navigation} = props;
   const [form, setForm] = useState<BugForm>(input);
+  const [isFetching, setIsFetching] = useState<boolean>(false);
   const {user} = UserStore;
 
   const handleBugPress = async () => {
+    setIsFetching(true);
     form.senderId = user._id;
     if (form.name.length === 0 || form.description.length === 0) {
     } else {
-      await createBug(form);
+      const result = await createBug(form);
+      if (result) {
+        setIsFetching(false);
+        navigation.pop();
+      }
     }
   };
   return (
@@ -66,6 +72,7 @@ const BugTicketScreen = (props: Props) => {
             backgroundColor={Colors.primary}
             textColor={Colors.white}
             style={styles.button}
+            isFetching={isFetching}
           />
         </View>
       </View>
