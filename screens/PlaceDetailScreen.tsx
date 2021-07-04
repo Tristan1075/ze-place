@@ -201,7 +201,7 @@ const PlaceDetailScreen = () => {
               {place?.reviews.length > 0 && (
                 <View style={styles.padding}>
                   <Rating
-                    startingValue={place?.rate + 1}
+                    startingValue={place?.rate}
                     imageSize={20}
                     value={place?.rate}
                     precision={0.1}
