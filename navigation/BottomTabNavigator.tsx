@@ -11,7 +11,7 @@ import {
   MessageTab,
 } from '../types';
 import Colors from '../constants/Colors';
-
+import i18n from 'i18n-js';
 import HomeScreen from '../screens/HomeScreen';
 import PlaceDetailScreen from '../screens/PlaceDetailScreen';
 import FavoritesScreen from '../screens/FavoritesScreen';
@@ -30,14 +30,14 @@ export default function BottomTabNavigator() {
       initialRouteName="Home"
       tabBarOptions={{activeTintColor: Colors.primary}}>
       <BottomTab.Screen
-        name="Home"
+        name={i18n.t('tap_bar_home_title')}
         component={HomeNavigator}
         options={{
           tabBarIcon: ({color}) => <TabBarIcon name="home" color={color} />,
         }}
       />
       <BottomTab.Screen
-        name="Booking and Places"
+        name={i18n.t('tap_bar_booking_title')}
         component={BookingNavigator}
         options={{
           tabBarIcon: ({color}) => (
@@ -46,7 +46,7 @@ export default function BottomTabNavigator() {
         }}
       />
       <BottomTab.Screen
-        name="Messages"
+        name={i18n.t('tap_bar_message_title')}
         component={MessageNavigator}
         options={{
           tabBarIcon: ({color}) => (
@@ -59,7 +59,7 @@ export default function BottomTabNavigator() {
         }}
       />
       <BottomTab.Screen
-        name="Favorites"
+        name={i18n.t('tap_bar_favorites_title')}
         component={FavoritesNavigator}
         options={{
           tabBarIcon: ({color}) => <TabBarIcon name="heart" color={color} />,

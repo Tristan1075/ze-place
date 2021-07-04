@@ -41,7 +41,10 @@ const MessagesScreen = (props: Props) => {
     );
     if (conversation) {
       conversation.sort((o1: Conversation, o2: Conversation) => {
-        if (!o1.lastMessage.created_at || !o2.lastMessage.created_at) {
+        if (
+          (o1.lastMessage && !o1.lastMessage.created_at) ||
+          (o2.lastMessage && !o2.lastMessage.created_at)
+        ) {
           return;
         }
         return o1.lastMessage && o1.lastMessage.created_at
@@ -83,7 +86,7 @@ const MessagesScreen = (props: Props) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header type={route.params.tab ? 'menu': 'back'} showProfil={true} />
+      <Header type={route.params.tab ? 'menu' : 'back'} showProfil={true} />
       <View style={styles.content}>
         {conversations && conversations.length > 0 ? (
           <FlatList

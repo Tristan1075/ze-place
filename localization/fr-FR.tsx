@@ -134,6 +134,16 @@ export default {
   user_booking_confirm_action: 'Êtes-vous sûr ?',
   user_booking_confirm_action_description: `Cette action est irréversible, vous ne pourrez pas revenir en arrière !`,
 
+  //booking_and_place
+  booking_and_place_booking_title: 'Réservations',
+  booking_and_place_place_title: 'Espaces',
+
+  //tap_bar
+  tap_bar_home_title: 'Accueil',
+  tap_bar_booking_title: 'Réservation et Espaces',
+  tap_bar_message_title: 'Messages',
+  tap_bar_favorites_title: 'Favoris',
+
   //review
   review_title: 'Avis',
 

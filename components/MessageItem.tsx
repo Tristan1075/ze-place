@@ -16,7 +16,15 @@ const MessageItem = (props: Props) => {
   return (
     <TouchableOpacity style={styles.container} onPress={onConversationPress}>
       <View style={styles.container}>
-        <Image source={{uri: conversation.userAvatar}} style={styles.image} />
+        <Image
+          source={{
+            uri:
+              conversation.userId == UserStore.user._id
+                ? conversation.ownerAvatar
+                : conversation.userAvatar,
+          }}
+          style={styles.image}
+        />
         <View>
           <Text style={styles.from}>
             {conversation?.userId == UserStore.user._id

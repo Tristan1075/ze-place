@@ -136,6 +136,16 @@ export default {
   user_booking_confirm_action_description:
     'This action is irreversible, you will not be able to go back !',
 
+  //booking_and_place
+  booking_and_place_booking_title: 'Bookings',
+  booking_and_place_place_title: 'Places',
+
+  //tap_bar
+  tap_bar_home_title: 'Home',
+  tap_bar_booking_title: 'Booking and places',
+  tap_bar_message_title: 'Messages',
+  tap_bar_favorites_title: 'Favorites',
+
   //review
   review_title: 'Review',
 
