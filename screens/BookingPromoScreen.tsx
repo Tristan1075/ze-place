@@ -14,8 +14,11 @@ import {FilterForm, HomeParamList, Place, Promo} from '../types';
 import TitleWithDescription from '../components/TitleWithDescription';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
-import {getActivePromos} from '../api/customer';
+import {getActivePromos, addPromoCode, getUser} from '../api/customer';
 import {ModalContext} from '../providers/modalContext';
+import SimpleInput from '../components/SimpleInput';
+import UserStore from '../store/UserStore';
+import Button from '../components/Button';
 
 type RootScreenNavigationProp = StackNavigationProp<HomeParamList, 'Home'>;
 
@@ -29,6 +32,10 @@ type Props = {
 const PlaceReviewScreen = ({place, onPromoSelected, promo}: Props) => {
   const [activePromo, setActivePromo] = useState<Promo[]>();
   const [placePromo, setPlace] = useState<Place>(place);
+  const [code, setCode] = useState<string>();
+  const [error, setError] = useState<string>();
+  const [isFetching, setIsFecthing] = useState<boolean>(false);
+
   const {handleModal} = useContext(ModalContext);
   const [selectedElem, setSelectedElem] = useState<any>(
     promo ? promo.name : '',
@@ -40,6 +47,30 @@ const PlaceReviewScreen = ({place, onPromoSelected, promo}: Props) => {
     getActivePromovar();
   }, []);
 
+  const addPromo = async () => {
+    console.log(code);
+    
+    setIsFecthing(true);
+    setError('');
+    if (code) {
+      try {
+        await addPromoCode(code);
+        setIsFecthing(false);
+        setCode('');
+      } catch (err) {
+        console.log(err);
+        setError(i18n.t('promo_code_error'));
+        setIsFecthing(false);
+      }
+      const token = await getUser();
+      await UserStore.updateUser(token);
+    } else {
+      setError(i18n.t('promo_code_error'));
+      setIsFecthing(false);
+    }
+    setActivePromo(await getActivePromos());
+  };
+
   const handlePromo = (promo) => {
     if (selectedElem == promo.name) {
       setSelectedElem('');
@@ -47,6 +78,8 @@ const PlaceReviewScreen = ({place, onPromoSelected, promo}: Props) => {
       onPromoSelected(finalPrice);
     } else {
       setSelectedElem(promo.name);
+      console.log(promo.name);
+      
       let finalPrice = placePromo.price;
       finalPrice -= finalPrice * (promo.value / 100);
       onPromoSelected(finalPrice, promo);
@@ -60,10 +93,35 @@ const PlaceReviewScreen = ({place, onPromoSelected, promo}: Props) => {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.contentScrollView}>
         <View>
+        <TitleWithDescription
+          title={i18n.t('confirmation_booking_promotionnal_code')}
+          subtitle={true}
+          description={i18n.t('promo_code_description')}
+        />
+        <SimpleInput
+          
+          onChangeText={(v) => {
+            setCode(v.toUpperCase());
+            setError('');
+          }}
+          placeholder="Code"
+          style={styles.input}
+          textAlign="center"
+          error={error}
+        />
+        <Button
+          isFetching={isFetching}
+          value={i18n.t('promo_code_validate')}
+          onPress={addPromo}
+          backgroundColor={Colors.primary}
+          textColor={Colors.white}
+        />
           <Text style={styles.title}>{i18n.t('promo_code_active')}</Text>
 
           {activePromo &&
             activePromo.map((e) => (
+              console.log(selectedElem == e.name),
+              
               <TouchableOpacity
                 style={
                   selectedElem == e.name ? styles.selectedCode : styles.codeCard
@@ -92,6 +150,12 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.dark,
     paddingTop: 130,
+  },
+  input: {
+    marginBottom: 20,
+    textAlign: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   scrollView: {
     flex: 1,
@@ -155,14 +219,14 @@ const styles = StyleSheet.create({
   selectedCode: {
     position: 'relative',
 
-    backgroundColor: Colors.white,
+    backgroundColor: Colors.lightgray,
     textAlign: 'center',
     borderRadius: 15,
     paddingVertical: 15,
     paddingHorizontal: 20,
-    shadowColor: '#000',
+    shadowColor: '#100',
     shadowOffset: {
-      width: 0,
+      width: 1,
       height: 2,
     },
     shadowOpacity: 1,

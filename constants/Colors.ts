@@ -2,6 +2,7 @@ export default {
   dark: '#191919',
   textGray: '#545454',
   white: '#fff',
+  lightgray: '#e5e5e5',
   whiteOpacity: 'rgba(200, 200, 200, 0.6)',
   background: '#F5F7F8',
   primary: '#0E4A86',
