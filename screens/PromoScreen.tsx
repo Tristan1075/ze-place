@@ -43,6 +43,8 @@ const PromoScreen = () => {
   }, []);
 
   const addPromo = async () => {
+    console.log(code);
+    
     setIsFecthing(true);
     setError('');
     if (code) {
@@ -75,7 +77,7 @@ const PromoScreen = () => {
           description={i18n.t('promo_code_description')}
         />
         <SimpleInput
-          value={code}
+          
           onChangeText={(v) => {
             setCode(v.toUpperCase());
             setError('');
