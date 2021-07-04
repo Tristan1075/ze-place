@@ -48,7 +48,6 @@ const PlaceReviewScreen = ({place, onPromoSelected, promo}: Props) => {
   }, []);
 
   const addPromo = async () => {
-    console.log(code);
     
     setIsFecthing(true);
     setError('');
@@ -58,7 +57,6 @@ const PlaceReviewScreen = ({place, onPromoSelected, promo}: Props) => {
         setIsFecthing(false);
         setCode('');
       } catch (err) {
-        console.log(err);
         setError(i18n.t('promo_code_error'));
         setIsFecthing(false);
       }
@@ -78,7 +76,6 @@ const PlaceReviewScreen = ({place, onPromoSelected, promo}: Props) => {
       onPromoSelected(finalPrice);
     } else {
       setSelectedElem(promo.name);
-      console.log(promo.name);
       
       let finalPrice = placePromo.price;
       finalPrice -= finalPrice * (promo.value / 100);
@@ -99,7 +96,6 @@ const PlaceReviewScreen = ({place, onPromoSelected, promo}: Props) => {
           description={i18n.t('promo_code_description')}
         />
         <SimpleInput
-          
           onChangeText={(v) => {
             setCode(v.toUpperCase());
             setError('');
@@ -120,7 +116,6 @@ const PlaceReviewScreen = ({place, onPromoSelected, promo}: Props) => {
 
           {activePromo &&
             activePromo.map((e) => (
-              console.log(selectedElem == e.name),
               
               <TouchableOpacity
                 style={
