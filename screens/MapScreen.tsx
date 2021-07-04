@@ -52,7 +52,14 @@ const MapScreen = ({initialCoords, onItemPress}: Props) => {
   }, [coords]);
 
   const renderCarouselItem = ({item}: {item: Place}) => {
-    return <PlaceCard place={item} onPress={() => onItemPress(item)} />;
+    return (
+      <PlaceCard
+        key={item._id}
+        place={item}
+        onPress={() => onItemPress(item)}
+        isFavorite={item.isFavorite}
+      />
+    );
   };
 
   const onRegionChange = (c: Coords) => {

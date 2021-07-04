@@ -5,14 +5,20 @@ import UserStore from '../store/UserStore';
 
 import {Coords, CreatePlaceForm, FilterForm} from '../types';
 
-export const getAllPlaces = async () => {
+export const getAllPlaces = async (limit?: number) => {
   const token = await SecureStore.getItemAsync('access-token');
   return await axios
-    .get(`${API_URL}/places`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
+    .post(
+      `${API_URL}/places`,
+      {
+        limit,
       },
-    })
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    )
     .then((response: AxiosResponse<any>) => {
       return response.data;
     })
@@ -21,14 +27,20 @@ export const getAllPlaces = async () => {
     });
 };
 
-export const getAllPlacesShuffle = async () => {
+export const getAllPlacesShuffle = async (limit?: number) => {
   const token = await SecureStore.getItemAsync('access-token');
   return await axios
-    .get(`${API_URL}/places/shuffle`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
+    .post(
+      `${API_URL}/places/shuffle`,
+      {
+        limit,
       },
-    })
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    )
     .then((response: AxiosResponse<any>) => {
       return response.data;
     })
@@ -56,14 +68,16 @@ export const getPlaceById = async (id: string) => {
 export const getPlacesNearbyCoordinates = async (
   coords: Coords,
   distance: number,
+  limit?: number,
 ) => {
   const token = await SecureStore.getItemAsync('access-token');
   return await axios
     .post(
       `${API_URL}/places`,
       {
-        coords: coords,
-        distance: distance,
+        limit,
+        coords,
+        distance,
       },
       {
         headers: {
@@ -154,7 +168,7 @@ export const updatePlace = async (placeId: string, form: CreatePlaceForm) => {
     });
 };
 
-export const getSimilarPlaces = async (placeID: String) => {
+export const getSimilarPlaces = async (placeID: string) => {
   const token = await SecureStore.getItemAsync('access-token');
   return await axios
     .post(

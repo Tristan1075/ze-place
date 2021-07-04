@@ -53,7 +53,7 @@ const HomeScreen = (props: Props) => {
   const [nearbyPlaces, setNearbyPlaces] = useState<Array<Place>>([]);
   const {handleModal} = useContext(ModalContext);
   const init = useCallback(async () => {
-    setPlaces(await getAllPlacesShuffle());
+    setPlaces(await getAllPlacesShuffle(10));
     setNearbyPlaces(
       await getPlacesNearbyCoordinates(
         {
@@ -61,6 +61,7 @@ const HomeScreen = (props: Props) => {
           latitude: parseFloat(UserStore.user.location.latitude),
         },
         40000,
+        10,
       ),
     );
   }, []);
@@ -107,7 +108,6 @@ const HomeScreen = (props: Props) => {
   };
 
   const handleFavoritePress = async (p: Place) => {
-    console.log(p);
     p.isFavorite ? await removeFavorite(p) : await addFavorite(p);
     await init();
   };
@@ -166,7 +166,7 @@ const HomeScreen = (props: Props) => {
       <Carousel
         contentContainerCustomStyle={{paddingLeft: Layout.padding}}
         useScrollView={true}
-        data={nearbyPlaces.slice(0, 30)}
+        data={nearbyPlaces}
         renderItem={renderCarouselItem}
         sliderWidth={Layout.window.width}
         activeSlideAlignment="start"
@@ -182,7 +182,7 @@ const HomeScreen = (props: Props) => {
         subtitle={true}
         onActionPress={showFilterModal}
       />
-      {places.slice(0, 10).map((item) => (
+      {places.map((item) => (
         <View style={styles.paddingHorizontal} key={item._id}>
           <PlaceCard
             place={item}
