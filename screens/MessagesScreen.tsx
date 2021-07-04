@@ -41,17 +41,10 @@ const MessagesScreen = (props: Props) => {
     );
     if (conversation) {
       conversation.sort((o1: Conversation, o2: Conversation) => {
-        if (
-          (o1.lastMessage && !o1.lastMessage.created_at) ||
-          (o2.lastMessage && !o2.lastMessage.created_at)
-        ) {
+        if (!o1.lastMessage || !o2.lastMessage) {
           return;
         }
-        return o1.lastMessage && o1.lastMessage.created_at
-          ? -1
-          : o2.lastMessage && o2.lastMessage.created_at
-          ? 1
-          : 0;
+        return o1.lastMessage._id < o2.lastMessage._id;
       });
       setConversations(conversation);
     }
