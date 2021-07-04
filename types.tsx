@@ -229,7 +229,7 @@ export type Location = {
 };
 
 export type CreatePlaceForm = {
-  title?: string;
+  title: string;
   location?: Location;
   placeType?: PlaceType;
   startDate?: string;

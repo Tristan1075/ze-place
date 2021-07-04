@@ -23,10 +23,18 @@ type Props = {
   nextStep: () => void;
   createPlaceForm: CreatePlaceForm;
   setCreatePlaceForm: Dispatch<SetStateAction<CreatePlaceForm>>;
+  errors?: CreatePlaceForm;
+  setErrors: Dispatch<SetStateAction<any>>;
 };
 
 const GeneralInformations = (props: Props) => {
-  const {nextStep, createPlaceForm, setCreatePlaceForm} = props;
+  const {
+    nextStep,
+    createPlaceForm,
+    setCreatePlaceForm,
+    errors,
+    setErrors,
+  } = props;
   const {handleModal} = useContext(ModalContext);
 
   const handleMapPress = () => {
@@ -37,6 +45,7 @@ const GeneralInformations = (props: Props) => {
 
   const handleLocationPress = (location: Location) => {
     setCreatePlaceForm({...createPlaceForm, location: location});
+    setErrors({...errors, location: ''});
     handleModal();
   };
 
@@ -53,7 +62,9 @@ const GeneralInformations = (props: Props) => {
         placeholder={i18n.t('general_information_place_title')}
         onChangeText={(value) => {
           setCreatePlaceForm({...createPlaceForm, title: value});
+          setErrors({...errors, title: ''});
         }}
+        error={errors?.title}
       />
       <TitleWithDescription
         title={i18n.t('general_information_location')}
@@ -67,6 +78,7 @@ const GeneralInformations = (props: Props) => {
         isEditable={false}
         onPress={handleMapPress}
         suffix={<Ionicons name="chevron-down" size={20} color={Colors.dark} />}
+        error={errors?.location?.toString()}
       />
 
       {createPlaceForm.location && (

@@ -6,13 +6,16 @@ import Feature from './Feature';
 type Props = {
   features: Array<FeatureType>;
   onChange?: Dispatch<SetStateAction<any>>;
+  setErrors?: Dispatch<SetStateAction<any>>;
   list?: Booking | CreatePlaceForm;
   onlyOne?: boolean;
+  updateError?: () => void;
 };
 
-const FeatureList = ({features, onChange, list, onlyOne}: Props) => {
+const FeatureList = ({features, onChange, list, onlyOne, updateError}: Props) => {
   const handleFeaturePress = (feature: FeatureType) => {
     if (onChange && list) {
+      updateError && updateError();
       if (onlyOne) {
         onChange({...list, features: [feature]});
       } else {

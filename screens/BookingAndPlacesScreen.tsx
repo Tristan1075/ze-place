@@ -12,21 +12,44 @@ import Colors from '../constants/Colors';
 import i18n from 'i18n-js';
 import BookingListScreen from './BookingListScreen';
 import MyPlaceScreen from './MyPlaceScreen';
+import { useCallback, useEffect, useState } from 'react';
+import { getBookingByUser } from '../api/bookings';
+import { useNavigation } from '@react-navigation/native';
+import { Booking, Place } from '../types';
+import { getUser } from '../api/customer';
 
 const BookingAndPlacesScreen = () => {
   const layout = useWindowDimensions();
+  const navigation = useNavigation();
 
-  const [index, setIndex] = React.useState(0);
-  const [routes] = React.useState([
+  const [index, setIndex] = useState(0);
+  const [routes] = useState([
     {key: 'first', title: i18n.t('booking_and_place_booking_title')},
     {key: 'second', title: i18n.t('booking_and_place_place_title')},
   ]);
+  const [bookings, setBookings] = useState<Booking[]>([]);
+  const [places, setPlaces] = useState<Place[]>([]);
 
-  const renderScene = SceneMap({
-    first: BookingListScreen,
-    second: MyPlaceScreen,
-  });
+  const init = useCallback(async () => {
+    setBookings(await getBookingByUser());
+    const user = await getUser();
+    setPlaces(user.ownedPlaces);
+  }, []);
 
+  useEffect(() => {
+    navigation.addListener('focus', init);
+  }, [init, navigation]);
+
+  const renderScene = ({ route }) => {
+    switch (route.key) {
+      case 'first':
+        return <BookingListScreen bookings={bookings} />;
+      case 'second':
+        return <MyPlaceScreen places={places} />;
+      default:
+        return null;
+    }
+  };
   const renderTabBar = (props) => (
     <TabBar
       {...props}

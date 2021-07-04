@@ -312,6 +312,9 @@ export default {
   component_credit_card_expire: 'Expire le',
   component_credit_card_cvc: 'Code CVC',
   component_credit_card_save_card: 'Enregistrer la carte',
+  component_credit_card_expire_error: 'La date est invalide',
+  component_credit_card_number_error: 'Le numéro est invalide',
+  component_credit_card_cvc_error: 'Le code est invalide',
 
   //component_description_bloc
   component_description_bloc_rent_space: 'Louez votre espace',

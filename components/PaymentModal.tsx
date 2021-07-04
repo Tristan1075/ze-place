@@ -111,9 +111,10 @@ const PaymentModal = (props: Props) => {
             Veuillez choisir un moyen de paiement
           </Text>
           <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-            {paymentMethods.map((paymentMethod) => {
+            {paymentMethods.map((paymentMethod, index) => {
               return (
                 <TouchableOpacity
+                  key={index}
                   style={styles.paymentMethodCard}
                   onPress={
                     paymentMethod.card.brand === 'add_card'

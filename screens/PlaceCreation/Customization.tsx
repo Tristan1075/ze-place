@@ -29,18 +29,28 @@ import {CreatePlaceForm, Place} from '../../types';
 import {createPlace, updatePlace} from '../../api/places';
 import * as SecureStore from 'expo-secure-store';
 import i18n from 'i18n-js';
-import UserStore from '../../store/UserStore';
-import { compressImage } from '../../utils';
+import {compressImage} from '../../utils';
 
 type Props = {
   prevStep: () => void;
   createPlaceForm: CreatePlaceForm;
   setCreatePlaceForm: Dispatch<SetStateAction<CreatePlaceForm>>;
   place?: Place;
+  errors?: CreatePlaceForm;
+  verifyForm: () => Promise<boolean>;
+  setErrors: Dispatch<SetStateAction<any>>;
 };
 
 const Customization = (props: Props) => {
-  const {prevStep, createPlaceForm, setCreatePlaceForm, place} = props;
+  const {
+    prevStep,
+    createPlaceForm,
+    setCreatePlaceForm,
+    place,
+    verifyForm,
+    errors,
+    setErrors,
+  } = props;
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [submitModal, setSubmitModal] = useState<boolean>(false);
   const navigation = useNavigation();
@@ -60,6 +70,7 @@ const Customization = (props: Props) => {
         ...createPlaceForm,
         images: [...createPlaceForm.images, image],
       });
+      setErrors({...errors, images: undefined});
       setModalVisible(false);
     }
   };
@@ -70,8 +81,7 @@ const Customization = (props: Props) => {
     let cpt2 = 0;
 
     for (const element of createPlaceForm.images) {
-      const newurl =  await compressImage(element.url);
-      
+      const newurl = await compressImage(element.url);
       const options = {
         bucket: REACT_APP_BUCKET_NAME,
         region: REACT_APP_REGION,
@@ -99,19 +109,21 @@ const Customization = (props: Props) => {
   };
 
   const handleSubmitForm = async () => {
-    try {
-      if (place) {
-        await updatePlace(place._id, createPlaceForm);
-        setSubmitModal(false);
-        navigation.dispatch(StackActions.pop());
-      } else {
-
-         await uploadToS3();
-         await createPlace(createPlaceForm);
-        setSubmitModal(false);
-        navigation.dispatch(StackActions.popToTop());
-      }
-    } catch (err) {
+    if (await verifyForm()) {
+      try {
+        if (place) {
+          await updatePlace(place._id, createPlaceForm);
+          setSubmitModal(false);
+          navigation.dispatch(StackActions.pop());
+        } else {
+          await uploadToS3();
+          await createPlace(createPlaceForm);
+          setSubmitModal(false);
+          navigation.dispatch(StackActions.popToTop());
+        }
+      } catch (err) {}
+    } else {
+      setSubmitModal(false);
     }
   };
 
@@ -140,6 +152,7 @@ const Customization = (props: Props) => {
           />
         </TouchableOpacity>
       </ScrollView>
+      {errors?.images && <Text style={styles.error}>{errors?.images}</Text>}
       <View style={styles.row}>
         <Button
           value={i18n.t('customization_back')}
@@ -268,6 +281,12 @@ const styles = StyleSheet.create({
     fontFamily: 'poppins',
     color: Colors.dark,
     textDecorationLine: 'underline',
+  },
+  error: {
+    color: Colors.error,
+    fontFamily: 'poppins',
+    fontSize: 14,
+    paddingBottom: 20,
   },
 });
 

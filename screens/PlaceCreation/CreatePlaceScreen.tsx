@@ -22,13 +22,14 @@ const CreatePlaceScreen = () => {
   const place: Place = route.params?.place;
   const [activeStep, setActiveStep] = useState<number>(0);
   const [exitModal, setExitModal] = useState<boolean>(false);
+  const [errors, setErrors] = useState();
   const [createPlaceForm, setCreatePlaceForm] = useState<CreatePlaceForm>({
-    title: undefined,
+    title: '',
     location: undefined,
-    surface: undefined,
+    surface: '',
     placeType: undefined,
-    price: undefined,
-    description: undefined,
+    price: '',
+    description: '',
     features: [],
     images: [],
     authorizeAnimals: true,
@@ -57,6 +58,49 @@ const CreatePlaceScreen = () => {
       });
     }
   }, []);
+
+  const verifyForm = async (): Promise<boolean> => {
+    let isValid = true;
+    const e: any = {};
+
+    if (createPlaceForm.title?.length === 0) {
+      e.title = i18n.t('sign_up_field_required');
+      isValid = false;
+    }
+    if (!createPlaceForm.location?.address) {
+      e.location = i18n.t('sign_up_field_required');
+      isValid = false;
+    }
+    if (createPlaceForm.surface?.length === 0) {
+      e.surface = i18n.t('sign_up_field_required');
+      isValid = false;
+    }
+    if (!createPlaceForm.placeType?.name) {
+      e.placeType = i18n.t('sign_up_field_required');
+      isValid = false;
+    }
+
+    if (createPlaceForm.price?.length === 0) {
+      e.price = i18n.t('sign_up_field_required');
+      isValid = false;
+    }
+
+    if (createPlaceForm.description?.length === 0) {
+      e.description = i18n.t('sign_up_field_required');
+      isValid = false;
+    }
+    if (createPlaceForm.features.length === 0) {
+      e.features = i18n.t('sign_up_field_required');
+      isValid = false;
+    }
+    if (createPlaceForm.images.length === 0) {
+      e.images = i18n.t('sign_up_invalid_format');
+      isValid = false;
+    }
+
+    setErrors(e);
+    return isValid;
+  };
 
   const handleBackPress = () => {
     setExitModal(false);
@@ -89,6 +133,8 @@ const CreatePlaceScreen = () => {
                 nextStep={nextStep}
                 createPlaceForm={createPlaceForm}
                 setCreatePlaceForm={setCreatePlaceForm}
+                errors={errors}
+                setErrors={setErrors}
               />
             </View>
           </ProgressStep>
@@ -103,6 +149,8 @@ const CreatePlaceScreen = () => {
                 nextStep={nextStep}
                 createPlaceForm={createPlaceForm}
                 setCreatePlaceForm={setCreatePlaceForm}
+                errors={errors}
+                setErrors={setErrors}
               />
             </View>
           </ProgressStep>
@@ -129,6 +177,9 @@ const CreatePlaceScreen = () => {
                 createPlaceForm={createPlaceForm}
                 setCreatePlaceForm={setCreatePlaceForm}
                 place={place}
+                errors={errors}
+                verifyForm={verifyForm}
+                setErrors={setErrors}
               />
             </View>
           </ProgressStep>

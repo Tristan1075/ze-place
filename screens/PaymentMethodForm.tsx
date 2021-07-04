@@ -47,7 +47,9 @@ const PaymentMethodForm = ({closeModal, onSubmit}: Props) => {
         if (res) {
           onSubmit();
         }
-      } catch (err) {}
+      } catch (err) {
+        setIsFetching(false);
+      }
     }
   };
 

@@ -12,17 +12,12 @@ import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
 import {Booking} from '../types';
 
-const BookingListScreen = (props: Props) => {
+type Props = {
+  bookings: Booking[];
+};
+
+const BookingListScreen = ({bookings}: Props) => {
   const navigation = useNavigation();
-  const [bookings, setBookings] = useState<Booking[]>([]);
-
-  const init = useCallback(async () => {
-    setBookings(await getBookingByUser());
-  }, []);
-
-  useEffect(() => {
-    navigation.addListener('focus', init);
-  }, [init, navigation]);
 
   const handlePlacePress = (placeId?: string) => {
     navigation.navigate('PlaceDetail', {

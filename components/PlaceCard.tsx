@@ -36,7 +36,7 @@ const PlaceCard = (props: Props) => {
           )}
         </View>
         <View style={styles.row}>
-          <Text style={styles.subtitle}>
+          <Text style={styles.durationType}>
             {place.placeType && place.placeType.name}
           </Text>
         </View>

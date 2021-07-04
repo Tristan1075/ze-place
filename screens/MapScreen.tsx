@@ -41,8 +41,6 @@ const MapScreen = ({initialCoords, onItemPress}: Props) => {
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const [places, setPlaces] = useState<Array<Place>>([]);
   const [coords, setCoords] = useState<Coords>(initialCoords);
-  const [placeModal, showPlaceModal] = useState<boolean>(false);
-  const [selectedPlace, setSelectedPlace] = useState<Place>();
   let mapRef: any;
   let carouselRef: any;
 

@@ -150,8 +150,7 @@ const SignupScreen = (props: Props) => {
   };
 
   const uploadToS3 = async () => {
-
-    const newurl =  await compressImage(form.avatar);
+    const newurl = await compressImage(form.avatar);
     const file = {
       uri: newurl.uri,
       name: `${form.email}${form.lastname}.png`,

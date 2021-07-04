@@ -26,6 +26,8 @@ type Props = {
   nextStep: () => void;
   createPlaceForm: CreatePlaceForm;
   setCreatePlaceForm: Dispatch<SetStateAction<CreatePlaceForm>>;
+  errors?: CreatePlaceForm;
+  setErrors: Dispatch<SetStateAction<any>>;
 };
 
 const PlaceInformations = (props: Props) => {
@@ -35,6 +37,8 @@ const PlaceInformations = (props: Props) => {
     createPlaceForm,
     setCreatePlaceForm,
     place,
+    errors,
+    setErrors,
   } = props;
   const {handleModal} = useContext(ModalContext);
   const [minDate, setMinDate] = useState<string>();
@@ -57,6 +61,7 @@ const PlaceInformations = (props: Props) => {
 
   const handlePlaceTypePress = (type: PlaceType) => {
     setCreatePlaceForm({...createPlaceForm, placeType: type});
+    setErrors({...errors, placeType: undefined});
     handleModal();
   };
 
@@ -68,14 +73,13 @@ const PlaceInformations = (props: Props) => {
         subtitle={true}
         style={styles.paddingVertical}
       />
-
       <SimpleInput
         placeholder={i18n.t('place_information_place_type_placeholder')}
         value={createPlaceForm.placeType?.name}
         onPress={handleSelectPlaceType}
         suffix={<Ionicons name="chevron-down" size={20} color={Colors.dark} />}
+        error={errors?.placeType?.toString()}
       />
-
       <TitleWithDescription
         title={i18n.t('place_information_surface_title')}
         description={i18n.t('place_information_surface_description')}
@@ -87,9 +91,11 @@ const PlaceInformations = (props: Props) => {
         placeholder={i18n.t('place_information_surface_placeholder')}
         type="number-pad"
         suffix={<Text style={styles.descriptionText}>m²</Text>}
-        onChangeText={(value) =>
-          setCreatePlaceForm({...createPlaceForm, surface: value})
-        }
+        onChangeText={(value) => {
+          setCreatePlaceForm({...createPlaceForm, surface: value});
+          setErrors({...errors, surface: ''});
+        }}
+        error={errors?.surface}
       />
       <TitleWithDescription
         title={i18n.t('place_information_price_title')}
@@ -103,9 +109,11 @@ const PlaceInformations = (props: Props) => {
         style={styles.flex}
         suffix={<Text style={styles.descriptionText}>€</Text>}
         type="number-pad"
-        onChangeText={(value) =>
-          setCreatePlaceForm({...createPlaceForm, price: value})
-        }
+        onChangeText={(value) => {
+          setCreatePlaceForm({...createPlaceForm, price: value});
+          setErrors({...errors, price: ''});
+        }}
+        error={errors?.price}
       />
       <TitleWithDescription
         title={i18n.t('place_information_description_title')}
@@ -118,9 +126,11 @@ const PlaceInformations = (props: Props) => {
         multiline={true}
         numberOfLines={1}
         value={createPlaceForm.description}
-        onChangeText={(value) =>
-          setCreatePlaceForm({...createPlaceForm, description: value})
-        }
+        onChangeText={(value) => {
+          setCreatePlaceForm({...createPlaceForm, description: value});
+          setErrors({...errors, surface: ''});
+        }}
+        error={errors?.description}
       />
       <TitleWithDescription
         title={i18n.t('place_information_feature_title')}
@@ -132,8 +142,10 @@ const PlaceInformations = (props: Props) => {
         features={features}
         list={createPlaceForm}
         onChange={setCreatePlaceForm}
+        updateError={() => setErrors({...errors, features: undefined})}
         onlyOne={false}
       />
+      {errors?.features && <Text style={styles.error}>{errors?.features}</Text>}
       <View style={styles.row}>
         <Button
           value={i18n.t('place_information_back')}
@@ -193,6 +205,12 @@ const styles = StyleSheet.create({
   descriptionText: {
     color: Colors.gray,
   },
+  error: {
+    color: Colors.error,
+    fontFamily: 'poppins',
+    fontSize: 14,
+    paddingTop: 10,
+  }
 });
 
 export default PlaceInformations;

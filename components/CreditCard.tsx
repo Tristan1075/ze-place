@@ -108,6 +108,9 @@ const CreditCard = (props: Props) => {
           value={creditCardNumber}
           placeholder="4242 4242 4242 4242"
           maxLength={19}
+          error={
+            error.number ? i18n.t('component_credit_card_number_error') : ''
+          }
         />
       </View>
       <View style={styles.row}>
@@ -120,6 +123,9 @@ const CreditCard = (props: Props) => {
             value={expDate}
             placeholder="MM/YY"
             maxLength={5}
+            error={
+              error.expDate ? i18n.t('component_credit_card_expire_error') : ''
+            }
           />
         </View>
         <View style={styles.embedInput}>
@@ -131,6 +137,7 @@ const CreditCard = (props: Props) => {
             value={cvc}
             placeholder="123"
             maxLength={3}
+            error={error.cvc ? i18n.t('component_credit_card_cvc_error') : ''}
           />
         </View>
       </View>

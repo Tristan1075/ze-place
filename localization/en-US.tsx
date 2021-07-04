@@ -314,6 +314,9 @@ export default {
   component_credit_card_expire: 'Expire in',
   component_credit_card_cvc: 'CVC Code',
   component_credit_card_save_card: 'Save card',
+  component_credit_card_expire_error: 'This date is invalid',
+  component_credit_card_number_error: 'This numbers are invalid',
+  component_credit_card_cvc_error: 'This code is invalid',
 
   //component_description_bloc
   component_description_bloc_rent_space: 'Rent your space',
