@@ -64,7 +64,7 @@ const HomeScreen = (props: Props) => {
         location?.coords.latitude ||
         parseFloat(UserStore.user.location.latitude),
     });
-    setPlaces(await getAllPlacesShuffle(10));
+    setPlaces(await getAllPlaces(10));
     setNearbyPlaces(
       await getPlacesNearbyCoordinates(
         {
