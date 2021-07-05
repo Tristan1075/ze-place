@@ -328,7 +328,7 @@ export default {
   //component_description_bloc
   component_description_bloc_rent_space: 'Louez votre espace',
   component_description_bloc_rent_description:
-    'Vous pouvez louer votre m2, venez découvrir cette fonctionalitée',
+    'Vous pouvez louer votre m2, venez découvrir cette fonctionalité',
   component_description_bloc_see_more: 'En voir plus',
 
   //component_place_card
