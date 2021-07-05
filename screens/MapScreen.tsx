@@ -136,7 +136,9 @@ const MapScreen = ({initialCoords, onItemPress}: Props) => {
           );
         })}
       </MapView>
-      <TouchableOpacity style={styles.target} onPress={handleCenterUserPress}>
+      <TouchableOpacity
+        style={[styles.target, places.length > 0 && styles.targetWithPlace]}
+        onPress={handleCenterUserPress}>
         <MaterialCommunityIcons
           name="target"
           size={25}
@@ -212,12 +214,15 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     width: 50,
     height: 50,
-    right: 10,
-    bottom: 200,
+    right: 20,
+    bottom: 60,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 999,
   },
+  targetWithPlace: {
+    bottom: 200,
+  }
 });
 
 export default MapScreen;

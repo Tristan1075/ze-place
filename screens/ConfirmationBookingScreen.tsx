@@ -43,18 +43,13 @@ const ConfirmationBookingScreen = ({place, booking, navigation}: Props) => {
   const [TVA, setTVA] = useState<Charges>();
   const [Services, setService] = useState<Charges>();
 
-
-
   const {handleModal} = useContext(ModalContext);
 
-
   useEffect(() => {
-    const getTVACharges = async () =>
-      setTVA(await getTVA());
-    const getServiceCharges = async () =>
-      setService(await getService());
+    const getTVACharges = async () => setTVA(await getTVA());
+    const getServiceCharges = async () => setService(await getService());
 
-      getTVACharges();
+    getTVACharges();
     getServiceCharges();
   }, []);
 
@@ -68,8 +63,8 @@ const ConfirmationBookingScreen = ({place, booking, navigation}: Props) => {
     setPromoCode(promo);
   };
 
-  const fees = TVA ? TVA.value/100 : 0.3; 
-  const tva = Services ? Services.value/100 : 0.2; 
+  const tva = TVA ? TVA.value / 100 : 0.3;
+  const fees = Services ? Services.value / 100 : 0.2;
   const priceHT: number = parseFloat(
     (bookPromo.duration * placeBook.price).toFixed(2),
   );
