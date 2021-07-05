@@ -11,6 +11,7 @@ import FeatureList from '../components/FeatureList';
 import Modal from '../components/Modal';
 import ConfirmationBookingScreen from './ConfirmationBookingScreen';
 import i18n from 'i18n-js';
+import KeyboardSpacer from 'react-native-keyboard-spacer';
 
 type Props = {
   place: Place;
@@ -136,6 +137,7 @@ const BookingScreen = ({place, navigation}: Props) => {
         }
         handleModal={() => showConfirmationBooking(false)}
       />
+      <KeyboardSpacer topSpacing={-40} />
     </>
   );
 };
