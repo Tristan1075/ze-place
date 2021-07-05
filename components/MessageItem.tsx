@@ -15,37 +15,35 @@ const MessageItem = (props: Props) => {
     conversation.lastMessage && new Date(conversation.lastMessage.created_at);
   return (
     <TouchableOpacity style={styles.container} onPress={onConversationPress}>
-      <View style={styles.container}>
-        <Image
-          source={{
-            uri:
-              conversation.userId == UserStore.user._id
-                ? conversation.ownerAvatar
-                : conversation.userAvatar,
-          }}
-          style={styles.image}
-        />
-        <View>
-          <View style={styles.row}>
-            <Text style={styles.from}>
-              {conversation?.userId == UserStore.user._id
-                ? conversation?.ownerName
-                : conversation?.userName}
-            </Text>
-            {conversation.lastMessage && (
-              <Text style={styles.date}>
-                {time.getHours() < 10 ? '0' : ''}
-                {time.getHours()}:{time.getMinutes() < 10 ? '0' : ''}
-                {time.getMinutes()}
-              </Text>
-            )}
-          </View>
+      <Image
+        source={{
+          uri:
+            conversation.userId == UserStore.user._id
+              ? conversation.ownerAvatar
+              : conversation.userAvatar,
+        }}
+        style={styles.image}
+      />
+      <View style={{flex: 1}}>
+        <View style={styles.row}>
+          <Text style={styles.from}>
+            {conversation?.userId == UserStore.user._id
+              ? conversation.ownerName
+              : conversation.userName}
+          </Text>
           {conversation.lastMessage && (
-            <Text style={styles.lastMessage} numberOfLines={1}>
-              {conversation.lastMessage.text}
+            <Text style={styles.date}>
+              {time.getHours() < 10 ? '0' : ''}
+              {time.getHours()}:{time.getMinutes() < 10 ? '0' : ''}
+              {time.getMinutes()}
             </Text>
           )}
         </View>
+        {conversation.lastMessage && (
+          <Text style={styles.lastMessage} numberOfLines={1}>
+            {conversation.lastMessage.text}
+          </Text>
+        )}
       </View>
     </TouchableOpacity>
   );
@@ -55,7 +53,6 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
   },
   image: {
     width: 70,
@@ -69,7 +66,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: Colors.secondary,
     flexWrap: 'wrap',
-    width: 180,
+    flex: 5,
   },
   badge: {
     backgroundColor: Colors.primary,
@@ -93,10 +90,11 @@ const styles = StyleSheet.create({
     fontFamily: 'poppins',
     fontSize: 14,
     color: Colors.primary,
+    flex: 1,
+    marginLeft: 20,
   },
   row: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
   },
 });
 
