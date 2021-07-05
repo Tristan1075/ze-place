@@ -142,6 +142,7 @@ const ConversationScreen = (props: Props) => {
         conversationParams.userId,
         conversationParams.ownerId,
       );
+      setConversation(conversationResult);
       sendMessage(conversationResult);
     }
   };

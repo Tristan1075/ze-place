@@ -7,6 +7,7 @@ import {Place} from '../types';
 import {Rating} from 'react-native-ratings';
 import Layout from '../constants/Layout';
 import i18n from 'i18n-js';
+import UserStore from '../store/UserStore';
 
 type Props = {
   onFavoritePress?: (place: Place) => void;
@@ -36,7 +37,7 @@ const PlaceCard = (props: Props) => {
       <View style={styles.informations}>
         <View style={styles.row}>
           <Text style={styles.title}>{place.title}</Text>
-          {onFavoritePress && (
+          {UserStore.user._id != place.ownerId && onFavoritePress && (
             <TouchableOpacity onPress={() => onFavoritePress(place)}>
               <Ionicons
                 size={28}
