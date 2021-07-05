@@ -466,7 +466,6 @@ const SignupScreen = (props: Props) => {
             </View>
           </View>
         </ScrollView>
-        <KeyboardSpacer topSpacing={-20} />
         <DateTimePickerModal
           isVisible={showDateTimePicker}
           date={form.birthdate ? form.birthdate : new Date()}

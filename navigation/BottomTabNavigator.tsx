@@ -28,7 +28,10 @@ export default function BottomTabNavigator() {
   return (
     <BottomTab.Navigator
       initialRouteName="Home"
-      tabBarOptions={{activeTintColor: Colors.primary}}>
+      tabBarOptions={{
+        activeTintColor: Colors.primary,
+        keyboardHidesTabBar: true,
+      }}>
       <BottomTab.Screen
         name={i18n.t('tap_bar_home_title')}
         component={HomeNavigator}
