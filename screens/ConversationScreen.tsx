@@ -5,7 +5,6 @@ import {
   FlatList,
   View,
   TextInput,
-  Keyboard,
 } from 'react-native';
 import {RouteProp, useRoute} from '@react-navigation/native';
 import {Subscription} from '@unimodules/core';
@@ -49,7 +48,6 @@ const ConversationScreen = (props: Props) => {
   const _flatList = useRef<FlatList>(null);
   const notificationListener = useRef<Subscription>();
   const responseListener = useRef<Subscription>();
-  const [isKeyboardOpen, setIsKeyboardOpen] = useState<boolean>(false);
 
   useEffect(() => {
     // scrollToBottom();
@@ -111,26 +109,8 @@ const ConversationScreen = (props: Props) => {
     navigation.addListener('focus', init);
   }, [init, navigation]);
 
-  useEffect(() => {
-    Keyboard.addListener('keyboardWillShow', _keyboardDidShow);
-    Keyboard.addListener('keyboardWillHide', _keyboardDidHide);
-
-    // cleanup function
-    return () => {
-      Keyboard.removeListener('keyboardWillShow', _keyboardDidShow);
-      Keyboard.removeListener('keyboardDidHide', _keyboardDidHide);
-    };
-  }, []);
-
-  const _keyboardDidShow = () => setIsKeyboardOpen(true);
-  const _keyboardDidHide = () => setIsKeyboardOpen(false);
-
   const renderItem = ({item}: {item: Message}) => (
-    <ConversationItem
-      message={item}
-      conversation={conversation}
-      key={item._id}
-    />
+    <ConversationItem message={item} conversation={conversation} />
   );
 
   const sendMessagePress = async () => {
@@ -142,8 +122,8 @@ const ConversationScreen = (props: Props) => {
         conversationParams.userId,
         conversationParams.ownerId,
       );
-      setConversation(conversationResult);
       sendMessage(conversationResult);
+      setConversation(conversationResult);
     }
   };
 
@@ -185,6 +165,7 @@ const ConversationScreen = (props: Props) => {
       <View style={styles.content}>
         <FlatList
           inverted={true}
+          style={{paddingBottom: 200}}
           contentContainerStyle={{flexDirection: 'column-reverse'}}
           ref={_flatList}
           showsVerticalScrollIndicator={false}
@@ -192,11 +173,7 @@ const ConversationScreen = (props: Props) => {
           renderItem={renderItem}
           keyExtractor={(item) => item.id}
         />
-        <View
-          style={[
-            styles.inputContainer,
-            isKeyboardOpen && styles.keyboardOpen,
-          ]}>
+        <View style={styles.inputContainer}>
           <TextInput
             placeholder={i18n.t('conversation_type_message')}
             placeholderTextColor={Colors.gray}
@@ -215,6 +192,7 @@ const ConversationScreen = (props: Props) => {
           />
         </View>
       </View>
+      <KeyboardSpacer topSpacing={-40} />
     </SafeAreaView>
   );
 };
@@ -228,7 +206,6 @@ const styles = StyleSheet.create({
   content: {
     paddingHorizontal: Layout.padding,
     flex: 1,
-    paddingBottom: 100,
   },
   separator: {
     height: 1,
@@ -236,9 +213,6 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     zIndex: 999,
-    position: 'absolute',
-    left: 20,
-    right: 20,
     bottom: 0,
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -261,9 +235,6 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     fontFamily: 'poppins',
-  },
-  keyboardOpen: {
-    bottom: 260,
   },
 });
 
