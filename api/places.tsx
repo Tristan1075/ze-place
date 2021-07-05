@@ -65,6 +65,22 @@ export const getPlaceById = async (id: string) => {
     });
 };
 
+export const getPlacesByUser = async (userId: string) => {
+  const token = await SecureStore.getItemAsync('access-token');
+  return await axios
+    .get(`${API_URL}/places/user/${userId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .then((response: AxiosResponse<any>) => {
+      return response.data;
+    })
+    .catch((err) => {
+      return Promise.reject(err);
+    });
+};
+
 export const getPlacesNearbyCoordinates = async (
   coords: Coords,
   distance: number,

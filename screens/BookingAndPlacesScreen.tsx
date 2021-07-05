@@ -12,12 +12,12 @@ import Colors from '../constants/Colors';
 import i18n from 'i18n-js';
 import BookingListScreen from './BookingListScreen';
 import MyPlaceScreen from './MyPlaceScreen';
-import { useCallback, useEffect, useState } from 'react';
-import { getBookingByUser } from '../api/bookings';
-import { useNavigation } from '@react-navigation/native';
-import { Booking, Place } from '../types';
-import { getUser } from '../api/customer';
-import { StatusBar } from 'expo-status-bar';
+import {useCallback, useEffect, useState} from 'react';
+import {getBookingByUser} from '../api/bookings';
+import {useNavigation} from '@react-navigation/native';
+import {Booking, Place} from '../types';
+import {getPlacesByUser} from '../api/places';
+import UserStore from '../store/UserStore';
 
 const BookingAndPlacesScreen = () => {
   const layout = useWindowDimensions();
@@ -33,15 +33,14 @@ const BookingAndPlacesScreen = () => {
 
   const init = useCallback(async () => {
     setBookings(await getBookingByUser());
-    const user = await getUser();
-    setPlaces(user.ownedPlaces);
+    setPlaces(await getPlacesByUser(UserStore.user._id));
   }, []);
 
   useEffect(() => {
     navigation.addListener('focus', init);
   }, [init, navigation]);
 
-  const renderScene = ({ route }) => {
+  const renderScene = ({route}) => {
     switch (route.key) {
       case 'first':
         return <BookingListScreen bookings={bookings} />;

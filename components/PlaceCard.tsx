@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 import {Ionicons} from '@expo/vector-icons';
 
@@ -13,10 +13,22 @@ type Props = {
   onPress: () => void;
   place: Place;
   isFavorite: boolean;
+  showCounter?: boolean;
 };
 
 const PlaceCard = (props: Props) => {
-  const {place, onPress, onFavoritePress, isFavorite} = props;
+  const {
+    place,
+    onPress,
+    onFavoritePress,
+    isFavorite,
+    showCounter = false,
+  } = props;
+  const [counter, setCounter] = useState<number>(0);
+
+  const c = place.bookings.filter(
+    (booking) => !booking.isDenied && !booking.isAccepted,
+  ).length;
 
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
@@ -65,12 +77,14 @@ const PlaceCard = (props: Props) => {
           {/* <Text style={styles.badge}>Place available</Text> */}
         </View>
       </View>
+      {showCounter && c > 0 && <Text style={styles.badge}>{c}</Text>}
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
+    position: 'relative',
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 20,
@@ -139,6 +153,9 @@ const styles = StyleSheet.create({
     paddingVertical: 3,
     borderRadius: 5,
     overflow: 'hidden',
+    right: 10,
+    top: 10,
+    position: 'absolute',
   },
   rate: {
     paddingLeft: 5,

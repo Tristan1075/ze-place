@@ -6,6 +6,7 @@ import Button from './Button';
 import i18n from 'i18n-js';
 
 type Props = {
+  isFetching?: boolean;
   isVisible: boolean;
   onConfirmPress: () => void;
   onCancelPress: () => void;
@@ -14,6 +15,7 @@ type Props = {
 };
 
 const Popin = ({
+  isFetching,
   isVisible,
   onConfirmPress,
   onCancelPress,
@@ -30,6 +32,7 @@ const Popin = ({
         <Text style={styles.modalTitle}>{title}</Text>
         <Text style={styles.modalDescription}>{description}</Text>
         <Button
+          isFetching={isFetching}
           backgroundColor={Colors.primary}
           value={i18n.t('component_popin_confirm')}
           textColor={Colors.white}

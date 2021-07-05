@@ -26,11 +26,20 @@ const MessageItem = (props: Props) => {
           style={styles.image}
         />
         <View>
-          <Text style={styles.from}>
-            {conversation?.userId == UserStore.user._id
-              ? conversation?.ownerName
-              : conversation?.userName}
-          </Text>
+          <View style={styles.row}>
+            <Text style={styles.from}>
+              {conversation?.userId == UserStore.user._id
+                ? conversation?.ownerName
+                : conversation?.userName}
+            </Text>
+            {conversation.lastMessage && (
+              <Text style={styles.date}>
+                {time.getHours() < 10 ? '0' : ''}
+                {time.getHours()}:{time.getMinutes() < 10 ? '0' : ''}
+                {time.getMinutes()}
+              </Text>
+            )}
+          </View>
           {conversation.lastMessage && (
             <Text style={styles.lastMessage} numberOfLines={1}>
               {conversation.lastMessage.text}
@@ -38,13 +47,6 @@ const MessageItem = (props: Props) => {
           )}
         </View>
       </View>
-      {conversation.lastMessage && (
-        <Text style={styles.date}>
-          {time.getHours() < 10 ? '0' : ''}
-          {time.getHours()}:{time.getMinutes() < 10 ? '0' : ''}
-          {time.getMinutes()}
-        </Text>
-      )}
     </TouchableOpacity>
   );
 };
@@ -66,6 +68,8 @@ const styles = StyleSheet.create({
     fontFamily: 'poppins-semiBold',
     fontSize: 14,
     color: Colors.secondary,
+    flexWrap: 'wrap',
+    width: 180,
   },
   badge: {
     backgroundColor: Colors.primary,
@@ -89,6 +93,10 @@ const styles = StyleSheet.create({
     fontFamily: 'poppins',
     fontSize: 14,
     color: Colors.primary,
+  },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
 });
 

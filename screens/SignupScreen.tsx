@@ -9,6 +9,7 @@ import {
   ScrollView,
 } from 'react-native';
 import {Fold} from 'react-native-animated-spinkit';
+import * as Device from 'expo-device';
 
 import {
   REACT_APP_BUCKET_NAME,
@@ -59,7 +60,7 @@ import SearchPlaceScreen from './SearchPlaceScreen';
 import UserStore from '../store/UserStore';
 import CameraScreen from './CameraScreen';
 import {getUserByEmail} from '../api/customer';
-import { compressImage } from '../utils';
+import {compressImage} from '../utils';
 const input: SignupForm = {
   gender: '',
   avatar: '',
@@ -223,9 +224,26 @@ const SignupScreen = (props: Props) => {
   };
 
   const handleTakPicturePress = async (type: string) => {
-    handleModal({
-      child: <CameraScreen onPress={(photo) => takePhoto(photo, type)} />,
-    });
+    if (Device.isDevice) {
+      handleModal({
+        child: <CameraScreen onPress={(photo) => takePhoto(photo, type)} />,
+      });
+    } else {
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
+      if (!result.cancelled) {
+        if (type === 'recto') {
+          setForm({...form, IDRecto: result.uri});
+        } else {
+          setForm({...form, IDVerso: result.uri});
+        }
+        setErrors({...errors, IDRecto: ''});
+      }
+    }
   };
 
   const takePhoto = (photo, type: string) => {
@@ -439,7 +457,10 @@ const SignupScreen = (props: Props) => {
             />
             <View style={styles.row}>
               <Text style={styles.text}>{i18n.t('sign_up_account_exist')}</Text>
-              <Text style={[styles.text, styles.underline]}>
+              <View style={{flex: 1}} />
+              <Text
+                style={[styles.text, styles.underline]}
+                onPress={() => navigation.navigate('Signin')}>
                 {i18n.t('sign_up_sign_in')}
               </Text>
             </View>

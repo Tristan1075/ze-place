@@ -52,9 +52,7 @@ export const getBookingByUser = async (): Promise<Booking[]> => {
 export const getTVA = async (): Promise<Charges> => {
   const token = await SecureStore.getItemAsync('access-token');
   return await axios
-    .get(`${API_URL}/charges/getTVA`, {
-      
-    })
+    .get(`${API_URL}/charges/getTVA`, {})
     .then((response: AxiosResponse<any>) => {
       return response.data.charges;
     })
@@ -65,9 +63,7 @@ export const getTVA = async (): Promise<Charges> => {
 export const getService = async (): Promise<Charges> => {
   const token = await SecureStore.getItemAsync('access-token');
   return await axios
-    .get(`${API_URL}/charges/getService`, {
-      
-    })
+    .get(`${API_URL}/charges/getService`, {})
     .then((response: AxiosResponse<any>) => {
       return response.data.charges;
     })

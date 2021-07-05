@@ -27,14 +27,17 @@ const MyPlaceScreen = ({places}: Props) => {
     navigation.navigate('PlaceDetail', {place: place._id});
   };
 
-  const renderItem = ({item, index}: {item: Place; index: number}) => (
-    <PlaceCard
-      key={index}
-      place={item}
-      onPress={() => handleItemPress(item)}
-      isFavorite={item.isFavorite}
-    />
-  );
+  const renderItem = ({item, index}: {item: Place; index: number}) => {
+    return (
+      <PlaceCard
+        key={index}
+        place={item}
+        onPress={() => handleItemPress(item)}
+        isFavorite={item.isFavorite}
+        showCounter={true}
+      />
+    );
+  };
 
   return (
     <SafeAreaView style={styles.container}>

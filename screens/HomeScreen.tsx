@@ -38,7 +38,7 @@ import BankAccountScreen from './BankAccountScreen';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {withSocketContext} from '../components/SocketProvider';
 import {Flow} from 'react-native-animated-spinkit';
-import { StatusBar } from 'expo-status-bar';
+import {StatusBar} from 'expo-status-bar';
 
 type RootScreenNavigationProp = StackNavigationProp<HomeParamList, 'Home'>;
 
@@ -52,10 +52,17 @@ const HomeScreen = (props: Props) => {
   const [places, setPlaces] = useState<Array<Place>>([]);
   const [nearbyPlaces, setNearbyPlaces] = useState<Array<Place>>([]);
   const {handleModal} = useContext(ModalContext);
-  const [userLocation, setUserLocation] = useState<Coords>({
-    longitude: parseFloat(UserStore.user.location.longitude),
-    latitude: parseFloat(UserStore.user.location.latitude),
-  });
+  const [userLocation, setUserLocation] = useState<Coords>(
+    UserStore.user.location
+      ? {
+          longitude: parseFloat(UserStore.user.location.longitude),
+          latitude: parseFloat(UserStore.user.location.latitude),
+        }
+      : {
+          longitude: 0,
+          latitude: 0,
+        },
+  );
   const init = useCallback(async () => {
     const location = await getUserLocation();
     setUserLocation({

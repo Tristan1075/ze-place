@@ -39,6 +39,7 @@ const UserBookingsScreen = ({navigation}) => {
   const [owner, setOwner] = useState<User>();
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [selectedBooking, setSelectedBooking] = useState<string>('');
+  const [isFetching, setIsFetching] = useState<boolean>(false);
 
   const init = useCallback(async () => {
     if (activeBooking) {
@@ -193,6 +194,7 @@ const UserBookingsScreen = ({navigation}) => {
         description={I18n.t('user_booking_confirm_action_description')}
       />
       <Popin
+        isFetching={isFetching}
         isVisible={deny}
         onConfirmPress={() => handleDenyPress(selectedBooking)}
         onCancelPress={() => setDeny(false)}

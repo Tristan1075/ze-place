@@ -74,6 +74,7 @@ const PlaceInformations = (props: Props) => {
         style={styles.paddingVertical}
       />
       <SimpleInput
+        isEditable={false}
         placeholder={i18n.t('place_information_place_type_placeholder')}
         value={createPlaceForm.placeType?.name}
         onPress={handleSelectPlaceType}
