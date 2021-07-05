@@ -49,6 +49,10 @@ const ConversationScreen = (props: Props) => {
   const notificationListener = useRef<Subscription>();
   const responseListener = useRef<Subscription>();
 
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
   const init = useCallback(async () => {
     getConversationByPlaceAndUser(
       conversationParams.placeId,
@@ -87,7 +91,6 @@ const ConversationScreen = (props: Props) => {
               from: '0',
             };
             setMessages((prev) => [...prev, newMessage]);
-            scrollToBottom();
           }
         }
       },
