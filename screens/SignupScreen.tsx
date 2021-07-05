@@ -7,6 +7,7 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
+  Platform,
 } from 'react-native';
 import {Fold} from 'react-native-animated-spinkit';
 import * as Device from 'expo-device';
@@ -224,7 +225,7 @@ const SignupScreen = (props: Props) => {
   };
 
   const handleTakPicturePress = async (type: string) => {
-    if (Device.isDevice) {
+    if (Device.isDevice && Platform.OS === 'ios') {
       handleModal({
         child: <CameraScreen onPress={(photo) => takePhoto(photo, type)} />,
       });
