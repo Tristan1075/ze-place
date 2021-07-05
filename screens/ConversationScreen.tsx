@@ -126,7 +126,11 @@ const ConversationScreen = (props: Props) => {
   const _keyboardDidHide = () => setIsKeyboardOpen(false);
 
   const renderItem = ({item}: {item: Message}) => (
-    <ConversationItem message={item} conversation={conversation} />
+    <ConversationItem
+      message={item}
+      conversation={conversation}
+      key={item._id}
+    />
   );
 
   const sendMessagePress = async () => {
@@ -187,7 +191,11 @@ const ConversationScreen = (props: Props) => {
           renderItem={renderItem}
           keyExtractor={(item) => item.id}
         />
-        <View style={[styles.inputContainer, isKeyboardOpen && styles.keyboardOpen]}>
+        <View
+          style={[
+            styles.inputContainer,
+            isKeyboardOpen && styles.keyboardOpen,
+          ]}>
           <TextInput
             placeholder={i18n.t('conversation_type_message')}
             placeholderTextColor={Colors.gray}

@@ -61,7 +61,23 @@ const PlaceCardSquare = ({item, onPress}: Props) => {
           uri: item.placeCover,
         }}
         style={styles.cover}>
-        <Text style={styles.title}>{item.placeTitle}</Text>
+        <View style={styles.row}>
+          <Text style={styles.title}>{item.placeTitle}</Text>
+          <Text
+            style={[
+              styles.status,
+              !item.isAccepted && !item.isDenied && styles.statusPending,
+              item.isAccepted && !item.isDenied && styles.statusAccepted,
+            ]}>
+            {!item.isAccepted && !item.isDenied
+              ? i18n.t('component_booking_card_pending')
+              : item.isAccepted && item.isDenied
+              ? i18n.t('component_booking_card_denied')
+              : item.isAccepted && !item.isDenied
+              ? i18n.t('component_booking_card_accepted')
+              : i18n.t('component_booking_card_passed')}
+          </Text>
+        </View>
         <View style={styles.flex} />
         <Text style={styles.duration}>{item.startDate}</Text>
         <View style={styles.row}>
@@ -141,6 +157,22 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
+  status: {
+    backgroundColor: Colors.error,
+    fontFamily: 'oswald',
+    color: Colors.white,
+    paddingHorizontal: 5,
+    borderRadius: 5,
+    overflow: 'hidden',
+    width: 80,
+    textAlign: 'center',
+  },
+  statusPending: {
+    backgroundColor: Colors.yellow,
+  },
+  statusAccepted: {
+    backgroundColor: Colors.success,
+  }
 });
 
 export default PlaceCardSquare;

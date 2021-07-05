@@ -311,6 +311,7 @@ export default {
   component_booking_card_denied: 'REFUSÉ',
   component_booking_card_accepted: 'ACCEPTÉ',
   component_booking_card_pending: 'EN ATTENTE',
+  component_booking_card_passed: 'PASSÉE',
 
   //component_calendar_picker
   component_calendar_picker_from: 'Du :',

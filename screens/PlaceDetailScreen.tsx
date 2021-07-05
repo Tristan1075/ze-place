@@ -64,6 +64,7 @@ const PlaceDetailScreen = () => {
 
   useEffect(() => {
     navigation.addListener('focus', init);
+    console.log(place);
   }, [init, navigation]);
 
   const handlePlacePress = (p: Place) => {
@@ -324,13 +325,10 @@ const PlaceDetailScreen = () => {
               scrollEnabled={false}
               style={styles.map}
               initialRegion={{
-                latitude:
-                  (place?.location && parseFloat(place.location.latitude)) || 0,
-                longitude:
-                  (place?.location && parseFloat(place.location.longitude)) ||
-                  0,
-                latitudeDelta: 0.0922,
-                longitudeDelta: 0.0421,
+                latitude: parseFloat(place?.location.latitude) || 0,
+                longitude: parseFloat(place?.location.longitude) || 0,
+                latitudeDelta: 0.02,
+                longitudeDelta: 0.02,
               }}
             />
             <TitleWithDescription

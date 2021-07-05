@@ -310,6 +310,7 @@ export default {
   component_booking_card_denied: 'DENIED',
   component_booking_card_accepted: 'ACCEPTED',
   component_booking_card_pending: 'PENDING',
+  component_booking_card_passed: 'PASSED',
 
   //component_calendar_picker
   component_calendar_picker_from: 'From :',
