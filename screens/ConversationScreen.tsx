@@ -50,7 +50,7 @@ const ConversationScreen = (props: Props) => {
   const responseListener = useRef<Subscription>();
 
   useEffect(() => {
-    scrollToBottom();
+    // scrollToBottom();
   }, [messages]);
 
   const init = useCallback(async () => {
@@ -68,7 +68,7 @@ const ConversationScreen = (props: Props) => {
           setMessages(messagesMap);
           setConversation(conversationResult);
           initNotifications(conversationResult);
-          scrollToBottom();
+          // scrollToBottom();
         });
       }
     });
@@ -140,7 +140,7 @@ const ConversationScreen = (props: Props) => {
       );
       setMessages((prev) => [...prev, newMessage]);
       setInput('');
-      scrollToBottom();
+      // scrollToBottom();
     }
   };
 
@@ -163,6 +163,9 @@ const ConversationScreen = (props: Props) => {
       />
       <View style={styles.content}>
         <FlatList
+          inverted={true}
+          style={{ paddingBottom: 100}}
+          contentContainerStyle={{flexDirection: 'column-reverse'}}
           ref={_flatList}
           showsVerticalScrollIndicator={false}
           data={messages}
@@ -176,7 +179,6 @@ const ConversationScreen = (props: Props) => {
             style={styles.input}
             blurOnSubmit={false}
             value={input}
-            onTouchStart={scrollToBottom}
             returnKeyType="send"
             onSubmitEditing={sendMessagePress}
             onChangeText={(text) => setInput(text)}
