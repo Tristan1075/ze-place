@@ -38,6 +38,7 @@ import BankAccountScreen from './BankAccountScreen';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {withSocketContext} from '../components/SocketProvider';
 import {Flow} from 'react-native-animated-spinkit';
+import { StatusBar } from 'expo-status-bar';
 
 type RootScreenNavigationProp = StackNavigationProp<HomeParamList, 'Home'>;
 

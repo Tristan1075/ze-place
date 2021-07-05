@@ -17,6 +17,7 @@ import { getBookingByUser } from '../api/bookings';
 import { useNavigation } from '@react-navigation/native';
 import { Booking, Place } from '../types';
 import { getUser } from '../api/customer';
+import { StatusBar } from 'expo-status-bar';
 
 const BookingAndPlacesScreen = () => {
   const layout = useWindowDimensions();

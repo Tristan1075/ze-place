@@ -74,7 +74,9 @@ const ConversationScreen = (props: Props) => {
     notificationListener.current = Notifications.addNotificationReceivedListener(
       (notif: any) => {
         if (
+          notif.request.content &&
           notif.request.content.data &&
+          notif.request.content.data.conversation &&
           notif.request.content.data.conversation.id.toString() ===
             conversationResult?._id.toString()
         ) {
