@@ -79,7 +79,7 @@ const PlaceDetailScreen = () => {
 
   const handleFavoritePress = async (p: Place) => {
     p.isFavorite ? await removeFavorite(p) : await addFavorite(p);
-    await init();
+    setSimilarPlaces(await getSimilarPlaces(item));
   };
 
   const renderItem = ({
@@ -95,7 +95,7 @@ const PlaceDetailScreen = () => {
           key={index}
           place={placeItem}
           onPress={() => handlePlacePress(placeItem)}
-          onFavoritePress={handleFavoritePress}
+          onFavoritePress={() => handleFavoritePress(placeItem)}
           isFavorite={placeItem.isFavorite}
         />
       </View>
@@ -140,8 +140,6 @@ const PlaceDetailScreen = () => {
   const handleModifyPress = () => {
     navigation.navigate('CreatePlace', {place});
   };
-
-  console.log(place);
 
   return (
     <View>

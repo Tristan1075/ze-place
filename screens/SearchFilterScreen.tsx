@@ -40,9 +40,10 @@ type HomeScreenNavigationProp = StackNavigationProp<HomeParamList, 'PlaceList'>;
 
 type Props = {
   onSearchPress: (filter: FilterForm) => void;
+  filter?: FilterForm;
 };
 
-const SearchFilterScreen = ({onSearchPress}: Props) => {
+const SearchFilterScreen = ({onSearchPress, filter}: Props) => {
   // const {navigation} = props;
   const [showSearchLocation, setShowSearchLocation] = useState<boolean>(false);
   const [showPlaceType, setShowPlaceType] = useState<boolean>(false);
@@ -57,6 +58,9 @@ const SearchFilterScreen = ({onSearchPress}: Props) => {
   useEffect(() => {
     const getCardType = async () => setFeatures(await getPlaceFeatures());
     getCardType();
+    if (filter) {
+      setFilterForm(filter);
+    }
   }, []);
 
   const handlePlaceTypePress = (type: PlaceType) => {
@@ -134,6 +138,7 @@ const SearchFilterScreen = ({onSearchPress}: Props) => {
             description={i18n.t('search_filter_minimum_surface')}
           />
           <SimpleInput
+            value={filterForm.surface?.toString()}
             placeholder={i18n.t('search_filter_enter_surface')}
             style={styles.input}
             suffix={<Text>m²</Text>}

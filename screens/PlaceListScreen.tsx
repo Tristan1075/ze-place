@@ -24,7 +24,6 @@ const PlaceList = () => {
   const {handleModal} = useContext(ModalContext);
 
   const init = useCallback(async () => {
-    setUser(await getUser());
     setPlaces(await searchPlaces(filter));
   }, [filter]);
 
@@ -34,7 +33,12 @@ const PlaceList = () => {
 
   const showFilterModal = () => {
     handleModal({
-      child: <SearchFilterScreen onSearchPress={handleSeeAnnouncesPress} />,
+      child: (
+        <SearchFilterScreen
+          onSearchPress={handleSeeAnnouncesPress}
+          filter={filter}
+        />
+      ),
     });
   };
 
@@ -48,21 +52,15 @@ const PlaceList = () => {
   };
 
   const handleFavoritePress = async (p: Place) => {
-    const isFavorite = Boolean(
-      user && user.favorites.find((foundPlace) => foundPlace._id === p._id),
-    );
-    isFavorite ? removeFavorite(p) : addFavorite(p);
+    p.isFavorite ? await removeFavorite(p) : await addFavorite(p);
     await init();
   };
 
   const renderItem = ({item, index}: {item: Place; index: number}) => {
-    const isFavorite = Boolean(
-      user && user.favorites.find((foundPlace) => foundPlace._id === item._id),
-    );
     return (
       <PlaceCard
         key={index}
-        isFavorite={isFavorite}
+        isFavorite={item.isFavorite}
         place={item}
         onFavoritePress={handleFavoritePress}
         onPress={() => handleItemPress(item)}

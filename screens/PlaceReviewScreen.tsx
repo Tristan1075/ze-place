@@ -38,7 +38,10 @@ const PlaceReviewScreen = (props: Props) => {
           reviews.map((e) => (
             <View style={styles.review}>
               <View style={styles.align}>
-                <Text style={styles.title}>{e.name}</Text>
+                <View style={styles.row}>
+                  <Text style={styles.title}>{e.name}</Text>
+                  <Text style={styles.name}>{e.writerName}</Text>
+                </View>
                 <Text style={styles.description}>{e.description}</Text>
                 <Rating
                   startingValue={e.rate}
@@ -49,9 +52,6 @@ const PlaceReviewScreen = (props: Props) => {
                   tintColor={Colors.white}
                   ratingColor={Colors.dark}
                 />
-              </View>
-              <View>
-                <Text style={styles.name}>{e.writerName}</Text>
               </View>
             </View>
           ))
@@ -88,6 +88,9 @@ const styles = StyleSheet.create({
   padding: {
     paddingBottom: 10,
   },
+  row: {
+    flexDirection: 'row',
+  },
   review: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -99,11 +102,13 @@ const styles = StyleSheet.create({
   },
   align: {
     alignItems: 'flex-start',
+    flex: 1,
   },
   title: {
     fontFamily: 'oswald-light',
     fontSize: 18,
     color: Colors.dark,
+    flex: 1,
   },
   description: {
     fontFamily: 'poppins',
