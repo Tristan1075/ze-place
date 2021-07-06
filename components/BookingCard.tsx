@@ -21,7 +21,6 @@ const BookingCard = ({
   isUser,
   onSendMessagePress,
 }: Props) => {
-  console.log(getDuration(item.startDate));
   return (
     <View style={styles.card}>
       <View style={styles.row}>

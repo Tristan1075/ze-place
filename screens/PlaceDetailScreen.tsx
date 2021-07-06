@@ -64,7 +64,6 @@ const PlaceDetailScreen = () => {
 
   useEffect(() => {
     navigation.addListener('focus', init);
-    console.log(place);
   }, [init, navigation]);
 
   const handlePlacePress = (p: Place) => {
