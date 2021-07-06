@@ -81,7 +81,7 @@ const ConfirmationBookingScreen = ({place, booking, navigation}: Props) => {
     await bookPlace(placeBook, bookPromo, paymentIntent.id);
     setPaymentSheetEnabled(false);
     handleModal();
-    navigation.navigate('BookingAndPlaces');
+    navigation.navigate(i18n.t('tap_bar_booking_title'));
   };
 
   return (

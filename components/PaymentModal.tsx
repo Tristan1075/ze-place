@@ -6,6 +6,7 @@ import {
   View,
   TouchableWithoutFeedback,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {
@@ -25,6 +26,7 @@ import Modal from './Modal';
 import stripe from 'react-native-stripe-client';
 import {PUBLIC_KEY_STRIPE} from '../env';
 import {ModalContext} from '../providers/modalContext';
+import {Chase, Circle} from 'react-native-animated-spinkit';
 
 const stripeClient = stripe(PUBLIC_KEY_STRIPE);
 
@@ -41,6 +43,7 @@ const PaymentModal = (props: Props) => {
     [],
   );
   const [isFetching, setIsFetching] = useState(false);
+  const [cardUpdating, setCardUpdating] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const {handleModal} = useContext(ModalContext);
 
@@ -52,6 +55,7 @@ const PaymentModal = (props: Props) => {
       },
     });
     setPaymentMethods(methods.data);
+    setCardUpdating(false);
   }, []);
 
   useEffect(() => {
@@ -76,8 +80,20 @@ const PaymentModal = (props: Props) => {
     setAddPaymentMethod(false);
   };
 
-  const updateDefaultPaymentMethod = (paymentMethod: PaymentMethod) => {
-    updatePaymentMethod(UserStore.user.customerId, paymentMethod.id);
+  const updateDefaultPaymentMethod = async (paymentMethod: PaymentMethod) => {
+    setCardUpdating(true);
+    try {
+      const res = await updatePaymentMethod(
+        UserStore.user.customerId,
+        paymentMethod.id,
+      );
+
+      if (res) {
+        handleStateChange();
+      }
+    } catch (err) {
+      setCardUpdating(false);
+    }
     handleStateChange();
   };
 
@@ -131,6 +147,15 @@ const PaymentModal = (props: Props) => {
                       style={styles.default}
                     />
                   )}
+                  {!paymentMethod.isFavorite &&
+                    cardUpdating &&
+                    paymentMethod.card.brand !== 'add_card' && (
+                      <Chase
+                        size={14}
+                        color={Colors.primary}
+                        style={styles.default}
+                      />
+                    )}
                   {paymentMethod.card.brand === 'add_card' ? (
                     <Ionicons
                       name="add-circle"

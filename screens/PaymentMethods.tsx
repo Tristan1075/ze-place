@@ -23,6 +23,7 @@ import TitleWithDescription from '../components/TitleWithDescription';
 import i18n from 'i18n-js';
 import {ModalContext} from '../providers/modalContext';
 import PaymentMethodForm from './PaymentMethodForm';
+import {Flow} from 'react-native-animated-spinkit';
 
 const PaymentMethods = () => {
   const navigation = useNavigation();
@@ -30,7 +31,7 @@ const PaymentMethods = () => {
   const [paymentMethods, setPaymentMethods] = useState<Array<PaymentMethod>>(
     [],
   );
-  const [isFetching, setIsFetching] = useState(true);
+  const [isFetching, setIsFetching] = useState(false);
   const {handleModal} = useContext(ModalContext);
 
   const handleStateChange = useCallback(async () => {
@@ -41,6 +42,7 @@ const PaymentMethods = () => {
       },
     });
     setPaymentMethods(methods.data);
+    setIsFetching(false);
   }, []);
 
   useEffect(() => {
@@ -79,20 +81,34 @@ const PaymentMethods = () => {
     handleStateChange();
   };
 
-  const handleUpdatePaymentMethodPress = () => {
-    updatePaymentMethod(
-      UserStore.user.customerId,
-      paymentMethods[cardIndex].id,
-    );
-    handleStateChange();
+  const handleUpdatePaymentMethodPress = async () => {
+    setIsFetching(true);
+    try {
+      const res = await updatePaymentMethod(
+        UserStore.user.customerId,
+        paymentMethods[cardIndex].id,
+      );
+      if (res) {
+        handleStateChange();
+      }
+    } catch (err) {
+      setIsFetching(false);
+    }
   };
 
-  const handleRemovePaymentMethodPress = () => {
-    removePaymentMethod(
-      paymentMethods[cardIndex].id,
-      UserStore.user.customerId,
-    );
-    handleStateChange();
+  const handleRemovePaymentMethodPress = async () => {
+    setIsFetching(true);
+    try {
+      const res = await removePaymentMethod(
+        paymentMethods[cardIndex].id,
+        UserStore.user.customerId,
+      );
+      if (res) {
+        handleStateChange();
+      }
+    } catch (err) {
+      setIsFetching(false);
+    }
   };
 
   return (
@@ -123,18 +139,30 @@ const PaymentMethods = () => {
               {paymentMethods.length > 0 &&
                 !paymentMethods[cardIndex].isFavorite && (
                   <TouchableOpacity onPress={handleUpdatePaymentMethodPress}>
-                    <Text style={styles.updateButton}>
-                      {i18n.t('payement_methods_update')}
-                    </Text>
+                    {!isFetching ? (
+                      <Text style={styles.updateButton}>
+                        {i18n.t('payement_methods_update')}
+                      </Text>
+                    ) : (
+                      <View style={styles.loaderContainer}>
+                        <Flow size={20} color={Colors.primary} />
+                      </View>
+                    )}
                   </TouchableOpacity>
                 )}
               <View style={styles.separator} />
               {paymentMethods.length > 0 &&
                 !paymentMethods[cardIndex].isFavorite && (
                   <TouchableOpacity onPress={handleRemovePaymentMethodPress}>
-                    <Text style={styles.removeButton}>
-                      {i18n.t('payement_methods_delete')}
-                    </Text>
+                    {!isFetching ? (
+                      <Text style={styles.removeButton}>
+                        {i18n.t('payement_methods_delete')}
+                      </Text>
+                    ) : (
+                      <View style={styles.loaderContainer}>
+                        <Flow size={20} color={Colors.error} />
+                      </View>
+                    )}
                   </TouchableOpacity>
                 )}
             </View>
@@ -183,7 +211,7 @@ const styles = StyleSheet.create({
   actionButtons: {
     justifyContent: 'flex-end',
     backgroundColor: Colors.white,
-    paddingBottom: 40,
+    paddingBottom: 20,
     ...Layout.shadow,
   },
   updateButton: {
@@ -191,9 +219,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontFamily: 'poppins',
     fontSize: 16,
-    paddingVertical: 10,
-    marginTop: 20,
-    borderBottomWidth: 1,
+    paddingVertical: 20,
+    alignItems: 'center',
   },
   removeButton: {
     color: Colors.error,
@@ -201,6 +228,7 @@ const styles = StyleSheet.create({
     fontFamily: 'poppins',
     fontSize: 16,
     paddingVertical: 10,
+    height: 62,
   },
   separator: {
     height: 1,
@@ -211,7 +239,11 @@ const styles = StyleSheet.create({
   },
   invisibleSpace: {
     paddingVertical: 20,
-    marginTop: 20,
+  },
+  loaderContainer: {
+    height: 62,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 
