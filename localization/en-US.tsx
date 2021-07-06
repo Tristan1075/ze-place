@@ -300,6 +300,11 @@ export default {
   payement_methods_update: 'Update default card',
   payement_methods_delete: 'Remove card',
 
+  bank_account: 'Banks accounts',
+  bank_account_next_transfer: 'Next transfers',
+  bank_account_owner: 'Account owner',
+  bank_account_iban: 'IBAN number',
+
   //COMPONENT
 
   //component_booking_card

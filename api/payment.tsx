@@ -200,7 +200,6 @@ export const addBankAccount = async (accountId: string, data) => {
       {
         accountId: accountId,
         holderName: data.holderName,
-        bank_name: data.bankName,
         account_number: data.iban,
       },
       {

@@ -301,6 +301,11 @@ export default {
   messages_title: 'Vos messages',
   messages_description: `Trouvez ici l'ensemble de vos messages`,
 
+  bank_account: 'Comptes bancaires',
+  bank_account_next_transfer: 'Prochains virements',
+  bank_account_owner: 'Account owner',
+  bank_account_iban: 'IBAN number',
+
   //COMPONENT
 
   //component_booking_card

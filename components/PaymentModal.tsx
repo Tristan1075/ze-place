@@ -82,23 +82,25 @@ const PaymentModal = (props: Props) => {
   };
 
   const handlePayPress = async () => {
-    setIsFetching(true);
-    const item = paymentMethods.find(
-      (paymentMethod: PaymentMethod) => paymentMethod.isFavorite === true,
-    );
-    if (item) {
-      const paymentIntent = await createPaymentIntent(
-        UserStore.user.customerId,
-        item?.id,
-        bookingPrice,
+    if (!isFetching && !isSuccess) {
+      setIsFetching(true);
+      const item = paymentMethods.find(
+        (paymentMethod: PaymentMethod) => paymentMethod.isFavorite === true,
       );
-      if (paymentIntent) {
-        setIsSuccess(true);
-        setIsFetching(false);
-        setTimeout(() => {
-          onBookPress && onBookPress(paymentIntent);
-          setIsSuccess(false);
-        }, 2000);
+      if (item) {
+        const paymentIntent = await createPaymentIntent(
+          UserStore.user.customerId,
+          item?.id,
+          bookingPrice,
+        );
+        if (paymentIntent) {
+          setIsSuccess(true);
+          setTimeout(() => {
+            onBookPress && onBookPress(paymentIntent);
+            setIsSuccess(false);
+            setIsFetching(false);
+          }, 2000);
+        }
       }
     }
   };

@@ -14,7 +14,7 @@ import {MaterialCommunityIcons} from '@expo/vector-icons';
 import {StatusBar} from 'expo-status-bar';
 import {LocationObject} from 'expo-location';
 
-const CustomMarker = ({isActive, image}) => {
+export const CustomMarker = ({isActive, image}) => {
   return (
     <View style={styles.calloutContainer}>
       <View style={styles.callout}>
@@ -126,6 +126,7 @@ const MapScreen = ({initialCoords, onItemPress}: Props) => {
           };
           return (
             <Marker
+              key={index}
               coordinate={markerCoords}
               onPress={() => onMarkerTap(index)}>
               <CustomMarker
@@ -175,7 +176,7 @@ const styles = StyleSheet.create({
   callout: {
     backgroundColor: Colors.white,
     borderRadius: 10,
-    padding: 5,
+    padding: 3,
     ...Layout.shadow,
   },
   calloutImage: {
@@ -184,8 +185,8 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   activeImage: {
-    width: 50,
-    height: 50,
+    width: 40,
+    height: 40,
   },
   calloutContainer: {
     alignItems: 'center',

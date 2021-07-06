@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
 import {Rating} from 'react-native-ratings';
-import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
+import MapView, {Marker, PROVIDER_GOOGLE} from 'react-native-maps';
 import {
   AntDesign,
   FontAwesome5,
@@ -29,7 +29,7 @@ import Button from '../components/Button';
 import {mapStyle} from '../utils/mapStyle';
 import ToggleWithTitle from '../components/ToggleWithTitle';
 import {ModalContext} from '../providers/modalContext';
-import MapScreen from './MapScreen';
+import MapScreen, {CustomMarker} from './MapScreen';
 import BookingScreen from './BookingScreen';
 import CalendarPicker from '../components/CalendarPicker';
 import TitleWithDescription from '../components/TitleWithDescription';
@@ -140,6 +140,8 @@ const PlaceDetailScreen = () => {
   const handleModifyPress = () => {
     navigation.navigate('CreatePlace', {place});
   };
+
+  console.log(place);
 
   return (
     <View>
@@ -318,19 +320,41 @@ const PlaceDetailScreen = () => {
               title={i18n.t('place_detail_location')}
               subtitle={true}
             />
-            <MapView
-              provider={PROVIDER_GOOGLE}
-              onPress={handleMapPress}
-              customMapStyle={mapStyle}
-              scrollEnabled={false}
-              style={styles.map}
-              initialRegion={{
-                latitude: parseFloat(place?.location.latitude) || 0,
-                longitude: parseFloat(place?.location.longitude) || 0,
-                latitudeDelta: 0.02,
-                longitudeDelta: 0.02,
-              }}
-            />
+            {place && (
+              <MapView
+                provider={PROVIDER_GOOGLE}
+                onPress={handleMapPress}
+                customMapStyle={mapStyle}
+                style={styles.map}
+                initialRegion={{
+                  latitude: parseFloat(place?.location.latitude),
+                  longitude: parseFloat(place?.location.longitude),
+                  latitudeDelta: 0.02,
+                  longitudeDelta: 0.02,
+                }}>
+                {similarPlaces.map((place: Place, index) => {
+                  const markerCoords = {
+                    longitude: parseFloat(place.location.longitude),
+                    latitude: parseFloat(place.location.latitude),
+                  };
+                  return (
+                    <Marker coordinate={markerCoords} key={index}>
+                      <CustomMarker
+                        isActive={false}
+                        image={place.images[0].url}
+                      />
+                    </Marker>
+                  );
+                })}
+                <Marker
+                  coordinate={{
+                    latitude: parseFloat(place?.location.latitude),
+                    longitude: parseFloat(place?.location.longitude),
+                  }}>
+                  <CustomMarker image={place.images[0].url} isActive={true} />
+                </Marker>
+              </MapView>
+            )}
             <TitleWithDescription
               title={i18n.t('place_detail_availavilities')}
               subtitle={true}

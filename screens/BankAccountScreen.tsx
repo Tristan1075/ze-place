@@ -27,19 +27,25 @@ import Layout from '../constants/Layout';
 import UserStore from '../store/UserStore';
 
 const BankAccountScreen = () => {
-  const [account, setAccount] = useState();
-  const [balance, setBalance] = useState();
+  const [account, setAccount] = useState<any>();
+  const [balance, setBalance] = useState<number>(0);
   const [showForm, setShowForm] = useState<boolean>(false);
   const [screenFetching, setScreenFetching] = useState<boolean>(true);
   const [isFetching, setIsFetching] = useState<boolean>(false);
   const [actionFetching, setActionFetching] = useState<boolean>(false);
   const [form, setForm] = useState({
     holderName: '',
-    bankName: '',
     iban: '',
   });
 
   useEffect(() => {
+    getBalance(UserStore.user.stripeAccount).then((res) => {
+      let val = 0;
+      res.available.forEach((transfer: any) => {
+        val += transfer.amount;
+      });
+      setBalance(val / 100);
+    });
     getConnectedAccount(UserStore.user.stripeAccount)
       .then((account) => {
         setAccount(account);
@@ -55,7 +61,6 @@ const BankAccountScreen = () => {
       setShowForm(false);
       setForm({
         holderName: '',
-        bankName: '',
         iban: '',
       });
     } catch (err) {
@@ -93,52 +98,56 @@ const BankAccountScreen = () => {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
       <View style={styles.container}>
+        <Text style={styles.title}>{i18n.t('bank_account_next_transfer')}</Text>
+        <Text style={styles.balance}>{balance?.toString()}€</Text>
         {account?.external_accounts.data.length > 0 && (
-          <Text style={styles.title}>Banks accounts</Text>
+          <Text style={styles.title}>{i18n.t('bank_account')}</Text>
         )}
         <ScrollView>
           {account && account?.external_accounts.data.length > 0 ? (
-            account?.external_accounts.data.map((external, index) => {
-              return (
-                <TouchableOpacity
-                  key={index}
-                  style={styles.cardAccount}
-                  onPress={() => handleUpdateDefaultPress(external.id)}>
-                  <View style={styles.row}>
-                    <Text style={styles.bankName}>{external.bank_name}</Text>
-                    {!actionFetching ? (
-                      external.default_for_currency ? (
-                        <View style={styles.default}>
-                          <AntDesign
-                            name="check"
-                            size={14}
-                            color={Colors.white}
-                          />
-                        </View>
+            account?.external_accounts.data.map(
+              (external: any, index: number) => {
+                return (
+                  <TouchableOpacity
+                    key={index}
+                    style={styles.cardAccount}
+                    onPress={() => handleUpdateDefaultPress(external.id)}>
+                    <View style={styles.row}>
+                      <Text style={styles.bankName}>{external.bank_name}</Text>
+                      {!actionFetching ? (
+                        external.default_for_currency ? (
+                          <View style={styles.default}>
+                            <AntDesign
+                              name="check"
+                              size={14}
+                              color={Colors.white}
+                            />
+                          </View>
+                        ) : (
+                          <TouchableOpacity
+                            style={styles.remove}
+                            onPress={() => handleRemovePress(external.id)}>
+                            <AntDesign
+                              name="close"
+                              size={14}
+                              color={Colors.white}
+                            />
+                          </TouchableOpacity>
+                        )
                       ) : (
-                        <TouchableOpacity
-                          style={styles.remove}
-                          onPress={() => handleRemovePress(external.id)}>
-                          <AntDesign
-                            name="close"
-                            size={14}
-                            color={Colors.white}
-                          />
-                        </TouchableOpacity>
-                      )
-                    ) : (
-                      <Flow size={20} color={Colors.gray} />
-                    )}
-                  </View>
-                  <Text style={styles.holderName}>
-                    {external.account_holder_name}
-                  </Text>
-                  <Text style={styles.accountNumber}>
-                    **** **** **** **** {external.last4}
-                  </Text>
-                </TouchableOpacity>
-              );
-            })
+                        <Flow size={20} color={Colors.gray} />
+                      )}
+                    </View>
+                    <Text style={styles.holderName}>
+                      {external.account_holder_name}
+                    </Text>
+                    <Text style={styles.accountNumber}>
+                      **** **** **** **** {external.last4}
+                    </Text>
+                  </TouchableOpacity>
+                );
+              },
+            )
           ) : !screenFetching ? (
             <EmptyBloc
               title={i18n.t('bank_account_no_account')}
@@ -151,22 +160,19 @@ const BankAccountScreen = () => {
         <TouchableOpacity
           style={styles.row}
           onPress={() => setShowForm(!showForm)}>
-          <Text style={styles.addAcount}>Ajouter un compte</Text>
+          <Text style={styles.addAcount}>
+            {i18n.t('bank_account_add_an_account')}
+          </Text>
           <AntDesign name={showForm ? 'up' : 'down'} size={18} />
         </TouchableOpacity>
         {showForm && (
           <>
-            <Text style={styles.title}>Titulaire du compte</Text>
+            <Text style={styles.title}>{i18n.t('bank_account_owner')}</Text>
             <SimpleInput
               placeholder="John Doe"
               onChangeText={(v) => setForm({...form, holderName: v})}
             />
-            <Text style={styles.title}>Nom de la banque</Text>
-            <SimpleInput
-              placeholder="Caisse d'épargne"
-              onChangeText={(v) => setForm({...form, bankName: v})}
-            />
-            <Text style={styles.title}>Numéro IBAN</Text>
+            <Text style={styles.title}>{i18n.t('bank_account_iban')}</Text>
             <SimpleInput
               placeholder="**** **** **** **** ****"
               onChangeText={(v) => setForm({...form, iban: v})}
@@ -197,6 +203,11 @@ const styles = StyleSheet.create({
   },
   title: {
     fontFamily: 'oswald-light',
+    fontSize: 18,
+    marginVertical: 10,
+  },
+  balance: {
+    fontFamily: 'oswald',
     fontSize: 18,
     marginVertical: 10,
   },
