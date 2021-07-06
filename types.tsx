@@ -328,4 +328,5 @@ export type Booking = {
   isAccepted?: boolean;
   isDenied?: boolean;
   isPast?: boolean;
+  isPaid?: boolean;
 };

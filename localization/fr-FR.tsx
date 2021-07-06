@@ -317,6 +317,11 @@ export default {
   component_booking_card_accepted: 'ACCEPTÉ',
   component_booking_card_pending: 'EN ATTENTE',
   component_booking_card_passed: 'PASSÉE',
+  component_booking_card_cancel:
+    "Il n'est plus possible d'annnuler cette réservation.",
+  component_booking_still_have: 'Il vous reste',
+  component_booking_card_days_left:
+    "jours afin d'annuler votre réservation, après ce ne sera plus possible.",
 
   //component_calendar_picker
   component_calendar_picker_from: 'Du :',

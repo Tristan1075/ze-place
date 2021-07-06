@@ -136,3 +136,9 @@ export const isRangeAvailable = (
   }
   return true;
 };
+
+export const getDuration = (start: string) => {
+  const today = new Date();
+  const startDate = new Date(start);
+  return parseInt((startDate - today) / (1000 * 60 * 60 * 24), 10);
+};

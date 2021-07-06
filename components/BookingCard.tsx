@@ -4,6 +4,7 @@ import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import Colors from '../constants/Colors';
 import i18n from 'i18n-js';
 import {Booking} from '../types';
+import {getDuration} from '../utils';
 
 type Props = {
   item: Booking;
@@ -20,6 +21,7 @@ const BookingCard = ({
   isUser,
   onSendMessagePress,
 }: Props) => {
+  console.log(getDuration(item.startDate));
   return (
     <View style={styles.card}>
       <View style={styles.row}>
@@ -52,8 +54,19 @@ const BookingCard = ({
         </TouchableOpacity>
       )}
       <View style={styles.border} />
+      {getDuration(item.startDate) - 1 > 2 ? (
+        <Text style={styles.name}>
+          {`${i18n.t('component_booking_still_have')} ${
+            getDuration(item.startDate) - 1
+          } ${i18n.t('component_booking_card_days_left')}`}
+        </Text>
+      ) : (
+        <Text style={styles.name}>
+          {i18n.t('component_booking_card_cancel')}
+        </Text>
+      )}
       <View style={styles.actions}>
-        {!item.isDenied && (
+        {!item.isDenied && !item.isPaid && getDuration(item.startDate) - 1 > 2 && (
           <TouchableOpacity onPress={() => item._id && onDenyPress(item._id)}>
             <AntDesign name="closecircleo" size={30} color={Colors.dark} />
           </TouchableOpacity>

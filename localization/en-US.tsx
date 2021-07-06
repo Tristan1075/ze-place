@@ -316,6 +316,9 @@ export default {
   component_booking_card_accepted: 'ACCEPTED',
   component_booking_card_pending: 'PENDING',
   component_booking_card_passed: 'PASSED',
+  component_booking_card_cancel: 'It is no longer possible to cancel this reservation.',
+  component_booking_still_have: 'You still have',
+  component_booking_card_days_left: 'days left to cancel your reservation, after that it will no longer be possible.',
 
   //component_calendar_picker
   component_calendar_picker_from: 'From :',
